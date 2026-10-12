@@ -92,6 +92,10 @@
   }
   .hero-glow { animation: heroGlow 9s ease-in-out infinite; }
 
+  /* banner image — tight bottom fit */
+  .hero-banner { line-height: 0; }
+  .hero-banner img { display: block; width: 100%; height: auto; }
+
   @media print {
     body * { visibility: hidden; }
     #invoiceBox, #invoiceBox * { visibility: visible; }
@@ -123,7 +127,6 @@
 
   <nav class="h-16 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex h-full max-w-7xl items-center gap-4 px-5 sm:px-8 lg:px-12">
-      <!-- Logo (left) -->
       <a href="#home" class="flex min-w-0 shrink-0 items-center gap-2.5">
         <img src="logo.png" alt="eMutation logo"
              class="h-11 w-11 shrink-0 object-contain" />
@@ -137,7 +140,6 @@
         </span>
       </a>
 
-      <!-- Right-aligned group: nav links + buttons -->
       <div class="ml-auto flex items-center gap-3 sm:gap-5">
         <div class="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
           <a href="#home"    class="transition hover:text-brand-700">হোম</a>
@@ -178,7 +180,7 @@
   </nav>
 </header>
 
-<!-- ============ HERO (light & soft blue) ============ -->
+<!-- ============ HERO (light & soft blue + banner image) ============ -->
 <section id="home"
   class="relative overflow-hidden bg-gradient-to-b from-brand-100 via-brand-50 to-white">
 
@@ -188,7 +190,7 @@
   <!-- subtle mesh / grid texture -->
   <div class="hero-mesh pointer-events-none absolute inset-0"></div>
 
-  <!-- soft glowing blobs (lighter, less saturated) -->
+  <!-- soft glowing blobs -->
   <div class="hero-glow pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-brand-300/30 blur-3xl"></div>
   <div class="pointer-events-none absolute -bottom-36 -left-28 h-96 w-96 rounded-full bg-sky-200/50 blur-3xl"></div>
   <div class="pointer-events-none absolute left-1/2 top-10 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-white/70 blur-3xl"></div>
@@ -196,7 +198,8 @@
   <!-- thin highlight line at top -->
   <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent"></div>
 
-  <div class="relative mx-auto max-w-7xl px-4 py-14 text-center sm:py-20 lg:py-24">
+  <!-- Hero content -->
+  <div class="relative mx-auto max-w-7xl px-4 pt-14 pb-4 text-center sm:pt-20 sm:pb-6 lg:pt-24 lg:pb-8">
     <span class="anim-in inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-700 shadow-sm shadow-brand-100 backdrop-blur sm:text-xs">
       <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
       অনলাইন ই-নামজারি সেবা
@@ -251,8 +254,10 @@
     </div>
   </div>
 
-  <!-- smooth fade into next white section -->
-  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white"></div>
+  <!-- ===== BANNER IMAGE (full width, no gap) ===== -->
+  <div class="hero-banner relative w-full select-none pointer-events-none">
+    <img src="banner-img.png" alt="" aria-hidden="true" />
+  </div>
 </section>
 
 <!-- ============ SERVICE / ORDER FORM ============ -->
@@ -340,7 +345,6 @@
       <!-- STEP 1 -->
       <div id="step1" class="p-5 sm:p-7 lg:p-8">
 
-        <!-- 🟡 COURT FEE — সবার জন্য একবার (form এর একদম উপরে) -->
         <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-5">
           <div class="flex items-start gap-3">
             <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700">
@@ -374,7 +378,6 @@
           </div>
         </div>
 
-        <!-- 🔵 আবেদনকারীর সংখ্যা -->
         <div class="mt-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-brand-50/60 to-slate-50 p-5">
           <label class="label">কতজন আবেদনকারীর তথ্য যোগ করবেন? <span class="text-rose-500">*</span></label>
 
@@ -399,7 +402,6 @@
           </div>
         </div>
 
-        <!-- 🟢 আবেদনকারীর তথ্য -->
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">১</span>
           আবেদনকারীর তথ্য
@@ -408,7 +410,6 @@
 
         <div id="applicantsWrap" class="mt-4 space-y-5"></div>
 
-        <!-- 🔵 land.gov.bd -->
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">২</span>
           land.gov.bd অ্যাকাউন্ট তথ্য
@@ -450,7 +451,6 @@
           </div>
         </div>
 
-        <!-- 🔵 Receiver Email -->
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">৩</span>
           রিসিভার ইমেইল
@@ -700,7 +700,7 @@
   </div>
 </footer>
 
-<!-- ============ SUPPORT CHAT PANEL (floating button নেই) ============ -->
+<!-- ============ SUPPORT CHAT PANEL ============ -->
 <div id="chatPanel"
   class="fixed bottom-6 right-4 z-50 hidden w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:right-6">
   <div class="flex items-center justify-between gap-3 bg-gradient-to-r from-brand-700 to-brand-900 px-4 py-3.5 text-white">
@@ -867,7 +867,7 @@ document.querySelectorAll('#mobileMenu a').forEach(a =>
 );
 $('#year').textContent = new Date().getFullYear();
 
-/* ================= Court Fee toggle (একটাই পুরো form এর জন্য) ================= */
+/* ================= Court Fee toggle ================= */
 const courtFeePaid = $('#courtFeePaid');
 const circleFields = $('#circleFields');
 const circleName   = $('#circleName');
@@ -1072,7 +1072,6 @@ function collectApplicants(validate = true) {
 $('#nextBtn').addEventListener('click', () => {
   clearErrors();
 
-  // Court fee validation (top-level)
   if (!courtFeePaid.checked && !circleName.value.trim()) {
     markError(circleName);
     showError('অনুগ্রহ করে সার্কেল/উপজেলা লিখুন, অথবা "Court fee ইতিমধ্যে পরিশোধ করা হয়েছে" টিক দিন।');
@@ -1112,7 +1111,6 @@ $('#backBtn').addEventListener('click', () => {
   $('#step1').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-/* copy bkash */
 $('#copyBkash').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(BKASH_NUMBER);
@@ -1238,7 +1236,6 @@ submitBtn.addEventListener('click', async () => {
 
     await addDoc(collection(db, 'orders'), payload);
 
-    /* invoice */
     $('#invOrderId').textContent = orderId;
     $('#invDate').textContent    = fmtDate(new Date());
     $('#invCount').textContent   = `${toBn(applicantCount)} জন`;
@@ -1381,8 +1378,6 @@ function closeChat() {
   chatOpen = false;
   $('#chatPanel').classList.add('hidden');
 }
-
-function toggleChat() { chatOpen ? closeChat() : openChat(); }
 
 document.querySelectorAll('[data-open-chat]').forEach(b => b.addEventListener('click', (e) => {
   e.preventDefault();
