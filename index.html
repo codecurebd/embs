@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>eMutation Birth certificate application support</title>
+<meta name="description" content="১৮+ জন্ম নিবন্ধন আবেদন সাপোর্ট সেবা — দ্রুত, নিরাপদ ও নির্ভরযোগ্য।" />
+
+<link rel="icon" type="image/png" href="logo.png" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['"Noto Sans Bengali"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+        colors: {
+          brand: {
+            50:'#eef5ff',100:'#d9e8ff',200:'#bcd7ff',300:'#8ebdff',400:'#5996ff',
+            500:'#3372ff',600:'#1d51f5',700:'#163ee1',800:'#1935b6',900:'#1a328f'
+          }
+        }
+      }
+    }
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer components {
+    .input {
+      @apply w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-800
+             placeholder:text-slate-400 outline-none transition
+             focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100;
+    }
+    .label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
+    .hint  { @apply mt-1.5 text-xs text-slate-500; }
+    .file-input {
+      @apply block w-full cursor-pointer rounded-xl border border-dashed border-slate-300 bg-slate-50 px-3 py-3
+             text-sm text-slate-600 transition hover:border-brand-400 hover:bg-brand-50/40
+             file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-brand-600
+             file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-700;
+    }
+    .btn-primary {
+      @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-bold
+             text-white shadow-lg shadow-brand-600/25 transition hover:bg-brand-700 active:scale-[.98]
+             disabled:cursor-not-allowed disabled:opacity-60;
+    }
+    .btn-ghost {
+      @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5
+             text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-700;
+    }
+    .card { @apply rounded-2xl border border-slate-200 bg-white shadow-sm; }
+    .field-error { @apply !border-rose-400 !bg-rose-50 ring-2 !ring-rose-100; }
+  }
+</style>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { padding-top: 100px; }
+  #topbar { transition: height .35s ease, opacity .3s ease; }
+  #topbar.collapsed { height: 0 !important; opacity: 0; overflow: hidden; }
+  .chat-body::-webkit-scrollbar { width: 6px; }
+  .chat-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+  @keyframes floatIn { from { opacity:0; transform: translateY(14px) } to { opacity:1; transform:none } }
+  .anim-in { animation: floatIn .45s ease both; }
+
+  .step-item .step-circle { transition: all .3s ease; }
+  .step-item .step-label { transition: color .3s ease; }
+  .step-item.active .step-circle {
+    background: #1d51f5; color: #fff; box-shadow: 0 0 0 4px rgba(29,81,245,.15);
+  }
+  .step-item.active .step-label { color: #0f172a; font-weight: 700; }
+  .step-item.done .step-circle { background: #10b981; color: #fff; }
+  .step-item.done .step-label { color: #059669; font-weight: 700; }
+
+  @media print {
+    body * { visibility: hidden; }
+    #invoiceBox, #invoiceBox * { visibility: visible; }
+    #invoiceBox { position: absolute; inset: 0; margin: 0; box-shadow: none; }
+  }
+</style>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-800 antialiased">
+
+<!-- ============ HEADER ============ -->
+<header class="fixed inset-x-0 top-0 z-50">
+  <div id="topbar" class="flex h-9 items-center overflow-hidden bg-slate-900 text-slate-200">
+    <div class="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 text-[11px] sm:text-xs">
+      <a href="tel:01350141762" class="flex items-center gap-1.5 whitespace-nowrap transition hover:text-white">
+        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.25 1.05l-1.3 1.3a15 15 0 0 0 6.17 6.17l1.3-1.3a1 1 0 0 1 1.05-.25l3.6 1.2a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.7 21 3 14.3 3 6V5Z"/>
+        </svg>
+        01350141762
+      </a>
+      <a href="mailto:nopqrshov337@gmail.com" class="flex items-center gap-1.5 truncate transition hover:text-white">
+        <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 12 13l9-5.5M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+        </svg>
+        nopqrshov337@gmail.com
+      </a>
+    </div>
+  </div>
+
+  <nav class="h-16 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex h-full max-w-7xl items-center justify-between gap-4 px-4">
+      <a href="#home" class="flex min-w-0 items-center gap-2.5">
+        <img src="logo.png" alt="eMutation logo"
+             class="h-11 w-11 shrink-0 object-contain" />
+        <span class="min-w-0">
+          <span class="block truncate text-[13px] font-extrabold leading-tight text-slate-900 sm:text-[15px]">
+            eMutation Birth certificate
+          </span>
+          <span class="block text-[10px] font-semibold uppercase tracking-wider text-brand-600 sm:text-[11px]">
+            application support
+          </span>
+        </span>
+      </a>
+
+      <div class="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
+        <a href="#home"    class="transition hover:text-brand-700">হোম</a>
+        <a href="#service" class="transition hover:text-brand-700">সেবাসমূহ</a>
+        <a href="#how"     class="transition hover:text-brand-700">কিভাবে কাজ করে</a>
+        <a href="#footer"  class="transition hover:text-brand-700">যোগাযোগ</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button type="button" data-open-chat
+          class="hidden items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-md shadow-brand-600/25 transition hover:bg-brand-700 sm:inline-flex">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+          </svg>
+          সাপোর্ট চ্যাট
+        </button>
+
+        <button type="button" id="menuBtn" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-300 text-slate-600 md:hidden">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobileMenu" class="hidden border-t border-slate-200 bg-white md:hidden">
+      <div class="mx-auto max-w-7xl space-y-1 px-4 py-3 text-sm font-semibold text-slate-700">
+        <a href="#home"    class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">হোম</a>
+        <a href="#service" class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সেবাসমূহ</a>
+        <a href="#how"     class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">কিভাবে কাজ করে</a>
+        <a href="#footer"  class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">যোগাযোগ</a>
+        <button type="button" data-open-chat class="mt-1 block w-full rounded-lg bg-brand-600 px-3 py-2.5 text-center font-bold text-white">
+          সাপোর্ট চ্যাট
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="home" class="relative overflow-hidden bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 text-white">
+  <div class="pointer-events-none absolute inset-0 opacity-[.12]"
+       style="background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size:22px 22px;"></div>
+  <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-400/20 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-brand-300/10 blur-3xl"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 py-14 text-center sm:py-20 lg:py-24">
+    <span class="anim-in inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-50 backdrop-blur sm:text-xs">
+      <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
+      অনলাইন ই-নামজারি সেবা
+    </span>
+
+    <h1 class="anim-in mt-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+      eMutation Birth certificate<br class="hidden sm:block" />
+      <span class="bg-gradient-to-r from-white to-brand-200 bg-clip-text text-transparent">application support</span>
+    </h1>
+
+    <p class="anim-in mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-brand-100 sm:text-base lg:text-lg">
+      ১৮ বছর বয়সোর্ধ্ব নাগরিকদের জন্ম নিবন্ধন আবেদন প্রক্রিয়া সম্পূর্ণ দ্রুত, নিরাপদ ও নির্ভরযোগ্যভাবে সম্পন্ন করার জন্য
+      একটি পেশাদার সাপোর্ট সেবা।
+    </p>
+
+    <div class="anim-in mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href="#service"
+         class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-extrabold text-brand-800 shadow-xl shadow-black/20 transition hover:bg-brand-50 active:scale-[.98] sm:w-auto">
+        আবেদন শুরু করুন
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+        </svg>
+      </a>
+      <button type="button" data-open-chat
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20 sm:w-auto">
+        সাপোর্টের সাথে কথা বলুন
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICE / ORDER FORM ============ -->
+<section id="service" class="border-b border-slate-200 bg-white py-14 sm:py-20">
+  <div class="mx-auto max-w-6xl px-4">
+
+    <div class="mx-auto max-w-2xl text-center">
+      <span class="inline-block rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700">
+        আমাদের সেবা
+      </span>
+      <h2 class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl lg:text-4xl">
+        ১৮+ জন্ম নিবন্ধন আবেদন
+      </h2>
+      <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
+        কতজন আবেদনকারীর তথ্য যোগ করতে চান তা নির্বাচন করুন। প্রতি আবেদনকারীর জন্য ফি
+        <b class="text-brand-700">৫০০ টাকা</b>।
+      </p>
+    </div>
+
+    <!-- Service highlights -->
+    <div class="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+      <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 text-center">
+        <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-brand-100 text-brand-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+        </span>
+        <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">প্রতি জন</p>
+        <p class="mt-0.5 text-lg font-extrabold text-slate-900">৳ ৫০০</p>
+      </div>
+
+      <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 text-center">
+        <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-emerald-100 text-emerald-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+        </span>
+        <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">ডেলিভারি</p>
+        <p class="mt-0.5 text-lg font-extrabold text-slate-900">৩০-১২০ মিনিট</p>
+      </div>
+
+      <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 text-center">
+        <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-violet-100 text-violet-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.6 2A9.6 9.6 0 0 1 12 21a9.6 9.6 0 0 1-8.6-9A9.6 9.6 0 0 1 12 3a9.6 9.6 0 0 1 8.6 9Z"/>
+          </svg>
+        </span>
+        <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">গোপনীয়তা</p>
+        <p class="mt-0.5 text-lg font-extrabold text-slate-900">১০০% সুরক্ষিত</p>
+      </div>
+
+      <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 text-center">
+        <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-amber-100 text-amber-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+          </svg>
+        </span>
+        <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">সাপোর্ট</p>
+        <p class="mt-0.5 text-lg font-extrabold text-slate-900">২৪/৭ লাইভ</p>
+      </div>
+    </div>
+
+    <!-- ORDER FORM CARD -->
+    <div class="mx-auto mt-10 max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70">
+
+      <div class="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white px-5 py-5 sm:px-7 sm:py-6">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="step-item active flex items-center gap-2.5" data-step="1">
+            <span class="step-circle grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">১</span>
+            <span class="step-label hidden text-xs font-semibold text-slate-500 sm:inline">তথ্য প্রদান</span>
+          </div>
+          <div class="h-px flex-1 bg-slate-200"></div>
+          <div class="step-item flex items-center gap-2.5" data-step="2">
+            <span class="step-circle grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">২</span>
+            <span class="step-label hidden text-xs font-semibold text-slate-500 sm:inline">পেমেন্ট</span>
+          </div>
+          <div class="h-px flex-1 bg-slate-200"></div>
+          <div class="step-item flex items-center gap-2.5" data-step="3">
+            <span class="step-circle grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">৩</span>
+            <span class="step-label hidden text-xs font-semibold text-slate-500 sm:inline">সম্পন্ন</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div id="step1" class="p-5 sm:p-7 lg:p-8">
+
+        <div class="rounded-2xl border border-slate-200 bg-gradient-to-br from-brand-50/60 to-slate-50 p-5">
+          <label class="label">কতজন আবেদনকারীর তথ্য যোগ করবেন? <span class="text-rose-500">*</span></label>
+
+          <div class="mt-2 flex flex-wrap items-center gap-3">
+            <div class="flex items-center overflow-hidden rounded-xl border border-slate-300 bg-white shadow-sm">
+              <button type="button" id="minusBtn" class="grid h-11 w-11 place-items-center text-xl font-bold text-slate-600 transition hover:bg-slate-100">−</button>
+              <span id="countDisplay" class="grid h-11 w-16 place-items-center border-x border-slate-200 text-base font-extrabold text-slate-900">১</span>
+              <button type="button" id="plusBtn" class="grid h-11 w-11 place-items-center text-xl font-bold text-slate-600 transition hover:bg-slate-100">+</button>
+            </div>
+            <select id="countSelect" class="input max-w-[200px]"></select>
+          </div>
+
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <div class="rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">আবেদনকারী</p>
+              <p id="sumCount" class="mt-0.5 text-base font-extrabold text-slate-900">১ জন</p>
+            </div>
+            <div class="rounded-xl border-2 border-brand-200 bg-brand-50 px-4 py-3">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-brand-600">মোট বিল</p>
+              <p id="sumTotal" class="mt-0.5 text-base font-extrabold text-brand-800">৳ ৫০০</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">১</span>
+          আবেদনকারীর তথ্য
+        </h3>
+        <p class="mt-1 text-xs text-slate-500">জন্ম নিবন্ধন সনদ অনুযায়ী প্রতিটি তথ্য সঠিকভাবে পূরণ করুন।</p>
+
+        <div id="applicantsWrap" class="mt-4 space-y-5"></div>
+
+        <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">২</span>
+          land.gov.bd অ্যাকাউন্ট তথ্য
+        </h3>
+        <p class="mt-1 text-xs text-slate-500">
+          যে অ্যাকাউন্ট দিয়ে land.gov.bd ওয়েবসাইটে আবেদন করা হবে, সেই অ্যাকাউন্টের তথ্য দিন।
+        </p>
+
+        <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+              </svg>
+            </span>
+            <p class="text-xs leading-relaxed text-amber-800">
+              এই তথ্য শুধুমাত্র আপনার আবেদন সম্পন্ন করার জন্য ব্যবহৃত হবে এবং সম্পূর্ণ গোপন রাখা হবে।
+            </p>
+          </div>
+
+          <div class="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label class="label">অ্যাকাউন্ট মোবাইল নম্বর <span class="text-rose-500">*</span></label>
+              <input type="tel" id="landNumber" class="input" placeholder="01XXXXXXXXX" inputmode="numeric" />
+            </div>
+            <div>
+              <label class="label">অ্যাকাউন্ট পাসওয়ার্ড <span class="text-rose-500">*</span></label>
+              <div class="relative">
+                <input type="password" id="landPassword" class="input pr-11" placeholder="পাসওয়ার্ড লিখুন" />
+                <button type="button" id="togglePwd"
+                  class="absolute inset-y-0 right-0 grid w-11 place-items-center text-slate-400 hover:text-slate-700">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
+          <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">৩</span>
+          রিসিভার ইমেইল
+        </h3>
+        <p class="mt-1 text-xs text-slate-500">অর্ডার সম্পন্ন হলে এই ইমেইলে আবেদনকারীর জন্ম নিবন্ধন অনুযায়ী তথ্য পাঠানো হবে।</p>
+
+        <div class="mt-4">
+          <input type="email" id="receiverEmail" class="input" placeholder="example@email.com" />
+        </div>
+
+        <div class="mt-8 flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-xs text-slate-500">* চিহ্নিত সকল ঘর পূরণ করা আবশ্যক।</p>
+          <button type="button" id="nextBtn" class="btn-primary w-full sm:w-auto">
+            পেমেন্টে যান
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div id="step2" class="hidden p-5 sm:p-7 lg:p-8">
+
+        <button type="button" id="backBtn" class="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 transition hover:text-brand-700">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m6 6-6-6 6-6"/>
+          </svg>
+          তথ্য সম্পাদনা করুন
+        </button>
+
+        <h3 class="text-xl font-extrabold text-slate-900">পেমেন্ট সম্পন্ন করুন</h3>
+        <p class="mt-1.5 text-sm text-slate-600">
+          নিচের বিকাশ নম্বরে <b>Send Money</b> করে টাকা পাঠান, তারপর ফর্মটি পূরণ করুন।
+        </p>
+
+        <div class="mt-6 rounded-2xl border-2 border-dashed border-brand-300 bg-gradient-to-br from-brand-50 to-brand-100/40 p-6 text-center">
+          <p class="text-xs font-bold uppercase tracking-wider text-brand-700">মোট পরিশোধযোগ্য বিল</p>
+          <p id="payTotal" class="mt-2 text-5xl font-extrabold text-brand-900">৳ ৫০০</p>
+          <p id="payBreakdown" class="mt-2 text-xs text-brand-700">১ জন × ৳ ৫০০</p>
+        </div>
+
+        <div class="mt-5 rounded-2xl border border-slate-200 bg-white p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">বিকাশ (Send Money) নম্বর</p>
+              <p class="mt-1 text-3xl font-extrabold tracking-wide text-slate-900">01860319433</p>
+            </div>
+            <button type="button" id="copyBkash"
+              class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M5 8h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/>
+              </svg>
+              কপি করুন
+            </button>
+          </div>
+          <p class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">
+            ⚠️ শুধুমাত্র <b>Send Money</b> করুন, Cash Out নয়।
+          </p>
+        </div>
+
+        <div class="mt-5">
+          <label class="label">যে নম্বর থেকে টাকা পাঠিয়েছেন <span class="text-rose-500">*</span></label>
+          <input type="tel" id="senderNumber" class="input" placeholder="01XXXXXXXXX" inputmode="numeric" />
+          <p class="hint">ম্যানুয়াল পেমেন্ট যাচাইয়ের জন্য সঠিক নম্বর দিন।</p>
+        </div>
+
+        <button type="button" id="submitBtn" class="btn-primary mt-6 w-full py-4 text-base">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4m5.6 2A9.6 9.6 0 0 1 12 21a9.6 9.6 0 0 1-8.6-9A9.6 9.6 0 0 1 12 3a9.6 9.6 0 0 1 8.6 9Z"/>
+          </svg>
+          পেমেন্ট যাচাই করে অর্ডার সাবমিট করুন
+        </button>
+
+        <div id="progressWrap" class="mt-5 hidden">
+          <div class="mb-2 flex items-center justify-between text-xs font-semibold text-slate-600">
+            <span id="progressText">আপলোড হচ্ছে…</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="h-2 w-full overflow-hidden rounded-full bg-slate-200">
+            <div id="progressBar" class="h-full w-0 rounded-full bg-brand-600 transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <p id="formError" class="mt-4 hidden rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how" class="border-b border-slate-200 bg-slate-50 py-14 sm:py-20">
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="inline-block rounded-full bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700 ring-1 ring-brand-100">
+        গুরুত্বপূর্ণ তথ্য
+      </span>
+      <h2 class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl lg:text-4xl">কিভাবে কাজ করে</h2>
+      <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
+        অর্ডার সম্পন্ন করার পূর্বে নিচের নির্দেশাবলী ভালোভাবে পড়ে নিন।
+      </p>
+    </div>
+
+    <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div class="card p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">১. land.gov.bd অ্যাকাউন্ট</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          land.gov.bd ওয়েবসাইটে যে অ্যাকাউন্ট দিয়ে আবেদন করা হবে, সেই অ্যাকাউন্টের <b>মোবাইল নম্বর ও পাসওয়ার্ড</b>
+          অবশ্যই এন্ট্রি করতে হবে। এটি ছাড়া আবেদন প্রক্রিয়া সম্পন্ন করা সম্ভব নয়।
+        </p>
+      </div>
+
+      <div class="card p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">২. ডেলিভারি সময়</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          সাধারণত অর্ডার <b>৩০ মিনিট থেকে ১২০ মিনিটের</b> মধ্যে ডেলিভারি হয়ে থাকে — যদি সার্ভারে কোনো সমস্যা না থাকে।
+        </p>
+      </div>
+
+      <div class="card p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.5-5 3 3.5L15 10l5 6M5 20h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">৩. সনদের স্পষ্ট ছবি</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          গ্রাহক যতজন, তাদের প্রত্যেকের তথ্য যোগ করে অবশ্যই জন্ম নিবন্ধন সনদের <b>পরিষ্কার ছবি</b> তুলে অ্যাটাচ করতে হবে
+          (JPG / PNG ফরম্যাট)।
+        </p>
+      </div>
+
+      <div class="card p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h2m4 0h4M5 6h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">৪. বিকাশে পেমেন্ট</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          পেমেন্ট অবশ্যই <b>বিকাশ (bKash)</b> এ Send Money করে পাঠাতে হবে। প্রাপক নম্বর:
+          <b class="text-slate-900">01860319433</b>। প্রতি আবেদনকারীর জন্য ফি <b>৫০০ টাকা</b>।
+        </p>
+      </div>
+
+      <div class="card p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">৫. ইমেইলে নিশ্চিতকরণ</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          অর্ডার সম্পন্ন হয়ে গেলে <b>মেইল করে জানিয়ে দেওয়া হবে</b> — গ্রাহকের জন্ম নিবন্ধন অনুযায়ী সম্পূর্ণ তথ্য সহ।
+        </p>
+      </div>
+
+      <div class="card border-brand-200 bg-brand-50/50 p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-600 text-white">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">৬. লাইভ সাপোর্ট</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          যেকোনো সমস্যায় পেজের নিচে ডান কোণায় থাকা <b>সাপোর্ট চ্যাট</b> আইকনে ক্লিক করে সরাসরি আমাদের সাথে কথা বলতে পারেন।
+        </p>
+        <button type="button" data-open-chat class="btn-primary mt-4 w-full">চ্যাট শুরু করুন</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="footer" class="bg-slate-900 text-slate-300">
+  <div class="mx-auto max-w-7xl px-4 pt-12 pb-28 sm:pb-12">
+    <div class="grid gap-8 md:grid-cols-3">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <img src="logo.png" alt="eMutation logo"
+               class="h-11 w-11 shrink-0 object-contain" />
+          <div>
+            <p class="text-sm font-extrabold text-white">eMutation Birth certificate</p>
+            <p class="text-[11px] uppercase tracking-wider text-brand-400">application support</p>
+          </div>
+        </div>
+        <p class="mt-4 text-sm leading-relaxed text-slate-400">
+          ১৮+ জন্ম নিবন্ধন আবেদনের জন্য নির্ভরযোগ্য ও পেশাদার অনলাইন সাপোর্ট সেবা।
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-extrabold uppercase tracking-wider text-white">যোগাযোগ</h4>
+        <ul class="mt-4 space-y-3 text-sm">
+          <li>
+            <a href="tel:01350141762" class="flex items-center gap-2.5 text-slate-400 transition hover:text-white">
+              <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.25 1.05l-1.3 1.3a15 15 0 0 0 6.17 6.17l1.3-1.3a1 1 0 0 1 1.05-.25l3.6 1.2a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.7 21 3 14.3 3 6V5Z"/>
+              </svg>
+              01350141762
+            </a>
+          </li>
+          <li>
+            <a href="mailto:nopqrshov337@gmail.com" class="flex items-center gap-2.5 break-all text-slate-400 transition hover:text-white">
+              <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5 12 13l9-5.5M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+              </svg>
+              nopqrshov337@gmail.com
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-extrabold uppercase tracking-wider text-white">দ্রুত লিংক</h4>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li><a href="#home"    class="text-slate-400 transition hover:text-white">হোম</a></li>
+          <li><a href="#service" class="text-slate-400 transition hover:text-white">সেবাসমূহ</a></li>
+          <li><a href="#how"     class="text-slate-400 transition hover:text-white">কিভাবে কাজ করে</a></li>
+          <li><button type="button" data-open-chat class="text-slate-400 transition hover:text-white">সাপোর্ট চ্যাট</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-800 pt-6 text-center sm:flex-row sm:text-left">
+      <p class="text-xs text-slate-500">
+        © <span id="year"></span> eMutation Birth certificate application support. সর্বস্বত্ব সংরক্ষিত।
+      </p>
+      <p class="text-xs text-slate-500 sm:pr-20">
+        Developed by
+        <a href="https://codecurebd.vercel.app/" target="_blank" rel="noopener"
+           class="font-bold text-brand-400 transition hover:text-brand-300">CodeCureBD</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ SUPPORT CHAT ============ -->
+<button type="button" id="chatToggle"
+  class="fixed bottom-5 right-4 z-50 grid h-14 w-14 place-items-center rounded-full bg-brand-600 text-white shadow-2xl shadow-brand-600/40 transition hover:scale-105 hover:bg-brand-700 active:scale-95 sm:right-6">
+  <svg id="chatIconOpen" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+  </svg>
+  <svg id="chatIconClose" class="hidden h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+  </svg>
+  <span id="chatBadge" class="absolute -right-0.5 -top-0.5 hidden h-5 w-5 place-items-center rounded-full bg-rose-500 text-[10px] font-bold text-white">0</span>
+</button>
+
+<div id="chatPanel"
+  class="fixed bottom-24 right-4 z-50 hidden w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:right-6">
+  <div class="flex items-center justify-between gap-3 bg-gradient-to-r from-brand-700 to-brand-900 px-4 py-3.5 text-white">
+    <div class="flex items-center gap-3">
+      <span class="relative grid h-9 w-9 place-items-center rounded-full bg-white/15">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18.4 14.8A9 9 0 1 1 21 12m-9 0v.01"/>
+        </svg>
+        <span class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-brand-800 bg-emerald-400"></span>
+      </span>
+      <div>
+        <p class="text-sm font-extrabold leading-tight">সাপোর্ট চ্যাট</p>
+        <p class="text-[11px] text-brand-100">সাধারণত কয়েক মিনিটেই উত্তর</p>
+      </div>
+    </div>
+    <button type="button" id="chatClose" class="grid h-8 w-8 place-items-center rounded-lg text-white/80 transition hover:bg-white/10 hover:text-white">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="chatBody" class="chat-body h-72 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4"></div>
+
+  <form id="chatForm" class="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-3">
+    <input id="chatInput" type="text" autocomplete="off" placeholder="আপনার মেসেজ লিখুন…"
+      class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100" />
+    <button type="submit"
+      class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white transition hover:bg-brand-700 disabled:opacity-50">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.3 3.7a1 1 0 0 1 1.3-1.2l16.4 8.4a1 1 0 0 1 0 1.8L4.6 21.5a1 1 0 0 1-1.3-1.2L6 12Zm0 0h6"/>
+      </svg>
+    </button>
+  </form>
+</div>
+
+<!-- ============ INVOICE MODAL ============ -->
+<div id="invoiceModal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/70 p-4 backdrop-blur-sm">
+  <div class="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl">
+    <div id="invoiceBox" class="p-6 sm:p-7">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-5">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-brand-600">ইনভয়েস</p>
+          <h3 class="mt-1 text-lg font-extrabold text-slate-900">eMutation Birth certificate support</h3>
+        </div>
+        <span class="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold text-amber-700">যাচাইাধীন</span>
+      </div>
+
+      <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p class="text-xs text-slate-500">অর্ডার আইডি</p>
+          <p id="invOrderId" class="mt-0.5 font-extrabold text-slate-900">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-500">তারিখ</p>
+          <p id="invDate" class="mt-0.5 font-semibold text-slate-800">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-500">আবেদনকারী</p>
+          <p id="invCount" class="mt-0.5 font-semibold text-slate-800">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-500">রিসিভার ইমেইল</p>
+          <p id="invEmail" class="mt-0.5 break-all font-semibold text-slate-800">—</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-xs text-slate-500">যে নম্বর থেকে বিকাশে পেমেন্ট</p>
+          <p id="invSender" class="mt-0.5 font-semibold text-slate-800">—</p>
+        </div>
+      </div>
+
+      <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">আবেদনকারীর তালিকা</p>
+        <ul id="invApplicants" class="mt-3 space-y-2 text-sm text-slate-700"></ul>
+      </div>
+
+      <div class="mt-5 flex items-center justify-between rounded-xl bg-brand-50 px-4 py-3.5">
+        <span class="text-sm font-bold text-brand-800">মোট পরিশোধিত</span>
+        <span id="invTotal" class="text-xl font-extrabold text-brand-900">৳ ০</span>
+      </div>
+
+      <p class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-800">
+        আপনার অর্ডার সফলভাবে জমা হয়েছে। পেমেন্ট যাচাইয়ের পর সাধারণত <b>৩০ থেকে ১২০ মিনিটের</b> মধ্যে
+        আবেদন সম্পন্ন করে আপনার ইমেইলে জানিয়ে দেওয়া হবে। অর্ডার আইডি সংরক্ষণ করুন।
+      </p>
+
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+        <button type="button" id="printInvoice" class="btn-ghost flex-1">প্রিন্ট / সেভ করুন</button>
+        <button type="button" id="closeInvoice" class="btn-primary flex-1">ঠিক আছে</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCRIPTS ============ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, doc, updateDoc, onSnapshot,
+  query, orderBy, serverTimestamp, getDoc, increment
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+/* ================= Firebase ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyDbNC1ZD67zcwpLHZL3WB41dE_z8WmjbK8",
+  authDomain: "emutationbirth.firebaseapp.com",
+  projectId: "emutationbirth",
+  storageBucket: "emutationbirth.firebasestorage.app",
+  messagingSenderId: "200454817186",
+  appId: "1:200454817186:web:b28e3cbe6f72a1f4cfdefb"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+/* ================= Cloudinary ================= */
+const CLOUDINARY_CLOUD_NAME    = 'zmoyykj7';
+const CLOUDINARY_UPLOAD_PRESET = 'emutation_unsigned';
+
+/* ================= Config ================= */
+const PRICE_PER_PERSON = 500;
+const BKASH_NUMBER     = '01860319433';
+
+/* ================= Helpers ================= */
+const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+const toBn = n => String(n).replace(/\d/g, d => BN_DIGITS[+d]);
+const $ = s => document.querySelector(s);
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function generateOrderId() {
+  const d = new Date();
+  const ymd = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  const rand = Math.random().toString(36).slice(2,7).toUpperCase();
+  return `EMB-${ymd}-${rand}`;
+}
+function escapeHtml(str='') {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function setStep(n) {
+  document.querySelectorAll('.step-item').forEach(el => {
+    const s = +el.dataset.step;
+    el.classList.toggle('active', s === n);
+    el.classList.toggle('done',   s <  n);
+  });
+}
+
+/* ================= Header ================= */
+const topbar = $('#topbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) topbar.classList.add('collapsed');
+  else topbar.classList.remove('collapsed');
+}, { passive: true });
+
+$('#menuBtn').addEventListener('click', () => $('#mobileMenu').classList.toggle('hidden'));
+document.querySelectorAll('#mobileMenu a').forEach(a =>
+  a.addEventListener('click', () => $('#mobileMenu').classList.add('hidden'))
+);
+$('#year').textContent = new Date().getFullYear();
+
+/* ================= Applicant count ================= */
+let applicantCount = 1;
+const MIN_COUNT = 1, MAX_COUNT = 10;
+const countSelect = $('#countSelect');
+for (let i = MIN_COUNT; i <= MAX_COUNT; i++) {
+  countSelect.insertAdjacentHTML('beforeend', `<option value="${i}">${toBn(i)} জন আবেদনকারী</option>`);
+}
+countSelect.value = 1;
+
+function snapshotApplicants() {
+  return [...document.querySelectorAll('.applicant-card')].map(card => {
+    const o = {};
+    card.querySelectorAll('[data-field]').forEach(el => {
+      if (el.type !== 'file') o[el.dataset.field] = el.value;
+    });
+    return o;
+  });
+}
+function restoreApplicants(snap) {
+  document.querySelectorAll('.applicant-card').forEach((card, i) => {
+    const data = snap[i];
+    if (!data) return;
+    card.querySelectorAll('[data-field]').forEach(el => {
+      if (el.type !== 'file' && data[el.dataset.field] !== undefined) el.value = data[el.dataset.field];
+    });
+  });
+}
+
+function applicantCardHTML(i) {
+  const n = toBn(i + 1);
+  return `
+  <div class="applicant-card anim-in rounded-2xl border border-slate-200 bg-slate-50/50 p-5 sm:p-6" data-index="${i}">
+    <div class="mb-5 flex items-center gap-3">
+      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-600 text-sm font-extrabold text-white">${n}</span>
+      <div>
+        <h4 class="text-base font-extrabold text-slate-900">আবেদনকারী ${n}</h4>
+        <p class="text-xs text-slate-500">জন্ম নিবন্ধন সনদ অনুযায়ী তথ্য দিন</p>
+      </div>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label class="label">জন্ম নিবন্ধন নম্বর <span class="text-rose-500">*</span></label>
+        <input type="text" data-field="certNo" class="input" placeholder="১৭ ডিজিটের জন্ম নিবন্ধন নম্বর" />
+      </div>
+      <div>
+        <label class="label">জন্ম তারিখ <span class="text-rose-500">*</span></label>
+        <input type="date" data-field="birthDate" class="input" />
+      </div>
+      <div>
+        <label class="label">নাম <span class="text-rose-500">*</span></label>
+        <input type="text" data-field="name" class="input" placeholder="আবেদনকারীর পূর্ণ নাম" />
+      </div>
+      <div>
+        <label class="label">পিতার নাম <span class="text-rose-500">*</span></label>
+        <input type="text" data-field="fatherName" class="input" placeholder="পিতার নাম" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="label">মাতার নাম <span class="text-rose-500">*</span></label>
+        <input type="text" data-field="motherName" class="input" placeholder="মাতার নাম" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="label">ঠিকানা (দলিল / ওয়ারিশ সনদ অনুযায়ী) <span class="text-rose-500">*</span></label>
+        <textarea data-field="address" rows="2" class="input" placeholder="দলিল / ওয়ারিশ সনদ অনুযায়ী সম্পূর্ণ ঠিকানা"></textarea>
+        <p class="hint">এই ঠিকানাটিই আবেদনে গ্রাহকের ঠিকানা হিসেবে ব্যবহার করা হবে।</p>
+      </div>
+      <div class="sm:col-span-2">
+        <label class="label">জন্ম নিবন্ধন সনদের ছবি (JPG / PNG) <span class="text-rose-500">*</span></label>
+        <input type="file" data-field="file" accept="image/jpeg,image/png,image/jpg" class="file-input" />
+        <p class="hint">স্পষ্টভাবে তোলা ছবি আপলোড করুন। সর্বোচ্চ ৫ MB।</p>
+        <div class="file-preview mt-3 hidden">
+          <img class="h-28 w-auto rounded-xl border border-slate-200 object-cover shadow-sm" alt="preview" />
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderApplicants() {
+  const snap = snapshotApplicants();
+  const wrap = $('#applicantsWrap');
+  wrap.innerHTML = '';
+  for (let i = 0; i < applicantCount; i++) wrap.insertAdjacentHTML('beforeend', applicantCardHTML(i));
+  restoreApplicants(snap);
+  updateSummary();
+}
+
+function updateSummary() {
+  const total = applicantCount * PRICE_PER_PERSON;
+  $('#countDisplay').textContent = toBn(applicantCount);
+  countSelect.value = applicantCount;
+  $('#sumCount').textContent = `${toBn(applicantCount)} জন`;
+  $('#sumTotal').textContent = `৳ ${total}`;
+  $('#payTotal').textContent = `৳ ${total}`;
+  $('#payBreakdown').textContent = `${toBn(applicantCount)} জন × ৳ ${PRICE_PER_PERSON}`;
+}
+
+function setCount(n) {
+  applicantCount = Math.min(MAX_COUNT, Math.max(MIN_COUNT, n));
+  renderApplicants();
+}
+
+$('#plusBtn').addEventListener('click', () => setCount(applicantCount + 1));
+$('#minusBtn').addEventListener('click', () => setCount(applicantCount - 1));
+countSelect.addEventListener('change', e => setCount(+e.target.value));
+
+/* file preview */
+$('#applicantsWrap').addEventListener('change', e => {
+  const input = e.target.closest('input[type="file"]');
+  if (!input) return;
+  const box = input.parentElement.querySelector('.file-preview');
+  const img = box?.querySelector('img');
+  const file = input.files?.[0];
+  if (!box || !img) return;
+
+  if (!file) { box.classList.add('hidden'); img.removeAttribute('src'); return; }
+  if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
+    input.value = ''; box.classList.add('hidden');
+    alert('শুধুমাত্র JPG অথবা PNG ফরম্যাটের ছবি আপলোড করুন।');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    input.value = ''; box.classList.add('hidden');
+    alert('ছবির সাইজ সর্বোচ্চ ৫ MB হতে পারবে।');
+    return;
+  }
+  img.src = URL.createObjectURL(file);
+  box.classList.remove('hidden');
+});
+
+/* password toggle */
+$('#togglePwd').addEventListener('click', () => {
+  const el = $('#landPassword');
+  el.type = el.type === 'password' ? 'text' : 'password';
+});
+
+renderApplicants();
+
+/* ================= Validation ================= */
+function clearErrors() {
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+  const fe = $('#formError');
+  fe.classList.add('hidden'); fe.textContent = '';
+}
+function showError(msg) {
+  const fe = $('#formError');
+  fe.textContent = msg;
+  fe.classList.remove('hidden');
+  fe.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function markError(el) {
+  el.classList.add('field-error');
+  el.addEventListener('input', () => el.classList.remove('field-error'), { once: true });
+}
+
+function collectApplicants(validate = true) {
+  const cards = [...document.querySelectorAll('.applicant-card')];
+  const list = [];
+  let ok = true, firstBad = null;
+
+  cards.forEach(card => {
+    const get = f => card.querySelector(`[data-field="${f}"]`);
+    const rec = {
+      certNo:     get('certNo').value.trim(),
+      birthDate:  get('birthDate').value,
+      name:       get('name').value.trim(),
+      fatherName: get('fatherName').value.trim(),
+      motherName: get('motherName').value.trim(),
+      address:    get('address').value.trim(),
+      file:       get('file').files?.[0] || null,
+    };
+
+    if (validate) {
+      ['certNo','birthDate','name','fatherName','motherName','address'].forEach(f => {
+        if (!rec[f]) { ok = false; markError(get(f)); firstBad = firstBad || get(f); }
+      });
+      if (!rec.file) {
+        ok = false;
+        markError(get('file'));
+        firstBad = firstBad || get('file');
+      }
+    }
+    list.push(rec);
+  });
+
+  return { list, ok, firstBad };
+}
+
+$('#nextBtn').addEventListener('click', () => {
+  clearErrors();
+  const { ok, firstBad } = collectApplicants(true);
+
+  if (!ok) {
+    showError('অনুগ্রহ করে প্রতিটি আবেদনকারীর সকল তথ্য পূরণ করুন এবং জন্ম নিবন্ধন সনদের ছবি অ্যাটাচ করুন।');
+    firstBad?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const landNumber = $('#landNumber').value.trim();
+  const landPassword = $('#landPassword').value.trim();
+  if (!landNumber) { markError($('#landNumber')); showError('land.gov.bd অ্যাকাউন্টের মোবাইল নম্বর দিন।'); return; }
+  if (!/^01[3-9]\d{8}$/.test(landNumber)) { markError($('#landNumber')); showError('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।'); return; }
+  if (!landPassword) { markError($('#landPassword')); showError('land.gov.bd অ্যাকাউন্টের পাসওয়ার্ড দিন।'); return; }
+
+  const email = $('#receiverEmail').value.trim();
+  if (!email) { markError($('#receiverEmail')); showError('রিসিভার ইমেইল দিন।'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { markError($('#receiverEmail')); showError('সঠিক ইমেইল এড্রেস দিন।'); return; }
+
+  $('#step1').classList.add('hidden');
+  $('#step2').classList.remove('hidden');
+  updateSummary();
+  setStep(2);
+  $('#step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+$('#backBtn').addEventListener('click', () => {
+  $('#step2').classList.add('hidden');
+  $('#step1').classList.remove('hidden');
+  setStep(1);
+  $('#step1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* copy bkash */
+$('#copyBkash').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(BKASH_NUMBER);
+    const btn = $('#copyBkash');
+    const html = btn.innerHTML;
+    btn.innerHTML = '✓ কপি হয়েছে';
+    setTimeout(() => (btn.innerHTML = html), 1600);
+  } catch { alert('কপি করা যায়নি। নম্বরটি ম্যানুয়ালি লিখুন: ' + BKASH_NUMBER); }
+});
+
+/* ================= Cloudinary Upload ================= */
+function uploadToCloudinary(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
+    xhr.upload.onprogress = e => {
+      if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          if (!data.secure_url) return reject(new Error('আপলোড URL পাওয়া যায়নি'));
+          resolve(data.secure_url);
+        } catch (err) {
+          reject(new Error('আপলোড রেসপন্স পড়া যায়নি'));
+        }
+      } else {
+        let msg = 'ছবি আপলোড ব্যর্থ হয়েছে';
+        try {
+          const err = JSON.parse(xhr.responseText);
+          msg = err?.error?.message || msg;
+          if (msg.toLowerCase().includes('preset')) {
+            msg = 'Cloudinary upload preset সেটআপ করা হয়নি। Settings → Upload → Upload presets এ গিয়ে "emutation_unsigned" নামে unsigned preset বানান।';
+          }
+        } catch {}
+        reject(new Error(msg));
+      }
+    };
+    xhr.onerror = () => reject(new Error('নেটওয়ার্ক সমস্যা — ইন্টারনেট চেক করুন'));
+    xhr.send(fd);
+  });
+}
+
+/* ================= Order Submit ================= */
+const submitBtn = $('#submitBtn');
+
+submitBtn.addEventListener('click', async () => {
+  clearErrors();
+
+  const sender = $('#senderNumber').value.trim();
+  if (!sender) { markError($('#senderNumber')); showError('যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি লিখুন।'); return; }
+  if (!/^01[3-9]\d{8}$/.test(sender)) { markError($('#senderNumber')); showError('সঠিক ১১ ডিজিটের বিকাশ নম্বর দিন।'); return; }
+
+  const { list, ok } = collectApplicants(false);
+  if (!ok || list.some(a => !a.file)) {
+    showError('কিছু তথ্য অনুপস্থিত। অনুগ্রহ করে পূর্বের ধাপে ফিরে সব তথ্য পূরণ করুন।');
+    return;
+  }
+
+  const total = applicantCount * PRICE_PER_PERSON;
+  const orderId = generateOrderId();
+
+  submitBtn.disabled = true;
+  const originalHTML = submitBtn.innerHTML;
+  submitBtn.innerHTML = 'প্রক্রিয়া চলছে…';
+  $('#progressWrap').classList.remove('hidden');
+
+  try {
+    const totalFiles = list.length;
+    let done = 0;
+
+    for (let i = 0; i < list.length; i++) {
+      const base = Math.round((done / totalFiles) * 100);
+      $('#progressText').textContent = `আবেদনকারী ${toBn(i+1)} এর সনদ আপলোড হচ্ছে…`;
+      $('#progressBar').style.width = `${base}%`;
+      $('#progressPct').textContent = `${base}%`;
+
+      const url = await uploadToCloudinary(list[i].file, pct => {
+        const overall = Math.round(((done + pct/100) / totalFiles) * 100);
+        $('#progressBar').style.width = `${overall}%`;
+        $('#progressPct').textContent = `${overall}%`;
+      });
+      list[i].imageUrl = url;
+      done++;
+    }
+
+    $('#progressText').textContent = 'অর্ডার সংরক্ষণ হচ্ছে…';
+    $('#progressBar').style.width = '100%';
+    $('#progressPct').textContent = '100%';
+
+    const applicants = list.map(a => ({
+      certNo: a.certNo,
+      birthDate: a.birthDate,
+      name: a.name,
+      fatherName: a.fatherName,
+      motherName: a.motherName,
+      address: a.address,
+      imageUrl: a.imageUrl
+    }));
+
+    const payload = {
+      orderId,
+      createdAt: serverTimestamp(),
+      status: 'pending',
+      paymentStatus: 'pending-verification',
+      applicantCount,
+      pricePerPerson: PRICE_PER_PERSON,
+      amount: total,
+      applicants,
+      landAccountNumber: $('#landNumber').value.trim(),
+      landAccountPassword: $('#landPassword').value.trim(),
+      receiverEmail: $('#receiverEmail').value.trim(),
+      bkashReceiverNumber: BKASH_NUMBER,
+      bkashSenderNumber: sender
+    };
+
+    await addDoc(collection(db, 'orders'), payload);
+
+    $('#invOrderId').textContent = orderId;
+    $('#invDate').textContent    = fmtDate(new Date());
+    $('#invCount').textContent   = `${toBn(applicantCount)} জন`;
+    $('#invEmail').textContent   = payload.receiverEmail;
+    $('#invSender').textContent  = sender;
+    $('#invTotal').textContent   = `৳ ${total}`;
+    $('#invApplicants').innerHTML = applicants.map((a, i) => `
+      <li class="flex items-start gap-2.5">
+        <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">${toBn(i+1)}</span>
+        <span class="min-w-0">
+          <b class="text-slate-900">${escapeHtml(a.name)}</b>
+          <span class="block text-xs text-slate-500">নিবন্ধন নং: ${escapeHtml(a.certNo || '—')} · জন্ম তারিখ: ${escapeHtml(a.birthDate || '—')}</span>
+        </span>
+      </li>`).join('');
+
+    setStep(3);
+
+    const modal = $('#invoiceModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    $('#senderNumber').value = '';
+
+  } catch (err) {
+    console.error(err);
+    showError(err?.message || 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalHTML;
+    $('#progressWrap').classList.add('hidden');
+    $('#progressBar').style.width = '0%';
+    $('#progressPct').textContent = '0%';
+  }
+});
+
+/* invoice modal controls */
+function closeInvoice() {
+  $('#invoiceModal').classList.add('hidden');
+  $('#invoiceModal').classList.remove('flex');
+  document.body.style.overflow = '';
+}
+$('#closeInvoice').addEventListener('click', () => { closeInvoice(); setStep(1); });
+$('#invoiceModal').addEventListener('click', e => { if (e.target.id === 'invoiceModal') { closeInvoice(); setStep(1); } });
+$('#printInvoice').addEventListener('click', () => window.print());
+
+/* ================= Support Chat ================= */
+const CHAT_KEY = 'em_chat_id';
+const TAG_KEY  = 'em_chat_tag';
+let chatId = localStorage.getItem(CHAT_KEY);
+let chatTag = localStorage.getItem(TAG_KEY);
+let chatUnsub = null;
+let chatOpen = false;
+let unreadClient = 0;
+
+if (!chatTag) {
+  chatTag = 'C-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+  localStorage.setItem(TAG_KEY, chatTag);
+}
+
+async function ensureChat() {
+  if (chatId) {
+    try {
+      const snap = await getDoc(doc(db, 'chats', chatId));
+      if (snap.exists()) return chatId;
+    } catch {}
+  }
+  const ref = await addDoc(collection(db, 'chats'), {
+    tag: chatTag,
+    clientName: 'ক্লায়েন্ট ' + chatTag,
+    createdAt: serverTimestamp(),
+    lastMessage: 'চ্যাট শুরু হয়েছে',
+    lastMessageAt: serverTimestamp(),
+    unreadForAdmin: 0,
+    unreadForClient: 0
+  });
+  chatId = ref.id;
+  localStorage.setItem(CHAT_KEY, chatId);
+  return chatId;
+}
+
+function renderChatMessages(msgs) {
+  const body = $('#chatBody');
+
+  if (!msgs.length) {
+    body.innerHTML = `
+      <div class="flex h-full flex-col items-center justify-center px-6 text-center">
+        <span class="grid h-12 w-12 place-items-center rounded-full bg-brand-50 text-brand-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+          </svg>
+        </span>
+        <p class="mt-3 text-sm font-bold text-slate-700">স্বাগতম!</p>
+        <p class="mt-1 text-xs leading-relaxed text-slate-500">
+          আপনার যেকোনো প্রশ্ন বা সমস্যা লিখুন — আমাদের টিম দ্রুত উত্তর দেবে।
+        </p>
+      </div>`;
+    return;
+  }
+
+  body.innerHTML = msgs.map(m => {
+    const mine = m.sender === 'client';
+    return `
+      <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
+        <div class="max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm
+          ${mine ? 'rounded-br-sm bg-brand-600 text-white' : 'rounded-bl-sm border border-slate-200 bg-white text-slate-800'}">
+          <p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
+          <p class="mt-1 text-[10px] ${mine ? 'text-brand-100' : 'text-slate-400'}">${fmtDate(m.createdAt)}</p>
+        </div>
+      </div>`;
+  }).join('');
+
+  body.scrollTop = body.scrollHeight;
+}
+
+async function openChat() {
+  chatOpen = true;
+  $('#chatPanel').classList.remove('hidden');
+  $('#chatIconOpen').classList.add('hidden');
+  $('#chatIconClose').classList.remove('hidden');
+  unreadClient = 0;
+  updateBadge();
+
+  const id = await ensureChat();
+
+  if (chatUnsub) chatUnsub();
+  chatUnsub = onSnapshot(
+    query(collection(db, 'chats', id, 'messages'), orderBy('createdAt', 'asc')),
+    snap => {
+      const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderChatMessages(msgs);
+      if (chatOpen) updateDoc(doc(db, 'chats', id), { unreadForClient: 0 }).catch(() => {});
+    },
+    err => console.error('chat listen error', err)
+  );
+}
+
+function closeChat() {
+  chatOpen = false;
+  $('#chatPanel').classList.add('hidden');
+  $('#chatIconOpen').classList.remove('hidden');
+  $('#chatIconClose').classList.add('hidden');
+}
+
+function toggleChat() { chatOpen ? closeChat() : openChat(); }
+
+document.querySelectorAll('[data-open-chat]').forEach(b => b.addEventListener('click', () => {
+  $('#mobileMenu').classList.add('hidden');
+  if (!chatOpen) openChat(); else $('#chatInput').focus();
+}));
+$('#chatToggle').addEventListener('click', toggleChat);
+$('#chatClose').addEventListener('click', closeChat);
+
+function updateBadge() {
+  const badge = $('#chatBadge');
+  if (unreadClient > 0) {
+    badge.textContent = toBn(unreadClient);
+    badge.classList.remove('hidden');
+    badge.classList.add('grid');
+  } else {
+    badge.classList.add('hidden');
+    badge.classList.remove('grid');
+  }
+}
+
+$('#chatForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const input = $('#chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const btn = $('#chatForm button[type="submit"]');
+  btn.disabled = true;
+  input.value = '';
+
+  try {
+    const id = await ensureChat();
+    await addDoc(collection(db, 'chats', id, 'messages'), {
+      text,
+      sender: 'client',
+      createdAt: serverTimestamp()
+    });
+    await updateDoc(doc(db, 'chats', id), {
+      lastMessage: text,
+      lastMessageAt: serverTimestamp(),
+      unreadForAdmin: increment(1)
+    });
+  } catch (err) {
+    console.error(err);
+    input.value = text;
+    alert('মেসেজ পাঠানো যায়নি। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।');
+  } finally {
+    btn.disabled = false;
+    input.focus();
+  }
+});
+
+/* ================= Resize ================= */
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 768) $('#mobileMenu').classList.add('hidden');
+});
+</script>
+</body>
+</html>

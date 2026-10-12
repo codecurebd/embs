@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Panel — eMutation Birth certificate support</title>
+<meta name="robots" content="noindex, nofollow" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['"Noto Sans Bengali"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+        colors: {
+          brand: {
+            50:'#eef5ff',100:'#d9e8ff',200:'#bcd7ff',300:'#8ebdff',400:'#5996ff',
+            500:'#3372ff',600:'#1d51f5',700:'#163ee1',800:'#1935b6',900:'#1a328f'
+          }
+        }
+      }
+    }
+  }
+</script>
+
+<style type="text/tailwindcss">
+  @layer components {
+    .input {
+      @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800
+             placeholder:text-slate-400 outline-none transition
+             focus:border-brand-500 focus:ring-2 focus:ring-brand-100;
+    }
+    .btn-primary {
+      @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5
+             text-sm font-bold text-white shadow-md shadow-brand-600/25 transition
+             hover:bg-brand-700 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60;
+    }
+    .btn-ghost {
+      @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white
+             px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-700;
+    }
+    .stat-card {
+      @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm;
+    }
+    .badge {
+      @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold;
+    }
+  }
+</style>
+
+<style>
+  html { scroll-behavior: smooth; }
+  .chat-body::-webkit-scrollbar { width: 6px; }
+  .chat-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+  .sidebar-scroll::-webkit-scrollbar { width: 5px; }
+  .sidebar-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 99px; }
+  @keyframes floatIn { from { opacity:0; transform: translateY(10px) } to { opacity:1; transform:none } }
+  .anim-in { animation: floatIn .35s ease both; }
+</style>
+</head>
+
+<body class="bg-slate-100 font-sans text-slate-800 antialiased">
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="loginScreen" class="fixed inset-0 z-50 grid place-items-center bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 p-4">
+  <div class="pointer-events-none absolute inset-0 opacity-[.1]"
+       style="background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size:22px 22px;"></div>
+
+  <div class="relative w-full max-w-md anim-in">
+    <div class="rounded-3xl border border-white/15 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl">
+      <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white/15 text-white backdrop-blur">
+        <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2Zm10-10V7a4 4 0 0 0-8 0v4"/>
+        </svg>
+      </span>
+      <h1 class="mt-5 text-2xl font-extrabold text-white">Admin Panel</h1>
+      <p class="mt-2 text-sm text-brand-100">eMutation Birth certificate application support</p>
+
+      <p class="mt-6 text-xs leading-relaxed text-brand-100/90">
+        শুধুমাত্র অনুমোদিত অ্যাডমিন Google অ্যাকাউন্ট দিয়ে প্রবেশ করতে পারবেন।
+      </p>
+
+      <button id="googleLoginBtn"
+        class="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-3.5 text-sm font-extrabold text-slate-800 shadow-xl transition hover:bg-brand-50 active:scale-[.98]">
+        <svg class="h-5 w-5" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.2-.1-2.3-.1-3.5Z"/>
+          <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7Z"/>
+          <path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.4C29.4 34.7 26.9 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.6 39.6 16.3 44 24 44Z"/>
+          <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.3 5.4c-.4.4 6.6-4.8 6.6-15.1 0-1.2-.1-2.3-.4-3.5Z"/>
+        </svg>
+        Google দিয়ে লগইন করুন
+      </button>
+
+      <p id="loginError" class="mt-4 hidden rounded-xl border border-rose-300/40 bg-rose-500/20 px-4 py-3 text-xs font-semibold text-rose-50"></p>
+    </div>
+
+    <p class="mt-6 text-center text-xs text-brand-100/70">
+      Developed by <a href="https://codecurebd.vercel.app/" target="_blank" class="font-bold text-white hover:underline">CodeCureBD</a>
+    </p>
+  </div>
+</div>
+
+<!-- ============ LOADING ============ -->
+<div id="loadingScreen" class="fixed inset-0 z-40 hidden place-items-center bg-slate-900/50 backdrop-blur-sm">
+  <div class="flex flex-col items-center gap-3">
+    <span class="h-10 w-10 animate-spin rounded-full border-4 border-white/30 border-t-white"></span>
+    <p class="text-sm font-semibold text-white">লোড হচ্ছে…</p>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="app" class="hidden min-h-screen">
+
+  <!-- Sidebar backdrop (mobile) -->
+  <div id="sidebarBackdrop" class="fixed inset-0 z-30 hidden bg-slate-900/60 backdrop-blur-sm md:hidden"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full bg-slate-900 text-slate-300 transition-transform duration-300 md:translate-x-0">
+    <div class="flex h-16 items-center gap-2.5 border-b border-slate-800 px-5">
+      <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
+        </svg>
+      </span>
+      <div class="min-w-0">
+        <p class="truncate text-sm font-extrabold text-white">eMutation Admin</p>
+        <p class="text-[10px] uppercase tracking-wider text-brand-400">Control Panel</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-scroll h-[calc(100vh-8rem)] space-y-1 overflow-y-auto px-3 py-5 text-sm font-semibold">
+      <button data-nav="dashboard" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+        <svg class="h-4.5 w-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h7V3H3v9Zm0 9h7v-6H3v6Zm11 0h7v-9h-7v9Zm0-15v4h7V3h-7Z"/>
+        </svg>
+        ড্যাশবোর্ড
+      </button>
+      <button data-nav="orders" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+        <svg class="h-4.5 w-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
+        </svg>
+        অর্ডারসমূহ
+        <span id="ordersBadge" class="ml-auto hidden rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold text-white">0</span>
+      </button>
+      <button data-nav="chats" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+        <svg class="h-4.5 w-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+        </svg>
+        সাপোর্ট চ্যাট
+        <span id="chatsBadge" class="ml-auto hidden rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white">0</span>
+      </button>
+    </nav>
+
+    <div class="absolute inset-x-0 bottom-0 border-t border-slate-800 bg-slate-900 p-3">
+      <div class="flex items-center gap-3 rounded-xl bg-slate-800/60 px-3 py-2.5">
+        <img id="userAvatar" class="h-9 w-9 rounded-full object-cover bg-slate-700" alt="" />
+        <div class="min-w-0 flex-1">
+          <p id="userName" class="truncate text-xs font-bold text-white">Admin</p>
+          <p id="userEmail" class="truncate text-[10px] text-slate-400">—</p>
+        </div>
+        <button id="logoutBtn" title="লগআউট" class="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-rose-500/20 hover:text-rose-400">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H3m0 0 3-3m-3 3 3 3m9-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="md:pl-64">
+
+    <!-- Topbar -->
+    <header class="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
+      <div class="flex items-center gap-3">
+        <button id="menuToggle" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-300 text-slate-600 md:hidden">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <div>
+          <h1 id="pageTitle" class="text-base font-extrabold text-slate-900 sm:text-lg">ড্যাশবোর্ড</h1>
+          <p id="pageSub" class="text-[11px] text-slate-500 sm:text-xs">সারসংক্ষেপ ও পরিসংখ্যান</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-700 sm:inline-flex">
+          <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
+          লাইভ
+        </span>
+      </div>
+    </header>
+
+    <!-- ============ PAGE: DASHBOARD ============ -->
+    <main id="page-dashboard" class="page p-4 sm:p-6">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="stat-card">
+          <div class="flex items-start justify-between">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+              </svg>
+            </span>
+          </div>
+          <p class="mt-3 text-xs font-semibold text-slate-500">মোট অর্ডার</p>
+          <p id="statTotalOrders" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
+        </div>
+
+        <div class="stat-card">
+          <div class="flex items-start justify-between">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+              </svg>
+            </span>
+          </div>
+          <p class="mt-3 text-xs font-semibold text-slate-500">মোট আর্নিং</p>
+          <p id="statEarnings" class="mt-1 text-3xl font-extrabold text-slate-900">৳ ০</p>
+        </div>
+
+        <div class="stat-card">
+          <div class="flex items-start justify-between">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-amber-700">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+              </svg>
+            </span>
+          </div>
+          <p class="mt-3 text-xs font-semibold text-slate-500">পেন্ডিং অর্ডার</p>
+          <p id="statPending" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
+        </div>
+
+        <div class="stat-card">
+          <div class="flex items-start justify-between">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-rose-50 text-rose-700">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+              </svg>
+            </span>
+          </div>
+          <p class="mt-3 text-xs font-semibold text-slate-500">মোট মেসেজ</p>
+          <p id="statMessages" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
+        </div>
+      </div>
+
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="stat-card">
+          <p class="text-xs font-semibold text-slate-500">সম্পন্ন অর্ডার</p>
+          <p id="statCompleted" class="mt-1 text-2xl font-extrabold text-emerald-700">০</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-xs font-semibold text-slate-500">প্রসেসিং</p>
+          <p id="statProcessing" class="mt-1 text-2xl font-extrabold text-brand-700">০</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-xs font-semibold text-slate-500">বাতিল</p>
+          <p id="statCancelled" class="mt-1 text-2xl font-extrabold text-rose-700">০</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-xs font-semibold text-slate-500">মোট আবেদনকারী</p>
+          <p id="statApplicants" class="mt-1 text-2xl font-extrabold text-slate-900">০</p>
+        </div>
+      </div>
+
+      <div class="mt-5 grid gap-4 lg:grid-cols-3">
+        <div class="stat-card lg:col-span-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-extrabold text-slate-900">সাম্প্রতিক অর্ডার</h3>
+            <button data-nav="orders" class="text-xs font-bold text-brand-600 hover:underline">সব দেখুন →</button>
+          </div>
+          <div id="recentOrders" class="mt-4 space-y-3"></div>
+        </div>
+
+        <div class="stat-card">
+          <h3 class="text-sm font-extrabold text-slate-900">সাম্প্রতিক সাপোর্ট চ্যাট</h3>
+          <div id="recentChats" class="mt-4 space-y-3"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============ PAGE: ORDERS ============ -->
+    <main id="page-orders" class="page hidden p-4 sm:p-6">
+      <div class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex flex-1 flex-col gap-3 sm:flex-row">
+            <div class="relative flex-1">
+              <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3M17 11a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/>
+              </svg>
+              <input id="orderSearch" type="text" class="input pl-10" placeholder="অর্ডার আইডি, নাম বা ইমেইল দিয়ে খুঁজুন…" />
+            </div>
+            <select id="orderFilter" class="input sm:max-w-[190px]">
+              <option value="all">সব অর্ডার</option>
+              <option value="pending">পেন্ডিং</option>
+              <option value="processing">প্রসেসিং</option>
+              <option value="completed">সম্পন্ন</option>
+              <option value="cancelled">বাতিল</option>
+            </select>
+          </div>
+          <button id="refreshOrders" class="btn-ghost shrink-0">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.6M20 20v-5h-.6M4.6 9A8 8 0 0 1 19.4 9M19.4 15a8 8 0 0 1-14.8 0"/>
+            </svg>
+            রিফ্রেশ
+          </button>
+        </div>
+      </div>
+
+      <div id="ordersList" class="mt-5 space-y-4"></div>
+    </main>
+
+    <!-- ============ PAGE: CHATS ============ -->
+    <main id="page-chats" class="page hidden p-4 sm:p-6">
+      <div class="grid h-[calc(100vh-8rem)] gap-4 lg:grid-cols-3">
+
+        <!-- Chat list -->
+        <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white lg:col-span-1">
+          <div class="border-b border-slate-200 px-4 py-3.5">
+            <h3 class="text-sm font-extrabold text-slate-900">সাপোর্ট চ্যাট লিস্ট</h3>
+            <p class="mt-0.5 text-xs text-slate-500">সব ক্লায়েন্টের সাথে কথোপকথন</p>
+          </div>
+          <div id="chatList" class="sidebar-scroll flex-1 overflow-y-auto p-2"></div>
+        </div>
+
+        <!-- Chat window -->
+        <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white lg:col-span-2">
+          <div id="chatHeader" class="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3.5">
+            <div class="flex items-center gap-3">
+              <span class="relative grid h-10 w-10 place-items-center rounded-full bg-brand-100 text-brand-700 font-extrabold" id="chatAvatar">?</span>
+              <div>
+                <p id="chatName" class="text-sm font-extrabold text-slate-900">কোনো চ্যাট নির্বাচন করুন</p>
+                <p id="chatStatus" class="text-[11px] text-slate-500">বাম দিক থেকে একটি চ্যাট বেছে নিন</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="adminChatBody" class="chat-body flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4">
+            <div class="flex h-full flex-col items-center justify-center text-center">
+              <span class="grid h-14 w-14 place-items-center rounded-full bg-slate-100 text-slate-400">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+                </svg>
+              </span>
+              <p class="mt-3 text-sm font-bold text-slate-700">চ্যাট নির্বাচন করুন</p>
+              <p class="mt-1 text-xs text-slate-500">বাম দিকের তালিকা থেকে একটি ক্লায়েন্ট নির্বাচন করলে তার মেসেজ দেখতে পাবেন।</p>
+            </div>
+          </div>
+
+          <form id="adminChatForm" class="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-3">
+            <input id="adminChatInput" type="text" autocomplete="off" placeholder="উত্তর লিখুন…"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100" />
+            <button type="submit" id="adminSendBtn"
+              class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white transition hover:bg-brand-700 disabled:opacity-50">
+              <svg class="h-4.5 w-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.3 3.7a1 1 0 0 1 1.3-1.2l16.4 8.4a1 1 0 0 1 0 1.8L4.6 21.5a1 1 0 0 1-1.3-1.2L6 12Zm0 0h6"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ ORDER DETAILS MODAL ============ -->
+<div id="orderModal" class="fixed inset-0 z-[60] hidden items-start justify-center overflow-y-auto bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center">
+  <div class="my-4 w-full max-w-3xl rounded-2xl bg-white shadow-2xl anim-in">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
+      <div>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-600">অর্ডার বিস্তারিত</p>
+        <h3 id="modalOrderId" class="mt-0.5 text-lg font-extrabold text-slate-900">—</h3>
+      </div>
+      <button id="closeOrderModal" class="grid h-9 w-9 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="modalOrderBody" class="max-h-[75vh] overflow-y-auto px-5 py-5 sm:px-6"></div>
+
+    <div class="sticky bottom-0 flex flex-col gap-3 border-t border-slate-200 bg-white px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
+      <button id="modalPrintBtn" class="btn-ghost">প্রিন্ট</button>
+      <button id="modalCompletedBtn" class="btn-primary" data-status="completed">সম্পন্ন হিসেবে চিহ্নিত করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCRIPTS ============ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getFirestore, collection, doc, updateDoc, onSnapshot, query, orderBy,
+  serverTimestamp, increment
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+/* ---------- Config ---------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDbNC1ZD67zcwpLHZL3WB41dE_z8WmjbK8",
+  authDomain: "emutationbirth.firebaseapp.com",
+  projectId: "emutationbirth",
+  storageBucket: "emutationbirth.firebasestorage.app",
+  messagingSenderId: "200454817186",
+  appId: "1:200454817186:web:b28e3cbe6f72a1f4cfdefb"
+};
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+/* ⚠️ অনুমোদিত অ্যাডমিন ইমেইল এখানে যোগ করুন */
+const ALLOWED_ADMINS = [
+  'nopqrshov337@gmail.com'
+];
+
+/* ---------- Helpers ---------- */
+const BN = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+const toBn = n => String(n ?? 0).replace(/\d/g, d => BN[+d]);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function escapeHtml(str='') {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------- State ---------- */
+let ordersData = [];
+let chatsData  = [];
+let messageCount = 0;
+let currentPage = 'dashboard';
+let selectedChatId = null;
+let chatMsgUnsub = null;
+
+/* =====================================================================
+   AUTH
+   ===================================================================== */
+const loginScreen = $('#loginScreen');
+const appEl = $('#app');
+
+$('#googleLoginBtn').addEventListener('click', async () => {
+  const err = $('#loginError');
+  err.classList.add('hidden');
+  try {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    await signInWithPopup(auth, provider);
+  } catch (e) {
+    console.error(e);
+    err.textContent = 'লগইন ব্যর্থ হয়েছে: ' + (e?.message || 'Unknown error');
+    err.classList.remove('hidden');
+  }
+});
+
+$('#logoutBtn').addEventListener('click', () => signOut(auth));
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    loginScreen.classList.remove('hidden');
+    loginScreen.classList.add('grid');
+    appEl.classList.add('hidden');
+    return;
+  }
+
+  if (!ALLOWED_ADMINS.includes(user.email)) {
+    $('#loginError').textContent =
+      `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়।`;
+    $('#loginError').classList.remove('hidden');
+    signOut(auth);
+    return;
+  }
+
+  // success
+  loginScreen.classList.add('hidden');
+  loginScreen.classList.remove('grid');
+  appEl.classList.remove('hidden');
+
+  $('#userName').textContent  = user.displayName || 'Admin';
+  $('#userEmail').textContent = user.email;
+  $('#userAvatar').src = user.photoURL || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect fill="%23334155" width="40" height="40"/><text x="20" y="26" font-size="18" fill="white" text-anchor="middle" font-family="sans-serif">A</text></svg>';
+
+  startListeners();
+});
+
+/* =====================================================================
+   NAVIGATION
+   ===================================================================== */
+const NAV_META = {
+  dashboard: { title: 'ড্যাশবোর্ড', sub: 'সারসংক্ষেপ ও পরিসংখ্যান' },
+  orders:    { title: 'অর্ডারসমূহ', sub: 'সব ক্লায়েন্ট অর্ডারের তালিকা' },
+  chats:     { title: 'সাপোর্ট চ্যাট', sub: 'ক্লায়েন্টদের সাথে যোগাযোগ' }
+};
+
+function navigate(page) {
+  currentPage = page;
+  $$('.page').forEach(p => p.classList.add('hidden'));
+  $(`#page-${page}`).classList.remove('hidden');
+  $('#pageTitle').textContent = NAV_META[page].title;
+  $('#pageSub').textContent   = NAV_META[page].sub;
+
+  $$('.nav-btn').forEach(b => {
+    const active = b.dataset.nav === page;
+    b.classList.toggle('bg-brand-600', active);
+    b.classList.toggle('text-white', active);
+    b.classList.toggle('shadow-md', active);
+    b.classList.toggle('shadow-brand-600/25', active);
+    b.classList.toggle('text-slate-300', !active);
+    b.classList.toggle('hover:bg-slate-800', !active);
+  });
+
+  closeSidebar();
+}
+$$('[data-nav]').forEach(b => b.addEventListener('click', () => navigate(b.dataset.nav)));
+navigate('dashboard');
+
+/* sidebar mobile */
+function openSidebar() {
+  $('#sidebar').classList.remove('-translate-x-full');
+  $('#sidebarBackdrop').classList.remove('hidden');
+}
+function closeSidebar() {
+  if (window.innerWidth < 768) {
+    $('#sidebar').classList.add('-translate-x-full');
+    $('#sidebarBackdrop').classList.add('hidden');
+  }
+}
+$('#menuToggle').addEventListener('click', openSidebar);
+$('#sidebarBackdrop').addEventListener('click', closeSidebar);
+
+/* =====================================================================
+   FIRESTORE LISTENERS
+   ===================================================================== */
+let ordersUnsub = null;
+let chatsUnsub  = null;
+
+function startListeners() {
+  if (ordersUnsub) ordersUnsub();
+  if (chatsUnsub) chatsUnsub();
+
+  ordersUnsub = onSnapshot(
+    query(collection(db, 'orders'), orderBy('createdAt', 'desc')),
+    snap => {
+      ordersData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderDashboard();
+      renderOrders();
+      const pending = ordersData.filter(o => o.status === 'pending').length;
+      const badge = $('#ordersBadge');
+      if (pending > 0) { badge.textContent = toBn(pending); badge.classList.remove('hidden'); }
+      else badge.classList.add('hidden');
+    },
+    err => console.error('orders listener', err)
+  );
+
+  chatsUnsub = onSnapshot(
+    query(collection(db, 'chats'), orderBy('lastMessageAt', 'desc')),
+    snap => {
+      chatsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderChatList();
+      renderRecentChats();
+
+      // total messages — read subcollections on demand is heavy; approximate via unread counters
+      messageCount = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0) + (c.unreadForClient || 0), 0);
+      $('#statMessages').textContent = toBn(messageCount);
+
+      const unread = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0), 0);
+      const cBadge = $('#chatsBadge');
+      if (unread > 0) { cBadge.textContent = toBn(unread); cBadge.classList.remove('hidden'); }
+      else cBadge.classList.add('hidden');
+    },
+    err => console.error('chats listener', err)
+  );
+}
+
+/* =====================================================================
+   DASHBOARD
+   ===================================================================== */
+function renderDashboard() {
+  const total      = ordersData.length;
+  const earnings   = ordersData.reduce((s, o) => s + (o.amount || 0), 0);
+  const pending    = ordersData.filter(o => o.status === 'pending').length;
+  const processing = ordersData.filter(o => o.status === 'processing').length;
+  const completed  = ordersData.filter(o => o.status === 'completed').length;
+  const cancelled  = ordersData.filter(o => o.status === 'cancelled').length;
+  const applicants = ordersData.reduce((s, o) => s + (o.applicantCount || 0), 0);
+
+  $('#statTotalOrders').textContent = toBn(total);
+  $('#statEarnings').textContent    = '৳ ' + toBn(earnings);
+  $('#statPending').textContent     = toBn(pending);
+  $('#statCompleted').textContent   = toBn(completed);
+  $('#statProcessing').textContent  = toBn(processing);
+  $('#statCancelled').textContent   = toBn(cancelled);
+  $('#statApplicants').textContent  = toBn(applicants);
+
+  // recent orders
+  const wrap = $('#recentOrders');
+  const recent = ordersData.slice(0, 5);
+  if (!recent.length) {
+    wrap.innerHTML = `<p class="rounded-xl bg-slate-50 px-4 py-6 text-center text-xs text-slate-500">এখনো কোনো অর্ডার নেই।</p>`;
+  } else {
+    wrap.innerHTML = recent.map(o => `
+      <button data-order-id="${o.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+          </svg>
+        </span>
+        <span class="min-w-0 flex-1">
+          <span class="block truncate text-sm font-bold text-slate-900">${escapeHtml(o.orderId || o.id)}</span>
+          <span class="block truncate text-[11px] text-slate-500">${toBn(o.applicantCount || 0)} জন · ${fmtDate(o.createdAt)}</span>
+        </span>
+        <span class="shrink-0 text-right">
+          <span class="block text-sm font-extrabold text-slate-900">৳ ${toBn(o.amount || 0)}</span>
+          ${statusBadge(o.status)}
+        </span>
+      </button>`).join('');
+
+    wrap.querySelectorAll('[data-order-id]').forEach(b =>
+      b.addEventListener('click', () => openOrderModal(b.dataset.orderId))
+    );
+  }
+}
+
+function statusBadge(s) {
+  const map = {
+    pending:    ['bg-amber-100','text-amber-700','পেন্ডিং'],
+    processing: ['bg-brand-100','text-brand-700','প্রসেসিং'],
+    completed:  ['bg-emerald-100','text-emerald-700','সম্পন্ন'],
+    cancelled:  ['bg-rose-100','text-rose-700','বাতিল']
+  };
+  const [bg, fg, label] = map[s] || ['bg-slate-100','text-slate-600', s || '—'];
+  return `<span class="badge mt-1 ${bg} ${fg}">${label}</span>`;
+}
+
+/* =====================================================================
+   ORDERS PAGE
+   ===================================================================== */
+function renderOrders() {
+  const term = ($('#orderSearch').value || '').toLowerCase().trim();
+  const filter = $('#orderFilter').value;
+
+  let list = ordersData;
+  if (filter !== 'all') list = list.filter(o => (o.status || 'pending') === filter);
+
+  if (term) {
+    list = list.filter(o => {
+      const hay = [
+        o.orderId, o.receiverEmail, o.bkashSenderNumber, o.landAccountNumber,
+        ...(o.applicants || []).map(a => a?.name)
+      ].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(term);
+    });
+  }
+
+  const wrap = $('#ordersList');
+  if (!list.length) {
+    wrap.innerHTML = `
+      <div class="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+        <span class="mx-auto grid h-14 w-14 place-items-center rounded-full bg-slate-100 text-slate-400">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+          </svg>
+        </span>
+        <p class="mt-3 text-sm font-bold text-slate-700">কোনো অর্ডার পাওয়া যায়নি</p>
+        <p class="mt-1 text-xs text-slate-500">সার্চ বা ফিল্টার পরিবর্তন করে আবার চেষ্টা করুন।</p>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML = list.map(o => `
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md sm:p-5">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="rounded-lg bg-slate-900 px-2.5 py-1 font-mono text-xs font-bold text-white">${escapeHtml(o.orderId || o.id)}</span>
+            ${statusBadge(o.status)}
+            <span class="badge bg-slate-100 text-slate-600">${fmtDate(o.createdAt)}</span>
+          </div>
+          <div class="mt-3 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <p class="text-[11px] text-slate-500">আবেদনকারী</p>
+              <p class="font-bold text-slate-800">${toBn(o.applicantCount || 0)} জন</p>
+            </div>
+            <div>
+              <p class="text-[11px] text-slate-500">মোট</p>
+              <p class="font-bold text-brand-700">৳ ${toBn(o.amount || 0)}</p>
+            </div>
+            <div>
+              <p class="text-[11px] text-slate-500">বিকাশ সেন্ডার</p>
+              <p class="font-bold text-slate-800">${escapeHtml(o.bkashSenderNumber || '—')}</p>
+            </div>
+            <div>
+              <p class="text-[11px] text-slate-500">রিসিভার ইমেইল</p>
+              <p class="truncate font-bold text-slate-800" title="${escapeHtml(o.receiverEmail || '')}">${escapeHtml(o.receiverEmail || '—')}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex shrink-0 items-center gap-2">
+          <select data-status-select="${o.id}" class="input !w-auto !py-2 !text-xs">
+            <option value="pending"    ${o.status==='pending'?'selected':''}>পেন্ডিং</option>
+            <option value="processing" ${o.status==='processing'?'selected':''}>প্রসেসিং</option>
+            <option value="completed"  ${o.status==='completed'?'selected':''}>সম্পন্ন</option>
+            <option value="cancelled"  ${o.status==='cancelled'?'selected':''}>বাতিল</option>
+          </select>
+          <button data-view-order="${o.id}" class="btn-primary !px-4 !py-2 !text-xs">বিস্তারিত</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  wrap.querySelectorAll('[data-view-order]').forEach(b =>
+    b.addEventListener('click', () => openOrderModal(b.dataset.viewOrder))
+  );
+  wrap.querySelectorAll('[data-status-select]').forEach(sel =>
+    sel.addEventListener('change', async e => {
+      const id = sel.dataset.statusSelect;
+      try {
+        await updateDoc(doc(db, 'orders', id), {
+          status: e.target.value,
+          statusUpdatedAt: serverTimestamp()
+        });
+      } catch (err) {
+        console.error(err);
+        alert('স্ট্যাটাস আপডেট করা যায়নি।');
+      }
+    })
+  );
+}
+
+$('#orderSearch').addEventListener('input', renderOrders);
+$('#orderFilter').addEventListener('change', renderOrders);
+$('#refreshOrders').addEventListener('click', () => {
+  $('#orderSearch').value = '';
+  $('#orderFilter').value = 'all';
+  renderOrders();
+});
+
+/* =====================================================================
+   ORDER MODAL
+   ===================================================================== */
+let modalOrderId = null;
+
+function openOrderModal(id) {
+  const o = ordersData.find(x => x.id === id);
+  if (!o) return;
+  modalOrderId = id;
+
+  $('#modalOrderId').textContent = o.orderId || o.id;
+
+  const applicantsHTML = (o.applicants || []).map((a, i) => `
+    <div class="rounded-xl border border-slate-200 bg-white p-4">
+      <div class="mb-3 flex items-center gap-2.5">
+        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand-600 text-xs font-bold text-white">${toBn(i+1)}</span>
+        <p class="text-sm font-extrabold text-slate-900">${escapeHtml(a.name || '—')}</p>
+      </div>
+      <div class="grid gap-3 text-xs sm:grid-cols-2">
+        <div><p class="text-slate-500">জন্ম নিবন্ধন নং</p><p class="font-semibold text-slate-800">${escapeHtml(a.certNo || '—')}</p></div>
+        <div><p class="text-slate-500">জন্ম তারিখ</p><p class="font-semibold text-slate-800">${escapeHtml(a.birthDate || '—')}</p></div>
+        <div><p class="text-slate-500">পিতার নাম</p><p class="font-semibold text-slate-800">${escapeHtml(a.fatherName || '—')}</p></div>
+        <div><p class="text-slate-500">মাতার নাম</p><p class="font-semibold text-slate-800">${escapeHtml(a.motherName || '—')}</p></div>
+        <div class="sm:col-span-2"><p class="text-slate-500">ঠিকানা</p><p class="font-semibold text-slate-800">${escapeHtml(a.address || '—')}</p></div>
+      </div>
+      ${a.imageUrl ? `
+        <a href="${a.imageUrl}" target="_blank" rel="noopener" class="mt-3 block">
+          <img src="${a.imageUrl}" alt="certificate" class="h-32 w-auto rounded-xl border border-slate-200 object-cover shadow-sm transition hover:scale-[1.02]" />
+          <span class="mt-1.5 inline-block text-[11px] font-bold text-brand-600 hover:underline">সম্পূর্ণ ছবি দেখুন →</span>
+        </a>` : `<p class="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700">⚠️ সনদের ছবি পাওয়া যায়নি</p>`}
+    </div>`).join('');
+
+  $('#modalOrderBody').innerHTML = `
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div class="rounded-xl bg-slate-50 p-4">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">অর্ডার তথ্য</p>
+        <dl class="mt-3 space-y-2 text-sm">
+          <div class="flex justify-between gap-3"><dt class="text-slate-500">স্ট্যাটাস</dt><dd>${statusBadge(o.status)}</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-slate-500">পেমেন্ট</dt><dd class="font-semibold">${escapeHtml(o.paymentStatus || '—')}</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-slate-500">আবেদনকারী</dt><dd class="font-bold">${toBn(o.applicantCount||0)} জন</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-slate-500">প্রতি জন</dt><dd class="font-semibold">৳ ${toBn(o.pricePerPerson||0)}</dd></div>
+          <div class="flex justify-between gap-3 border-t border-slate-200 pt-2"><dt class="font-bold text-slate-700">মোট</dt><dd class="font-extrabold text-brand-700">৳ ${toBn(o.amount||0)}</dd></div>
+          <div class="flex justify-between gap-3"><dt class="text-slate-500">সময়</dt><dd class="text-xs font-semibold">${fmtDate(o.createdAt)}</dd></div>
+        </dl>
+      </div>
+
+      <div class="rounded-xl bg-slate-50 p-4">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">পেমেন্ট ও অ্যাকাউন্ট</p>
+        <dl class="mt-3 space-y-2 text-sm">
+          <div><dt class="text-slate-500 text-xs">বিকাশ প্রাপক</dt><dd class="font-semibold">${escapeHtml(o.bkashReceiverNumber || '—')}</dd></div>
+          <div><dt class="text-slate-500 text-xs">বিকাশ সেন্ডার</dt><dd class="font-semibold text-slate-900">${escapeHtml(o.bkashSenderNumber || '—')}</dd></div>
+          <div><dt class="text-slate-500 text-xs">রিসিভার ইমেইল</dt><dd class="break-all font-semibold">${escapeHtml(o.receiverEmail || '—')}</dd></div>
+          <div class="border-t border-slate-200 pt-2"><dt class="text-slate-500 text-xs">land.gov.bd নাম্বার</dt><dd class="font-semibold">${escapeHtml(o.landAccountNumber || '—')}</dd></div>
+          <div><dt class="text-slate-500 text-xs">land.gov.bd পাসওয়ার্ড</dt>
+            <dd class="flex items-center gap-2">
+              <span class="font-mono font-semibold" data-pwd>••••••••</span>
+              <button type="button" id="toggleAdminPwd" class="text-[11px] font-bold text-brand-600 hover:underline">দেখুন</button>
+            </dd>
+            <input type="hidden" id="pwdReal" value="${escapeHtml(o.landAccountPassword || '')}" />
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <h4 class="mt-6 text-sm font-extrabold text-slate-900">আবেদনকারীর তালিকা (${toBn((o.applicants||[]).length)})</h4>
+    <div class="mt-3 space-y-3">${applicantsHTML || '<p class="text-sm text-slate-500">কোনো আবেদনকারী নেই।</p>'}</div>
+  `;
+
+  // password toggle
+  const pwdBtn = $('#toggleAdminPwd');
+  if (pwdBtn) {
+    pwdBtn.addEventListener('click', () => {
+      const real = $('#pwdReal').value;
+      const span = $('#modalOrderBody [data-pwd]');
+      const shown = span.textContent !== '••••••••';
+      span.textContent = shown ? '••••••••' : real;
+      pwdBtn.textContent = shown ? 'দেখুন' : 'লুকান';
+    });
+  }
+
+  // completed button state
+  const cb = $('#modalCompletedBtn');
+  cb.disabled = (o.status === 'completed');
+  cb.textContent = o.status === 'completed' ? '✓ সম্পন্ন' : 'সম্পন্ন হিসেবে চিহ্নিত করুন';
+
+  const m = $('#orderModal');
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOrderModal() {
+  $('#orderModal').classList.add('hidden');
+  $('#orderModal').classList.remove('flex');
+  document.body.style.overflow = '';
+}
+$('#closeOrderModal').addEventListener('click', closeOrderModal);
+$('#orderModal').addEventListener('click', e => { if (e.target.id === 'orderModal') closeOrderModal(); });
+$('#modalPrintBtn').addEventListener('click', () => window.print());
+
+$('#modalCompletedBtn').addEventListener('click', async () => {
+  if (!modalOrderId) return;
+  const btn = $('#modalCompletedBtn');
+  btn.disabled = true;
+  const html = btn.innerHTML;
+  btn.innerHTML = 'আপডেট হচ্ছে…';
+  try {
+    await updateDoc(doc(db, 'orders', modalOrderId), {
+      status: 'completed',
+      paymentStatus: 'verified',
+      completedAt: serverTimestamp()
+    });
+    btn.innerHTML = '✓ সম্পন্ন';
+  } catch (err) {
+    console.error(err);
+    alert('আপডেট করা যায়নি।');
+    btn.innerHTML = html;
+    btn.disabled = false;
+  }
+});
+
+/* =====================================================================
+   CHATS
+   ===================================================================== */
+function renderChatList() {
+  const wrap = $('#chatList');
+  if (!chatsData.length) {
+    wrap.innerHTML = `<p class="rounded-xl bg-slate-50 px-4 py-8 text-center text-xs text-slate-500">এখনো কোনো চ্যাট নেই।</p>`;
+    return;
+  }
+  wrap.innerHTML = chatsData.map(c => {
+    const active = c.id === selectedChatId;
+    const unread = c.unreadForAdmin || 0;
+    const initial = (c.tag || '?').slice(-2);
+    return `
+      <button data-chat-id="${c.id}"
+        class="flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition
+          ${active ? 'bg-brand-50 ring-1 ring-brand-200' : 'hover:bg-slate-50'}">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full ${active ? 'bg-brand-600 text-white' : 'bg-slate-200 text-slate-600'} text-xs font-extrabold">
+          ${escapeHtml(initial)}
+        </span>
+        <span class="min-w-0 flex-1">
+          <span class="flex items-center justify-between gap-2">
+            <span class="truncate text-sm font-bold ${active ? 'text-brand-800' : 'text-slate-800'}">
+              ${escapeHtml(c.clientName || 'ক্লায়েন্ট')}
+            </span>
+            ${unread > 0 ? `<span class="shrink-0 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-bold text-white">${toBn(unread)}</span>` : ''}
+          </span>
+          <span class="mt-0.5 block truncate text-[11px] text-slate-500">${escapeHtml(c.lastMessage || '—')}</span>
+          <span class="mt-0.5 block text-[10px] text-slate-400">${fmtDate(c.lastMessageAt || c.createdAt)}</span>
+        </span>
+      </button>`;
+  }).join('');
+
+  wrap.querySelectorAll('[data-chat-id]').forEach(b =>
+    b.addEventListener('click', () => selectChat(b.dataset.chatId))
+  );
+}
+
+function renderRecentChats() {
+  const wrap = $('#recentChats');
+  if (!chatsData.length) {
+    wrap.innerHTML = `<p class="rounded-xl bg-slate-50 px-4 py-6 text-center text-xs text-slate-500">এখনো কোনো চ্যাট নেই।</p>`;
+    return;
+  }
+  wrap.innerHTML = chatsData.slice(0, 4).map(c => `
+    <button data-recent-chat="${c.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
+      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-100 text-[11px] font-extrabold text-brand-700">
+        ${escapeHtml((c.tag || '?').slice(-2))}
+      </span>
+      <span class="min-w-0 flex-1">
+        <span class="block truncate text-xs font-bold text-slate-800">${escapeHtml(c.clientName || 'ক্লায়েন্ট')}</span>
+        <span class="block truncate text-[11px] text-slate-500">${escapeHtml(c.lastMessage || '—')}</span>
+      </span>
+      ${(c.unreadForAdmin||0) > 0 ? `<span class="shrink-0 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-bold text-white">${toBn(c.unreadForAdmin)}</span>` : ''}
+    </button>`).join('');
+
+  wrap.querySelectorAll('[data-recent-chat]').forEach(b =>
+    b.addEventListener('click', () => { navigate('chats'); selectChat(b.dataset.recentChat); })
+  );
+}
+
+async function selectChat(id) {
+  selectedChatId = id;
+  renderChatList();
+
+  const c = chatsData.find(x => x.id === id);
+  $('#chatName').textContent   = c?.clientName || 'ক্লায়েন্ট';
+  $('#chatStatus').textContent = 'লাইভ চ্যাট · ' + (c?.tag || '');
+  $('#chatAvatar').textContent = (c?.tag || '?').slice(-2);
+
+  if (chatMsgUnsub) chatMsgUnsub();
+  chatMsgUnsub = onSnapshot(
+    query(collection(db, 'chats', id, 'messages'), orderBy('createdAt', 'asc')),
+    snap => {
+      const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderAdminMessages(msgs);
+    }
+  );
+
+  // clear unread for admin
+  try { await updateDoc(doc(db, 'chats', id), { unreadForAdmin: 0 }); } catch {}
+}
+
+function renderAdminMessages(msgs) {
+  const body = $('#adminChatBody');
+
+  if (!msgs.length) {
+    body.innerHTML = `
+      <div class="flex h-full flex-col items-center justify-center text-center">
+        <p class="text-sm font-bold text-slate-700">এখনো কোনো মেসেজ নেই</p>
+        <p class="mt-1 text-xs text-slate-500">ক্লায়েন্ট মেসেজ পাঠালে এখানে দেখা যাবে।</p>
+      </div>`;
+    return;
+  }
+
+  body.innerHTML = msgs.map(m => {
+    const mine = m.sender === 'admin';
+    return `
+      <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
+        <div class="max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm
+          ${mine ? 'rounded-br-sm bg-brand-600 text-white' : 'rounded-bl-sm border border-slate-200 bg-white text-slate-800'}">
+          <p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
+          <p class="mt-1 text-[10px] ${mine ? 'text-brand-100' : 'text-slate-400'}">${fmtDate(m.createdAt)}</p>
+        </div>
+      </div>`;
+  }).join('');
+
+  body.scrollTop = body.scrollHeight;
+}
+
+$('#adminChatForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!selectedChatId) return;
+
+  const input = $('#adminChatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const btn = $('#adminSendBtn');
+  btn.disabled = true;
+  input.value = '';
+
+  try {
+    await addDoc(collection(db, 'chats', selectedChatId, 'messages'), {
+      text,
+      sender: 'admin',
+      createdAt: serverTimestamp()
+    });
+    await updateDoc(doc(db, 'chats', selectedChatId), {
+      lastMessage: text,
+      lastMessageAt: serverTimestamp(),
+      unreadForClient: increment(1)
+    });
+  } catch (err) {
+    console.error(err);
+    input.value = text;
+    alert('মেসেজ পাঠানো যায়নি।');
+  } finally {
+    btn.disabled = false;
+    input.focus();
+  }
+});
+
+/* keyboard: Esc to close modal */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (!$('#orderModal').classList.contains('hidden')) closeOrderModal();
+    closeSidebar();
+  }
+});
+
+/* close sidebar on resize */
+window.addEventListener('resize', () => {
+  if (window.innerWidth >= 768) {
+    $('#sidebar').classList.remove('-translate-x-full');
+    $('#sidebarBackdrop').classList.add('hidden');
+  } else {
+    if (!$('#sidebarBackdrop').classList.contains('hidden')) return;
+    $('#sidebar').classList.add('-translate-x-full');
+  }
+});
+</script>
+</body>
+</html>
