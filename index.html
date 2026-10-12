@@ -283,7 +283,42 @@
       <!-- STEP 1 -->
       <div id="step1" class="p-5 sm:p-7 lg:p-8">
 
-        <div class="rounded-2xl border border-slate-200 bg-gradient-to-br from-brand-50/60 to-slate-50 p-5">
+        <!-- 🟡 COURT FEE — সবার জন্য একবার (form এর একদম উপরে) -->
+        <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-5">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
+              </svg>
+            </span>
+            <div class="min-w-0">
+              <h3 class="text-sm font-extrabold text-amber-900">Court Fee তথ্য</h3>
+              <p class="mt-1 text-xs leading-relaxed text-amber-800">
+                সম্পূর্ণ আবেদনের জন্য এই তথ্য একবারই দিতে হবে।
+              </p>
+            </div>
+          </div>
+
+          <label class="mt-4 flex cursor-pointer items-start gap-3 rounded-xl border border-amber-200 bg-white p-3.5 transition hover:border-amber-300">
+            <input type="checkbox" id="courtFeePaid"
+                   class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
+            <span class="min-w-0">
+              <span class="block text-sm font-bold text-slate-800">Court fee ইতিমধ্যে পরিশোধ করা হয়েছে</span>
+              <span class="mt-0.5 block text-xs text-slate-500">
+                যদি ইতিমধ্যে court fee দেওয়া থাকে, টিক দিন — সার্কেল/উপজেলা লেখার দরকার নেই।
+              </span>
+            </span>
+          </label>
+
+          <div id="circleFields" class="mt-4 rounded-xl border border-amber-200 bg-white p-4">
+            <label class="label">সার্কেল / উপজেলা <span class="text-rose-500">*</span></label>
+            <input type="text" id="circleName" class="input" placeholder="যেমন: সাভার উপজেলা / ধামরাই সার্কেল" />
+            <p class="hint">যে সার্কেল/উপজেলায় আবেদন করা হবে, সেটি লিখুন — court fee পরিশোধের জন্য প্রয়োজন।</p>
+          </div>
+        </div>
+
+        <!-- 🔵 আবেদনকারীর সংখ্যা -->
+        <div class="mt-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-brand-50/60 to-slate-50 p-5">
           <label class="label">কতজন আবেদনকারীর তথ্য যোগ করবেন? <span class="text-rose-500">*</span></label>
 
           <div class="mt-2 flex flex-wrap items-center gap-3">
@@ -307,6 +342,7 @@
           </div>
         </div>
 
+        <!-- 🟢 আবেদনকারীর তথ্য -->
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">১</span>
           আবেদনকারীর তথ্য
@@ -315,6 +351,7 @@
 
         <div id="applicantsWrap" class="mt-4 space-y-5"></div>
 
+        <!-- 🔵 land.gov.bd -->
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">২</span>
           land.gov.bd অ্যাকাউন্ট তথ্য
@@ -356,6 +393,7 @@
           </div>
         </div>
 
+        <!-- 🔵 Receiver Email -->
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">৩</span>
           রিসিভার ইমেইল
@@ -533,7 +571,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">৬. লাইভ সাপোর্ট</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          যেকোনো সমস্যায় পেজের নিচে ডান কোণায় থাকা <b>সাপোর্ট চ্যাট</b> আইকনে ক্লিক করে সরাসরি আমাদের সাথে কথা বলতে পারেন।
+          যেকোনো সমস্যায় উপরের নেভিগেশন বারে থাকা <b>সাপোর্ট চ্যাট</b> বাটনে ক্লিক করে সরাসরি আমাদের সাথে কথা বলতে পারেন।
         </p>
         <button type="button" data-open-chat class="btn-primary mt-4 w-full">চ্যাট শুরু করুন</button>
       </div>
@@ -543,7 +581,7 @@
 
 <!-- ============ FOOTER ============ -->
 <footer id="footer" class="bg-slate-900 text-slate-300">
-  <div class="mx-auto max-w-7xl px-4 pt-12 pb-28 sm:pb-12">
+  <div class="mx-auto max-w-7xl px-4 py-12">
     <div class="grid gap-8 md:grid-cols-3">
       <div>
         <div class="flex items-center gap-2.5">
@@ -596,7 +634,7 @@
       <p class="text-xs text-slate-500">
         © <span id="year"></span> eMutation Birth certificate application support. সর্বস্বত্ব সংরক্ষিত।
       </p>
-      <p class="text-xs text-slate-500 sm:pr-20">
+      <p class="text-xs text-slate-500">
         Developed by
         <a href="https://codecurebd.vercel.app/" target="_blank" rel="noopener"
            class="font-bold text-brand-400 transition hover:text-brand-300">CodeCureBD</a>
@@ -605,20 +643,9 @@
   </div>
 </footer>
 
-<!-- ============ SUPPORT CHAT ============ -->
-<button type="button" id="chatToggle"
-  class="fixed bottom-5 right-4 z-50 grid h-14 w-14 place-items-center rounded-full bg-brand-600 text-white shadow-2xl shadow-brand-600/40 transition hover:scale-105 hover:bg-brand-700 active:scale-95 sm:right-6">
-  <svg id="chatIconOpen" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
-  </svg>
-  <svg id="chatIconClose" class="hidden h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
-  </svg>
-  <span id="chatBadge" class="absolute -right-0.5 -top-0.5 hidden h-5 w-5 place-items-center rounded-full bg-rose-500 text-[10px] font-bold text-white">0</span>
-</button>
-
+<!-- ============ SUPPORT CHAT PANEL (floating button নেই) ============ -->
 <div id="chatPanel"
-  class="fixed bottom-24 right-4 z-50 hidden w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:right-6">
+  class="fixed bottom-6 right-4 z-50 hidden w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:right-6">
   <div class="flex items-center justify-between gap-3 bg-gradient-to-r from-brand-700 to-brand-900 px-4 py-3.5 text-white">
     <div class="flex items-center gap-3">
       <span class="relative grid h-9 w-9 place-items-center rounded-full bg-white/15">
@@ -682,9 +709,13 @@
           <p class="text-xs text-slate-500">রিসিভার ইমেইল</p>
           <p id="invEmail" class="mt-0.5 break-all font-semibold text-slate-800">—</p>
         </div>
-        <div class="col-span-2">
+        <div>
           <p class="text-xs text-slate-500">যে নম্বর থেকে বিকাশে পেমেন্ট</p>
           <p id="invSender" class="mt-0.5 font-semibold text-slate-800">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-500">Court Fee</p>
+          <p id="invCourtFee" class="mt-0.5 font-semibold text-slate-800">—</p>
         </div>
       </div>
 
@@ -779,6 +810,19 @@ document.querySelectorAll('#mobileMenu a').forEach(a =>
 );
 $('#year').textContent = new Date().getFullYear();
 
+/* ================= Court Fee toggle (একটাই পুরো form এর জন্য) ================= */
+const courtFeePaid = $('#courtFeePaid');
+const circleFields = $('#circleFields');
+const circleName   = $('#circleName');
+
+courtFeePaid.addEventListener('change', () => {
+  circleFields.classList.toggle('hidden', courtFeePaid.checked);
+  if (courtFeePaid.checked) {
+    circleName.value = '';
+    circleName.classList.remove('field-error');
+  }
+});
+
 /* ================= Applicant count ================= */
 let applicantCount = 1;
 const MIN_COUNT = 1, MAX_COUNT = 10;
@@ -788,17 +832,11 @@ for (let i = MIN_COUNT; i <= MAX_COUNT; i++) {
 }
 countSelect.value = 1;
 
-/* snapshot/restore — checkbox handles separately */
 function snapshotApplicants() {
   return [...document.querySelectorAll('.applicant-card')].map(card => {
     const o = {};
     card.querySelectorAll('[data-field]').forEach(el => {
-      if (el.type === 'file') return;
-      if (el.type === 'checkbox') {
-        o[el.dataset.field] = el.checked;
-      } else {
-        o[el.dataset.field] = el.value;
-      }
+      if (el.type !== 'file') o[el.dataset.field] = el.value;
     });
     return o;
   });
@@ -808,17 +846,7 @@ function restoreApplicants(snap) {
     const data = snap[i];
     if (!data) return;
     card.querySelectorAll('[data-field]').forEach(el => {
-      if (el.type === 'file') return;
-      if (el.type === 'checkbox') {
-        if (data[el.dataset.field] !== undefined) {
-          el.checked = !!data[el.dataset.field];
-          // toggle circle field visibility
-          const wrap = card.querySelector('.court-fee-fields');
-          if (wrap) wrap.classList.toggle('hidden', el.checked);
-        }
-      } else if (data[el.dataset.field] !== undefined) {
-        el.value = data[el.dataset.field];
-      }
+      if (el.type !== 'file' && data[el.dataset.field] !== undefined) el.value = data[el.dataset.field];
     });
   });
 }
@@ -861,27 +889,6 @@ function applicantCardHTML(i) {
         <textarea data-field="address" rows="2" class="input" placeholder="দলিল / ওয়ারিশ সনদ অনুযায়ী সম্পূর্ণ ঠিকানা"></textarea>
         <p class="hint">এই ঠিকানাটিই আবেদনে গ্রাহকের ঠিকানা হিসেবে ব্যবহার করা হবে।</p>
       </div>
-
-      <!-- COURT FEE SECTION -->
-      <div class="sm:col-span-2 rounded-xl border-2 border-brand-100 bg-white p-4">
-        <label class="flex cursor-pointer items-start gap-3">
-          <input type="checkbox" data-field="courtFeePaid"
-                 class="court-fee-check mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
-          <span class="min-w-0">
-            <span class="block text-sm font-bold text-slate-800">Court fee ইতিমধ্যে পরিশোধ করা হয়েছে</span>
-            <span class="mt-0.5 block text-xs text-slate-500">
-              যদি ইতিমধ্যে court fee দেওয়া থাকে, তাহলে টিক দিন — সার্কেল/উপজেলা লেখার দরকার নেই।
-            </span>
-          </span>
-        </label>
-
-        <div class="court-fee-fields mt-4 rounded-lg border border-amber-200 bg-amber-50/60 p-3">
-          <label class="label">সার্কেল / উপজেলা <span class="text-rose-500">*</span></label>
-          <input type="text" data-field="circle" class="input" placeholder="যেমন: সাভার উপজেলা / ধামরাই সার্কেল" />
-          <p class="hint">যে সার্কেল/উপজেলায় আবেদন করা হবে, সেটি লিখুন — court fee পরিশোধের জন্য প্রয়োজন।</p>
-        </div>
-      </div>
-
       <div class="sm:col-span-2">
         <label class="label">জন্ম নিবন্ধন সনদের ছবি (JPG / PNG) <span class="text-rose-500">*</span></label>
         <input type="file" data-field="file" accept="image/jpeg,image/png,image/jpg" class="file-input" />
@@ -922,19 +929,9 @@ $('#plusBtn').addEventListener('click', () => setCount(applicantCount + 1));
 $('#minusBtn').addEventListener('click', () => setCount(applicantCount - 1));
 countSelect.addEventListener('change', e => setCount(+e.target.value));
 
-/* file preview + court fee toggle */
+/* file preview */
 $('#applicantsWrap').addEventListener('change', e => {
-  const target = e.target;
-
-  // court fee checkbox toggle
-  if (target.classList.contains('court-fee-check')) {
-    const wrap = target.closest('.applicant-card')?.querySelector('.court-fee-fields');
-    if (wrap) wrap.classList.toggle('hidden', target.checked);
-    return;
-  }
-
-  // file preview
-  const input = target.closest('input[type="file"]');
+  const input = e.target.closest('input[type="file"]');
   if (!input) return;
   const box = input.parentElement.querySelector('.file-preview');
   const img = box?.querySelector('img');
@@ -989,29 +986,20 @@ function collectApplicants(validate = true) {
 
   cards.forEach(card => {
     const get = f => card.querySelector(`[data-field="${f}"]`);
-    const feePaid = get('courtFeePaid').checked;
     const rec = {
-      certNo:       get('certNo').value.trim(),
-      birthDate:    get('birthDate').value,
-      name:         get('name').value.trim(),
-      fatherName:   get('fatherName').value.trim(),
-      motherName:   get('motherName').value.trim(),
-      address:      get('address').value.trim(),
-      courtFeePaid: feePaid,
-      circle:       feePaid ? '' : get('circle').value.trim(),
-      file:         get('file').files?.[0] || null,
+      certNo:     get('certNo').value.trim(),
+      birthDate:  get('birthDate').value,
+      name:       get('name').value.trim(),
+      fatherName: get('fatherName').value.trim(),
+      motherName: get('motherName').value.trim(),
+      address:    get('address').value.trim(),
+      file:       get('file').files?.[0] || null,
     };
 
     if (validate) {
       ['certNo','birthDate','name','fatherName','motherName','address'].forEach(f => {
         if (!rec[f]) { ok = false; markError(get(f)); firstBad = firstBad || get(f); }
       });
-      // circle required only when court fee NOT paid
-      if (!feePaid && !rec.circle) {
-        ok = false;
-        markError(get('circle'));
-        firstBad = firstBad || get('circle');
-      }
       if (!rec.file) {
         ok = false;
         markError(get('file'));
@@ -1026,10 +1014,19 @@ function collectApplicants(validate = true) {
 
 $('#nextBtn').addEventListener('click', () => {
   clearErrors();
+
+  // Court fee validation (top-level)
+  if (!courtFeePaid.checked && !circleName.value.trim()) {
+    markError(circleName);
+    showError('অনুগ্রহ করে সার্কেল/উপজেলা লিখুন, অথবা "Court fee ইতিমধ্যে পরিশোধ করা হয়েছে" টিক দিন।');
+    circleName.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
   const { ok, firstBad } = collectApplicants(true);
 
   if (!ok) {
-    showError('অনুগ্রহ করে প্রতিটি আবেদনকারীর সকল তথ্য পূরণ করুন, প্রয়োজন হলে সার্কেল/উপজেলা লিখুন, এবং জন্ম নিবন্ধন সনদের ছবি অ্যাটাচ করুন।');
+    showError('অনুগ্রহ করে প্রতিটি আবেদনকারীর সকল তথ্য পূরণ করুন এবং জন্ম নিবন্ধন সনদের ছবি অ্যাটাচ করুন।');
     firstBad?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
@@ -1155,15 +1152,13 @@ submitBtn.addEventListener('click', async () => {
     $('#progressPct').textContent = '100%';
 
     const applicants = list.map(a => ({
-      certNo:       a.certNo,
-      birthDate:    a.birthDate,
-      name:         a.name,
-      fatherName:   a.fatherName,
-      motherName:   a.motherName,
-      address:      a.address,
-      courtFeePaid: a.courtFeePaid,
-      circle:       a.circle,
-      imageUrl:     a.imageUrl
+      certNo:     a.certNo,
+      birthDate:  a.birthDate,
+      name:       a.name,
+      fatherName: a.fatherName,
+      motherName: a.motherName,
+      address:    a.address,
+      imageUrl:   a.imageUrl
     }));
 
     const payload = {
@@ -1175,6 +1170,8 @@ submitBtn.addEventListener('click', async () => {
       pricePerPerson: PRICE_PER_PERSON,
       amount: total,
       applicants,
+      courtFeePaid: courtFeePaid.checked,
+      circle: courtFeePaid.checked ? '' : circleName.value.trim(),
       landAccountNumber: $('#landNumber').value.trim(),
       landAccountPassword: $('#landPassword').value.trim(),
       receiverEmail: $('#receiverEmail').value.trim(),
@@ -1184,11 +1181,15 @@ submitBtn.addEventListener('click', async () => {
 
     await addDoc(collection(db, 'orders'), payload);
 
+    /* invoice */
     $('#invOrderId').textContent = orderId;
     $('#invDate').textContent    = fmtDate(new Date());
     $('#invCount').textContent   = `${toBn(applicantCount)} জন`;
     $('#invEmail').textContent   = payload.receiverEmail;
     $('#invSender').textContent  = sender;
+    $('#invCourtFee').innerHTML  = payload.courtFeePaid
+      ? '<span class="inline-flex items-center gap-1 text-emerald-600"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>পরিশোধিত</span>'
+      : `বাকি · সার্কেল: ${escapeHtml(payload.circle || '—')}`;
     $('#invTotal').textContent   = `৳ ${total}`;
     $('#invApplicants').innerHTML = applicants.map((a, i) => `
       <li class="flex items-start gap-2.5">
@@ -1196,9 +1197,6 @@ submitBtn.addEventListener('click', async () => {
         <span class="min-w-0">
           <b class="text-slate-900">${escapeHtml(a.name)}</b>
           <span class="block text-xs text-slate-500">নিবন্ধন নং: ${escapeHtml(a.certNo || '—')} · জন্ম তারিখ: ${escapeHtml(a.birthDate || '—')}</span>
-          ${a.courtFeePaid
-            ? '<span class="mt-0.5 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600"><svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg> Court fee পরিশোধিত</span>'
-            : `<span class="mt-0.5 inline-block text-xs font-semibold text-amber-600">Court fee বাকি · সার্কেল: ${escapeHtml(a.circle || '—')}</span>`}
         </span>
       </li>`).join('');
 
@@ -1240,7 +1238,6 @@ let chatId = localStorage.getItem(CHAT_KEY);
 let chatTag = localStorage.getItem(TAG_KEY);
 let chatUnsub = null;
 let chatOpen = false;
-let unreadClient = 0;
 
 if (!chatTag) {
   chatTag = 'C-' + Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -1305,10 +1302,7 @@ function renderChatMessages(msgs) {
 async function openChat() {
   chatOpen = true;
   $('#chatPanel').classList.remove('hidden');
-  $('#chatIconOpen').classList.add('hidden');
-  $('#chatIconClose').classList.remove('hidden');
-  unreadClient = 0;
-  updateBadge();
+  $('#mobileMenu').classList.add('hidden');
 
   const id = await ensureChat();
 
@@ -1322,35 +1316,22 @@ async function openChat() {
     },
     err => console.error('chat listen error', err)
   );
+
+  setTimeout(() => $('#chatInput')?.focus(), 100);
 }
 
 function closeChat() {
   chatOpen = false;
   $('#chatPanel').classList.add('hidden');
-  $('#chatIconOpen').classList.remove('hidden');
-  $('#chatIconClose').classList.add('hidden');
 }
 
 function toggleChat() { chatOpen ? closeChat() : openChat(); }
 
-document.querySelectorAll('[data-open-chat]').forEach(b => b.addEventListener('click', () => {
-  $('#mobileMenu').classList.add('hidden');
-  if (!chatOpen) openChat(); else $('#chatInput').focus();
+document.querySelectorAll('[data-open-chat]').forEach(b => b.addEventListener('click', (e) => {
+  e.preventDefault();
+  openChat();
 }));
-$('#chatToggle').addEventListener('click', toggleChat);
 $('#chatClose').addEventListener('click', closeChat);
-
-function updateBadge() {
-  const badge = $('#chatBadge');
-  if (unreadClient > 0) {
-    badge.textContent = toBn(unreadClient);
-    badge.classList.remove('hidden');
-    badge.classList.add('grid');
-  } else {
-    badge.classList.add('hidden');
-    badge.classList.remove('grid');
-  }
-}
 
 $('#chatForm').addEventListener('submit', async e => {
   e.preventDefault();
