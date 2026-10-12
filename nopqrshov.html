@@ -6,6 +6,8 @@
 <title>Admin Panel — eMutation Birth certificate support</title>
 <meta name="robots" content="noindex, nofollow" />
 
+<link rel="icon" type="image/png" href="logo.png" />
+
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -72,11 +74,11 @@
 
   <div class="relative w-full max-w-md anim-in">
     <div class="rounded-3xl border border-white/15 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl">
-      <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white/15 text-white backdrop-blur">
-        <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2Zm10-10V7a4 4 0 0 0-8 0v4"/>
-        </svg>
-      </span>
+
+      <!-- LOGO -->
+      <img src="logo.png" alt="eMutation logo"
+           class="mx-auto h-20 w-20 object-contain" />
+
       <h1 class="mt-5 text-2xl font-extrabold text-white">Admin Panel</h1>
       <p class="mt-2 text-sm text-brand-100">eMutation Birth certificate application support</p>
 
@@ -85,7 +87,7 @@
       </p>
 
       <button id="googleLoginBtn"
-        class="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-3.5 text-sm font-extrabold text-slate-800 shadow-xl transition hover:bg-brand-50 active:scale-[.98]">
+        class="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-3.5 text-sm font-extrabold text-slate-800 shadow-xl transition hover:bg-brand-50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
         <svg class="h-5 w-5" viewBox="0 0 48 48">
           <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.2-.1-2.3-.1-3.5Z"/>
           <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7Z"/>
@@ -95,7 +97,18 @@
         Google দিয়ে লগইন করুন
       </button>
 
-      <p id="loginError" class="mt-4 hidden rounded-xl border border-rose-300/40 bg-rose-500/20 px-4 py-3 text-xs font-semibold text-rose-50"></p>
+      <!-- ERROR BOX -->
+      <div id="loginError" class="mt-4 hidden rounded-xl border border-rose-300/40 bg-rose-500/20 px-4 py-3 text-left">
+        <div class="flex items-start gap-2.5">
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-rose-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+          <div class="min-w-0">
+            <p id="loginErrorTitle" class="text-sm font-extrabold text-white">Verify Failed</p>
+            <p id="loginErrorMsg" class="mt-1 text-xs leading-relaxed text-rose-50"></p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <p class="mt-6 text-center text-xs text-brand-100/70">
@@ -115,18 +128,17 @@
 <!-- ============ APP SHELL ============ -->
 <div id="app" class="hidden min-h-screen">
 
-  <!-- Sidebar backdrop (mobile) -->
   <div id="sidebarBackdrop" class="fixed inset-0 z-30 hidden bg-slate-900/60 backdrop-blur-sm md:hidden"></div>
 
   <!-- Sidebar -->
   <aside id="sidebar"
     class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full bg-slate-900 text-slate-300 transition-transform duration-300 md:translate-x-0">
-    <div class="flex h-16 items-center gap-2.5 border-b border-slate-800 px-5">
-      <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
-        </svg>
-      </span>
+    <div class="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
+
+      <!-- LOGO -->
+      <img src="logo.png" alt="eMutation logo"
+           class="h-9 w-9 shrink-0 object-contain" />
+
       <div class="min-w-0">
         <p class="truncate text-sm font-extrabold text-white">eMutation Admin</p>
         <p class="text-[10px] uppercase tracking-wider text-brand-400">Control Panel</p>
@@ -135,20 +147,20 @@
 
     <nav class="sidebar-scroll h-[calc(100vh-8rem)] space-y-1 overflow-y-auto px-3 py-5 text-sm font-semibold">
       <button data-nav="dashboard" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
-        <svg class="h-4.5 w-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h7V3H3v9Zm0 9h7v-6H3v6Zm11 0h7v-9h-7v9Zm0-15v4h7V3h-7Z"/>
         </svg>
         ড্যাশবোর্ড
       </button>
       <button data-nav="orders" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
-        <svg class="h-4.5 w-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
         </svg>
         অর্ডারসমূহ
         <span id="ordersBadge" class="ml-auto hidden rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold text-white">0</span>
       </button>
       <button data-nav="chats" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
-        <svg class="h-4.5 w-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
         </svg>
         সাপোর্ট চ্যাট
@@ -172,10 +184,8 @@
     </div>
   </aside>
 
-  <!-- Main content -->
   <div class="md:pl-64">
 
-    <!-- Topbar -->
     <header class="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
       <div class="flex items-center gap-3">
         <button id="menuToggle" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-300 text-slate-600 md:hidden">
@@ -197,53 +207,45 @@
       </div>
     </header>
 
-    <!-- ============ PAGE: DASHBOARD ============ -->
+    <!-- DASHBOARD -->
     <main id="page-dashboard" class="page p-4 sm:p-6">
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div class="stat-card">
-          <div class="flex items-start justify-between">
-            <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
-              </svg>
-            </span>
-          </div>
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+            </svg>
+          </span>
           <p class="mt-3 text-xs font-semibold text-slate-500">মোট অর্ডার</p>
           <p id="statTotalOrders" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
         </div>
 
         <div class="stat-card">
-          <div class="flex items-start justify-between">
-            <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-              </svg>
-            </span>
-          </div>
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+          </span>
           <p class="mt-3 text-xs font-semibold text-slate-500">মোট আর্নিং</p>
           <p id="statEarnings" class="mt-1 text-3xl font-extrabold text-slate-900">৳ ০</p>
         </div>
 
         <div class="stat-card">
-          <div class="flex items-start justify-between">
-            <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-amber-700">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-              </svg>
-            </span>
-          </div>
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-amber-700">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+          </span>
           <p class="mt-3 text-xs font-semibold text-slate-500">পেন্ডিং অর্ডার</p>
           <p id="statPending" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
         </div>
 
         <div class="stat-card">
-          <div class="flex items-start justify-between">
-            <span class="grid h-11 w-11 place-items-center rounded-xl bg-rose-50 text-rose-700">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
-              </svg>
-            </span>
-          </div>
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-rose-50 text-rose-700">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+            </svg>
+          </span>
           <p class="mt-3 text-xs font-semibold text-slate-500">মোট মেসেজ</p>
           <p id="statMessages" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
         </div>
@@ -284,7 +286,7 @@
       </div>
     </main>
 
-    <!-- ============ PAGE: ORDERS ============ -->
+    <!-- ORDERS -->
     <main id="page-orders" class="page hidden p-4 sm:p-6">
       <div class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -315,11 +317,10 @@
       <div id="ordersList" class="mt-5 space-y-4"></div>
     </main>
 
-    <!-- ============ PAGE: CHATS ============ -->
+    <!-- CHATS -->
     <main id="page-chats" class="page hidden p-4 sm:p-6">
       <div class="grid h-[calc(100vh-8rem)] gap-4 lg:grid-cols-3">
 
-        <!-- Chat list -->
         <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white lg:col-span-1">
           <div class="border-b border-slate-200 px-4 py-3.5">
             <h3 class="text-sm font-extrabold text-slate-900">সাপোর্ট চ্যাট লিস্ট</h3>
@@ -328,7 +329,6 @@
           <div id="chatList" class="sidebar-scroll flex-1 overflow-y-auto p-2"></div>
         </div>
 
-        <!-- Chat window -->
         <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white lg:col-span-2">
           <div id="chatHeader" class="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3.5">
             <div class="flex items-center gap-3">
@@ -357,7 +357,7 @@
               class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100" />
             <button type="submit" id="adminSendBtn"
               class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white transition hover:bg-brand-700 disabled:opacity-50">
-              <svg class="h-4.5 w-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.3 3.7a1 1 0 0 1 1.3-1.2l16.4 8.4a1 1 0 0 1 0 1.8L4.6 21.5a1 1 0 0 1-1.3-1.2L6 12Zm0 0h6"/>
               </svg>
             </button>
@@ -398,13 +398,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getFirestore, collection, doc, updateDoc, onSnapshot, query, orderBy,
-  serverTimestamp, increment
+  serverTimestamp, increment, addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-/* ---------- Config ---------- */
+/* ================= Firebase ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyDbNC1ZD67zcwpLHZL3WB41dE_z8WmjbK8",
   authDomain: "emutationbirth.firebaseapp.com",
@@ -417,12 +417,14 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
 
-/* ⚠️ অনুমোদিত অ্যাডমিন ইমেইল এখানে যোগ করুন */
+/* =========================================================
+   ⚠️ শুধুমাত্র এই ইমেইলগুলোই অ্যাডমিন হিসেবে লগইন করতে পারবে
+   ========================================================= */
 const ALLOWED_ADMINS = [
   'nopqrshov337@gmail.com'
 ];
 
-/* ---------- Helpers ---------- */
+/* ================= Helpers ================= */
 const BN = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 const toBn = n => String(n ?? 0).replace(/\d/g, d => BN[+d]);
 const $ = s => document.querySelector(s);
@@ -437,7 +439,7 @@ function escapeHtml(str='') {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* ---------- State ---------- */
+/* ================= State ================= */
 let ordersData = [];
 let chatsData  = [];
 let messageCount = 0;
@@ -445,29 +447,43 @@ let currentPage = 'dashboard';
 let selectedChatId = null;
 let chatMsgUnsub = null;
 
-/* =====================================================================
+/* ================= Login Error UI ================= */
+function showLoginError(title, msg) {
+  $('#loginErrorTitle').textContent = title;
+  $('#loginErrorMsg').textContent = msg;
+  $('#loginError').classList.remove('hidden');
+}
+function hideLoginError() {
+  $('#loginError').classList.add('hidden');
+}
+
+/* =========================================================
    AUTH
-   ===================================================================== */
+   ========================================================= */
 const loginScreen = $('#loginScreen');
 const appEl = $('#app');
 
 $('#googleLoginBtn').addEventListener('click', async () => {
-  const err = $('#loginError');
-  err.classList.add('hidden');
+  hideLoginError();
+  const btn = $('#googleLoginBtn');
+  btn.disabled = true;
+
   try {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     await signInWithPopup(auth, provider);
   } catch (e) {
     console.error(e);
-    err.textContent = 'লগইন ব্যর্থ হয়েছে: ' + (e?.message || 'Unknown error');
-    err.classList.remove('hidden');
+    showLoginError('Login Failed', 'লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
+  } finally {
+    btn.disabled = false;
   }
 });
 
 $('#logoutBtn').addEventListener('click', () => signOut(auth));
 
 onAuthStateChanged(auth, user => {
+  // Not logged in
   if (!user) {
     loginScreen.classList.remove('hidden');
     loginScreen.classList.add('grid');
@@ -475,15 +491,21 @@ onAuthStateChanged(auth, user => {
     return;
   }
 
+  // Logged in but NOT authorized admin → Verify Failed
   if (!ALLOWED_ADMINS.includes(user.email)) {
-    $('#loginError').textContent =
-      `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়।`;
-    $('#loginError').classList.remove('hidden');
+    showLoginError(
+      'Verify Failed',
+      `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়। শুধুমাত্র অনুমোদিত অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করা যাবে।`
+    );
+    loginScreen.classList.remove('hidden');
+    loginScreen.classList.add('grid');
+    appEl.classList.add('hidden');
     signOut(auth);
     return;
   }
 
-  // success
+  // ✅ Authorized admin — show app
+  hideLoginError();
   loginScreen.classList.add('hidden');
   loginScreen.classList.remove('grid');
   appEl.classList.remove('hidden');
@@ -495,9 +517,9 @@ onAuthStateChanged(auth, user => {
   startListeners();
 });
 
-/* =====================================================================
+/* =========================================================
    NAVIGATION
-   ===================================================================== */
+   ========================================================= */
 const NAV_META = {
   dashboard: { title: 'ড্যাশবোর্ড', sub: 'সারসংক্ষেপ ও পরিসংখ্যান' },
   orders:    { title: 'অর্ডারসমূহ', sub: 'সব ক্লায়েন্ট অর্ডারের তালিকা' },
@@ -526,7 +548,6 @@ function navigate(page) {
 $$('[data-nav]').forEach(b => b.addEventListener('click', () => navigate(b.dataset.nav)));
 navigate('dashboard');
 
-/* sidebar mobile */
 function openSidebar() {
   $('#sidebar').classList.remove('-translate-x-full');
   $('#sidebarBackdrop').classList.remove('hidden');
@@ -540,9 +561,9 @@ function closeSidebar() {
 $('#menuToggle').addEventListener('click', openSidebar);
 $('#sidebarBackdrop').addEventListener('click', closeSidebar);
 
-/* =====================================================================
+/* =========================================================
    FIRESTORE LISTENERS
-   ===================================================================== */
+   ========================================================= */
 let ordersUnsub = null;
 let chatsUnsub  = null;
 
@@ -571,7 +592,6 @@ function startListeners() {
       renderChatList();
       renderRecentChats();
 
-      // total messages — read subcollections on demand is heavy; approximate via unread counters
       messageCount = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0) + (c.unreadForClient || 0), 0);
       $('#statMessages').textContent = toBn(messageCount);
 
@@ -584,9 +604,9 @@ function startListeners() {
   );
 }
 
-/* =====================================================================
+/* =========================================================
    DASHBOARD
-   ===================================================================== */
+   ========================================================= */
 function renderDashboard() {
   const total      = ordersData.length;
   const earnings   = ordersData.reduce((s, o) => s + (o.amount || 0), 0);
@@ -604,7 +624,6 @@ function renderDashboard() {
   $('#statCancelled').textContent   = toBn(cancelled);
   $('#statApplicants').textContent  = toBn(applicants);
 
-  // recent orders
   const wrap = $('#recentOrders');
   const recent = ordersData.slice(0, 5);
   if (!recent.length) {
@@ -644,9 +663,9 @@ function statusBadge(s) {
   return `<span class="badge mt-1 ${bg} ${fg}">${label}</span>`;
 }
 
-/* =====================================================================
+/* =========================================================
    ORDERS PAGE
-   ===================================================================== */
+   ========================================================= */
 function renderOrders() {
   const term = ($('#orderSearch').value || '').toLowerCase().trim();
   const filter = $('#orderFilter').value;
@@ -747,9 +766,9 @@ $('#refreshOrders').addEventListener('click', () => {
   renderOrders();
 });
 
-/* =====================================================================
+/* =========================================================
    ORDER MODAL
-   ===================================================================== */
+   ========================================================= */
 let modalOrderId = null;
 
 function openOrderModal(id) {
@@ -815,7 +834,6 @@ function openOrderModal(id) {
     <div class="mt-3 space-y-3">${applicantsHTML || '<p class="text-sm text-slate-500">কোনো আবেদনকারী নেই।</p>'}</div>
   `;
 
-  // password toggle
   const pwdBtn = $('#toggleAdminPwd');
   if (pwdBtn) {
     pwdBtn.addEventListener('click', () => {
@@ -827,7 +845,6 @@ function openOrderModal(id) {
     });
   }
 
-  // completed button state
   const cb = $('#modalCompletedBtn');
   cb.disabled = (o.status === 'completed');
   cb.textContent = o.status === 'completed' ? '✓ সম্পন্ন' : 'সম্পন্ন হিসেবে চিহ্নিত করুন';
@@ -868,9 +885,9 @@ $('#modalCompletedBtn').addEventListener('click', async () => {
   }
 });
 
-/* =====================================================================
+/* =========================================================
    CHATS
-   ===================================================================== */
+   ========================================================= */
 function renderChatList() {
   const wrap = $('#chatList');
   if (!chatsData.length) {
@@ -947,7 +964,6 @@ async function selectChat(id) {
     }
   );
 
-  // clear unread for admin
   try { await updateDoc(doc(db, 'chats', id), { unreadForAdmin: 0 }); } catch {}
 }
 
@@ -1011,7 +1027,9 @@ $('#adminChatForm').addEventListener('submit', async e => {
   }
 });
 
-/* keyboard: Esc to close modal */
+/* =========================================================
+   KEYBOARD / RESIZE
+   ========================================================= */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (!$('#orderModal').classList.contains('hidden')) closeOrderModal();
@@ -1019,7 +1037,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* close sidebar on resize */
 window.addEventListener('resize', () => {
   if (window.innerWidth >= 768) {
     $('#sidebar').classList.remove('-translate-x-full');
