@@ -45,6 +45,11 @@
       @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white
              px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-700;
     }
+    .btn-danger {
+      @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-rose-50 px-4 py-2.5
+             text-sm font-bold text-rose-700 transition hover:border-rose-400 hover:bg-rose-100 active:scale-[.98]
+             disabled:cursor-not-allowed disabled:opacity-60;
+    }
     .stat-card {
       @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm;
     }
@@ -120,7 +125,6 @@
 
   <div id="sidebarBackdrop" class="fixed inset-0 z-30 hidden bg-slate-900/60 backdrop-blur-sm md:hidden"></div>
 
-  <!-- Sidebar -->
   <aside id="sidebar"
     class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full bg-slate-900 text-slate-300 transition-transform duration-300 md:translate-x-0">
     <div class="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
@@ -373,10 +377,61 @@
 
     <div id="modalOrderBody" class="max-h-[75vh] overflow-y-auto px-5 py-5 sm:px-6"></div>
 
-    <div class="sticky bottom-0 flex flex-col gap-3 border-t border-slate-200 bg-white px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
-      <button id="modalPrintBtn" class="btn-ghost">প্রিন্ট</button>
-      <button id="modalCompletedBtn" class="btn-primary" data-status="completed">সম্পন্ন হিসেবে চিহ্নিত করুন</button>
+    <div class="sticky bottom-0 flex flex-col gap-3 border-t border-slate-200 bg-white px-5 py-4 sm:flex-row sm:justify-between sm:px-6">
+      <button id="modalDeleteBtn" class="btn-danger sm:w-auto">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
+        </svg>
+        অর্ডার ডিলিট করুন
+      </button>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <button id="modalPrintBtn" class="btn-ghost sm:w-auto">প্রিন্ট</button>
+        <button id="modalCompletedBtn" class="btn-primary sm:w-auto" data-status="completed">সম্পন্ন হিসেবে চিহ্নিত করুন</button>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- ============ DELETE CONFIRM MODAL ============ -->
+<div id="deleteModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-slate-900/70 p-4 backdrop-blur-sm">
+  <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl anim-in">
+    <div class="p-6">
+      <div class="flex items-start gap-4">
+        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-rose-100 text-rose-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+        </span>
+        <div class="min-w-0 flex-1">
+          <h3 class="text-lg font-extrabold text-slate-900">অর্ডার ডিলিট করবেন?</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">
+            এই অর্ডারটি স্থায়ীভাবে মুছে যাবে। এটি আর ফেরত আনা যাবে না।
+          </p>
+          <div class="mt-3 rounded-lg bg-slate-50 px-3 py-2">
+            <p class="text-xs text-slate-500">অর্ডার আইডি:</p>
+            <p id="deleteOrderId" class="mt-0.5 font-mono text-sm font-bold text-slate-900">—</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button id="cancelDeleteBtn" class="btn-ghost w-full sm:w-auto">বাতিল করুন</button>
+        <button id="confirmDeleteBtn" class="btn-danger w-full sm:w-auto">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
+          </svg>
+          হ্যাঁ, ডিলিট করুন
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="pointer-events-none fixed left-1/2 top-6 z-[80] -translate-x-1/2 opacity-0 transition-all duration-300">
+  <div id="toastBox" class="flex items-center gap-2.5 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-2xl">
+    <span id="toastIcon"></span>
+    <span id="toastText">—</span>
   </div>
 </div>
 
@@ -384,7 +439,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getFirestore, collection, doc, updateDoc, onSnapshot, query, orderBy,
+  getFirestore, collection, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy,
   serverTimestamp, increment, addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
@@ -424,6 +479,40 @@ function fmtDate(ts) {
 }
 function escapeHtml(str='') {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ================= Toast ================= */
+let toastTimer = null;
+function showToast(text, type='success') {
+  const toast = $('#toast');
+  const box = $('#toastBox');
+  const icon = $('#toastIcon');
+  const txt = $('#toastText');
+
+  txt.textContent = text;
+
+  const colors = {
+    success: 'bg-emerald-600',
+    error:   'bg-rose-600',
+    info:    'bg-slate-900'
+  };
+  box.className = `flex items-center gap-2.5 rounded-xl ${colors[type] || colors.info} px-4 py-3 text-sm font-semibold text-white shadow-2xl`;
+
+  const icons = {
+    success: '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>',
+    error:   '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>',
+    info:    '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8h.01M11 12h1v4h1m8-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>'
+  };
+  icon.innerHTML = icons[type] || icons.info;
+
+  toast.classList.remove('opacity-0');
+  toast.classList.add('opacity-100');
+
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.add('opacity-0');
+    toast.classList.remove('opacity-100');
+  }, 2600);
 }
 
 /* ================= State ================= */
@@ -589,7 +678,7 @@ function startListeners() {
 }
 
 /* =========================================================
-   COURT FEE HELPERS (top-level)
+   COURT FEE HELPERS
    ========================================================= */
 function courtFeeBadge(o) {
   if (o.courtFeePaid) {
@@ -739,7 +828,7 @@ function renderOrders() {
           </div>
         </div>
 
-        <div class="flex shrink-0 items-center gap-2">
+        <div class="flex shrink-0 flex-wrap items-center gap-2">
           <select data-status-select="${o.id}" class="input !w-auto !py-2 !text-xs">
             <option value="pending"    ${o.status==='pending'?'selected':''}>পেন্ডিং</option>
             <option value="processing" ${o.status==='processing'?'selected':''}>প্রসেসিং</option>
@@ -747,12 +836,21 @@ function renderOrders() {
             <option value="cancelled"  ${o.status==='cancelled'?'selected':''}>বাতিল</option>
           </select>
           <button data-view-order="${o.id}" class="btn-primary !px-4 !py-2 !text-xs">বিস্তারিত</button>
+          <button data-delete-order="${o.id}" title="ডিলিট করুন"
+            class="grid h-9 w-9 place-items-center rounded-xl border border-rose-200 bg-rose-50 text-rose-600 transition hover:border-rose-400 hover:bg-rose-100">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>`).join('');
 
   wrap.querySelectorAll('[data-view-order]').forEach(b =>
     b.addEventListener('click', () => openOrderModal(b.dataset.viewOrder))
+  );
+  wrap.querySelectorAll('[data-delete-order]').forEach(b =>
+    b.addEventListener('click', () => openDeleteModal(b.dataset.deleteOrder))
   );
   wrap.querySelectorAll('[data-status-select]').forEach(sel =>
     sel.addEventListener('change', async e => {
@@ -762,9 +860,10 @@ function renderOrders() {
           status: e.target.value,
           statusUpdatedAt: serverTimestamp()
         });
+        showToast('স্ট্যাটাস আপডেট হয়েছে', 'success');
       } catch (err) {
         console.error(err);
-        alert('স্ট্যাটাস আপডেট করা যায়নি।');
+        showToast('স্ট্যাটাস আপডেট করা যায়নি', 'error');
       }
     })
   );
@@ -842,7 +941,6 @@ function openOrderModal(id) {
       </div>
     </div>
 
-    <!-- COURT FEE SECTION -->
     <div class="mt-4 rounded-xl ${o.courtFeePaid ? 'border border-emerald-200 bg-emerald-50/60' : 'border border-amber-200 bg-amber-50/60'} p-4">
       <p class="text-[11px] font-bold uppercase tracking-wider ${o.courtFeePaid ? 'text-emerald-700' : 'text-amber-700'}">Court Fee তথ্য</p>
       <div class="mt-3 flex flex-wrap items-center gap-3">
@@ -905,11 +1003,76 @@ $('#modalCompletedBtn').addEventListener('click', async () => {
       completedAt: serverTimestamp()
     });
     btn.innerHTML = '✓ সম্পন্ন';
+    showToast('অর্ডার সম্পন্ন হিসেবে চিহ্নিত হয়েছে', 'success');
   } catch (err) {
     console.error(err);
-    alert('আপডেট করা যায়নি।');
+    showToast('আপডেট করা যায়নি', 'error');
     btn.innerHTML = html;
     btn.disabled = false;
+  }
+});
+
+/* =========================================================
+   DELETE ORDER
+   ========================================================= */
+let pendingDeleteId = null;
+
+function openDeleteModal(id) {
+  const o = ordersData.find(x => x.id === id);
+  if (!o) return;
+  pendingDeleteId = id;
+
+  $('#deleteOrderId').textContent = o.orderId || o.id;
+
+  const m = $('#deleteModal');
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteModal() {
+  $('#deleteModal').classList.add('hidden');
+  $('#deleteModal').classList.remove('flex');
+  if ($('#orderModal').classList.contains('hidden')) {
+    document.body.style.overflow = '';
+  }
+  pendingDeleteId = null;
+}
+
+$('#cancelDeleteBtn').addEventListener('click', closeDeleteModal);
+$('#deleteModal').addEventListener('click', e => { if (e.target.id === 'deleteModal') closeDeleteModal(); });
+
+// from order modal delete button
+$('#modalDeleteBtn').addEventListener('click', () => {
+  if (!modalOrderId) return;
+  openDeleteModal(modalOrderId);
+});
+
+// confirm delete
+$('#confirmDeleteBtn').addEventListener('click', async () => {
+  if (!pendingDeleteId) return;
+
+  const btn = $('#confirmDeleteBtn');
+  btn.disabled = true;
+  const originalHTML = btn.innerHTML;
+  btn.innerHTML = 'ডিলিট হচ্ছে…';
+
+  try {
+    await deleteDoc(doc(db, 'orders', pendingDeleteId));
+    showToast('অর্ডার সফলভাবে ডিলিট হয়েছে', 'success');
+    closeDeleteModal();
+
+    // also close order modal if open for this order
+    if (modalOrderId === pendingDeleteId) {
+      closeOrderModal();
+      modalOrderId = null;
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('ডিলিট করা যায়নি। আবার চেষ্টা করুন।', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHTML;
   }
 });
 
@@ -1048,7 +1211,7 @@ $('#adminChatForm').addEventListener('submit', async e => {
   } catch (err) {
     console.error(err);
     input.value = text;
-    alert('মেসেজ পাঠানো যায়নি।');
+    showToast('মেসেজ পাঠানো যায়নি', 'error');
   } finally {
     btn.disabled = false;
     input.focus();
@@ -1060,7 +1223,14 @@ $('#adminChatForm').addEventListener('submit', async e => {
    ========================================================= */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    if (!$('#orderModal').classList.contains('hidden')) closeOrderModal();
+    if (!$('#deleteModal').classList.contains('hidden')) {
+      closeDeleteModal();
+      return;
+    }
+    if (!$('#orderModal').classList.contains('hidden')) {
+      closeOrderModal();
+      return;
+    }
     closeSidebar();
   }
 });
