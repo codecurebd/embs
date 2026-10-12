@@ -77,6 +77,21 @@
   .step-item.done .step-circle { background: #10b981; color: #fff; }
   .step-item.done .step-label { color: #059669; font-weight: 700; }
 
+  /* ===== Hero (light, eye-friendly) ===== */
+  .hero-mesh {
+    background-image:
+      linear-gradient(to right, rgba(29,81,245,.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(29,81,245,.055) 1px, transparent 1px);
+    background-size: 46px 46px;
+    -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 34%, #000 32%, transparent 100%);
+            mask-image: radial-gradient(ellipse 72% 62% at 50% 34%, #000 32%, transparent 100%);
+  }
+  @keyframes heroGlow {
+    0%,100% { transform: translate3d(0,0,0) scale(1); opacity:.55 }
+    50%     { transform: translate3d(0,-14px,0) scale(1.06); opacity:.8 }
+  }
+  .hero-glow { animation: heroGlow 9s ease-in-out infinite; }
+
   @media print {
     body * { visibility: hidden; }
     #invoiceBox, #invoiceBox * { visibility: visible; }
@@ -159,43 +174,81 @@
   </nav>
 </header>
 
-<!-- ============ HERO ============ -->
-<section id="home" class="relative overflow-hidden bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 text-white">
-  <div class="pointer-events-none absolute inset-0 opacity-[.12]"
-       style="background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size:22px 22px;"></div>
-  <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-400/20 blur-3xl"></div>
-  <div class="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-brand-300/10 blur-3xl"></div>
+<!-- ============ HERO (light & soft blue) ============ -->
+<section id="home"
+  class="relative overflow-hidden bg-gradient-to-b from-brand-100 via-brand-50 to-white">
+
+  <!-- soft colour wash -->
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/70 via-transparent to-brand-100/60"></div>
+
+  <!-- subtle mesh / grid texture -->
+  <div class="hero-mesh pointer-events-none absolute inset-0"></div>
+
+  <!-- soft glowing blobs (lighter, less saturated) -->
+  <div class="hero-glow pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-brand-300/30 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-36 -left-28 h-96 w-96 rounded-full bg-sky-200/50 blur-3xl"></div>
+  <div class="pointer-events-none absolute left-1/2 top-10 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-white/70 blur-3xl"></div>
+
+  <!-- thin highlight line at top -->
+  <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent"></div>
 
   <div class="relative mx-auto max-w-7xl px-4 py-14 text-center sm:py-20 lg:py-24">
-    <span class="anim-in inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-50 backdrop-blur sm:text-xs">
-      <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>
+    <span class="anim-in inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-700 shadow-sm shadow-brand-100 backdrop-blur sm:text-xs">
+      <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
       অনলাইন ই-নামজারি সেবা
     </span>
 
-    <h1 class="anim-in mt-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+    <h1 class="anim-in mt-6 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
       eMutation Birth certificate<br class="hidden sm:block" />
-      <span class="bg-gradient-to-r from-white to-brand-200 bg-clip-text text-transparent">application support</span>
+      <span class="bg-gradient-to-r from-brand-700 via-brand-600 to-brand-400 bg-clip-text text-transparent">
+        application support
+      </span>
     </h1>
 
-    <p class="anim-in mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-brand-100 sm:text-base lg:text-lg">
+    <p class="anim-in mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base lg:text-lg">
       ১৮ বছর বয়সোর্ধ্ব নাগরিকদের জন্ম নিবন্ধন আবেদন প্রক্রিয়া সম্পূর্ণ দ্রুত, নিরাপদ ও নির্ভরযোগ্যভাবে সম্পন্ন করার জন্য
       একটি পেশাদার সাপোর্ট সেবা।
     </p>
 
     <div class="anim-in mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
       <a href="#service"
-         class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-extrabold text-brand-800 shadow-xl shadow-black/20 transition hover:bg-brand-50 active:scale-[.98] sm:w-auto">
+         class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/25 transition hover:bg-brand-700 hover:shadow-xl hover:shadow-brand-600/30 active:scale-[.98] sm:w-auto">
         আবেদন শুরু করুন
         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
         </svg>
       </a>
       <button type="button" data-open-chat
-        class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20 sm:w-auto">
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand-200 bg-white/90 px-8 py-3.5 text-sm font-bold text-brand-700 shadow-sm backdrop-blur transition hover:border-brand-300 hover:bg-white sm:w-auto">
         সাপোর্টের সাথে কথা বলুন
       </button>
     </div>
+
+    <!-- small trust chips -->
+    <div class="anim-in mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-semibold text-slate-500 sm:text-xs">
+      <span class="inline-flex items-center gap-1.5">
+        <svg class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
+        </svg>
+        ১০০% গোপনীয়তা
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <svg class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
+        </svg>
+        ৩০-১২০ মিনিটে ডেলিভারি
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <svg class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
+        </svg>
+        ২৪/৭ লাইভ সাপোর্ট
+      </span>
+    </div>
   </div>
+
+  <!-- smooth fade into next white section -->
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white"></div>
 </section>
 
 <!-- ============ SERVICE / ORDER FORM ============ -->
