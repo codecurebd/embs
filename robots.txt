@@ -1,0 +1,15 @@
+# ============================================
+# robots.txt — eMutation Birth Certificate
+# Domain: https://emb-support.vercel.app/
+# ============================================
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/
+
+# ============================================
+# Sitemap Location
+# ============================================
+Sitemap: https://emb-support.vercel.app/sitemap.xml
