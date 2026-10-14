@@ -385,9 +385,37 @@
         অর্ডার ডিলিট করুন
       </button>
       <div class="flex flex-col gap-3 sm:flex-row">
+        <button id="modalCopyFormBtn" class="btn-ghost sm:w-auto">Copy Form</button>
         <button id="modalPrintBtn" class="btn-ghost sm:w-auto">প্রিন্ট</button>
         <button id="modalCompletedBtn" class="btn-primary sm:w-auto" data-status="completed">সম্পন্ন হিসেবে চিহ্নিত করুন</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COPY FORM MODAL (NEW) ============ -->
+<div id="copyFormModal" class="fixed inset-0 z-[65] hidden items-start justify-center overflow-y-auto bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center">
+  <div class="my-4 w-full max-w-3xl rounded-2xl bg-white shadow-2xl anim-in">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
+      <div class="min-w-0">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Copy Form — দ্রুত কপি</p>
+        <h3 id="copyFormOrderId" class="mt-0.5 truncate text-lg font-extrabold text-slate-900">—</h3>
+        <p class="mt-0.5 text-[11px] text-slate-500">প্রতিটি ফিল্ডের পাশে Copy বাটনে ক্লিক করলে মানটি কপি হয়ে যাবে।</p>
+      </div>
+      <button id="closeCopyFormModal" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="copyFormApplicantTabs" class="hidden flex-wrap gap-2 border-b border-slate-200 px-5 py-3 sm:px-6"></div>
+
+    <div id="copyFormBody" class="max-h-[72vh] overflow-y-auto px-5 py-5 sm:px-6"></div>
+
+    <div class="flex flex-col gap-3 border-t border-slate-200 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
+      <button id="copyFormDownloadAll" class="btn-ghost sm:w-auto">সব ফিল্ড একসাথে কপি</button>
+      <button id="closeCopyFormBtn" class="btn-primary sm:w-auto">ঠিক আছে</button>
     </div>
   </div>
 </div>
@@ -479,6 +507,13 @@ function fmtDate(ts) {
 }
 function escapeHtml(str='') {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* Cloudinary download link (fl_attachment force download) */
+function cloudinaryDownloadUrl(url) {
+  if (!url) return '';
+  if (url.includes('/upload/')) return url.replace('/upload/', '/upload/fl_attachment/');
+  return url;
 }
 
 /* ================= Toast ================= */
@@ -770,7 +805,7 @@ function renderOrders() {
     list = list.filter(o => {
       const hay = [
         o.orderId, o.receiverEmail, o.bkashSenderNumber, o.landAccountNumber, o.circle,
-        ...(o.applicants || []).map(a => a?.name)
+        ...(o.applicants || []).flatMap(a => [a?.name, a?.certNo, a?.division, a?.district, a?.upazila])
       ].filter(Boolean).join(' ').toLowerCase();
       return hay.includes(term);
     });
@@ -835,6 +870,12 @@ function renderOrders() {
             <option value="completed"  ${o.status==='completed'?'selected':''}>সম্পন্ন</option>
             <option value="cancelled"  ${o.status==='cancelled'?'selected':''}>বাতিল</option>
           </select>
+          <button data-copy-form="${o.id}" class="btn-ghost !px-3.5 !py-2 !text-xs">
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M5 8h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/>
+            </svg>
+            Copy Form
+          </button>
           <button data-view-order="${o.id}" class="btn-primary !px-4 !py-2 !text-xs">বিস্তারিত</button>
           <button data-delete-order="${o.id}" title="ডিলিট করুন"
             class="grid h-9 w-9 place-items-center rounded-xl border border-rose-200 bg-rose-50 text-rose-600 transition hover:border-rose-400 hover:bg-rose-100">
@@ -848,6 +889,9 @@ function renderOrders() {
 
   wrap.querySelectorAll('[data-view-order]').forEach(b =>
     b.addEventListener('click', () => openOrderModal(b.dataset.viewOrder))
+  );
+  wrap.querySelectorAll('[data-copy-form]').forEach(b =>
+    b.addEventListener('click', () => openCopyFormModal(b.dataset.copyForm))
   );
   wrap.querySelectorAll('[data-delete-order]').forEach(b =>
     b.addEventListener('click', () => openDeleteModal(b.dataset.deleteOrder))
@@ -900,6 +944,9 @@ function openOrderModal(id) {
         <div><p class="text-slate-500">জন্ম তারিখ</p><p class="font-semibold text-slate-800">${escapeHtml(a.birthDate || '—')}</p></div>
         <div><p class="text-slate-500">পিতার নাম</p><p class="font-semibold text-slate-800">${escapeHtml(a.fatherName || '—')}</p></div>
         <div><p class="text-slate-500">মাতার নাম</p><p class="font-semibold text-slate-800">${escapeHtml(a.motherName || '—')}</p></div>
+        <div><p class="text-slate-500">বিভাগ</p><p class="font-semibold text-slate-800">${escapeHtml(a.division || '—')}</p></div>
+        <div><p class="text-slate-500">জেলা</p><p class="font-semibold text-slate-800">${escapeHtml(a.district || '—')}</p></div>
+        <div><p class="text-slate-500">উপজেলা / সার্কেল</p><p class="font-semibold text-slate-800">${escapeHtml(a.upazila || '—')}</p></div>
         <div class="sm:col-span-2"><p class="text-slate-500">ঠিকানা</p><p class="font-semibold text-slate-800">${escapeHtml(a.address || '—')}</p></div>
       </div>
       ${a.imageUrl ? `
@@ -984,7 +1031,9 @@ function openOrderModal(id) {
 function closeOrderModal() {
   $('#orderModal').classList.add('hidden');
   $('#orderModal').classList.remove('flex');
-  document.body.style.overflow = '';
+  if ($('#copyFormModal').classList.contains('hidden')) {
+    document.body.style.overflow = '';
+  }
 }
 $('#closeOrderModal').addEventListener('click', closeOrderModal);
 $('#orderModal').addEventListener('click', e => { if (e.target.id === 'orderModal') closeOrderModal(); });
@@ -1013,6 +1062,221 @@ $('#modalCompletedBtn').addEventListener('click', async () => {
 });
 
 /* =========================================================
+   COPY FORM MODAL  (NEW FEATURE)
+   ========================================================= */
+let copyFormOrderId = null;
+let copyFormApplicantIndex = 0;
+
+function openCopyFormModal(id) {
+  const o = ordersData.find(x => x.id === id);
+  if (!o) return;
+  copyFormOrderId = id;
+  copyFormApplicantIndex = 0;
+
+  $('#copyFormOrderId').textContent = o.orderId || o.id;
+  renderCopyFormTabs(o);
+  renderCopyFormBody(o);
+
+  const m = $('#copyFormModal');
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCopyFormModal() {
+  $('#copyFormModal').classList.add('hidden');
+  $('#copyFormModal').classList.remove('flex');
+  if ($('#orderModal').classList.contains('hidden') && $('#deleteModal').classList.contains('hidden')) {
+    document.body.style.overflow = '';
+  }
+  copyFormOrderId = null;
+}
+
+function renderCopyFormTabs(o) {
+  const wrap = $('#copyFormApplicantTabs');
+  const list = o.applicants || [];
+
+  if (list.length <= 1) {
+    wrap.innerHTML = '';
+    wrap.classList.add('hidden');
+    return;
+  }
+
+  wrap.classList.remove('hidden');
+  wrap.innerHTML = list.map((a, i) => `
+    <button type="button" data-cf-tab="${i}"
+      class="rounded-xl px-3.5 py-2 text-xs font-bold transition
+        ${i === copyFormApplicantIndex
+          ? 'bg-brand-600 text-white shadow-md shadow-brand-600/25'
+          : 'border border-slate-200 bg-white text-slate-600 hover:border-brand-300 hover:text-brand-700'}">
+      আবেদনকারী ${toBn(i+1)}
+    </button>`).join('');
+
+  wrap.querySelectorAll('[data-cf-tab]').forEach(b => {
+    b.addEventListener('click', () => {
+      copyFormApplicantIndex = +b.dataset.cfTab;
+      renderCopyFormTabs(o);
+      renderCopyFormBody(o);
+    });
+  });
+}
+
+/* একটি ফিল্ডের জন্য কপি-যোগ্য কার্ড */
+function copyFieldCard(label, value) {
+  const v = (value ?? '').toString();
+  return `
+    <div class="rounded-xl border border-slate-200 bg-white p-3">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">${label}</p>
+        <button type="button"
+          data-copy-text="${escapeHtml(v)}"
+          class="cf-copy inline-flex shrink-0 items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-600 transition hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700">
+          <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M5 8h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/>
+          </svg>
+          Copy
+        </button>
+      </div>
+      <p class="mt-1.5 break-words text-sm font-bold text-slate-900">${v ? escapeHtml(v) : '<span class="text-slate-400 font-normal">—</span>'}</p>
+    </div>`;
+}
+
+function renderCopyFormBody(o) {
+  const list = o.applicants || [];
+  const a = list[copyFormApplicantIndex] || {};
+  const body = $('#copyFormBody');
+
+  const dlUrl = a.imageUrl ? cloudinaryDownloadUrl(a.imageUrl) : '';
+
+  body.innerHTML = `
+    <div class="grid gap-3 sm:grid-cols-2">
+      ${copyFieldCard('Birth Certificate Number', a.certNo)}
+      ${copyFieldCard('Birth Date',             a.birthDate)}
+      ${copyFieldCard('Name',                   a.name)}
+      ${copyFieldCard("Father's Name",          a.fatherName)}
+      ${copyFieldCard("Mother's Name",          a.motherName)}
+      ${copyFieldCard('বিভাগ (Division)',       a.division)}
+      ${copyFieldCard('জেলা (District)',        a.district)}
+      ${copyFieldCard('উপজেলা / সার্কেল',       a.upazila)}
+    </div>
+
+    <div class="mt-3">
+      ${copyFieldCard('ঠিকানা (Address)', a.address)}
+    </div>
+
+    <div class="mt-3 rounded-xl border border-slate-200 bg-white p-3">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">জন্ম নিবন্ধন সনদের ছবি</p>
+        ${a.imageUrl ? `
+          <a href="${escapeHtml(dlUrl)}" download target="_blank" rel="noopener"
+             class="inline-flex shrink-0 items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 transition hover:border-emerald-400 hover:bg-emerald-100">
+            <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0-4-4m4 4 4-4M4 20h16"/>
+            </svg>
+            Download
+          </a>` : ''}
+      </div>
+      ${a.imageUrl
+        ? `<a href="${escapeHtml(a.imageUrl)}" target="_blank" rel="noopener" class="mt-2 block">
+             <img src="${escapeHtml(a.imageUrl)}" alt="জন্ম নিবন্ধন সনদ"
+                  class="h-40 w-auto rounded-xl border border-slate-200 object-cover shadow-sm transition hover:scale-[1.02]" />
+           </a>`
+        : `<p class="mt-2 rounded-lg bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700">⚠️ কোনো ছবি পাওয়া যায়নি</p>`}
+    </div>
+
+    <p class="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-[11px] font-semibold text-slate-500">
+      💡 টিপস: প্রতিটি ফিল্ডের পাশে <b>Copy</b> বাটনে ক্লিক করলে সেই মানটি ক্লিপবোর্ডে কপি হয়ে যাবে। অথবা নিচের
+      <b>সব ফিল্ড একসাথে কপি</b> বাটনে ক্লিক করে সম্পূর্ণ তথ্যটি একবারে কপি করা যাবে।
+    </p>
+  `;
+
+  attachCopyHandlers(body);
+  $('#copyFormDownloadAll').dataset.orderId = copyFormOrderId;
+  $('#copyFormDownloadAll').dataset.applicantIndex = copyFormApplicantIndex;
+}
+
+/* copy বাটনে ক্লিক হ্যান্ডলার */
+function attachCopyHandlers(root) {
+  root.querySelectorAll('.cf-copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copyText || '';
+      if (!text) { showToast('এই ফিল্ডে কোনো তথ্য নেই', 'info'); return; }
+      try {
+        await copyToClipboard(text);
+        const original = btn.innerHTML;
+        btn.innerHTML = '✓ কপি হয়েছে';
+        btn.classList.add('!border-emerald-300', '!bg-emerald-50', '!text-emerald-700');
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove('!border-emerald-300', '!bg-emerald-50', '!text-emerald-700');
+        }, 1500);
+        showToast('কপি হয়েছে', 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('কপি করা যায়নি', 'error');
+      }
+    });
+  });
+}
+
+async function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  // fallback (http / old browsers)
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  const ok = document.execCommand('copy');
+  document.body.removeChild(ta);
+  if (!ok) throw new Error('copy failed');
+}
+
+$('#closeCopyFormModal').addEventListener('click', closeCopyFormModal);
+$('#closeCopyFormBtn').addEventListener('click', closeCopyFormModal);
+$('#copyFormModal').addEventListener('click', e => { if (e.target.id === 'copyFormModal') closeCopyFormModal(); });
+
+$('#modalCopyFormBtn').addEventListener('click', () => {
+  if (!modalOrderId) return;
+  openCopyFormModal(modalOrderId);
+});
+
+/* সব ফিল্ড একসাথে কপি */
+$('#copyFormDownloadAll').addEventListener('click', async () => {
+  const id = $('#copyFormDownloadAll').dataset.orderId || copyFormOrderId;
+  const idx = +(($('#copyFormDownloadAll').dataset.applicantIndex) || 0);
+  const o = ordersData.find(x => x.id === id);
+  if (!o) return;
+
+  const a = (o.applicants || [])[idx] || {};
+  const lines = [
+    `Order ID: ${o.orderId || o.id}`,
+    `Applicant: ${toBn(idx + 1)}`,
+    `----------------------------------`,
+    `Birth Certificate Number: ${a.certNo || ''}`,
+    `Birth Date: ${a.birthDate || ''}`,
+    `Name: ${a.name || ''}`,
+    `Father's Name: ${a.fatherName || ''}`,
+    `Mother's Name: ${a.motherName || ''}`,
+    `Bivag (Division): ${a.division || ''}`,
+    `Jela (District): ${a.district || ''}`,
+    `Upojela / Sarkel: ${a.upazila || ''}`,
+    `Thikana (Address): ${a.address || ''}`,
+    `Image URL: ${a.imageUrl || ''}`
+  ];
+  try {
+    await copyToClipboard(lines.join('\n'));
+    showToast('সব তথ্য একসাথে কপি হয়েছে', 'success');
+  } catch (err) {
+    console.error(err);
+    showToast('কপি করা যায়নি', 'error');
+  }
+});
+
+/* =========================================================
    DELETE ORDER
    ========================================================= */
 let pendingDeleteId = null;
@@ -1033,7 +1297,7 @@ function openDeleteModal(id) {
 function closeDeleteModal() {
   $('#deleteModal').classList.add('hidden');
   $('#deleteModal').classList.remove('flex');
-  if ($('#orderModal').classList.contains('hidden')) {
+  if ($('#orderModal').classList.contains('hidden') && $('#copyFormModal').classList.contains('hidden')) {
     document.body.style.overflow = '';
   }
   pendingDeleteId = null;
@@ -1042,13 +1306,11 @@ function closeDeleteModal() {
 $('#cancelDeleteBtn').addEventListener('click', closeDeleteModal);
 $('#deleteModal').addEventListener('click', e => { if (e.target.id === 'deleteModal') closeDeleteModal(); });
 
-// from order modal delete button
 $('#modalDeleteBtn').addEventListener('click', () => {
   if (!modalOrderId) return;
   openDeleteModal(modalOrderId);
 });
 
-// confirm delete
 $('#confirmDeleteBtn').addEventListener('click', async () => {
   if (!pendingDeleteId) return;
 
@@ -1058,14 +1320,17 @@ $('#confirmDeleteBtn').addEventListener('click', async () => {
   btn.innerHTML = 'ডিলিট হচ্ছে…';
 
   try {
-    await deleteDoc(doc(db, 'orders', pendingDeleteId));
+    const deletingId = pendingDeleteId;
+    await deleteDoc(doc(db, 'orders', deletingId));
     showToast('অর্ডার সফলভাবে ডিলিট হয়েছে', 'success');
     closeDeleteModal();
 
-    // also close order modal if open for this order
-    if (modalOrderId === pendingDeleteId) {
+    if (modalOrderId === deletingId) {
       closeOrderModal();
       modalOrderId = null;
+    }
+    if (copyFormOrderId === deletingId) {
+      closeCopyFormModal();
     }
   } catch (err) {
     console.error(err);
@@ -1225,6 +1490,10 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (!$('#deleteModal').classList.contains('hidden')) {
       closeDeleteModal();
+      return;
+    }
+    if (!$('#copyFormModal').classList.contains('hidden')) {
+      closeCopyFormModal();
       return;
     }
     if (!$('#orderModal').classList.contains('hidden')) {

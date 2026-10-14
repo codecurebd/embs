@@ -1207,6 +1207,7 @@ function restoreApplicants(snap) {
   });
 }
 
+/* ✅ আপডেটেড applicantCardHTML — বিভাগ / জেলা / উপজেলা যোগ করা হয়েছে */
 function applicantCardHTML(i) {
   const n = toBn(i + 1);
   return `
@@ -1236,9 +1237,21 @@ function applicantCardHTML(i) {
         <label class="label">পিতার নাম <span class="text-rose-500">*</span></label>
         <input type="text" data-field="fatherName" class="input" placeholder="পিতার নাম" />
       </div>
-      <div class="sm:col-span-2">
+      <div>
         <label class="label">মাতার নাম <span class="text-rose-500">*</span></label>
         <input type="text" data-field="motherName" class="input" placeholder="মাতার নাম" />
+      </div>
+      <div>
+        <label class="label">বিভাগ <span class="text-rose-500">*</span></label>
+        <input type="text" data-field="division" class="input" placeholder="যেমন: ঢাকা" />
+      </div>
+      <div>
+        <label class="label">জেলা <span class="text-rose-500">*</span></label>
+        <input type="text" data-field="district" class="input" placeholder="যেমন: ঢাকা" />
+      </div>
+      <div>
+        <label class="label">উপজেলা / সার্কেল <span class="text-rose-500">*</span></label>
+        <input type="text" data-field="upazila" class="input" placeholder="যেমন: সাভার" />
       </div>
       <div class="sm:col-span-2">
         <label class="label">ঠিকানা (দলিল / ওয়ারিশ সনদ অনুযায়ী) <span class="text-rose-500">*</span></label>
@@ -1335,6 +1348,7 @@ function markError(el) {
   el.addEventListener('change', () => el.classList.remove('field-error'), { once: true });
 }
 
+/* ✅ collectApplicants — division / district / upazila সহ */
 function collectApplicants(validate = true) {
   const cards = [...document.querySelectorAll('.applicant-card')];
   const list = [];
@@ -1348,12 +1362,15 @@ function collectApplicants(validate = true) {
       name:       get('name').value.trim(),
       fatherName: get('fatherName').value.trim(),
       motherName: get('motherName').value.trim(),
+      division:   get('division').value.trim(),
+      district:   get('district').value.trim(),
+      upazila:    get('upazila').value.trim(),
       address:    get('address').value.trim(),
       file:       get('file').files?.[0] || null,
     };
 
     if (validate) {
-      ['certNo','birthDate','name','fatherName','motherName','address'].forEach(f => {
+      ['certNo','birthDate','name','fatherName','motherName','division','district','upazila','address'].forEach(f => {
         if (!rec[f]) { ok = false; markError(get(f)); firstBad = firstBad || get(f); }
       });
       if (!rec.file) {
@@ -1505,12 +1522,16 @@ submitBtn.addEventListener('click', async () => {
     $('#progressBar').style.width = '100%';
     $('#progressPct').textContent = '100%';
 
+    /* ✅ division / district / upazila payload এ যোগ */
     const applicants = list.map(a => ({
       certNo:     a.certNo,
       birthDate:  a.birthDate,
       name:       a.name,
       fatherName: a.fatherName,
       motherName: a.motherName,
+      division:   a.division,
+      district:   a.district,
+      upazila:    a.upazila,
       address:    a.address,
       imageUrl:   a.imageUrl
     }));
@@ -1550,6 +1571,7 @@ submitBtn.addEventListener('click', async () => {
         <span class="min-w-0">
           <b class="text-slate-900">${escapeHtml(a.name)}</b>
           <span class="block text-xs text-slate-500">নিবন্ধন নং: ${escapeHtml(a.certNo || '—')} · জন্ম তারিখ: ${escapeHtml(a.birthDate || '—')}</span>
+          <span class="block text-xs text-slate-500">${escapeHtml(a.division || '—')} · ${escapeHtml(a.district || '—')} · ${escapeHtml(a.upazila || '—')}</span>
         </span>
       </li>`).join('');
 
