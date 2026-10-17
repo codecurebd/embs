@@ -466,6 +466,7 @@
             <div>
               <label class="label" for="landNumber">অ্যাকাউন্ট মোবাইল নম্বর <span class="text-rose-500">*</span></label>
               <input type="tel" id="landNumber" class="input" placeholder="01XXXXXXXXX" inputmode="numeric" autocomplete="tel" />
+              <p class="hint">বাংলা (০-৯) বা ইংরেজি (0-9) — যেকোনো ডিজিটে লিখতে পারেন।</p>
             </div>
             <div>
               <label class="label" for="landPassword">অ্যাকাউন্ট পাসওয়ার্ড <span class="text-rose-500">*</span></label>
@@ -547,7 +548,7 @@
         <div class="mt-5">
           <label class="label" for="senderNumber">যে নম্বর থেকে টাকা পাঠিয়েছেন <span class="text-rose-500">*</span></label>
           <input type="tel" id="senderNumber" class="input" placeholder="01XXXXXXXXX" inputmode="numeric" autocomplete="tel" />
-          <p class="hint">ম্যানুয়াল পেমেন্ট যাচাইয়ের জন্য সঠিক নম্বর দিন।</p>
+          <p class="hint">ম্যানুয়াল পেমেন্ট যাচাইয়ের জন্য সঠিক নম্বর দিন (বাংলা/ইংরেজি উভয়ই গ্রহণযোগ্য)।</p>
         </div>
 
         <button type="button" id="submitBtn" class="btn-primary mt-6 w-full py-4 text-base">
@@ -937,6 +938,42 @@ const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 const toBn = n => String(n).replace(/\d/g, d => BN_DIGITS[+d]);
 const $ = s => document.querySelector(s);
 
+/* ====== Bengali ⇄ English digit helpers (for numbers) ====== */
+const BN_TO_EN = { '০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9' };
+const toEnDigits  = s => String(s ?? '').replace(/[০-৯]/g, d => BN_TO_EN[d]);
+// Convert Bengali digits → English, strip anything that isn't an ASCII digit
+const digitsOnly  = s => toEnDigits(s).replace(/\D/g, '');
+
+/**
+ * Live-filter an input so that ONLY Bengali (০-৯) or English (0-9) digits
+ * are allowed. Letters, spaces, symbols, etc. are removed on typing/paste.
+ */
+function attachDigitsOnlyFilter(input) {
+  if (!input || input.dataset.digitsOnlyFilter === '1') return;
+  input.dataset.digitsOnlyFilter = '1';
+
+  const clean = () => {
+    const original = input.value;
+    const filtered = original.replace(/[^\d০-৯]/g, '');
+    if (original !== filtered) {
+      const pos = input.selectionStart ?? filtered.length;
+      // keep cursor roughly in place
+      const diff = original.length - filtered.length;
+      input.value = filtered;
+      try { input.setSelectionRange(Math.max(0, pos - diff), Math.max(0, pos - diff)); } catch {}
+    }
+  };
+
+  input.addEventListener('input', clean);
+  input.addEventListener('blur', () => {
+    // On blur, normalize Bengali → English so user sees canonical 11-digit number
+    const normalized = digitsOnly(input.value);
+    if (input.value && normalized !== input.value) input.value = normalized;
+  });
+  // initial clean (in case of prefilled value)
+  clean();
+}
+
 function fmtDate(ts) {
   if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -1045,7 +1082,7 @@ function applicantCardHTML(i) {
     <div class="grid gap-4 sm:grid-cols-2">
       <div>
         <label class="label">জন্ম নিবন্ধন নম্বর <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="certNo" class="input" placeholder="১৭ ডিজিটের জন্ম নিবন্ধন নম্বর" />
+        <input type="text" data-field="certNo" class="input" placeholder="১৭ ডিজিটের জন্ম নিবন্ধন নম্বর" inputmode="numeric" />
       </div>
       <div>
         <label class="label">জন্ম তারিখ <span class="text-rose-500">*</span></label>
@@ -1098,6 +1135,8 @@ function renderApplicants() {
   wrap.innerHTML = '';
   for (let i = 0; i < applicantCount; i++) wrap.insertAdjacentHTML('beforeend', applicantCardHTML(i));
   restoreApplicants(snap);
+  // Attach digit-only filter to every certNo input (Bengali + English digits allowed)
+  wrap.querySelectorAll('[data-field="certNo"]').forEach(attachDigitsOnlyFilter);
   updateSummary();
 }
 
@@ -1151,6 +1190,10 @@ $('#togglePwd').addEventListener('click', () => {
 renderApplicants();
 fetchDynamicPrice();
 
+// Apply digit-only filter to main number inputs (Bengali + English digits allowed, letters blocked)
+attachDigitsOnlyFilter($('#landNumber'));
+attachDigitsOnlyFilter($('#senderNumber'));
+
 function clearErrors() {
   document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
   const fe = $('#formError');
@@ -1176,7 +1219,8 @@ function collectApplicants(validate = true) {
   cards.forEach(card => {
     const get = f => card.querySelector(`[data-field="${f}"]`);
     const rec = {
-      certNo:     get('certNo').value.trim(),
+      // Normalize birth certificate number (Bengali → English, digits only)
+      certNo:     digitsOnly(get('certNo').value),
       birthDate:  get('birthDate').value,
       name:       get('name').value.trim(),
       fatherName: get('fatherName').value.trim(),
@@ -1222,8 +1266,10 @@ $('#nextBtn').addEventListener('click', () => {
     return;
   }
 
-  const landNumber = $('#landNumber').value.trim();
+  // Normalize the account mobile number (Bengali or English → English 11 digits)
+  const landNumber = digitsOnly($('#landNumber').value);
   const landPassword = $('#landPassword').value.trim();
+
   if (!landNumber) { markError($('#landNumber')); showError('land.gov.bd অ্যাকাউন্টের মোবাইল নম্বর দিন।'); return; }
   if (!/^01[3-9]\d{8}$/.test(landNumber)) { markError($('#landNumber')); showError('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।'); return; }
   if (!landPassword) { markError($('#landPassword')); showError('land.gov.bd অ্যাকাউন্টের পাসওয়ার্ড দিন।'); return; }
@@ -1295,7 +1341,9 @@ const submitBtn = $('#submitBtn');
 submitBtn.addEventListener('click', async () => {
   clearErrors();
 
-  const sender = $('#senderNumber').value.trim();
+  // Normalize bKash sender number (Bengali or English → English 11 digits)
+  const sender = digitsOnly($('#senderNumber').value);
+
   if (!sender) { markError($('#senderNumber')); showError('যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি লিখুন।'); return; }
   if (!/^01[3-9]\d{8}$/.test(sender)) { markError($('#senderNumber')); showError('সঠিক ১১ ডিজিটের বিকাশ নম্বর দিন।'); return; }
 
@@ -1337,7 +1385,7 @@ submitBtn.addEventListener('click', async () => {
     $('#progressPct').textContent = '100%';
 
     const applicants = list.map(a => ({
-      certNo:     a.certNo,
+      certNo:     a.certNo,       // already normalized to English digits
       birthDate:  a.birthDate,
       name:       a.name,
       fatherName: a.fatherName,
@@ -1360,11 +1408,11 @@ submitBtn.addEventListener('click', async () => {
       applicants,
       courtFeePaid: courtFeePaid.checked,
       circle: courtFeePaid.checked ? '' : circleName.value.trim(),
-      landAccountNumber: $('#landNumber').value.trim(),
+      landAccountNumber: digitsOnly($('#landNumber').value),  // normalized 11-digit English
       landAccountPassword: $('#landPassword').value.trim(),
       receiverEmail: $('#receiverEmail').value.trim(),
       bkashReceiverNumber: BKASH_NUMBER,
-      bkashSenderNumber: sender
+      bkashSenderNumber: sender                                // normalized English
     };
 
     await addDoc(collection(db, 'orders'), payload);
