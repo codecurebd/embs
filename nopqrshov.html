@@ -79,13 +79,9 @@
 
   <div class="relative w-full max-w-md anim-in">
     <div class="rounded-3xl border border-white/15 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl">
-
-      <img src="logo.png" alt="eMutation logo"
-           class="mx-auto h-20 w-20 object-contain" />
-
+      <img src="logo.png" alt="eMutation logo" class="mx-auto h-20 w-20 object-contain" />
       <h1 class="mt-5 text-2xl font-extrabold text-white">Admin Panel</h1>
       <p class="mt-2 text-sm text-brand-100">eMutation Birth certificate application support</p>
-
       <p class="mt-6 text-xs leading-relaxed text-brand-100/90">
         শুধুমাত্র অনুমোদিত অ্যাডমিন Google অ্যাকাউন্ট দিয়ে প্রবেশ করতে পারবেন।
       </p>
@@ -128,8 +124,7 @@
   <aside id="sidebar"
     class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full bg-slate-900 text-slate-300 transition-transform duration-300 md:translate-x-0">
     <div class="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
-      <img src="logo.png" alt="eMutation logo"
-           class="h-9 w-9 shrink-0 object-contain" />
+      <img src="logo.png" alt="eMutation logo" class="h-9 w-9 shrink-0 object-contain" />
       <div class="min-w-0">
         <p class="truncate text-sm font-extrabold text-white">eMutation Admin</p>
         <p class="text-[10px] uppercase tracking-wider text-brand-400">Control Panel</p>
@@ -157,7 +152,6 @@
         সাপোর্ট চ্যাট
         <span id="chatsBadge" class="ml-auto hidden rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white">0</span>
       </button>
-      <!-- ✅ নতুন সেটিংস বাটন -->
       <button data-nav="settings" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
         <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
@@ -183,7 +177,6 @@
   </aside>
 
   <div class="md:pl-64">
-
     <header class="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
       <div class="flex items-center gap-3">
         <button id="menuToggle" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-300 text-slate-600 md:hidden">
@@ -318,7 +311,6 @@
     <!-- CHATS -->
     <main id="page-chats" class="page hidden p-4 sm:p-6">
       <div class="grid h-[calc(100vh-8rem)] gap-4 lg:grid-cols-3">
-
         <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white lg:col-span-1">
           <div class="border-b border-slate-200 px-4 py-3.5">
             <h3 class="text-sm font-extrabold text-slate-900">সাপোর্ট চ্যাট লিস্ট</h3>
@@ -361,11 +353,10 @@
             </button>
           </form>
         </div>
-
       </div>
     </main>
 
-    <!-- SETTINGS PAGE (NEW) -->
+    <!-- SETTINGS PAGE -->
     <main id="page-settings" class="page hidden p-4 sm:p-6">
       <div class="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-lg font-extrabold text-slate-900">গ্লোবাল প্রাইসিং সেটিংস</h2>
@@ -418,7 +409,7 @@
   </div>
 </div>
 
-<!-- ============ COPY FORM MODAL (NEW) ============ -->
+<!-- ============ COPY FORM MODAL ============ -->
 <div id="copyFormModal" class="fixed inset-0 z-[65] hidden items-start justify-center overflow-y-auto bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center">
   <div class="my-4 w-full max-w-3xl rounded-2xl bg-white shadow-2xl anim-in">
     <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
@@ -493,7 +484,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getFirestore, collection, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy,
-  serverTimestamp, increment, addDoc, getDoc, setDoc // Added getDoc, setDoc
+  serverTimestamp, increment, addDoc, getDoc, setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
@@ -534,7 +525,6 @@ function escapeHtml(str='') {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* Cloudinary download link (fl_attachment force download) */
 function cloudinaryDownloadUrl(url) {
   if (!url) return '';
   if (url.includes('/upload/')) return url.replace('/upload/', '/upload/fl_attachment/');
@@ -594,7 +584,7 @@ function hideLoginError() {
 }
 
 /* =========================================================
-   AUTH
+   AUTH & AUTO-SYNC ADMIN USER
    ========================================================= */
 const loginScreen = $('#loginScreen');
 const appEl = $('#app');
@@ -618,7 +608,7 @@ $('#googleLoginBtn').addEventListener('click', async () => {
 
 $('#logoutBtn').addEventListener('click', () => signOut(auth));
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   if (!user) {
     loginScreen.classList.remove('hidden');
     loginScreen.classList.add('grid');
@@ -629,13 +619,32 @@ onAuthStateChanged(auth, user => {
   if (!ALLOWED_ADMINS.includes(user.email)) {
     showLoginError(
       'Verify Failed',
-      `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়। শুধুমাত্র অনুমোদিত অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করা যাবে।`
+      `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়।`
     );
     loginScreen.classList.remove('hidden');
     loginScreen.classList.add('grid');
     appEl.classList.add('hidden');
     signOut(auth);
     return;
+  }
+
+  // ✅ Auto-sync admin user document so Firestore rules pass
+  try {
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
+    
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        email: user.email,
+        displayName: user.displayName || 'Admin',
+        role: 'admin',
+        createdAt: serverTimestamp()
+      });
+    } else if (userSnap.data().role !== 'admin') {
+      await setDoc(userRef, { role: 'admin' }, { merge: true });
+    }
+  } catch (e) {
+    console.warn('Could not sync user document:', e);
   }
 
   hideLoginError();
@@ -648,7 +657,7 @@ onAuthStateChanged(auth, user => {
   $('#userAvatar').src = user.photoURL || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect fill="%23334155" width="40" height="40"/><text x="20" y="26" font-size="18" fill="white" text-anchor="middle" font-family="sans-serif">A</text></svg>';
 
   startListeners();
-  loadSettings(); // অ্যাডমিন লগইন করলে সেটিংস লোড হবে
+  loadSettings();
 });
 
 /* =========================================================
@@ -658,7 +667,7 @@ const NAV_META = {
   dashboard: { title: 'ড্যাশবোর্ড', sub: 'সারসংক্ষেপ ও পরিসংখ্যান' },
   orders:    { title: 'অর্ডারসমূহ', sub: 'সব ক্লায়েন্ট অর্ডারের তালিকা' },
   chats:     { title: 'সাপোর্ট চ্যাট', sub: 'ক্লায়েন্টদের সাথে যোগাযোগ' },
-  settings:  { title: 'সেটিংস', sub: 'ওয়েবসাইটের গ্লোবাল কনফিগারেশন' } // নতুন পেজ
+  settings:  { title: 'সেটিংস', sub: 'ওয়েবসাইটের গ্লোবাল কনফিগারেশন' }
 };
 
 function navigate(page) {
@@ -697,7 +706,7 @@ $('#menuToggle').addEventListener('click', openSidebar);
 $('#sidebarBackdrop').addEventListener('click', closeSidebar);
 
 /* =========================================================
-   SETTINGS LOGIC (NEW)
+   SETTINGS LOGIC
    ========================================================= */
 const SETTINGS_REF = doc(db, 'settings', 'global');
 
@@ -705,10 +714,9 @@ async function loadSettings() {
   try {
     const snap = await getDoc(SETTINGS_REF);
     if (snap.exists()) {
-      const data = snap.data();
-      $('#globalPriceInput').value = data.pricePerPerson || 500;
+      $('#globalPriceInput').value = snap.data().pricePerPerson || 500;
     } else {
-      $('#globalPriceInput').value = 500; // Default
+      $('#globalPriceInput').value = 500; 
     }
   } catch (error) {
     console.error("Error loading settings", error);
@@ -728,11 +736,21 @@ $('#saveSettingsBtn').addEventListener('click', async () => {
   btn.innerHTML = 'সেভ হচ্ছে...';
   
   try {
-    await setDoc(SETTINGS_REF, { pricePerPerson: price }, { merge: true });
-    showToast('প্রাইস সফলভাবে আপডেট হয়েছে', 'success');
+    await setDoc(SETTINGS_REF, { pricePerPerson: price, updatedAt: serverTimestamp() }, { merge: true });
+    showToast('প্রাইস সফলভাবে আপডেট হয়েছে', 'success');
   } catch (error) {
-    console.error(error);
-    showToast('প্রাইস আপডেট করা যায়নি', 'error');
+    console.error('Settings update error:', error);
+    let msg = 'প্রাইস আপডেট করা যায়নি';
+    
+    if (error.code === 'permission-denied') {
+      msg = '❌ অনুমতি নেই। Firestore Rules চেক করুন।';
+    } else if (error.code === 'unavailable') {
+      msg = '❌ নেটওয়ার্ক সমস্যা। ইন্টারনেট চেক করুন।';
+    } else if (error.message) {
+      msg = '❌ ত্রুটি: ' + error.message;
+    }
+    
+    showToast(msg, 'error');
   } finally {
     btn.disabled = false;
     btn.innerHTML = originalHTML;
@@ -1132,7 +1150,7 @@ $('#modalCompletedBtn').addEventListener('click', async () => {
 });
 
 /* =========================================================
-   COPY FORM MODAL (NEW FEATURE)
+   COPY FORM MODAL
    ========================================================= */
 let copyFormOrderId = null;
 let copyFormApplicantIndex = 0;
@@ -1191,7 +1209,6 @@ function renderCopyFormTabs(o) {
   });
 }
 
-/* একটি ফিল্ডের জন্য কপি-যোগ্য কার্ড */
 function copyFieldCard(label, value) {
   const v = (value ?? '').toString();
   return `
@@ -1265,7 +1282,6 @@ function renderCopyFormBody(o) {
   $('#copyFormDownloadAll').dataset.applicantIndex = copyFormApplicantIndex;
 }
 
-/* copy বাটনে ক্লিক হ্যান্ডলার */
 function attachCopyHandlers(root) {
   root.querySelectorAll('.cf-copy').forEach(btn => {
     btn.addEventListener('click', async () => {
@@ -1293,7 +1309,6 @@ async function copyToClipboard(text) {
   if (navigator.clipboard && window.isSecureContext) {
     return navigator.clipboard.writeText(text);
   }
-  // fallback (http / old browsers)
   const ta = document.createElement('textarea');
   ta.value = text;
   ta.style.position = 'fixed';
@@ -1314,7 +1329,6 @@ $('#modalCopyFormBtn').addEventListener('click', () => {
   openCopyFormModal(modalOrderId);
 });
 
-/* সব ফিল্ড একসাথে কপি */
 $('#copyFormDownloadAll').addEventListener('click', async () => {
   const id = $('#copyFormDownloadAll').dataset.orderId || copyFormOrderId;
   const idx = +(($('#copyFormDownloadAll').dataset.applicantIndex) || 0);
