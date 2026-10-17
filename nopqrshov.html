@@ -360,7 +360,7 @@
     <main id="page-settings" class="page hidden p-4 sm:p-6">
       <div class="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-lg font-extrabold text-slate-900">গ্লোবাল প্রাইসিং সেটিংস</h2>
-        <p class="mt-1 text-sm text-slate-500">এখান থেকে প্রতি আবেদনকারীর ফি নির্ধারণ করুন। এই ফি স্বয়ংক্রিয়ভাবে ওয়েবসাইটে আপডেট হয়ে যাবে।</p>
+        <p class="mt-1 text-sm text-slate-500">এখান থেকে প্রতি আবেদনকারীর ফি নির্ধারণ করুন। এই ফি স্বয়ংক্রিয়ভাবে ওয়েবসাইটে আপডেট হয়ে যাবে।</p>
         
         <div class="mt-5">
           <label class="block text-sm font-semibold text-slate-700 mb-1.5">প্রতি আবেদনকারীর ফি (৳) <span class="text-rose-500">*</span></label>
@@ -503,12 +503,7 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
 
-/* =========================================================
-   ⚠️ শুধুমাত্র এই ইমেইলগুলোই অ্যাডমিন হিসেবে লগইন করতে পারবে
-   ========================================================= */
-const ALLOWED_ADMINS = [
-  'nopqrshov337@gmail.com'
-];
+const ALLOWED_ADMINS = ['nopqrshov337@gmail.com'];
 
 /* ================= Helpers ================= */
 const BN = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
@@ -584,7 +579,7 @@ function hideLoginError() {
 }
 
 /* =========================================================
-   AUTH & AUTO-SYNC ADMIN USER
+   AUTH & TOKEN FORCE REFRESH
    ========================================================= */
 const loginScreen = $('#loginScreen');
 const appEl = $('#app');
@@ -617,10 +612,7 @@ onAuthStateChanged(auth, async user => {
   }
 
   if (!ALLOWED_ADMINS.includes(user.email)) {
-    showLoginError(
-      'Verify Failed',
-      `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়।`
-    );
+    showLoginError('Verify Failed', `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়।`);
     loginScreen.classList.remove('hidden');
     loginScreen.classList.add('grid');
     appEl.classList.add('hidden');
@@ -628,7 +620,12 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
-  // ✅ Auto-sync admin user document so Firestore rules pass
+  // ✅ Force refresh the token to ensure rules get the latest email
+  try {
+    await user.getIdToken(true); 
+  } catch(e) { console.warn("Token refresh failed", e); }
+
+  // ✅ Auto-sync admin user document
   try {
     const userRef = doc(db, 'users', user.uid);
     const userSnap = await getDoc(userRef);
@@ -736,6 +733,9 @@ $('#saveSettingsBtn').addEventListener('click', async () => {
   btn.innerHTML = 'সেভ হচ্ছে...';
   
   try {
+    const user = auth.currentUser;
+    console.log("Attempting save. Logged in as:", user?.email);
+    
     await setDoc(SETTINGS_REF, { pricePerPerson: price, updatedAt: serverTimestamp() }, { merge: true });
     showToast('প্রাইস সফলভাবে আপডেট হয়েছে', 'success');
   } catch (error) {
@@ -743,11 +743,9 @@ $('#saveSettingsBtn').addEventListener('click', async () => {
     let msg = 'প্রাইস আপডেট করা যায়নি';
     
     if (error.code === 'permission-denied') {
-      msg = '❌ অনুমতি নেই। Firestore Rules চেক করুন।';
-    } else if (error.code === 'unavailable') {
-      msg = '❌ নেটওয়ার্ক সমস্যা। ইন্টারনেট চেক করুন।';
+      msg = `❌ অনুমতি নেই। আপনার ইমেইল: ${auth.currentUser?.email}। Firestore Rules পাবলিশ করেছেন কিনা দেখুন।`;
     } else if (error.message) {
-      msg = '❌ ত্রুটি: ' + error.message;
+      msg = '❌ ' + error.message;
     }
     
     showToast(msg, 'error');
