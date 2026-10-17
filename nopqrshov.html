@@ -157,6 +157,13 @@
         সাপোর্ট চ্যাট
         <span id="chatsBadge" class="ml-auto hidden rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white">0</span>
       </button>
+      <!-- ✅ নতুন সেটিংস বাটন -->
+      <button data-nav="settings" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+        </svg>
+        সেটিংস
+      </button>
     </nav>
 
     <div class="absolute inset-x-0 bottom-0 border-t border-slate-800 bg-slate-900 p-3">
@@ -357,6 +364,24 @@
 
       </div>
     </main>
+
+    <!-- SETTINGS PAGE (NEW) -->
+    <main id="page-settings" class="page hidden p-4 sm:p-6">
+      <div class="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-extrabold text-slate-900">গ্লোবাল প্রাইসিং সেটিংস</h2>
+        <p class="mt-1 text-sm text-slate-500">এখান থেকে প্রতি আবেদনকারীর ফি নির্ধারণ করুন। এই ফি স্বয়ংক্রিয়ভাবে ওয়েবসাইটে আপডেট হয়ে যাবে।</p>
+        
+        <div class="mt-5">
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">প্রতি আবেদনকারীর ফি (৳) <span class="text-rose-500">*</span></label>
+          <input type="number" id="globalPriceInput" class="input sm:max-w-xs" placeholder="যেমন: 500" min="1" />
+        </div>
+        
+        <button id="saveSettingsBtn" class="btn-primary mt-4">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          সেভ করুন
+        </button>
+      </div>
+    </main>
   </div>
 </div>
 
@@ -468,7 +493,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getFirestore, collection, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy,
-  serverTimestamp, increment, addDoc
+  serverTimestamp, increment, addDoc, getDoc, setDoc // Added getDoc, setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
@@ -623,6 +648,7 @@ onAuthStateChanged(auth, user => {
   $('#userAvatar').src = user.photoURL || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect fill="%23334155" width="40" height="40"/><text x="20" y="26" font-size="18" fill="white" text-anchor="middle" font-family="sans-serif">A</text></svg>';
 
   startListeners();
+  loadSettings(); // অ্যাডমিন লগইন করলে সেটিংস লোড হবে
 });
 
 /* =========================================================
@@ -631,7 +657,8 @@ onAuthStateChanged(auth, user => {
 const NAV_META = {
   dashboard: { title: 'ড্যাশবোর্ড', sub: 'সারসংক্ষেপ ও পরিসংখ্যান' },
   orders:    { title: 'অর্ডারসমূহ', sub: 'সব ক্লায়েন্ট অর্ডারের তালিকা' },
-  chats:     { title: 'সাপোর্ট চ্যাট', sub: 'ক্লায়েন্টদের সাথে যোগাযোগ' }
+  chats:     { title: 'সাপোর্ট চ্যাট', sub: 'ক্লায়েন্টদের সাথে যোগাযোগ' },
+  settings:  { title: 'সেটিংস', sub: 'ওয়েবসাইটের গ্লোবাল কনফিগারেশন' } // নতুন পেজ
 };
 
 function navigate(page) {
@@ -668,6 +695,49 @@ function closeSidebar() {
 }
 $('#menuToggle').addEventListener('click', openSidebar);
 $('#sidebarBackdrop').addEventListener('click', closeSidebar);
+
+/* =========================================================
+   SETTINGS LOGIC (NEW)
+   ========================================================= */
+const SETTINGS_REF = doc(db, 'settings', 'global');
+
+async function loadSettings() {
+  try {
+    const snap = await getDoc(SETTINGS_REF);
+    if (snap.exists()) {
+      const data = snap.data();
+      $('#globalPriceInput').value = data.pricePerPerson || 500;
+    } else {
+      $('#globalPriceInput').value = 500; // Default
+    }
+  } catch (error) {
+    console.error("Error loading settings", error);
+  }
+}
+
+$('#saveSettingsBtn').addEventListener('click', async () => {
+  const price = Number($('#globalPriceInput').value);
+  if (!price || price <= 0) {
+    showToast('সঠিক মূল্য দিন (০ এর বেশি)', 'error');
+    return;
+  }
+  
+  const btn = $('#saveSettingsBtn');
+  btn.disabled = true;
+  const originalHTML = btn.innerHTML;
+  btn.innerHTML = 'সেভ হচ্ছে...';
+  
+  try {
+    await setDoc(SETTINGS_REF, { pricePerPerson: price }, { merge: true });
+    showToast('প্রাইস সফলভাবে আপডেট হয়েছে', 'success');
+  } catch (error) {
+    console.error(error);
+    showToast('প্রাইস আপডেট করা যায়নি', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHTML;
+  }
+});
 
 /* =========================================================
    FIRESTORE LISTENERS
@@ -1062,7 +1132,7 @@ $('#modalCompletedBtn').addEventListener('click', async () => {
 });
 
 /* =========================================================
-   COPY FORM MODAL  (NEW FEATURE)
+   COPY FORM MODAL (NEW FEATURE)
    ========================================================= */
 let copyFormOrderId = null;
 let copyFormApplicantIndex = 0;
