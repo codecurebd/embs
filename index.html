@@ -469,7 +469,42 @@
       </div>
     </div>
 
-    <div class="mx-auto mt-10 max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70">
+    <!-- ============ NEW: Serial / NID notice BEFORE the application form ============ -->
+    <div class="mx-auto mt-10 max-w-4xl">
+      <div class="anim-in relative overflow-hidden rounded-2xl border-2 border-brand-200 bg-gradient-to-br from-brand-50 via-white to-sky-50 p-5 shadow-sm sm:p-6">
+        <div class="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-brand-200/40 blur-2xl" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -bottom-12 -left-10 h-28 w-28 rounded-full bg-sky-200/40 blur-2xl" aria-hidden="true"></div>
+
+        <div class="relative flex items-start gap-3.5">
+          <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-md shadow-brand-600/25" aria-hidden="true">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+            </svg>
+          </span>
+
+          <div class="min-w-0">
+            <h3 class="text-sm font-extrabold leading-snug text-slate-900 sm:text-base">
+              আবেদন করার আগে জরুরি নির্দেশনা — নথিপত্রের সিরিয়াল
+            </h3>
+
+            <p class="mt-1.5 text-[13px] leading-relaxed text-slate-700 sm:text-sm">
+              নথিপত্রের সিরিয়াল অনুযায়ী যদি <b class="font-bold text-slate-900">আগে এমন কোনো গ্রাহক থাকে যার NID ইতিমধ্যে বিদ্যমান</b>,
+              তাহলে প্রথমে সেই <b class="font-bold text-slate-900">NID গ্রহীতাদের তথ্য নিজে সংরক্ষণ</b> করে নিন — এরপর আবেদনটি সম্পন্ন করুন।
+            </p>
+
+            <p class="mt-2 flex items-start gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-[12.5px] font-semibold leading-relaxed text-emerald-800 sm:text-sm">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
+              </svg>
+              এতে নথিপত্রের সিরিয়াল অপরিবর্তিত থাকবে এবং আবেদনটি সঠিকভাবে সম্পন্ন হবে।
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ============ /NEW NOTICE ============ -->
+
+    <div class="mx-auto mt-5 max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70">
       <div class="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white px-5 py-5 sm:px-7 sm:py-6">
         <div class="flex items-center gap-2 sm:gap-3">
           <div class="step-item active flex items-center gap-2.5" data-step="1">
