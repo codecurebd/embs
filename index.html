@@ -153,7 +153,16 @@
     .bird-gif { width: 55px; top: 4%; right: 6%; }
   }
 
-  @media print { body * { visibility: hidden; } #invoiceBox, #invoiceBox * { visibility: visible; } #invoiceBox { position: absolute; inset: 0; margin: 0; box-shadow: none; } }
+  /* Call notice phone ring animation */
+  @keyframes callRing {
+    0%, 100% { transform: rotate(0); }
+    10%, 30% { transform: rotate(-14deg); }
+    20%, 40% { transform: rotate(14deg); }
+    50%      { transform: rotate(0); }
+  }
+  .call-ring { animation: callRing 1.8s ease-in-out infinite; transform-origin: 50% 60%; display: inline-block; }
+
+  @media print { body * { visibility: hidden; } #invoiceBox, #invoiceBox * { visibility: visible; } #invoiceBox { position: absolute; inset: 0; margin: 0; box-shadow: none; background: #fff; } }
 </style>
 </head>
 
@@ -243,25 +252,25 @@
   <div class="pointer-events-none absolute left-1/2 top-10 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-white/70 blur-3xl" aria-hidden="true"></div>
   <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent" aria-hidden="true"></div>
 
-  <div class="relative mx-auto max-w-7xl px-4 pt-14 pb-4 text-center sm:pt-20 sm:pb-6 lg:pt-24 lg:pb-8">
+  <div class="relative mx-auto max-w-7xl px-4 pt-10 pb-0 text-center sm:pt-14 lg:pt-16">
     <span class="anim-in inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-700 shadow-sm shadow-brand-100 backdrop-blur sm:text-xs">
       <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" aria-hidden="true"></span>
       অনলাইন ই-নামজারি সেবা
     </span>
 
-    <h1 id="hero-heading" class="anim-in mt-6 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+    <h1 id="hero-heading" class="anim-in mt-5 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
       eMutation Birth Certificate Application Online
       <span class="block mt-2 bg-gradient-to-r from-brand-700 via-brand-600 to-brand-400 bg-clip-text text-transparent">
         18+ Birth Certificate Mutation Application
       </span>
     </h1>
 
-    <p class="anim-in mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base lg:text-lg">
+    <p class="anim-in mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base lg:text-lg">
       ১৮ বছর বয়সোর্ধ্ব নাগরিকদের জন্য <strong class="font-semibold text-slate-800">eMutation Birth Certificate Application</strong> ও
       <strong class="font-semibold text-slate-800">18+ Birth Certificate Mutation Application Online</strong> প্রক্রিয়া সম্পূর্ণ দ্রুত, নিরাপদ ও নির্ভরযোগ্যভাবে সম্পন্ন করার একটি পেশাদার সাপোর্ট সেবা।
     </p>
 
-    <div class="anim-in mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+    <div class="anim-in mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
       <a href="#service"
          class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/25 transition hover:bg-brand-700 hover:shadow-xl hover:shadow-brand-600/30 active:scale-[.98] sm:w-auto">
         আবেদন শুরু করুন
@@ -275,7 +284,7 @@
       </button>
     </div>
 
-    <div class="anim-in mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-semibold text-slate-500 sm:text-xs">
+    <div class="anim-in mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-semibold text-slate-500 sm:text-xs">
       <span class="inline-flex items-center gap-1.5">
         <svg class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
         ১০০% গোপনীয়তা
@@ -848,9 +857,62 @@
   </form>
 </div>
 
-<div id="invoiceModal" role="dialog" aria-modal="true" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/70 p-4 backdrop-blur-sm">
-  <div class="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl">
-    <div id="invoiceBox" class="p-6 sm:p-7">
+<!-- INVOICE + CALL NOTICE OVERLAY -->
+<div id="invoiceModal" role="dialog" aria-modal="true" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
+  <div id="invoiceWrap" class="flex min-h-full flex-col items-center justify-center gap-4 p-4">
+
+    <!-- ORDER COMPLETE + CALL NOTICE POPUP -->
+    <div id="callNotice"
+         class="anim-in w-full max-w-lg overflow-hidden rounded-2xl border-2 border-brand-300 bg-white shadow-2xl shadow-brand-900/25"
+         style="animation-delay:.12s">
+      <div class="flex items-start gap-3.5 bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-4 text-white">
+        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/20">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
+          </svg>
+        </span>
+        <div class="min-w-0">
+          <h3 class="text-base font-extrabold leading-tight sm:text-lg">🎉 অর্ডার সম্পন্ন হয়েছে!</h3>
+          <p class="mt-0.5 text-xs text-emerald-50 sm:text-sm">আপনার অর্ডারটি সফলভাবে জমা হয়েছে।</p>
+        </div>
+      </div>
+
+      <div class="px-5 py-5">
+        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <p class="flex items-center gap-1.5 text-sm font-extrabold text-amber-900">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/>
+            </svg>
+            দ্রুত কাজ সম্পন্ন করাতে চান?
+          </p>
+          <p class="mt-1.5 text-[13px] leading-relaxed text-amber-800 sm:text-sm">
+            দ্রুত কাজ সম্পন্ন হওয়ার জন্য
+            <a href="tel:+8801350141762" class="font-extrabold text-amber-900 underline decoration-amber-400 underline-offset-2">+880 1350-141762</a>
+            নম্বরে কল করে জানিয়ে দিন। অনেক সময় বেশি অর্ডার থাকার কারণে কাজ সম্পন্ন হতে দেরি হতে পারে —
+            কল করলে আপনার অর্ডারটি <b>গুরুত্বসহকারে আগে</b> সম্পন্ন করা হবে।
+          </p>
+        </div>
+
+        <div class="mt-4 flex flex-col gap-2.5 sm:flex-row">
+          <a href="tel:+8801350141762"
+             class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-emerald-600/25 transition hover:bg-emerald-700 active:scale-[.98]">
+            <svg class="call-ring h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.25 1.05l-1.3 1.3a15 15 0 0 0 6.17 6.17l1.3-1.3a1 1 0 0 1 1.05-.25l3.6 1.2a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.7 21 3 14.3 3 6V5Z"/>
+            </svg>
+            এখনই কল করুন
+          </a>
+          <button type="button" id="closeCallNotice"
+             class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+            বন্ধ করুন
+          </button>
+        </div>
+
+        <p class="mt-3 text-center text-[11px] text-slate-500">অর্ডার আইডি: <b class="text-slate-700" id="noticeOrderId">—</b></p>
+      </div>
+    </div>
+
+    <!-- INVOICE POPUP -->
+    <div id="invoiceBox" class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-7">
       <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <p class="text-xs font-bold uppercase tracking-wider text-brand-600">ইনভয়েস</p>
@@ -906,6 +968,7 @@
         <button type="button" id="closeInvoice" class="btn-primary flex-1">ঠিক আছে</button>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -1436,11 +1499,14 @@ submitBtn.addEventListener('click', async () => {
         </span>
       </li>`).join('');
 
+    // Call notice popup data
+    $('#noticeOrderId').textContent = orderId;
+    $('#callNotice').classList.remove('hidden');
+
     setStep(3);
 
     const modal = $('#invoiceModal');
     modal.classList.remove('hidden');
-    modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
 
     $('#senderNumber').value = '';
@@ -1459,11 +1525,15 @@ submitBtn.addEventListener('click', async () => {
 
 function closeInvoice() {
   $('#invoiceModal').classList.add('hidden');
-  $('#invoiceModal').classList.remove('flex');
   document.body.style.overflow = '';
 }
 $('#closeInvoice').addEventListener('click', () => { closeInvoice(); setStep(1); });
-$('#invoiceModal').addEventListener('click', e => { if (e.target.id === 'invoiceModal') { closeInvoice(); setStep(1); } });
+$('#invoiceWrap').addEventListener('click', e => {
+  if (e.target.id === 'invoiceWrap') { closeInvoice(); setStep(1); }
+});
+$('#closeCallNotice').addEventListener('click', () => {
+  $('#callNotice').classList.add('hidden');
+});
 $('#printInvoice').addEventListener('click', () => window.print());
 
 const CHAT_KEY = 'em_chat_id';
