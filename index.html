@@ -127,10 +127,41 @@
   .hero-mesh { background-image: linear-gradient(to right, rgba(29,81,245,.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(29,81,245,.055) 1px, transparent 1px); background-size: 46px 46px; -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 34%, #000 32%, transparent 100%); mask-image: radial-gradient(ellipse 72% 62% at 50% 34%, #000 32%, transparent 100%); }
   @keyframes heroGlow { 0%,100% { transform: translate3d(0,0,0) scale(1); opacity:.55 } 50% { transform: translate3d(0,-14px,0) scale(1.06); opacity:.8 } }
   .hero-glow { animation: heroGlow 9s ease-in-out infinite; }
-  .hero-banner { line-height: 0; }
-  .hero-banner img { display: block; width: 100%; height: auto; }
 
-  .hero-banner { position: relative; overflow: hidden; }
+  /* ===== Banner background section ===== */
+  .hero-banner-wrap { position: relative; overflow: hidden; }
+  .hero-banner-bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    z-index: 0;
+  }
+  .hero-banner-overlay {
+    position: absolute; inset: 0;
+    z-index: 1;
+    background: linear-gradient(to bottom,
+      rgba(255,255,255,0.96) 0%,
+      rgba(255,255,255,0.55) 22%,
+      rgba(255,255,255,0.42) 50%,
+      rgba(255,255,255,0.70) 78%,
+      rgba(255,255,255,1) 100%);
+  }
+  .hero-banner-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+  }
+
+  /* Trust badge readability on banner */
+  .trust-badge {
+    text-shadow:
+      0 1px 2px rgba(255,255,255,0.95),
+      0 0 10px rgba(255,255,255,0.85),
+      0 0 2px rgba(255,255,255,1);
+  }
+
+  /* Bird gif */
   .bird-gif {
     position: absolute;
     top: 6%;
@@ -241,6 +272,7 @@
 </header>
 
 <main>
+<!-- ======================= HERO ======================= -->
 <section id="home"
   class="relative overflow-hidden bg-gradient-to-b from-brand-100 via-brand-50 to-white"
   aria-labelledby="hero-heading">
@@ -252,7 +284,8 @@
   <div class="pointer-events-none absolute left-1/2 top-10 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-white/70 blur-3xl" aria-hidden="true"></div>
   <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent" aria-hidden="true"></div>
 
-  <div class="relative mx-auto max-w-7xl px-4 pt-10 pb-0 text-center sm:pt-14 lg:pt-16">
+  <!-- Text section -->
+  <div class="relative z-10 mx-auto max-w-7xl px-4 pt-10 pb-7 text-center sm:pt-14 sm:pb-9 lg:pt-16 lg:pb-10">
     <span class="anim-in inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-700 shadow-sm shadow-brand-100 backdrop-blur sm:text-xs">
       <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" aria-hidden="true"></span>
       অনলাইন ই-নামজারি সেবা
@@ -269,44 +302,53 @@
       ১৮ বছর বয়সোর্ধ্ব নাগরিকদের জন্য <strong class="font-semibold text-slate-800">eMutation Birth Certificate Application</strong> ও
       <strong class="font-semibold text-slate-800">18+ Birth Certificate Mutation Application Online</strong> প্রক্রিয়া সম্পূর্ণ দ্রুত, নিরাপদ ও নির্ভরযোগ্যভাবে সম্পন্ন করার একটি পেশাদার সাপোর্ট সেবা।
     </p>
-
-    <div class="anim-in mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-      <a href="#service"
-         class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/25 transition hover:bg-brand-700 hover:shadow-xl hover:shadow-brand-600/30 active:scale-[.98] sm:w-auto">
-        আবেদন শুরু করুন
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
-        </svg>
-      </a>
-      <button type="button" data-open-chat
-        class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand-200 bg-white/90 px-8 py-3.5 text-sm font-bold text-brand-700 shadow-sm backdrop-blur transition hover:border-brand-300 hover:bg-white sm:w-auto">
-        সাপোর্টের সাথে কথা বলুন
-      </button>
-    </div>
-
-    <div class="anim-in mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-semibold text-slate-500 sm:text-xs">
-      <span class="inline-flex items-center gap-1.5">
-        <svg class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
-        ১০০% গোপনীয়তা
-      </span>
-      <span class="inline-flex items-center gap-1.5">
-        <svg class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
-        ১০-৩০ মিনিটে ডেলিভারি
-      </span>
-      <span class="inline-flex items-center gap-1.5">
-        <svg class="h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
-        ২৪/৭ লাইভ সাপোর্ট
-      </span>
-    </div>
   </div>
 
-  <div class="hero-banner relative w-full select-none pointer-events-none">
+  <!-- Banner image as background for CTA + trust badges -->
+  <div class="hero-banner-wrap">
     <img src="banner-img.png"
          alt="eMutation Birth Certificate Application Online - 18+ Birth Certificate Mutation Application Bangladesh"
-         width="1600" height="600" loading="eager" fetchpriority="high" />
+         width="1600" height="600" loading="eager" fetchpriority="high"
+         class="hero-banner-bg" aria-hidden="true" />
+    <div class="hero-banner-overlay pointer-events-none" aria-hidden="true"></div>
+
+    <div class="hero-banner-content mx-auto min-h-[280px] max-w-7xl px-4 py-12 sm:min-h-[340px] sm:py-16 lg:min-h-[400px] lg:py-20">
+      <!-- CTA buttons -->
+      <div class="anim-in flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+        <a href="#service"
+           class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/30 transition hover:bg-brand-700 hover:shadow-xl hover:shadow-brand-600/35 active:scale-[.98] sm:w-auto">
+          আবেদন শুরু করুন
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+          </svg>
+        </a>
+        <button type="button" data-open-chat
+          class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand-200 bg-white/95 px-8 py-3.5 text-sm font-bold text-brand-700 shadow-md shadow-slate-900/5 backdrop-blur transition hover:border-brand-300 hover:bg-white sm:w-auto">
+          সাপোর্টের সাথে কথা বলুন
+        </button>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="trust-badge anim-in mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-bold text-slate-800 sm:text-xs">
+        <span class="inline-flex items-center gap-1.5">
+          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+          ১০০% গোপনীয়তা
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+          ১০-৩০ মিনিটে ডেলিভারি
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+          ২৪/৭ লাইভ সাপোর্ট
+        </span>
+      </div>
+    </div>
+
     <img src="bird.gif" alt="" aria-hidden="true" class="bird-gif" loading="lazy" />
   </div>
 </section>
+<!-- ======================= /HERO ======================= -->
 
 <section id="service" class="border-b border-slate-200 bg-white py-14 sm:py-20" aria-labelledby="service-heading">
   <div class="mx-auto max-w-6xl px-4">
