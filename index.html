@@ -106,6 +106,11 @@
     }
     .card { @apply rounded-2xl border border-slate-200 bg-white shadow-sm; }
     .field-error { @apply !border-rose-400 !bg-rose-50 ring-2 !ring-rose-100; }
+    .legal-prose h3 { @apply mt-6 text-base font-extrabold text-slate-900; }
+    .legal-prose p  { @apply mt-2 text-sm leading-relaxed text-slate-700; }
+    .legal-prose ul { @apply mt-2 space-y-1.5 text-sm text-slate-700; }
+    .legal-prose li { @apply flex gap-2; }
+    .legal-prose li::before { content: '•'; @apply shrink-0 text-brand-600 font-bold; }
   }
 </style>
 
@@ -132,8 +137,6 @@
   .hero-banner-wrap {
     position: relative;
     overflow: hidden;
-    /* Light-blue gradient behind the banner so the transparent (background-removed)
-       top of banner-img.png blends with the hero theme instead of looking white. */
     background:
       radial-gradient(ellipse at 50% 0%, #e3eeff 0%, rgba(227,238,255,0) 60%),
       linear-gradient(to bottom, #eef5ff 0%, #f4f9ff 45%, #ffffff 100%);
@@ -142,13 +145,9 @@
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    /* Keep the visible (green) part of the banner anchored at the bottom */
     object-position: center bottom;
     z-index: 0;
   }
-  /* The overlay is now fully transparent at the top (so the transparent part of
-     the PNG shows the light-blue background), and only fades to white at the very
-     bottom to blend into the white services section. */
   .hero-banner-overlay {
     position: absolute; inset: 0;
     z-index: 1;
@@ -166,7 +165,6 @@
     text-align: center;
   }
 
-  /* Trust badge readability on banner */
   .trust-badge {
     text-shadow:
       0 1px 2px rgba(255,255,255,0.95),
@@ -174,7 +172,6 @@
       0 0 2px rgba(255,255,255,1);
   }
 
-  /* Service intro heading over the banner (starts ~60% down) */
   .service-intro-text {
     text-shadow:
       0 1px 0 rgba(255,255,255,0.95),
@@ -189,7 +186,7 @@
   }
   @keyframes scrollBounce2 {
     0%, 100% { transform: translateY(0);   opacity: .35; }
-    50%      { transform: translateY(10px); opacity: .9; }
+    50%      { transform: translateY(10px); opacity: .9;  }
   }
   @keyframes scrollRing {
     0%, 100% { transform: translateY(0) scale(1);   opacity: .5; }
@@ -283,11 +280,12 @@
       </a>
 
       <div class="ml-auto flex items-center gap-3 sm:gap-5">
-        <div class="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
-          <a href="#home"    class="transition hover:text-brand-700">হোম</a>
-          <a href="#service" class="transition hover:text-brand-700">সেবাসমূহ</a>
-          <a href="#how"     class="transition hover:text-brand-700">কিভাবে কাজ করে</a>
-          <a href="#footer"  class="transition hover:text-brand-700">যোগাযোগ</a>
+        <div class="hidden items-center gap-6 text-sm font-semibold text-slate-600 lg:flex">
+          <a href="#home"      class="transition hover:text-brand-700">হোম</a>
+          <a href="#service"   class="transition hover:text-brand-700">সেবাসমূহ</a>
+          <a href="#how"       class="transition hover:text-brand-700">কিভাবে কাজ করে</a>
+          <a href="#important" class="transition hover:text-amber-700">সতর্কতা</a>
+          <a href="#footer"    class="transition hover:text-brand-700">যোগাযোগ</a>
         </div>
 
         <div class="flex items-center gap-2">
@@ -310,10 +308,14 @@
 
     <div id="mobileMenu" class="hidden border-t border-slate-200 bg-white md:hidden">
       <div class="mx-auto max-w-7xl space-y-1 px-5 py-3 text-sm font-semibold text-slate-700 sm:px-8">
-        <a href="#home"    class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">হোম</a>
-        <a href="#service" class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সেবাসমূহ</a>
-        <a href="#how"     class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">কিভাবে কাজ করে</a>
-        <a href="#footer"  class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">যোগাযোগ</a>
+        <a href="#home"      class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">হোম</a>
+        <a href="#service"   class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সেবাসমূহ</a>
+        <a href="#how"       class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">কিভাবে কাজ করে</a>
+        <a href="#important" class="block rounded-lg px-3 py-2.5 text-amber-700 hover:bg-amber-50">⚠️ গুরুত্বপূর্ণ সতর্কতা</a>
+        <a href="#faq"       class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সচরাচর জিজ্ঞাসা</a>
+        <a href="#privacy"   class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">গোপনীয়তা নীতি</a>
+        <a href="#disclaimer" class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">দাবিত্যাগ</a>
+        <a href="#footer"    class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">যোগাযোগ</a>
         <button type="button" data-open-chat class="mt-1 block w-full rounded-lg bg-brand-600 px-3 py-2.5 text-center font-bold text-white">
           সাপোর্ট চ্যাট
         </button>
@@ -335,7 +337,6 @@
   <div class="pointer-events-none absolute left-1/2 top-10 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-white/70 blur-3xl" aria-hidden="true"></div>
   <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent" aria-hidden="true"></div>
 
-  <!-- Text section (extra top gap so heading/paragraph/buttons feel centered) -->
   <div class="relative z-10 mx-auto max-w-7xl px-4 pt-20 pb-4 text-center sm:pt-28 sm:pb-5 lg:pt-32 lg:pb-6">
     <span class="anim-in inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-700 shadow-sm shadow-brand-100 backdrop-blur sm:text-xs">
       <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" aria-hidden="true"></span>
@@ -355,7 +356,6 @@
     </p>
   </div>
 
-  <!-- Banner image as background for CTA + trust badges + service intro -->
   <div class="hero-banner-wrap">
     <img src="banner-img.png"
          alt="eMutation Birth Certificate Application Online - 18+ Birth Certificate Mutation Application Bangladesh"
@@ -363,9 +363,7 @@
          class="hero-banner-bg" aria-hidden="true" />
     <div class="hero-banner-overlay pointer-events-none" aria-hidden="true"></div>
 
-    <!-- CTA + trust badges near the top of the banner -->
     <div class="hero-banner-content mx-auto max-w-7xl px-4 pt-4 pb-0 sm:pt-5">
-      <!-- CTA buttons -->
       <div class="anim-in flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
         <a href="#service"
            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/30 transition hover:bg-brand-700 hover:shadow-xl hover:shadow-brand-600/35 active:scale-[.98] sm:w-auto">
@@ -380,7 +378,6 @@
         </button>
       </div>
 
-      <!-- Trust badges -->
       <div class="trust-badge anim-in mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-bold text-slate-800 sm:text-xs">
         <span class="inline-flex items-center gap-1.5">
           <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
@@ -396,7 +393,6 @@
         </span>
       </div>
 
-      <!-- Animated scroll-down arrow -->
       <a href="#service" aria-label="Scroll down to services" class="scroll-arrow anim-in mt-7 mb-1">
         <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600/90">নিচে স্ক্রল করুন</span>
         <span class="relative grid h-9 w-9 place-items-center rounded-full border border-brand-200/80 bg-white/85 shadow-sm backdrop-blur">
@@ -410,7 +406,6 @@
       </a>
     </div>
 
-    <!-- Service intro starts ~60% down the banner, banner stays as background -->
     <div id="service" class="relative z-[2] mx-auto max-w-6xl scroll-mt-24 px-4 pt-16 pb-16 text-center sm:pt-20 sm:pb-20 lg:pt-24">
       <span class="service-intro-text inline-block rounded-full border border-brand-200/80 bg-white/90 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700 shadow-sm backdrop-blur">
         আমাদের সেবা
@@ -496,6 +491,23 @@
 
       <!-- STEP 1 -->
       <div id="step1" class="p-5 sm:p-7 lg:p-8">
+
+        <!-- NEW: Important notice banner inside the form -->
+        <a href="#important" class="mb-5 flex items-start gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50/70 p-4 transition hover:border-amber-400 hover:bg-amber-50">
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700" aria-hidden="true">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+            </svg>
+          </span>
+          <div class="min-w-0">
+            <h3 class="text-sm font-extrabold text-amber-900">তথ্য দেওয়ার আগে গুরুত্বপূর্ণ সতর্কতা পড়ুন</h3>
+            <p class="mt-1 text-xs leading-relaxed text-amber-800">
+              ভুল বা মিথ্যা তথ্য প্রদান করলে আবেদন বাতিল হতে পারে এবং রিফান্ডের কোনো সুযোগ নেই। বিস্তারিত জানতে
+              <b class="underline decoration-amber-500 underline-offset-2">এখানে ক্লিক করুন</b>।
+            </p>
+          </div>
+        </a>
+
         <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-5">
           <div class="flex items-start gap-3">
             <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700" aria-hidden="true">
@@ -787,6 +799,106 @@
   </div>
 </section>
 
+<!-- ======================= IMPORTANT NOTICE (NEW) ======================= -->
+<section id="important" class="border-b border-amber-200 bg-gradient-to-b from-amber-50/80 via-amber-50/40 to-white py-14 scroll-mt-24 sm:py-20" aria-labelledby="important-heading">
+  <div class="mx-auto max-w-5xl px-4">
+    <div class="text-center">
+      <span class="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-800">
+        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+        </svg>
+        বিশেষ সতর্কতা
+      </span>
+      <h2 id="important-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl">
+        গুরুত্বপূর্ণ তথ্য — ১৮+ জন্ম নিবন্ধন আবেদন সম্পর্কে
+      </h2>
+      <p class="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
+        আমাদের সেবা ব্যবহারের পূর্বে নিচের তথ্যগুলো অবশ্যই মনোযোগ দিয়ে পড়ুন। এটি আপনার আবেদনের বৈধতা ও নিরাপত্তার জন্য অত্যন্ত গুরুত্বপূর্ণ।
+      </p>
+    </div>
+
+    <div class="mt-10 grid gap-5 md:grid-cols-2">
+      <article class="card border-amber-200 bg-white p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-100 text-amber-700" aria-hidden="true">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">প্রযুক্তিগত সীমাবদ্ধতা</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          <b>mutation.land.gov.bd</b> পোর্টালে ১৮ বছর বয়সোর্ধ্ব (18+) গ্রাহকের ক্ষেত্রে <b>NID বাধ্যতামূলক</b>। অন্যদিকে জন্ম নিবন্ধন সনদ মূলত ১৮ বছরের কম বয়সীদের জন্য, ফলে জন্ম নিবন্ধন যোগ করার সময় <b>২০০৮ সালের আগের তারিখ নির্বাচন করা যায় না</b>।
+        </p>
+      </article>
+
+      <article class="card border-emerald-200 bg-emerald-50/40 p-6">
+        <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-100 text-emerald-700" aria-hidden="true">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.6 2A9.6 9.6 0 0 1 12 21a9.6 9.6 0 0 1-8.6-9A9.6 9.6 0 0 1 12 3a9.6 9.6 0 0 1 8.6 9Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">আমাদের সমাধান</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          কোনো গ্রাহক <b>প্রবাসী (probashi)</b> হলে বা তার NID এখনো ইস্যু হয়নি কিন্তু ব্যক্তি ১৮+ বয়সোর্ধ্ব হয়ে গেছেন — সেক্ষেত্রে জন্ম নিবন্ধনের মাধ্যমে আবেদন করলে <b>ভূমি অফিস যাচাই করে তা গ্রহণও করে থাকে</b>। কিন্তু ওয়েবসাইটের টেকনিক্যাল ইস্যুর কারণে সাধারণ জনগণ এই কাজটি করতে পারেন না, কারণ NID বা জন্ম নিবন্ধন সরকারি সার্ভার থেকে ভেরিফাই হয় না।
+        </p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          আমাদের প্রতিষ্ঠানের নিজস্ব ওয়েবসাইট, সার্ভার ও ব্যাকএন্ড থাকায় <b>আমরা সেই এন্ট্রিগুলো করতে পারি যা সাধারণ জনগণ পারেন না</b>।
+        </p>
+      </article>
+    </div>
+
+    <div class="mt-6 rounded-2xl border-2 border-rose-200 bg-rose-50/70 p-6">
+      <div class="flex items-start gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-700" aria-hidden="true">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+        </span>
+        <div class="min-w-0">
+          <h3 class="text-base font-extrabold text-rose-900">তথ্যের সঠিকতা ও দায়বদ্ধতা</h3>
+          <p class="mt-2 text-sm leading-relaxed text-rose-800">
+            আমাদের হাতে অপশন থাকার কারণে ভুল তথ্য দেওয়ার সুযোগ রয়েছে — তাই আমরা এ বিষয়ে <b>অত্যন্ত সচেতন ও কঠোর</b>। emb-support সমস্ত তথ্য সংগ্রহ ও সংরক্ষণ করে এবং যতটা সম্ভব যাচাই করে নেয়।
+          </p>
+          <p class="mt-2 text-sm leading-relaxed text-rose-800">
+            যদি কোনো ব্যক্তি <b>ভুল বা মিথ্যা তথ্য</b> প্রদান করেন, তার দায় আমরা নেব না। ভবিষ্যতে কোনো সমস্যা হলে তথ্য প্রদানকারীর তথ্য <b>আইনের কাছে প্রদান করা হবে</b>।
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 rounded-2xl border border-amber-200 bg-white p-6">
+      <h3 class="flex items-center gap-2 text-base font-extrabold text-slate-900">
+        <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
+        </svg>
+        সতর্কতা — যা মেনে চলা আবশ্যক
+      </h3>
+      <ul class="mt-4 space-y-3">
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-rose-100 text-[11px] font-bold text-rose-700">১</span>
+          <p class="text-sm leading-relaxed text-slate-700">ভুল বা মিথ্যা তথ্য দিলে <b>আবেদন বাতিল হতে পারে</b>।</p>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-rose-100 text-[11px] font-bold text-rose-700">২</span>
+          <p class="text-sm leading-relaxed text-slate-700">এই ক্ষেত্রে <b>রিফান্ডের কোনো সুযোগ নেই</b>।</p>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber-100 text-[11px] font-bold text-amber-700">৩</span>
+          <p class="text-sm leading-relaxed text-slate-700">ভুলবশত কোনো ভুল তথ্য এসে পড়লে <b>৩০ মিনিটের মধ্যে সাপোর্ট চ্যাটে</b> কথা বলে ঠিক করে নিন।</p>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-700">৪</span>
+          <p class="text-sm leading-relaxed text-slate-700">আপনার প্রদত্ত তথ্য <b>সম্পূর্ণ গোপন</b> রাখা হয় এবং শুধুমাত্র আবেদন সম্পন্ন করার জন্য ব্যবহার করা হয়।</p>
+        </li>
+      </ul>
+      <div class="mt-5 rounded-xl bg-brand-50 px-4 py-3">
+        <p class="text-xs text-brand-800">
+          <b>প্রশ্ন বা সংশোধন প্রয়োজন?</b> সাপোর্ট চ্যাটে যোগাযোগ করুন অথবা <a href="tel:01350141762" class="font-bold underline decoration-brand-400 underline-offset-2">01350141762</a> নম্বরে কল করুন।
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="faq" class="border-b border-slate-200 bg-white py-14 sm:py-20" aria-labelledby="faq-heading">
   <div class="mx-auto max-w-4xl px-4">
     <div class="text-center">
@@ -864,11 +976,163 @@
     </div>
   </div>
 </section>
+
+<!-- ======================= PRIVACY POLICY (NEW) ======================= -->
+<section id="privacy" class="border-b border-slate-200 bg-slate-50 py-14 scroll-mt-24 sm:py-20" aria-labelledby="privacy-heading">
+  <div class="mx-auto max-w-4xl px-4">
+    <div class="text-center">
+      <span class="inline-block rounded-full bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700 ring-1 ring-brand-100">
+        আইনি তথ্য
+      </span>
+      <h2 id="privacy-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl">
+        গোপনীয়তা নীতি (Privacy Policy)
+      </h2>
+      <p class="mt-3 text-sm text-slate-600 sm:text-base">
+        সর্বশেষ আপডেট: ১ জানুয়ারি ২০২৬ · <a href="https://emb-support.vercel.app/" class="text-brand-700 underline">emb-support.vercel.app</a>
+      </p>
+    </div>
+
+    <div class="legal-prose mt-10 space-y-5">
+      <article class="card p-6">
+        <p>
+          <b>emb-support</b> ( <a href="https://emb-support.vercel.app/" class="text-brand-700 underline decoration-brand-300 underline-offset-2">https://emb-support.vercel.app/</a> ) আপনার ব্যক্তিগত তথ্যের গোপনীয়তাকে সর্বোচ্চ গুরুত্ব দেয়। এই নীতিতে আমরা কীভাবে আপনার তথ্য সংগ্রহ, ব্যবহার ও সুরক্ষিত রাখি তা বর্ণনা করা হয়েছে। আমাদের সেবা ব্যবহার করার মাধ্যমে আপনি এই নীতিতে সম্মত হচ্ছেন।
+        </p>
+      </article>
+
+      <article class="card p-6">
+        <h3>১. আমরা যে তথ্য সংগ্রহ করি</h3>
+        <ul>
+          <li>নাম, জন্ম তারিখ, পিতার নাম, মাতার নাম</li>
+          <li>জন্ম নিবন্ধন নম্বর ও জন্ম নিবন্ধন সনদের ছবি</li>
+          <li>ঠিকানা (বিভাগ, জেলা, উপজেলা/সার্কেল, বিস্তারিত ঠিকানা)</li>
+          <li>land.gov.bd অ্যাকাউন্টের মোবাইল নম্বর ও পাসওয়ার্ড</li>
+          <li>রিসিভার ইমেইল ও বিকাশ পেমেন্ট নম্বর</li>
+          <li>সাপোর্ট চ্যাটে আপনার প্রদত্ত যেকোনো তথ্য</li>
+        </ul>
+      </article>
+
+      <article class="card p-6">
+        <h3>২. তথ্য ব্যবহারের উদ্দেশ্য</h3>
+        <ul>
+          <li>জন্ম নিবন্ধন মিউটেশন আবেদন সম্পন্ন করা</li>
+          <li>পেমেন্ট যাচাই করা ও অর্ডার প্রসেস করা</li>
+          <li>গ্রাহককে অর্ডার সংক্রান্ত তথ্য জানানো</li>
+          <li>আইনি বাধ্যবাধকতা পূরণ ও প্রতারণা প্রতিরোধ</li>
+        </ul>
+      </article>
+
+      <article class="card p-6">
+        <h3>৩. তথ্য সুরক্ষা</h3>
+        <ul>
+          <li>সমস্ত তথ্য এনক্রিপ্টেড সার্ভারে সংরক্ষিত থাকে</li>
+          <li>শুধুমাত্র অনুমোদিত ব্যক্তিরা তথ্য অ্যাক্সেস করতে পারেন</li>
+          <li>তৃতীয় পক্ষের কাছে আপনার তথ্য বিক্রি বা বাণিজ্যিকভাবে শেয়ার করা হয় না</li>
+          <li>আইনি প্রয়োজনে সংশ্লিষ্ট কর্তৃপক্ষকে তথ্য প্রদান করা হতে পারে</li>
+        </ul>
+      </article>
+
+      <article class="card p-6">
+        <h3>৪. তৃতীয় পক্ষের সেবা</h3>
+        <ul>
+          <li><b>Google Firebase</b> — ডেটাবেস ও অ্যাকাউন্ট ব্যবস্থাপনা</li>
+          <li><b>Cloudinary</b> — জন্ম নিবন্ধন সনদের ছবি হোস্টিং</li>
+          <li><b>bKash</b> — পেমেন্ট প্রসেসিং</li>
+        </ul>
+        <p class="mt-2">এই সেবাগুলো তাদের নিজস্ব গোপনীয়তা নীতি অনুযায়ী কাজ করে।</p>
+      </article>
+
+      <article class="card p-6">
+        <h3>৫. আপনার অধিকার</h3>
+        <ul>
+          <li>আপনার সংরক্ষিত তথ্য দেখার অধিকার</li>
+          <li>ভুল তথ্য সংশোধনের অনুরোধ করার অধিকার</li>
+          <li>আবেদন সম্পন্ন হওয়ার পর তথ্য মুছে ফেলার অনুরোধ করার অধিকার</li>
+        </ul>
+        <p class="mt-2">অনুরোধ পাঠাতে পারেন <a href="mailto:nopqrshov337@gmail.com" class="text-brand-700 underline">nopqrshov337@gmail.com</a> ঠিকানায়।</p>
+      </article>
+
+      <article class="card p-6">
+        <h3>৬. কুকিজ ও স্থানীয় স্টোরেজ</h3>
+        <p>আমাদের ওয়েবসাইট সাপোর্ট চ্যাট সেশন ও আপনার পছন্দ মনে রাখার জন্য ব্রাউজারের স্থানীয় স্টোরেজ ব্যবহার করে। এটি ব্যক্তিগত তথ্য সংগ্রহ করে না।</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= DISCLAIMER (NEW) ======================= -->
+<section id="disclaimer" class="border-b border-slate-200 bg-white py-14 scroll-mt-24 sm:py-20" aria-labelledby="disclaimer-heading">
+  <div class="mx-auto max-w-4xl px-4">
+    <div class="text-center">
+      <span class="inline-block rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700">
+        আইনি তথ্য
+      </span>
+      <h2 id="disclaimer-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl">
+        দাবিত্যাগ (Disclaimer)
+      </h2>
+      <p class="mt-3 text-sm text-slate-600 sm:text-base">
+        সর্বশেষ আপডেট: ১ জানুয়ারি ২০২৬
+      </p>
+    </div>
+
+    <div class="legal-prose mt-10 space-y-5">
+      <article class="card p-6">
+        <p>
+          <b>emb-support</b> একটি স্বাধীন সাপোর্ট সার্ভিস প্রদানকারী প্রতিষ্ঠান। আমরা কোনো সরকারি সংস্থা নই এবং <b>land.gov.bd</b> বা <b>mutation.land.gov.bd</b> সহ কোনো সরকারি ওয়েবসাইটের সাথে সরাসরি সম্পর্কিত নই।
+        </p>
+      </article>
+
+      <article class="card p-6">
+        <h3>১. সেবার প্রকৃতি</h3>
+        <ul>
+          <li>আমরা শুধুমাত্র গ্রাহকের পক্ষ থেকে land.gov.bd পোর্টালে আবেদন প্রস্তুত ও জমা দেওয়ার সাপোর্ট প্রদান করি</li>
+          <li>আবেদন অনুমোদন বা প্রত্যাখ্যানের চূড়ান্ত সিদ্ধান্ত সংশ্লিষ্ট সরকারি অফিসের এখতিয়ারভুক্ত</li>
+          <li>উল্লেখিত ডেলিভারি সময় (১০-৩০ মিনিট) সরকারি সার্ভারের অবস্থার উপর নির্ভরশীল এবং এটি কোনো নিশ্চিত গ্যারান্টি নয়</li>
+        </ul>
+      </article>
+
+      <article class="card p-6">
+        <h3>২. দায়বদ্ধতার সীমাবদ্ধতা</h3>
+        <ul>
+          <li>গ্রাহকের প্রদত্ত ভুল বা মিথ্যা তথ্যের জন্য emb-support দায়ী নয়</li>
+          <li>সরকারি সার্ভার ডাউন, টেকনিক্যাল ত্রুটি বা নেটওয়ার্ক সমস্যার জন্য আমরা দায়ী নয়</li>
+          <li>আবেদন বাতিল বা প্রত্যাখ্যাত হলে (বিশেষত ভুল তথ্যের কারণে) কোনো রিফান্ড প্রযোজ্য নয়</li>
+          <li>গ্রাহকের অ্যাকাউন্ট সংক্রান্ত যেকোনো সমস্যার চূড়ান্ত দায় গ্রাহকের নিজের</li>
+        </ul>
+      </article>
+
+      <article class="card p-6">
+        <h3>৩. আইনি সম্মতি</h3>
+        <ul>
+          <li>গ্রাহককে অবশ্যই সঠিক ও সত্য তথ্য প্রদান করতে হবে</li>
+          <li>মিথ্যা তথ্য প্রদান করা হলে তা আইনগতভাবে দণ্ডনীয় এবং তথ্য প্রদানকারীর তথ্য প্রয়োজন হলে আইন প্রয়োগকারী সংস্থাকে প্রদান করা হবে</li>
+          <li>কোনো বিতর্ক দেখা দিলে বাংলাদেশের প্রচলিত আইন প্রযোজ্য হবে</li>
+        </ul>
+      </article>
+
+      <article class="card p-6">
+        <h3>৪. তথ্য সংশোধনের সময়সীমা</h3>
+        <p>
+          ভুলবশত কোনো ভুল বা অসম্পূর্ণ তথ্য জমা হয়ে গেলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে যোগাযোগ করে তা সংশোধন করে নিতে হবে। এই সময়সীমার পরে কোনো পরিবর্তন বা রিফান্ডের দাবি গ্রহণযোগ্য নাও হতে পারে।
+        </p>
+      </article>
+
+      <article class="card p-6">
+        <h3>৫. যোগাযোগ</h3>
+        <p>এই দাবিত্যাগ সম্পর্কে কোনো প্রশ্ন থাকলে যোগাযোগ করুন:</p>
+        <ul class="mt-2">
+          <li>ফোন: <a href="tel:01350141762" class="text-brand-700 underline">01350141762</a></li>
+          <li>ইমেইল: <a href="mailto:nopqrshov337@gmail.com" class="text-brand-700 underline">nopqrshov337@gmail.com</a></li>
+          <li>সাপোর্ট চ্যাট: <button type="button" data-open-chat class="text-brand-700 underline">এখানে ক্লিক করুন</button></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer id="footer" class="bg-slate-900 text-slate-300" role="contentinfo">
   <div class="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-12">
-    <div class="grid gap-8 md:grid-cols-3">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
       <div>
         <div class="flex items-center gap-2.5">
           <img src="logo.png" alt="eMutation Birth Certificate Application Support Logo" width="44" height="44" loading="lazy" class="h-11 w-11 shrink-0 object-contain" />
@@ -914,11 +1178,28 @@
           <li><button type="button" data-open-chat class="text-slate-400 transition hover:text-white">সাপোর্ট চ্যাট</button></li>
         </ul>
       </div>
+
+      <div>
+        <h3 class="text-sm font-extrabold uppercase tracking-wider text-white">আইনি তথ্য</h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li>
+            <a href="#important" class="flex items-center gap-2 text-amber-300 transition hover:text-amber-200">
+              <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+              </svg>
+              গুরুত্বপূর্ণ সতর্কতা
+            </a>
+          </li>
+          <li><a href="#privacy"    class="text-slate-400 transition hover:text-white">গোপনীয়তা নীতি</a></li>
+          <li><a href="#disclaimer" class="text-slate-400 transition hover:text-white">দাবিত্যাগ (Disclaimer)</a></li>
+          <li><a href="#faq"        class="text-slate-400 transition hover:text-white">সচরাচর জিজ্ঞাসা</a></li>
+        </ul>
+      </div>
     </div>
 
     <div class="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-800 pt-6 text-center sm:flex-row sm:text-left">
       <p class="text-xs text-slate-500">
-        © <span id="year"></span> eMutation Birth Certificate Application Support. সর্বস্বত্ব সংরক্ষিত।
+        © <span id="year"></span> eMutation Birth Certificate Application Support. সর্বস্বত্ব সংরক্ষিত। emb-support একটি স্বাধীন সাপোর্ট সার্ভিস, সরকারি সংস্থা নয়।
       </p>
       <p class="text-xs text-slate-500">
         Developed by
@@ -1069,7 +1350,7 @@
 
       <p class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-800">
         আপনার অর্ডার সফলভাবে জমা হয়েছে। পেমেন্ট যাচাইয়ের পর সাধারণত <b>১০ থেকে ৩০ মিনিটের</b> মধ্যে
-        আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে এবং ইমেইলে জানানো হবে। অর্ডার আইডি সংরক্ষণ করুন।
+        আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে এবং ইমেইলে জানানো হবে। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।
       </p>
 
       <div class="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -1113,7 +1394,6 @@ const $ = s => document.querySelector(s);
 /* ====== Bengali ⇄ English digit helpers (for numbers) ====== */
 const BN_TO_EN = { '০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9' };
 const toEnDigits  = s => String(s ?? '').replace(/[০-৯]/g, d => BN_TO_EN[d]);
-// Convert Bengali digits → English, strip anything that isn't an ASCII digit
 const digitsOnly  = s => toEnDigits(s).replace(/\D/g, '');
 
 /**
@@ -1129,7 +1409,6 @@ function attachDigitsOnlyFilter(input) {
     const filtered = original.replace(/[^\d০-৯]/g, '');
     if (original !== filtered) {
       const pos = input.selectionStart ?? filtered.length;
-      // keep cursor roughly in place
       const diff = original.length - filtered.length;
       input.value = filtered;
       try { input.setSelectionRange(Math.max(0, pos - diff), Math.max(0, pos - diff)); } catch {}
@@ -1138,11 +1417,9 @@ function attachDigitsOnlyFilter(input) {
 
   input.addEventListener('input', clean);
   input.addEventListener('blur', () => {
-    // On blur, normalize Bengali → English so user sees canonical 11-digit number
     const normalized = digitsOnly(input.value);
     if (input.value && normalized !== input.value) input.value = normalized;
   });
-  // initial clean (in case of prefilled value)
   clean();
 }
 
@@ -1307,7 +1584,6 @@ function renderApplicants() {
   wrap.innerHTML = '';
   for (let i = 0; i < applicantCount; i++) wrap.insertAdjacentHTML('beforeend', applicantCardHTML(i));
   restoreApplicants(snap);
-  // Attach digit-only filter to every certNo input (Bengali + English digits allowed)
   wrap.querySelectorAll('[data-field="certNo"]').forEach(attachDigitsOnlyFilter);
   updateSummary();
 }
@@ -1362,7 +1638,6 @@ $('#togglePwd').addEventListener('click', () => {
 renderApplicants();
 fetchDynamicPrice();
 
-// Apply digit-only filter to main number inputs (Bengali + English digits allowed, letters blocked)
 attachDigitsOnlyFilter($('#landNumber'));
 attachDigitsOnlyFilter($('#senderNumber'));
 
@@ -1391,7 +1666,6 @@ function collectApplicants(validate = true) {
   cards.forEach(card => {
     const get = f => card.querySelector(`[data-field="${f}"]`);
     const rec = {
-      // Normalize birth certificate number (Bengali → English, digits only)
       certNo:     digitsOnly(get('certNo').value),
       birthDate:  get('birthDate').value,
       name:       get('name').value.trim(),
@@ -1438,7 +1712,6 @@ $('#nextBtn').addEventListener('click', () => {
     return;
   }
 
-  // Normalize the account mobile number (Bengali or English → English 11 digits)
   const landNumber = digitsOnly($('#landNumber').value);
   const landPassword = $('#landPassword').value.trim();
 
@@ -1513,7 +1786,6 @@ const submitBtn = $('#submitBtn');
 submitBtn.addEventListener('click', async () => {
   clearErrors();
 
-  // Normalize bKash sender number (Bengali or English → English 11 digits)
   const sender = digitsOnly($('#senderNumber').value);
 
   if (!sender) { markError($('#senderNumber')); showError('যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি লিখুন।'); return; }
@@ -1557,7 +1829,7 @@ submitBtn.addEventListener('click', async () => {
     $('#progressPct').textContent = '100%';
 
     const applicants = list.map(a => ({
-      certNo:     a.certNo,       // already normalized to English digits
+      certNo:     a.certNo,
       birthDate:  a.birthDate,
       name:       a.name,
       fatherName: a.fatherName,
@@ -1580,11 +1852,11 @@ submitBtn.addEventListener('click', async () => {
       applicants,
       courtFeePaid: courtFeePaid.checked,
       circle: courtFeePaid.checked ? '' : circleName.value.trim(),
-      landAccountNumber: digitsOnly($('#landNumber').value),  // normalized 11-digit English
+      landAccountNumber: digitsOnly($('#landNumber').value),
       landAccountPassword: $('#landPassword').value.trim(),
       receiverEmail: $('#receiverEmail').value.trim(),
       bkashReceiverNumber: BKASH_NUMBER,
-      bkashSenderNumber: sender                                // normalized English
+      bkashSenderNumber: sender
     };
 
     await addDoc(collection(db, 'orders'), payload);
@@ -1608,7 +1880,6 @@ submitBtn.addEventListener('click', async () => {
         </span>
       </li>`).join('');
 
-    // Call notice popup data
     $('#noticeOrderId').textContent = orderId;
     $('#callNotice').classList.remove('hidden');
 
