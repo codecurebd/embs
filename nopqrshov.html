@@ -484,7 +484,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getFirestore, collection, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy,
-  serverTimestamp, increment, addDoc, getDoc, setDoc
+  serverTimestamp, increment, addDoc, getDoc, setDoc, getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
@@ -568,6 +568,11 @@ let currentPage = 'dashboard';
 let selectedChatId = null;
 let chatMsgUnsub = null;
 
+// Prevent flicker / unnecessary re-renders
+let lastOrdersSig = '';
+let lastChatsSig  = '';
+let pollTimer = null;
+
 /* ================= Login Error UI ================= */
 function showLoginError(title, msg) {
   $('#loginErrorTitle').textContent = title;
@@ -579,7 +584,7 @@ function hideLoginError() {
 }
 
 /* =========================================================
-   AUTH & TOKEN FORCE REFRESH
+   AUTH
    ========================================================= */
 const loginScreen = $('#loginScreen');
 const appEl = $('#app');
@@ -620,12 +625,9 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
-  // ✅ Force refresh the token to ensure rules get the latest email
-  try {
-    await user.getIdToken(true); 
-  } catch(e) { console.warn("Token refresh failed", e); }
+  try { await user.getIdToken(true); }
+  catch(e) { console.warn("Token refresh failed", e); }
 
-  // ✅ Auto-sync admin user document
   try {
     const userRef = doc(db, 'users', user.uid);
     const userSnap = await getDoc(userRef);
@@ -733,9 +735,6 @@ $('#saveSettingsBtn').addEventListener('click', async () => {
   btn.innerHTML = 'সেভ হচ্ছে...';
   
   try {
-    const user = auth.currentUser;
-    console.log("Attempting save. Logged in as:", user?.email);
-    
     await setDoc(SETTINGS_REF, { pricePerPerson: price, updatedAt: serverTimestamp() }, { merge: true });
     showToast('প্রাইস সফলভাবে আপডেট হয়েছে', 'success');
   } catch (error) {
@@ -756,7 +755,80 @@ $('#saveSettingsBtn').addEventListener('click', async () => {
 });
 
 /* =========================================================
-   FIRESTORE LISTENERS
+   SIGNATURE HELPERS (Prevent flicker on identical data)
+   ========================================================= */
+function ordersSignature(list) {
+  return JSON.stringify(list.map(o => [
+    o.id,
+    o.status,
+    o.courtFeePaid ? 1 : 0,
+    o.amount || 0,
+    o.applicantCount || 0,
+    o.paymentStatus || '',
+    o.orderId || '',
+    o.receiverEmail || '',
+    o.bkashSenderNumber || '',
+    o.circle || '',
+    o.createdAt?.seconds || 0,
+    o.statusUpdatedAt?.seconds || 0,
+    o.completedAt?.seconds || 0
+  ]));
+}
+
+function chatsSignature(list) {
+  return JSON.stringify(list.map(c => [
+    c.id,
+    c.lastMessage || '',
+    c.lastMessageAt?.seconds || 0,
+    c.unreadForAdmin || 0,
+    c.unreadForClient || 0,
+    c.clientName || '',
+    c.tag || ''
+  ]));
+}
+
+/* =========================================================
+   APPLY DATA (with flicker-free rendering)
+   ========================================================= */
+function applyOrdersSnapshot(list, force = false) {
+  ordersData = list; // always update local state so modals read fresh data
+  const sig = ordersSignature(list);
+  if (!force && sig === lastOrdersSig) return;
+  lastOrdersSig = sig;
+  renderDashboard();
+  renderOrders();
+  updateOrdersBadge();
+}
+
+function applyChatsSnapshot(list, force = false) {
+  chatsData = list;
+  const sig = chatsSignature(list);
+  if (!force && sig === lastChatsSig) return;
+  lastChatsSig = sig;
+  renderChatList();
+  renderRecentChats();
+  updateChatsStats();
+}
+
+function updateOrdersBadge() {
+  const pending = ordersData.filter(o => o.status === 'pending').length;
+  const badge = $('#ordersBadge');
+  if (pending > 0) { badge.textContent = toBn(pending); badge.classList.remove('hidden'); }
+  else badge.classList.add('hidden');
+}
+
+function updateChatsStats() {
+  messageCount = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0) + (c.unreadForClient || 0), 0);
+  $('#statMessages').textContent = toBn(messageCount);
+
+  const unread = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0), 0);
+  const cBadge = $('#chatsBadge');
+  if (unread > 0) { cBadge.textContent = toBn(unread); cBadge.classList.remove('hidden'); }
+  else cBadge.classList.add('hidden');
+}
+
+/* =========================================================
+   FIRESTORE LISTENERS + 10s FALLBACK POLL
    ========================================================= */
 let ordersUnsub = null;
 let chatsUnsub  = null;
@@ -764,38 +836,34 @@ let chatsUnsub  = null;
 function startListeners() {
   if (ordersUnsub) ordersUnsub();
   if (chatsUnsub) chatsUnsub();
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
 
+  // ---- Realtime (primary) ----
   ordersUnsub = onSnapshot(
     query(collection(db, 'orders'), orderBy('createdAt', 'desc')),
-    snap => {
-      ordersData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderDashboard();
-      renderOrders();
-      const pending = ordersData.filter(o => o.status === 'pending').length;
-      const badge = $('#ordersBadge');
-      if (pending > 0) { badge.textContent = toBn(pending); badge.classList.remove('hidden'); }
-      else badge.classList.add('hidden');
-    },
+    snap => applyOrdersSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
     err => console.error('orders listener', err)
   );
 
   chatsUnsub = onSnapshot(
     query(collection(db, 'chats'), orderBy('lastMessageAt', 'desc')),
-    snap => {
-      chatsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderChatList();
-      renderRecentChats();
-
-      messageCount = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0) + (c.unreadForClient || 0), 0);
-      $('#statMessages').textContent = toBn(messageCount);
-
-      const unread = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0), 0);
-      const cBadge = $('#chatsBadge');
-      if (unread > 0) { cBadge.textContent = toBn(unread); cBadge.classList.remove('hidden'); }
-      else cBadge.classList.add('hidden');
-    },
+    snap => applyChatsSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
     err => console.error('chats listener', err)
   );
+
+  // ---- 10s fallback poll (safety net if realtime goes silent) ----
+  pollTimer = setInterval(async () => {
+    if (document.hidden) return;
+    try {
+      const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
+      applyOrdersSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    } catch (e) { /* silent fallback */ }
+
+    try {
+      const snap = await getDocs(query(collection(db, 'chats'), orderBy('lastMessageAt', 'desc')));
+      applyChatsSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    } catch (e) { /* silent fallback */ }
+  }, 10000);
 }
 
 /* =========================================================
@@ -823,7 +891,10 @@ function courtFeeBadge(o) {
    ========================================================= */
 function renderDashboard() {
   const total      = ordersData.length;
-  const earnings   = ordersData.reduce((s, o) => s + (o.amount || 0), 0);
+  // ✅ Earnings: only completed orders
+  const earnings   = ordersData
+    .filter(o => o.status === 'completed')
+    .reduce((s, o) => s + (o.amount || 0), 0);
   const pending    = ordersData.filter(o => o.status === 'pending').length;
   const processing = ordersData.filter(o => o.status === 'processing').length;
   const completed  = ordersData.filter(o => o.status === 'completed').length;
@@ -1505,6 +1576,17 @@ async function selectChat(id) {
   try { await updateDoc(doc(db, 'chats', id), { unreadForAdmin: 0 }); } catch {}
 }
 
+/* ---------- Message Delete Button HTML ---------- */
+function msgDeleteBtnHtml(msgId) {
+  return `
+    <button type="button" data-msg-del="${msgId}" title="মেসেজ ডিলিট করুন"
+      class="msg-del-btn grid h-7 w-7 shrink-0 place-items-center rounded-full bg-rose-50 text-rose-600 opacity-100 transition hover:bg-rose-100 hover:text-rose-700 sm:opacity-0 sm:group-hover:opacity-100">
+      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
+      </svg>
+    </button>`;
+}
+
 function renderAdminMessages(msgs) {
   const body = $('#adminChatBody');
 
@@ -1520,16 +1602,63 @@ function renderAdminMessages(msgs) {
   body.innerHTML = msgs.map(m => {
     const mine = m.sender === 'admin';
     return `
-      <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
+      <div class="group flex items-end gap-1.5 ${mine ? 'justify-end' : 'justify-start'}">
+        ${!mine ? msgDeleteBtnHtml(m.id) : ''}
         <div class="max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm
           ${mine ? 'rounded-br-sm bg-brand-600 text-white' : 'rounded-bl-sm border border-slate-200 bg-white text-slate-800'}">
           <p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
           <p class="mt-1 text-[10px] ${mine ? 'text-brand-100' : 'text-slate-400'}">${fmtDate(m.createdAt)}</p>
         </div>
+        ${mine ? msgDeleteBtnHtml(m.id) : ''}
       </div>`;
   }).join('');
 
+  // Attach delete handlers
+  body.querySelectorAll('[data-msg-del]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      deleteChatMessage(selectedChatId, btn.dataset.msgDel);
+    });
+  });
+
   body.scrollTop = body.scrollHeight;
+}
+
+/* ---------- Delete specific chat message ---------- */
+async function deleteChatMessage(chatId, msgId) {
+  if (!chatId || !msgId) return;
+  if (!confirm('এই মেসেজটি ডিলিট করবেন?\n\nএটি স্থায়ীভাবে মুছে যাবে।')) return;
+
+  try {
+    // 1. Delete the message
+    await deleteDoc(doc(db, 'chats', chatId, 'messages', msgId));
+
+    // 2. Recalculate chat's last message (fresh fetch to avoid race conditions)
+    let lastText = '';
+    let lastTime = serverTimestamp();
+    try {
+      const snap = await getDocs(query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt', 'asc')));
+      const remain = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const last = remain[remain.length - 1];
+      if (last) {
+        lastText = last.text || '';
+        if (last.createdAt) lastTime = last.createdAt;
+      }
+    } catch (_) { /* fallback: keep empty */ }
+
+    try {
+      await updateDoc(doc(db, 'chats', chatId), {
+        lastMessage: lastText,
+        lastMessageAt: lastTime
+      });
+    } catch (e) {
+      console.warn('Could not update chat preview:', e);
+    }
+
+    showToast('মেসেজ ডিলিট হয়েছে', 'success');
+  } catch (err) {
+    console.error('Delete message failed:', err);
+    showToast('মেসেজ ডিলিট করা যায়নি', 'error');
+  }
 }
 
 $('#adminChatForm').addEventListener('submit', async e => {
