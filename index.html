@@ -209,6 +209,32 @@
     .scroll-arrow .chev1, .scroll-arrow .chev2, .scroll-arrow .scroll-dot { animation: none; }
   }
 
+  /* ===== Working-time marquee (left → right) ===== */
+  .marquee-wrap { position: relative; overflow: hidden; }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marqueeRight 46s linear infinite;
+    will-change: transform;
+  }
+  .marquee-track > .marquee-text {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding-right: 3.5rem;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  @keyframes marqueeRight {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; transform: translateX(0); }
+  }
 
   /* Call notice phone ring animation */
   @keyframes callRing {
@@ -261,6 +287,7 @@
         <div class="hidden items-center gap-6 text-sm font-semibold text-slate-600 lg:flex">
           <a href="#home"      class="transition hover:text-brand-700">হোম</a>
           <a href="#service"   class="transition hover:text-brand-700">সেবাসমূহ</a>
+          <a href="#worktime"  class="transition hover:text-brand-700">কাজের সময়</a>
           <a href="#how"       class="transition hover:text-brand-700">কিভাবে কাজ করে</a>
           <a href="#important" class="transition hover:text-amber-700">সতর্কতা</a>
           <a href="#footer"    class="transition hover:text-brand-700">যোগাযোগ</a>
@@ -288,6 +315,7 @@
       <div class="mx-auto max-w-7xl space-y-1 px-5 py-3 text-sm font-semibold text-slate-700 sm:px-8">
         <a href="#home"      class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">হোম</a>
         <a href="#service"   class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সেবাসমূহ</a>
+        <a href="#worktime"  class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">⏰ কাজের সময় ও জরুরি সেবা</a>
         <a href="#how"       class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">কিভাবে কাজ করে</a>
         <a href="#important" class="block rounded-lg px-3 py-2.5 text-amber-700 hover:bg-amber-50">⚠️ গুরুত্বপূর্ণ সতর্কতা</a>
         <a href="#faq"       class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সচরাচর জিজ্ঞাসা</a>
@@ -303,6 +331,47 @@
 </header>
 
 <main>
+<!-- ======================= WORKING TIME MARQUEE (TOP) ======================= -->
+<div class="marquee-wrap border-b border-brand-900/30 bg-gradient-to-r from-brand-800 via-brand-700 to-brand-800 py-2.5 text-white" aria-label="কাজের সময় ও জরুরি অর্ডারের তথ্য">
+  <div class="marquee-track">
+    <span class="marquee-text">
+      <span class="inline-flex items-center gap-2">
+        <svg class="h-3.5 w-3.5 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+        কাজের সময়: সকাল ১০:০০ – রাত ১০:০০
+      </span>
+      <span class="mx-3 text-white/40">•</span>
+      <span class="text-brand-100">কাজের সময়ের বাইরে অর্ডার করলে পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়</span>
+      <span class="mx-3 text-white/40">•</span>
+      <span class="font-bold text-amber-300">জরুরি (আর্জেন্ট) অর্ডার: কাজের সময়ের বাইরে অর্ডার করেও একই দিনে ডেলিভারি অত্যন্ত জরুরি হলে অতিরিক্ত ৳৫০</span>
+      <span class="mx-3 text-white/40">•</span>
+      <span>জরুরি অর্ডারের জন্য অবশ্যই কল করুন:
+        <a href="tel:01350141762" class="font-extrabold underline decoration-amber-300 decoration-2 underline-offset-2">০১৩৫০১৪১৭৬২</a>
+      </span>
+      <span class="mx-3 text-white/40">•</span>
+    </span>
+    <span class="marquee-text" aria-hidden="true">
+      <span class="inline-flex items-center gap-2">
+        <svg class="h-3.5 w-3.5 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+        কাজের সময়: সকাল ১০:০০ – রাত ১০:০০
+      </span>
+      <span class="mx-3 text-white/40">•</span>
+      <span class="text-brand-100">কাজের সময়ের বাইরে অর্ডার করলে পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়</span>
+      <span class="mx-3 text-white/40">•</span>
+      <span class="font-bold text-amber-300">জরুরি (আর্জেন্ট) অর্ডার: কাজের সময়ের বাইরে অর্ডার করেও একই দিনে ডেলিভারি অত্যন্ত জরুরি হলে অতিরিক্ত ৳৫০</span>
+      <span class="mx-3 text-white/40">•</span>
+      <span>জরুরি অর্ডারের জন্য অবশ্যই কল করুন:
+        <a href="tel:01350141762" class="font-extrabold underline decoration-amber-300 decoration-2 underline-offset-2">০১৩৫০১৪১৭৬২</a>
+      </span>
+      <span class="mx-3 text-white/40">•</span>
+    </span>
+  </div>
+</div>
+<!-- ======================= /WORKING TIME MARQUEE ======================= -->
+
 <!-- ======================= HERO ======================= -->
 <section id="home"
   class="relative overflow-hidden bg-gradient-to-b from-brand-100 via-brand-50 to-white"
@@ -446,7 +515,7 @@
       </div>
     </div>
 
-    <!-- ============ NEW: Serial / NID notice BEFORE the application form ============ -->
+    <!-- ============ Serial / NID notice BEFORE the application form ============ -->
     <div class="mx-auto mt-10 max-w-4xl">
       <div class="anim-in relative overflow-hidden rounded-2xl border-2 border-brand-200 bg-gradient-to-br from-brand-50 via-white to-sky-50 p-5 shadow-sm sm:p-6">
         <div class="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-brand-200/40 blur-2xl" aria-hidden="true"></div>
@@ -479,7 +548,7 @@
         </div>
       </div>
     </div>
-    <!-- ============ /NEW NOTICE ============ -->
+    <!-- ============ /NOTICE ============ -->
 
     <div class="mx-auto mt-5 max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70">
       <div class="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white px-5 py-5 sm:px-7 sm:py-6">
@@ -504,7 +573,7 @@
       <!-- STEP 1 -->
       <div id="step1" class="p-5 sm:p-7 lg:p-8">
 
-        <!-- NEW: Important notice banner inside the form -->
+        <!-- Important notice banner inside the form -->
         <a href="#important" class="mb-5 flex items-start gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50/70 p-4 transition hover:border-amber-400 hover:bg-amber-50">
           <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700" aria-hidden="true">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -575,6 +644,10 @@
             </div>
           </div>
         </div>
+
+        <!-- ============ URGENT SERVICE OPTION (Dynamic) ============ -->
+        <div id="urgentBlock" class="mt-4" data-state=""></div>
+        <!-- ============ /URGENT SERVICE OPTION ============ -->
 
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">১</span>
@@ -668,6 +741,35 @@
           <p id="payBreakdown" class="mt-2 text-xs text-brand-700">১ জন × ৳ ...</p>
         </div>
 
+        <!-- ============ WORKING TIME NOTICE (PAYMENT STEP) ============ -->
+        <div class="mt-5 rounded-2xl border border-sky-200 bg-sky-50/70 p-5">
+          <h4 class="flex items-center gap-2 text-sm font-extrabold text-sky-900">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            কাজের সময় ও ডেলিভারি সংক্রান্ত নির্দেশনা
+          </h4>
+          <ul class="mt-3 space-y-2 text-[13px] leading-relaxed text-sky-900">
+            <li class="flex items-start gap-2">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500"></span>
+              আমাদের কাজের সময় <b>সকাল ১০:০০টা থেকে রাত ১০:০০টা</b>। এই সময়ের মধ্যে অর্ডার করলে সাধারণত <b>১০–৩০ মিনিটে</b> ডেলিভারি সম্পন্ন হয়।
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500"></span>
+              কাজের সময়ের <b>বাইরে</b> অর্ডার করলে আপনার আবেদনটি <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়।
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500"></span>
+              <span>
+                <b>জরুরি (আর্জেন্ট) অর্ডার:</b> কাজের সময়ের বাইরে অর্ডার করেও যদি <b>একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি</b> হয়, তাহলে অতিরিক্ত <b>৳৫০</b> পরিশোধ করতে হবে এবং অবশ্যই
+                <a href="tel:01350141762" class="font-extrabold text-brand-700 underline decoration-brand-300 underline-offset-2">০১৩৫০১৪১৭৬২</a>
+                নম্বরে কল করে আপনার জরুরি অর্ডারটি সম্পর্কে অবহিত করতে হবে।
+              </span>
+            </li>
+          </ul>
+        </div>
+        <!-- ============ /WORKING TIME NOTICE ============ -->
+
         <div class="mt-5 rounded-2xl border border-slate-200 bg-white p-5">
           <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -716,6 +818,92 @@
   </div>
 </section>
 
+<!-- ======================= WORKING TIME SECTION ======================= -->
+<section id="worktime" class="scroll-mt-24 border-b border-slate-200 bg-white py-14 sm:py-20" aria-labelledby="worktime-heading">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="inline-block rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-brand-700 ring-1 ring-brand-100">
+        সেবার সময়সূচি
+      </span>
+      <h2 id="worktime-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl lg:text-4xl">
+        কাজের সময় ও জরুরি অর্ডারের নির্দেশনা
+      </h2>
+      <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
+        গ্রাহকসেবার স্বচ্ছতা ও সুবিধার্থে আমাদের সেবা প্রদানের সময়সূচি এবং জরুরি অর্ডারের শর্তাবলি নিচে স্পষ্টভাবে উল্লেখ করা হলো।
+      </p>
+
+      <div class="mt-6 flex justify-center">
+        <span id="workStatus"
+          class="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-100 px-4 py-1.5 text-xs font-bold text-emerald-800">
+          <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
+          এখন কাজের সময় চলছে
+        </span>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 md:grid-cols-2">
+      <!-- Normal service -->
+      <article class="card relative overflow-hidden p-6">
+        <span class="absolute right-5 top-5 rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">
+          সাধারণ সেবা
+        </span>
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-700" aria-hidden="true">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-lg font-extrabold text-slate-900">কাজের সময়: সকাল ১০টা – রাত ১০টা</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          এই সময়ের মধ্যে অর্ডার করলে সাধারণত <b class="text-slate-900">১০ থেকে ৩০ মিনিটের</b> মধ্যে ডেলিভারি সম্পন্ন করা হয়।
+        </p>
+        <div class="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+          <p class="text-[13px] leading-relaxed text-amber-800">
+            <b>কাজের সময়ের বাইরে</b> অর্ডার করলে আপনার আবেদনটি <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়।
+          </p>
+        </div>
+      </article>
+
+      <!-- Urgent service -->
+      <article class="card relative overflow-hidden border-2 border-amber-300 bg-gradient-to-br from-amber-50/80 to-white p-6">
+        <span class="absolute right-5 top-5 rounded-full bg-amber-500 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white">
+          জরুরি অর্ডার
+        </span>
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-amber-100 text-amber-700" aria-hidden="true">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/>
+          </svg>
+        </span>
+        <h3 class="mt-4 text-lg font-extrabold text-slate-900">জরুরি (আর্জেন্ট) অর্ডার — অতিরিক্ত ৳৫০</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-600">
+          যদি কাজের সময়ের (<b>সকাল ১০টা – রাত ১০টা</b>) বাইরে অর্ডার করা হয় এবং সেই অর্ডারটি <b class="text-slate-900">একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি</b> হয়, তাহলে অতিরিক্ত <b class="text-slate-900">৫০ টাকা</b> পরিশোধ করতে হবে।
+        </p>
+        <div class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
+          <p class="text-[13px] leading-relaxed text-rose-800">
+            অর্ডার সম্পন্ন করার পর অবশ্যই নিচের নম্বরে কল করে আপনার জরুরি অর্ডারটি সম্পর্কে অবহিত করতে হবে।
+          </p>
+          <a href="tel:01350141762"
+             class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-rose-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-rose-600/25 transition hover:bg-rose-700 active:scale-[.98]">
+            <svg class="call-ring h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.25 1.05l-1.3 1.3a15 15 0 0 0 6.17 6.17l1.3-1.3a1 1 0 0 1 1.05-.25l3.6 1.2a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.7 21 3 14.3 3 6V5Z"/>
+            </svg>
+            ০১৩৫০১৪১৭৬২ — এখনই কল করুন
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <p class="text-center text-[13px] leading-relaxed text-slate-600">
+        <b class="text-slate-900">বিশেষ দৃষ্টি আকর্ষণ:</b> জরুরি অর্ডারের সুবিধা কাজের সময়ের (সকাল ১০টা – রাত ১০টা) বাইরে প্রযোজ্য — অর্থাৎ যদি এই সময়ের বাইরে অর্ডার করেও একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি হয়, তখন অতিরিক্ত ৫০ টাকা পরিশোধ করে কল করে অর্ডারটি নিশ্চিত করতে হবে।
+      </p>
+    </div>
+  </div>
+</section>
+<!-- ======================= /WORKING TIME SECTION ======================= -->
+
 <section id="how" class="border-b border-slate-200 bg-slate-50 py-14 sm:py-20" aria-labelledby="how-heading">
   <div class="mx-auto max-w-7xl px-4">
     <div class="mx-auto max-w-3xl text-center">
@@ -752,7 +940,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">২. ডেলিভারি সময়</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          সাধারণত অর্ডার <b>১০ মিনিট থেকে ৩০ মিনিটের</b> মধ্যে ডেলিভারি হয়ে থাকে — যদি সার্ভারে কোনো সমস্যা না থাকে।
+          কাজের সময় (সকাল ১০টা – রাত ১০টা) অর্ডার করলে সাধারণত <b>১০ মিনিট থেকে ৩০ মিনিটের</b> মধ্যে ডেলিভারি হয়ে থাকে — যদি সার্ভারে কোনো সমস্যা না থাকে। কাজের সময়ের বাইরে অর্ডার করলে পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়।
         </p>
       </article>
 
@@ -811,7 +999,7 @@
   </div>
 </section>
 
-<!-- ======================= IMPORTANT NOTICE (NEW) ======================= -->
+<!-- ======================= IMPORTANT NOTICE ======================= -->
 <section id="important" class="border-b border-amber-200 bg-gradient-to-b from-amber-50/80 via-amber-50/40 to-white py-14 scroll-mt-24 sm:py-20" aria-labelledby="important-heading">
   <div class="mx-auto max-w-5xl px-4">
     <div class="text-center">
@@ -946,19 +1134,31 @@
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600" id="faqPriceText">
-          প্রতি আবেদনকারীর জন্য ফি নির্ধারিত থাকে। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।
+          প্রতি আবেদনকারীর জন্য ফি নির্ধারিত থাকে। জরুরি অর্ডারের ক্ষেত্রে অতিরিক্ত ৫০ টাকা (কাজের সময়ের বাইরে একই দিনে ডেলিভারি প্রয়োজন হলে)। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।
         </p>
       </details>
 
       <details class="group card p-5 open:shadow-md">
         <summary class="flex cursor-pointer items-center justify-between gap-4">
-          <h3 class="text-base font-extrabold text-slate-900">ডেলিভারি কত সময়ে পাব?</h3>
+          <h3 class="text-base font-extrabold text-slate-900">কাজের সময় ও ডেলিভারি সময় কেমন?</h3>
           <svg class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600">
-          সাধারণত ১০ থেকে ৩০ মিনিটের মধ্যে ডেলিভারি সম্পন্ন হয়। সার্ভারে কোনো সমস্যা থাকলে কিছুটা দেরি হতে পারে, সেক্ষেত্রে সাপোর্ট টিম আপনাকে জানাবে।
+          আমাদের কাজের সময় <b>সকাল ১০:০০টা থেকে রাত ১০:০০টা</b>। এই সময়ে অর্ডার করলে সাধারণত ১০ থেকে ৩০ মিনিটের মধ্যে ডেলিভারি সম্পন্ন হয়। কাজের সময়ের বাইরে অর্ডার করলে <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়।
+        </p>
+      </details>
+
+      <details class="group card p-5 open:shadow-md">
+        <summary class="flex cursor-pointer items-center justify-between gap-4">
+          <h3 class="text-base font-extrabold text-slate-900">জরুরি (আর্জেন্ট) অর্ডার কীভাবে করব?</h3>
+          <svg class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-slate-600">
+          যদি কাজের সময়ের (<b>সকাল ১০টা – রাত ১০টা</b>) বাইরে অর্ডার করা হয় এবং সেই অর্ডারটি <b>একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি</b> হয়, তাহলে অতিরিক্ত <b>৫০ টাকা</b> পরিশোধ করতে হবে। অর্ডার সম্পন্ন করার পর অবশ্যই <a href="tel:01350141762" class="font-bold text-brand-700 underline">০১৩৫০১৪১৭৬২</a> নম্বরে কল করে আপনার জরুরি অর্ডারটি সম্পর্কে অবহিত করতে হবে।
         </p>
       </details>
 
@@ -989,7 +1189,7 @@
   </div>
 </section>
 
-<!-- ======================= PRIVACY POLICY (NEW) ======================= -->
+<!-- ======================= PRIVACY POLICY ======================= -->
 <section id="privacy" class="border-b border-slate-200 bg-slate-50 py-14 scroll-mt-24 sm:py-20" aria-labelledby="privacy-heading">
   <div class="mx-auto max-w-4xl px-4">
     <div class="text-center">
@@ -1071,7 +1271,7 @@
   </div>
 </section>
 
-<!-- ======================= DISCLAIMER (NEW) ======================= -->
+<!-- ======================= DISCLAIMER ======================= -->
 <section id="disclaimer" class="border-b border-slate-200 bg-white py-14 scroll-mt-24 sm:py-20" aria-labelledby="disclaimer-heading">
   <div class="mx-auto max-w-4xl px-4">
     <div class="text-center">
@@ -1156,6 +1356,9 @@
         <p class="mt-4 text-sm leading-relaxed text-slate-400">
           eMutation Birth Certificate Application এবং 18+ Birth Certificate Mutation Application Online সেবার জন্য নির্ভরযোগ্য ও পেশাদার অনলাইন সাপোর্ট।
         </p>
+        <p class="mt-3 rounded-lg bg-slate-800 px-3 py-2 text-[11px] font-semibold text-amber-300">
+          ⏰ কাজের সময়: সকাল ১০টা – রাত ১০টা
+        </p>
       </div>
 
       <div>
@@ -1183,10 +1386,11 @@
       <div>
         <h3 class="text-sm font-extrabold uppercase tracking-wider text-white">দ্রুত লিংক</h3>
         <ul class="mt-4 space-y-2.5 text-sm">
-          <li><a href="#home"    class="text-slate-400 transition hover:text-white">হোম</a></li>
-          <li><a href="#service" class="text-slate-400 transition hover:text-white">eMutation Application Service</a></li>
-          <li><a href="#how"     class="text-slate-400 transition hover:text-white">কিভাবে কাজ করে</a></li>
-          <li><a href="#faq"     class="text-slate-400 transition hover:text-white">সচরাচর জিজ্ঞাসা</a></li>
+          <li><a href="#home"     class="text-slate-400 transition hover:text-white">হোম</a></li>
+          <li><a href="#service"  class="text-slate-400 transition hover:text-white">eMutation Application Service</a></li>
+          <li><a href="#worktime" class="text-slate-400 transition hover:text-white">কাজের সময় ও জরুরি সেবা</a></li>
+          <li><a href="#how"      class="text-slate-400 transition hover:text-white">কিভাবে কাজ করে</a></li>
+          <li><a href="#faq"      class="text-slate-400 transition hover:text-white">সচরাচর জিজ্ঞাসা</a></li>
           <li><button type="button" data-open-chat class="text-slate-400 transition hover:text-white">সাপোর্ট চ্যাট</button></li>
         </ul>
       </div>
@@ -1360,9 +1564,14 @@
         <span id="invTotal" class="text-xl font-extrabold text-brand-900">৳ ০</span>
       </div>
 
+      <p id="invUrgent" class="mt-3 hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs font-semibold leading-relaxed text-amber-800">
+        ⚡ জরুরি (আর্জেন্ট) অর্ডার অন্তর্ভুক্ত (অতিরিক্ত ৳৫০) — কাজের সময়ের বাইরে একই দিনে ডেলিভারির জন্য। অর্ডারটি নিশ্চিত করতে অবশ্যই
+        <a href="tel:01350141762" class="underline decoration-amber-400 underline-offset-2">০১৩৫০১৪১৭৬২</a> নম্বরে কল করুন।
+      </p>
+
       <p class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-800">
-        আপনার অর্ডার সফলভাবে জমা হয়েছে। পেমেন্ট যাচাইয়ের পর সাধারণত <b>১০ থেকে ৩০ মিনিটের</b> মধ্যে
-        আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে এবং ইমেইলে জানানো হবে। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।
+        আপনার অর্ডার সফলভাবে জমা হয়েছে। পেমেন্ট যাচাইয়ের পর <b>কাজের সময়ের (সকাল ১০টা – রাত ১০টা)</b> মধ্যে সাধারণত <b>১০ থেকে ৩০ মিনিটে</b>
+        আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে এবং ইমেইলে জানানো হবে। কাজের সময়ের বাইরে অর্ডার করলে <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়। জরুরি অর্ডার নির্বাচন করলে একই দিনে ডেলিভারি নিশ্চিত করতে অবশ্যই <b>০১৩৫০১৪১৭৬২</b> নম্বরে কল করুন। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।
       </p>
 
       <div class="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -1373,6 +1582,63 @@
 
   </div>
 </div>
+
+<!-- ======================= COOKIE / WARNING CONSENT POPUP ======================= -->
+<div id="cookiePopup"
+     class="fixed inset-0 z-[80] hidden items-end justify-center bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center"
+     role="dialog" aria-modal="true" aria-labelledby="cookieTitle">
+  <div class="anim-in w-full max-w-lg overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+
+    <div class="flex items-start gap-3 bg-gradient-to-r from-brand-700 to-brand-900 px-5 py-4 text-white">
+      <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15" aria-hidden="true">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 1 0 9 9 3 3 0 0 1-3.6-2.9A3 3 0 0 1 14.5 6 3 3 0 0 1 12 3Z"/>
+          <circle cx="8.5" cy="10" r=".9" fill="currentColor" stroke="none"/>
+          <circle cx="10.5" cy="14.5" r=".9" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="13" r=".9" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      <div class="min-w-0">
+        <h2 id="cookieTitle" class="text-base font-extrabold leading-tight">সতর্কীকরণ বিজ্ঞপ্তি</h2>
+        <p class="mt-0.5 text-[11px] text-brand-100">অনুগ্রহ করে পড়ে নিন — চালিয়ে যেতে সম্মতি প্রয়োজন</p>
+      </div>
+    </div>
+
+    <div class="px-5 py-5">
+      <p class="text-sm leading-relaxed text-slate-700">
+        ওয়েবসাইটটি ব্যবহার করার পূর্বে আমাদের <b class="text-slate-900">গুরুত্বপূর্ণ সতর্কতা</b>,
+        <b class="text-slate-900">গোপনীয়তা নীতি</b> ও <b class="text-slate-900">দাবিত্যাগ</b> পড়ে নেওয়ার জন্য বিনীত অনুরোধ করা হচ্ছে।
+        ভুল বা মিথ্যা তথ্য প্রদান করলে আবেদন বাতিল হতে পারে এবং রিফান্ডের কোনো সুযোগ নেই।
+      </p>
+
+      <ul class="mt-3 space-y-2 text-[13px] leading-relaxed text-slate-600">
+        <li class="flex items-start gap-2">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+          আপনার প্রদত্ত তথ্য সম্পূর্ণ গোপন রাখা হয়
+        </li>
+        <li class="flex items-start gap-2">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+          কাজের সময়: সকাল ১০টা – রাত ১০টা। এই সময়ের বাইরে অর্ডার করলে পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়।
+        </li>
+        <li class="flex items-start gap-2">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/></svg>
+          <span><b>জরুরি (আর্জেন্ট) অর্ডার:</b> কাজের সময়ের বাইরে অর্ডার করেও যদি একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি হয়, তাহলে অতিরিক্ত ৳৫০ পরিশোধ করতে হবে এবং অবশ্যই <a href="tel:01350141762" class="underline">০১৩৫০১৪১৭৬২</a> নম্বরে কল করে অর্ডারটি নিশ্চিত করতে হবে।</span>
+        </li>
+      </ul>
+
+      <div class="mt-5 flex flex-col gap-2.5 sm:flex-row">
+        <a href="#important" id="cookieReadMore" class="btn-ghost flex-1">সতর্কতা পড়ুন</a>
+        <button type="button" id="cookieAccept" class="btn-primary flex-1">সম্মত আছি</button>
+      </div>
+
+      <p class="mt-3 text-center text-[11px] leading-relaxed text-slate-400">
+        “সম্মত আছি” ক্লিক করার মাধ্যমে আপনি আমাদের শর্তাবলি ও নীতিমালায় সম্মতি দিচ্ছেন।
+        এই বার্তাটি শুধুমাত্র প্রথমবার প্রদর্শিত হবে।
+      </p>
+    </div>
+  </div>
+</div>
+<!-- ======================= /COOKIE POPUP ======================= -->
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -1396,8 +1662,9 @@ const CLOUDINARY_CLOUD_NAME    = 'zmoyykj7';
 const CLOUDINARY_UPLOAD_PRESET = 'codecurebd';
 
 let PRICE_PER_PERSON = 500; // Default
-const BKASH_NUMBER     = '01860319433';
-const SETTINGS_REF     = doc(db, 'settings', 'global');
+const URGENT_FEE      = 50; // জরুরি অর্ডারের অতিরিক্ত চার্জ
+const BKASH_NUMBER    = '01860319433';
+const SETTINGS_REF    = doc(db, 'settings', 'global');
 
 const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 const toBn = n => String(n).replace(/\d/g, d => BN_DIGITS[+d]);
@@ -1457,6 +1724,142 @@ function setStep(n) {
   });
 }
 
+/* ============================================================
+   BANGLADESH TIME HELPERS
+   ============================================================ */
+function bdNow() {
+  const now = new Date();
+  return new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (6 * 60 * 60 * 1000));
+}
+
+function isWithinWorkingHours() {
+  const now = bdNow();
+  const hourFloat = now.getHours() + now.getMinutes() / 60;
+  return hourFloat >= 10 && hourFloat < 22; // সকাল ১০টা – রাত ১০টা
+}
+
+/* ============================================================
+   COOKIE / WARNING CONSENT POPUP (শুধুমাত্র প্রথমবার)
+   ============================================================ */
+const COOKIE_KEY = 'emb_cookie_consent_v1';
+
+function showCookiePopup() {
+  const el = $('#cookiePopup');
+  if (!el) return;
+  el.classList.remove('hidden');
+  el.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+
+function hideCookiePopup(save = false) {
+  const el = $('#cookiePopup');
+  if (!el) return;
+  el.classList.add('hidden');
+  el.classList.remove('flex');
+  document.body.style.overflow = '';
+  if (save) {
+    try { localStorage.setItem(COOKIE_KEY, '1'); } catch {}
+  }
+}
+
+(function initCookiePopup() {
+  let accepted = false;
+  try { accepted = !!localStorage.getItem(COOKIE_KEY); } catch {}
+  if (!accepted) {
+    setTimeout(showCookiePopup, 450);
+  }
+
+  const acceptBtn = $('#cookieAccept');
+  const readMore  = $('#cookieReadMore');
+
+  acceptBtn?.addEventListener('click', () => hideCookiePopup(true));
+
+  readMore?.addEventListener('click', (e) => {
+    e.preventDefault();
+    hideCookiePopup(false);
+    setTimeout(() => {
+      document.querySelector('#important')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  });
+})();
+
+/* ============================================================
+   WORKING TIME STATUS BADGE
+   ============================================================ */
+function updateWorkStatus() {
+  const el = $('#workStatus');
+  if (!el) return;
+
+  const inWorkingHours = isWithinWorkingHours();
+
+  if (inWorkingHours) {
+    el.className = 'inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-100 px-4 py-1.5 text-xs font-bold text-emerald-800';
+    el.innerHTML = '<span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span> এখন কাজের সময় চলছে — ১০–৩০ মিনিটে ডেলিভারি';
+  } else {
+    el.className = 'inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-100 px-4 py-1.5 text-xs font-bold text-amber-800';
+    el.innerHTML = '<span class="h-2 w-2 animate-pulse rounded-full bg-amber-500"></span> এখন কাজের সময়ের বাইরে — পরবর্তী কর্মদিবস সকাল ১০টার পর ডেলিভারি (একই দিনে প্রয়োজন হলে জরুরি অর্ডার করুন)';
+  }
+}
+updateWorkStatus();
+setInterval(updateWorkStatus, 60000);
+
+/* ============================================================
+   URGENT OPTION — Dynamic (কাজের সময়ে নয়, বাইরে প্রযোজ্য)
+   ============================================================ */
+function renderUrgentBlock(force = false) {
+  const block = $('#urgentBlock');
+  if (!block) return;
+
+  const inHours = isWithinWorkingHours();
+  const state = inHours ? 'in-hours' : 'out-of-hours';
+
+  if (!force && block.dataset.state === state) return;
+  block.dataset.state = state;
+
+  if (inHours) {
+    // কাজের সময়ে — জরুরি অর্ডারের প্রয়োজন নেই, সাধারণ ডেলিভারি ১০-৩০ মিনিট
+    block.innerHTML = `
+      <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-4">
+        <div class="flex items-start gap-3">
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-emerald-100 text-emerald-700" aria-hidden="true">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
+            </svg>
+          </span>
+          <div class="min-w-0">
+            <p class="text-sm font-extrabold text-emerald-900">এখন কাজের সময় চলছে — জরুরি অর্ডারের প্রয়োজন নেই</p>
+            <p class="mt-1 text-xs leading-relaxed text-emerald-800">
+              আমাদের কাজের সময় সকাল ১০টা থেকে রাত ১০টা। এখন এই সময়ের মধ্যে আছেন, তাই আপনার ডেলিভারি সাধারণত ১০–৩০ মিনিটেই সম্পন্ন হবে — অতিরিক্ত কোনো চার্জ ছাড়াই।
+            </p>
+          </div>
+        </div>
+      </div>`;
+  } else {
+    // কাজের সময়ের বাইরে — জরুরি অর্ডার অপশন
+    block.innerHTML = `
+      <label class="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-4 transition hover:border-amber-300">
+        <input type="checkbox" id="urgentService" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-amber-600 accent-amber-600" />
+        <span class="min-w-0">
+          <span class="flex flex-wrap items-center gap-2 text-sm font-extrabold text-amber-900">
+            জরুরি (আর্জেন্ট) অর্ডার — অতিরিক্ত ৳৫০
+            <span class="rounded-full bg-amber-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-900">একই দিনে ডেলিভারি</span>
+          </span>
+          <span class="mt-1 block text-xs leading-relaxed text-amber-800">
+            কাজের সময়ের (সকাল ১০টা – রাত ১০টা) বাইরে অর্ডার করলে সাধারণত পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়। কিন্তু যদি এই সময়ের বাইরে অর্ডার করেও <b>একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি</b> হয়, তাহলে এই অপশনটি নির্বাচন করে অতিরিক্ত ৫০ টাকা পরিশোধ করুন। এরপর অবশ্যই <b>০১৩৫০১৪১৭৬২</b> নম্বরে কল করে আপনার জরুরি অর্ডারটি সম্পর্কে অবহিত করতে হবে।
+          </span>
+        </span>
+      </label>`;
+
+    const check = block.querySelector('#urgentService');
+    if (check) check.addEventListener('change', updateSummary);
+  }
+
+  updateSummary();
+}
+
+/* ============================================================
+   PRICE
+   ============================================================ */
 async function fetchDynamicPrice() {
   try {
     const snap = await getDoc(SETTINGS_REF);
@@ -1471,7 +1874,7 @@ async function fetchDynamicPrice() {
   if ($('#priceLabel')) $('#priceLabel').textContent = `${bnPrice} টাকা`;
   if ($('#cardPrice')) $('#cardPrice').textContent = `৳ ${bnPrice}`;
   if ($('#faqPriceText')) {
-    $('#faqPriceText').innerHTML = `প্রতি আবেদনকারীর জন্য ফি মাত্র ${bnPrice} টাকা। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।`;
+    $('#faqPriceText').innerHTML = `প্রতি আবেদনকারীর জন্য ফি মাত্র ${bnPrice} টাকা। জরুরি অর্ডারের ক্ষেত্রে অতিরিক্ত ৫০ টাকা (কাজের সময়ের বাইরে একই দিনে ডেলিভারি প্রয়োজন হলে)। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।`;
   }
 
   updateSummary();
@@ -1601,13 +2004,21 @@ function renderApplicants() {
 }
 
 function updateSummary() {
-  const total = applicantCount * PRICE_PER_PERSON;
-  $('#countDisplay').textContent = toBn(applicantCount);
+  const urgentCheck = $('#urgentService');
+  const base   = applicantCount * PRICE_PER_PERSON;
+  const urgent = urgentCheck && urgentCheck.checked ? URGENT_FEE : 0;
+  const total  = base + urgent;
+
+  if ($('#countDisplay')) $('#countDisplay').textContent = toBn(applicantCount);
   countSelect.value = applicantCount;
-  $('#sumCount').textContent = `${toBn(applicantCount)} জন`;
-  $('#sumTotal').textContent = `৳ ${toBn(total)}`;
-  $('#payTotal').textContent = `৳ ${toBn(total)}`;
-  $('#payBreakdown').textContent = `${toBn(applicantCount)} জন × ৳ ${toBn(PRICE_PER_PERSON)}`;
+  if ($('#sumCount')) $('#sumCount').textContent = `${toBn(applicantCount)} জন`;
+  if ($('#sumTotal')) $('#sumTotal').textContent = `৳ ${toBn(total)}`;
+  if ($('#payTotal')) $('#payTotal').textContent = `৳ ${toBn(total)}`;
+  if ($('#payBreakdown')) {
+    $('#payBreakdown').textContent =
+      `${toBn(applicantCount)} জন × ৳ ${toBn(PRICE_PER_PERSON)}` +
+      (urgent ? ` + জরুরি অর্ডার ৳ ${toBn(urgent)}` : '');
+  }
 }
 
 function setCount(n) {
@@ -1648,6 +2059,8 @@ $('#togglePwd').addEventListener('click', () => {
 });
 
 renderApplicants();
+renderUrgentBlock(true);
+setInterval(() => renderUrgentBlock(), 60000);
 fetchDynamicPrice();
 
 attachDigitsOnlyFilter($('#landNumber'));
@@ -1809,7 +2222,10 @@ submitBtn.addEventListener('click', async () => {
     return;
   }
 
-  const total = applicantCount * PRICE_PER_PERSON;
+  const urgentCheck = $('#urgentService');
+  const isUrgent = !!(urgentCheck && urgentCheck.checked);
+  const urgentFeeAmount = isUrgent ? URGENT_FEE : 0;
+  const total = (applicantCount * PRICE_PER_PERSON) + urgentFeeAmount;
   const orderId = generateOrderId();
 
   submitBtn.disabled = true;
@@ -1860,6 +2276,8 @@ submitBtn.addEventListener('click', async () => {
       paymentStatus: 'pending-verification',
       applicantCount,
       pricePerPerson: PRICE_PER_PERSON,
+      isUrgent,
+      urgentFee: urgentFeeAmount,
       amount: total,
       applicants,
       courtFeePaid: courtFeePaid.checked,
@@ -1882,6 +2300,8 @@ submitBtn.addEventListener('click', async () => {
       ? '<span class="inline-flex items-center gap-1 text-emerald-600"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>পরিশোধিত</span>'
       : `বাকি · সার্কেল: ${escapeHtml(payload.circle || '—')}`;
     $('#invTotal').textContent   = `৳ ${toBn(total)}`;
+    $('#invUrgent').classList.toggle('hidden', !payload.isUrgent);
+
     $('#invApplicants').innerHTML = applicants.map((a, i) => `
       <li class="flex items-start gap-2.5">
         <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">${toBn(i+1)}</span>
@@ -1928,6 +2348,9 @@ $('#closeCallNotice').addEventListener('click', () => {
 });
 $('#printInvoice').addEventListener('click', () => window.print());
 
+/* ============================================================
+   SUPPORT CHAT
+   ============================================================ */
 const CHAT_KEY = 'em_chat_id';
 const TAG_KEY  = 'em_chat_tag';
 let chatId = localStorage.getItem(CHAT_KEY);
