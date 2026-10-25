@@ -57,10 +57,10 @@
              disabled:cursor-not-allowed disabled:opacity-60;
     }
     .stat-card {
-      @apply rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft transition hover:shadow-lift hover:border-slate-300;
+      @apply rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-soft transition hover:shadow-lift hover:border-slate-300;
     }
     .badge {
-      @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold;
+      @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold whitespace-nowrap;
     }
     .nav-btn {
       @apply flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold transition-all;
@@ -72,8 +72,8 @@
 </style>
 
 <style>
-  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
-  body { -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+  body { -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100vw; }
 
   /* Custom scrollbars */
   .scroll-slim::-webkit-scrollbar { width: 6px; }
@@ -127,9 +127,8 @@
 
 <body class="bg-slate-50 font-sans text-slate-800 antialiased">
 
-<!-- ============ LOGIN SCREEN (LIGHT) ============ -->
+<!-- ============ LOGIN SCREEN ============ -->
 <div id="loginScreen" class="fixed inset-0 z-50 grid place-items-center bg-gradient-to-br from-indigo-50 via-white to-sky-50 p-4 overflow-y-auto">
-  <!-- Decorative blur blobs -->
   <div class="pointer-events-none absolute inset-0 overflow-hidden">
     <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-brand-200/40 blur-3xl"></div>
     <div class="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl"></div>
@@ -256,7 +255,7 @@
 <!-- ============ APP SHELL ============ -->
 <div id="app" class="hidden min-h-screen">
 
-  <!-- ========== DESKTOP SIDEBAR ========== -->
+  <!-- DESKTOP SIDEBAR -->
   <aside id="sidebar" class="hidden md:flex md:flex-col fixed inset-y-0 left-0 z-30 w-64 border-r border-slate-200/80 bg-white">
     <div class="flex h-16 items-center gap-3 border-b border-slate-100 px-5">
       <img src="logo.png" alt="logo" class="h-9 w-9 shrink-0 object-contain" />
@@ -316,25 +315,22 @@
     </div>
   </aside>
 
-  <!-- ========== MAIN CONTENT ========== -->
   <div class="md:pl-64">
 
     <!-- HEADER -->
     <header class="sticky top-0 z-20 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
       <div class="flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
-        <div class="min-w-0">
+        <div class="min-w-0 flex-1">
           <h1 id="pageTitle" class="truncate text-base font-extrabold tracking-tight text-slate-900 sm:text-lg">ড্যাশবোর্ড</h1>
           <p id="pageSub" class="truncate text-[11px] text-slate-500 sm:text-xs">সারসংক্ষেপ ও পরিসংখ্যান</p>
         </div>
 
-        <!-- Live indicator (desktop) -->
-        <span class="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-700 sm:inline-flex">
+        <span class="hidden shrink-0 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-700 sm:inline-flex">
           <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
           লাইভ
         </span>
 
-        <!-- Profile avatar (mobile only) -->
-        <div class="relative md:hidden">
+        <div class="relative shrink-0 md:hidden">
           <button id="profileMenuBtn" class="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-slate-100 ring-2 ring-white">
             <img id="mobileAvatar" class="h-full w-full object-cover" alt="" />
           </button>
@@ -357,16 +353,18 @@
       </div>
     </header>
 
-    <!-- ==================== DASHBOARD ==================== -->
-    <main id="page-dashboard" class="page p-4 pb-28 sm:p-6 sm:pb-6">
-      <div class="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
-        <div class="stat-card">
-          <div class="flex items-start justify-between gap-3">
-            <div class="min-w-0">
-              <p class="text-xs font-semibold text-slate-500">মোট অর্ডার</p>
-              <p id="statTotalOrders" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">০</p>
+    <!-- ==================== DASHBOARD (MOBILE FIXED) ==================== -->
+    <main id="page-dashboard" class="page w-full max-w-full overflow-x-hidden p-3 pb-32 sm:p-6 sm:pb-6">
+
+      <!-- Top 4 stat cards -->
+      <div class="grid w-full max-w-full min-w-0 grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        <div class="stat-card w-full min-w-0 overflow-hidden">
+          <div class="flex min-w-0 items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-[11px] font-semibold text-slate-500 sm:text-xs">মোট অর্ডার</p>
+              <p id="statTotalOrders" class="mt-1.5 break-words text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl">০</p>
             </div>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600 sm:h-11 sm:w-11">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
               </svg>
@@ -374,13 +372,13 @@
           </div>
         </div>
 
-        <div class="stat-card">
-          <div class="flex items-start justify-between gap-3">
-            <div class="min-w-0">
-              <p class="text-xs font-semibold text-slate-500">মোট আর্নিং</p>
-              <p id="statEarnings" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">৳ ০</p>
+        <div class="stat-card w-full min-w-0 overflow-hidden">
+          <div class="flex min-w-0 items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-[11px] font-semibold text-slate-500 sm:text-xs">মোট আর্নিং</p>
+              <p id="statEarnings" class="mt-1.5 break-words text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl">৳ ০</p>
             </div>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600 sm:h-11 sm:w-11">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
               </svg>
@@ -388,13 +386,13 @@
           </div>
         </div>
 
-        <div class="stat-card">
-          <div class="flex items-start justify-between gap-3">
-            <div class="min-w-0">
-              <p class="text-xs font-semibold text-slate-500">পেন্ডিং অর্ডার</p>
-              <p id="statPending" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">০</p>
+        <div class="stat-card w-full min-w-0 overflow-hidden">
+          <div class="flex min-w-0 items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-[11px] font-semibold text-slate-500 sm:text-xs">পেন্ডিং অর্ডার</p>
+              <p id="statPending" class="mt-1.5 break-words text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl">০</p>
             </div>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-600">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-600 sm:h-11 sm:w-11">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
               </svg>
@@ -402,13 +400,13 @@
           </div>
         </div>
 
-        <div class="stat-card">
-          <div class="flex items-start justify-between gap-3">
-            <div class="min-w-0">
-              <p class="text-xs font-semibold text-slate-500">মোট মেসেজ</p>
-              <p id="statMessages" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">০</p>
+        <div class="stat-card w-full min-w-0 overflow-hidden">
+          <div class="flex min-w-0 items-start justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-[11px] font-semibold text-slate-500 sm:text-xs">মোট মেসেজ</p>
+              <p id="statMessages" class="mt-1.5 break-words text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl">০</p>
             </div>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-rose-50 text-rose-500">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-50 text-rose-500 sm:h-11 sm:w-11">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
               </svg>
@@ -417,46 +415,48 @@
         </div>
       </div>
 
-      <div class="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-4">
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
-          <p class="text-[11px] font-semibold text-slate-500">সম্পন্ন</p>
-          <p id="statCompleted" class="mt-1 text-2xl font-extrabold tracking-tight text-emerald-600">০</p>
+      <!-- Second 4 small stat cards -->
+      <div class="mt-2.5 grid w-full max-w-full min-w-0 grid-cols-2 gap-2.5 sm:mt-4 sm:gap-4 lg:grid-cols-4">
+        <div class="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-4">
+          <p class="truncate text-[10px] font-semibold text-slate-500 sm:text-[11px]">সম্পন্ন</p>
+          <p id="statCompleted" class="mt-1 break-words text-xl font-extrabold leading-tight tracking-tight text-emerald-600 sm:text-2xl">০</p>
         </div>
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
-          <p class="text-[11px] font-semibold text-slate-500">প্রসেসিং</p>
-          <p id="statProcessing" class="mt-1 text-2xl font-extrabold tracking-tight text-brand-600">০</p>
+        <div class="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-4">
+          <p class="truncate text-[10px] font-semibold text-slate-500 sm:text-[11px]">প্রসেসিং</p>
+          <p id="statProcessing" class="mt-1 break-words text-xl font-extrabold leading-tight tracking-tight text-brand-600 sm:text-2xl">০</p>
         </div>
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
-          <p class="text-[11px] font-semibold text-slate-500">বাতিল</p>
-          <p id="statCancelled" class="mt-1 text-2xl font-extrabold tracking-tight text-rose-500">০</p>
+        <div class="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-4">
+          <p class="truncate text-[10px] font-semibold text-slate-500 sm:text-[11px]">বাতিল</p>
+          <p id="statCancelled" class="mt-1 break-words text-xl font-extrabold leading-tight tracking-tight text-rose-500 sm:text-2xl">০</p>
         </div>
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
-          <p class="text-[11px] font-semibold text-slate-500">আবেদনকারী</p>
-          <p id="statApplicants" class="mt-1 text-2xl font-extrabold tracking-tight text-slate-900">০</p>
+        <div class="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-4">
+          <p class="truncate text-[10px] font-semibold text-slate-500 sm:text-[11px]">আবেদনকারী</p>
+          <p id="statApplicants" class="mt-1 break-words text-xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-2xl">০</p>
         </div>
       </div>
 
-      <div class="mt-3 grid gap-4 sm:mt-5 lg:grid-cols-3">
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft lg:col-span-2">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-extrabold tracking-tight text-slate-900">সাম্প্রতিক অর্ডার</h3>
-            <button data-nav="orders" class="text-xs font-bold text-brand-600 hover:underline">সব দেখুন →</button>
+      <!-- Bottom 2 sections (Recent Orders + Recent Chats) -->
+      <div class="mt-2.5 grid w-full max-w-full min-w-0 gap-3 sm:mt-5 sm:gap-4 lg:grid-cols-3">
+        <div class="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-5 lg:col-span-2">
+          <div class="flex min-w-0 items-center justify-between gap-2">
+            <h3 class="truncate text-sm font-extrabold tracking-tight text-slate-900">সাম্প্রতিক অর্ডার</h3>
+            <button data-nav="orders" class="shrink-0 text-[11px] font-bold text-brand-600 hover:underline sm:text-xs">সব দেখুন →</button>
           </div>
-          <div id="recentOrders" class="mt-4 space-y-2.5"></div>
+          <div id="recentOrders" class="mt-3 w-full max-w-full min-w-0 space-y-2 sm:mt-4 sm:space-y-2.5"></div>
         </div>
 
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft">
-          <h3 class="text-sm font-extrabold tracking-tight text-slate-900">সাম্প্রতিক সাপোর্ট চ্যাট</h3>
-          <div id="recentChats" class="mt-4 space-y-2.5"></div>
+        <div class="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-5">
+          <h3 class="truncate text-sm font-extrabold tracking-tight text-slate-900">সাম্প্রতিক সাপোর্ট চ্যাট</h3>
+          <div id="recentChats" class="mt-3 w-full max-w-full min-w-0 space-y-2 sm:mt-4 sm:space-y-2.5"></div>
         </div>
       </div>
     </main>
 
     <!-- ==================== ORDERS ==================== -->
-    <main id="page-orders" class="page hidden p-4 pb-28 sm:p-6 sm:pb-6">
+    <main id="page-orders" class="page hidden w-full max-w-full overflow-x-hidden p-3 pb-32 sm:p-6 sm:pb-6">
       <div class="rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-4">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-0">
             <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3M17 11a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/>
             </svg>
@@ -487,7 +487,6 @@
       <div id="chatContainer" class="chat-container flex h-[calc(100dvh-3.5rem)] md:h-[calc(100dvh-4rem)] md:p-6 md:bg-slate-50">
         <div class="flex w-full overflow-hidden md:rounded-2xl md:border md:border-slate-200/80 md:bg-white md:shadow-soft">
 
-          <!-- Chat list panel -->
           <div class="chat-list-wrap flex w-full flex-col md:w-80 md:border-r md:border-slate-200 lg:w-96">
             <div class="border-b border-slate-100 px-4 py-3.5">
               <h3 class="text-sm font-extrabold tracking-tight text-slate-900">সাপোর্ট চ্যাট</h3>
@@ -496,7 +495,6 @@
             <div id="chatList" class="scroll-slim flex-1 overflow-y-auto p-2"></div>
           </div>
 
-          <!-- Chat detail panel -->
           <div class="chat-detail-wrap flex min-w-0 flex-1 flex-col bg-white">
             <div class="flex items-center gap-3 border-b border-slate-100 bg-white px-3 py-3 md:px-4">
               <button id="chatBackBtn" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 md:hidden">
@@ -539,10 +537,9 @@
     </main>
 
     <!-- ==================== SETTINGS ==================== -->
-    <main id="page-settings" class="page hidden p-4 pb-28 sm:p-6 sm:pb-6">
-      <div class="max-w-2xl space-y-4">
-        <!-- Pricing -->
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft sm:p-6">
+    <main id="page-settings" class="page hidden w-full max-w-full overflow-x-hidden p-3 pb-32 sm:p-6 sm:pb-6">
+      <div class="w-full max-w-2xl space-y-4">
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft sm:p-6">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
               <h2 class="text-base font-extrabold tracking-tight text-slate-900 sm:text-lg">গ্লোবাল প্রাইসিং</h2>
@@ -566,8 +563,7 @@
           </button>
         </div>
 
-        <!-- Password -->
-        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft sm:p-6">
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft sm:p-6">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
               <h2 class="text-base font-extrabold tracking-tight text-slate-900 sm:text-lg">পাসওয়ার্ড সেটিংস</h2>
@@ -587,16 +583,16 @@
     </main>
   </div>
 
-  <!-- ========== MOBILE BOTTOM NAV ========== -->
+  <!-- MOBILE BOTTOM NAV -->
   <nav class="mobile-bottom-nav md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-slate-200/80 bg-white/95 backdrop-blur-xl pb-safe">
     <div class="grid grid-cols-4">
-      <button data-nav="dashboard" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+      <button data-nav="dashboard" class="mobile-nav-btn text-slate-400">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h7V3H3v9Zm0 9h7v-6H3v6Zm11 0h7v-9h-7v9Zm0-15v4h7V3h-7Z"/>
         </svg>
         <span>হোম</span>
       </button>
-      <button data-nav="orders" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+      <button data-nav="orders" class="mobile-nav-btn text-slate-400">
         <div class="relative">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
@@ -605,7 +601,7 @@
         </div>
         <span>অর্ডার</span>
       </button>
-      <button data-nav="chats" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+      <button data-nav="chats" class="mobile-nav-btn text-slate-400">
         <div class="relative">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
@@ -614,7 +610,7 @@
         </div>
         <span>চ্যাট</span>
       </button>
-      <button data-nav="settings" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+      <button data-nav="settings" class="mobile-nav-btn text-slate-400">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
         </svg>
@@ -738,7 +734,6 @@ import {
   EmailAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-/* ================= Firebase ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyDbNC1ZD67zcwpLHZL3WB41dE_z8WmjbK8",
   authDomain: "emutationbirth.firebaseapp.com",
@@ -781,20 +776,16 @@ function showToast(text, type='success') {
   const icon = $('#toastIcon');
   const txt = $('#toastText');
   txt.textContent = text;
-
   const colors = { success: 'bg-emerald-600', error: 'bg-rose-600', info: 'bg-slate-900' };
   box.className = `flex items-center gap-2.5 rounded-xl ${colors[type] || colors.info} px-4 py-3 text-sm font-semibold text-white shadow-lift`;
-
   const icons = {
     success: '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>',
     error:   '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>',
     info:    '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8h.01M11 12h1v4h1m8-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>'
   };
   icon.innerHTML = icons[type] || icons.info;
-
   toast.classList.remove('opacity-0');
   toast.classList.add('opacity-100');
-
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(() => {
     toast.classList.add('opacity-0');
@@ -814,7 +805,6 @@ let lastChatsSig  = '';
 let pollTimer = null;
 let hasPasswordSet = false;
 
-/* ================= Login Error UI ================= */
 function showLoginError(title, msg) {
   $('#loginErrorTitle').textContent = title;
   $('#loginErrorMsg').textContent = msg;
@@ -852,7 +842,6 @@ function openEmailLoginModal() {
   inp.type = 'password';
   $('#eyeOpenIcon').classList.remove('hidden');
   $('#eyeOffIcon').classList.add('hidden');
-
   const m = $('#emailLoginModal');
   m.classList.remove('hidden');
   m.classList.add('flex');
@@ -929,7 +918,6 @@ $('#logoutBtnMobile').addEventListener('click', () => {
   signOut(auth);
 });
 
-/* Profile menu (mobile) */
 $('#profileMenuBtn').addEventListener('click', (e) => {
   e.stopPropagation();
   $('#profileMenu').classList.toggle('hidden');
@@ -941,7 +929,6 @@ document.addEventListener('click', (e) => {
   menu.classList.add('hidden');
 });
 
-/* Auth state */
 onAuthStateChanged(auth, async user => {
   if (!user) {
     loginScreen.classList.remove('hidden');
@@ -1027,7 +1014,6 @@ function renderPasswordSettings() {
           <p class="mt-0.5 text-[11px] text-emerald-700">Google এবং ইমেইল-পাসওয়ার্ড দুটোই কাজ করবে।</p>
         </div>
       </div>`;
-
     formEl.innerHTML = `
       <form id="changePasswordForm" class="space-y-3" novalidate>
         <div>
@@ -1064,7 +1050,6 @@ function renderPasswordSettings() {
           <p class="mt-0.5 text-[11px] text-amber-700">ইমেইল লগইন চালু করতে একটি পাসওয়ার্ড সেট করুন।</p>
         </div>
       </div>`;
-
     formEl.innerHTML = `
       <form id="setPasswordForm" class="space-y-3" novalidate>
         <div class="grid gap-3 sm:grid-cols-2">
@@ -1217,7 +1202,6 @@ function navigate(page) {
   $('#pageTitle').textContent = NAV_META[page].title;
   $('#pageSub').textContent   = NAV_META[page].sub;
 
-  // Desktop sidebar
   $$('.nav-btn').forEach(b => {
     const active = b.dataset.nav === page;
     b.classList.toggle('bg-brand-50', active);
@@ -1227,19 +1211,14 @@ function navigate(page) {
     b.classList.toggle('hover:text-slate-900', !active);
   });
 
-  // Mobile bottom nav
   $$('.mobile-nav-btn').forEach(b => {
     const active = b.dataset.nav === page;
     b.classList.toggle('text-brand-600', active);
     b.classList.toggle('text-slate-400', !active);
   });
 
-  // If leaving chats on mobile, close chat view
   if (page !== 'chats') closeMobileChat();
-
   if (page === 'settings') refreshPasswordState();
-
-  // Close profile menu
   $('#profileMenu').classList.add('hidden');
 }
 $$('[data-nav]').forEach(b => b.addEventListener('click', () => navigate(b.dataset.nav)));
@@ -1258,7 +1237,6 @@ function closeMobileChat() {
   if (!c.classList.contains('chat-open')) return;
   c.classList.remove('chat-open');
   document.body.classList.remove('chat-full');
-
   if (chatMsgUnsub) { chatMsgUnsub(); chatMsgUnsub = null; }
   selectedChatId = null;
   $('#chatName').textContent   = 'চ্যাট নির্বাচন করুন';
@@ -1276,11 +1254,10 @@ function closeMobileChat() {
     </div>`;
   renderChatList();
 }
-
 $('#chatBackBtn').addEventListener('click', closeMobileChat);
 
 /* =========================================================
-   SETTINGS — PRICING
+   SETTINGS
    ========================================================= */
 const SETTINGS_REF = doc(db, 'settings', 'global');
 
@@ -1295,12 +1272,10 @@ async function loadSettings() {
 $('#saveSettingsBtn').addEventListener('click', async () => {
   const price = Number($('#globalPriceInput').value);
   if (!price || price <= 0) { showToast('সঠিক মূল্য দিন (০ এর বেশি)', 'error'); return; }
-
   const btn = $('#saveSettingsBtn');
   btn.disabled = true;
   const originalHTML = btn.innerHTML;
   btn.innerHTML = 'সেভ হচ্ছে...';
-
   try {
     await setDoc(SETTINGS_REF, { pricePerPerson: price, updatedAt: serverTimestamp() }, { merge: true });
     showToast('প্রাইস আপডেট হয়েছে', 'success');
@@ -1336,7 +1311,6 @@ function chatsSignature(list) {
     c.unreadForAdmin || 0, c.unreadForClient || 0, c.clientName || '', c.tag || ''
   ]));
 }
-
 function applyOrdersSnapshot(list, force = false) {
   ordersData = list;
   const sig = ordersSignature(list);
@@ -1358,11 +1332,9 @@ function applyChatsSnapshot(list, force = false) {
 function updateOrdersBadge() {
   const pending = ordersData.filter(o => o.status === 'pending').length;
   const val = toBn(pending);
-
   const sBadge = $('#ordersBadge');
   if (pending > 0) { sBadge.textContent = val; sBadge.classList.remove('hidden'); }
   else sBadge.classList.add('hidden');
-
   const mBadge = $('#ordersBadgeMobile');
   if (mBadge) {
     if (pending > 0) { mBadge.textContent = val; mBadge.classList.remove('hidden'); }
@@ -1372,14 +1344,11 @@ function updateOrdersBadge() {
 function updateChatsStats() {
   messageCount = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0) + (c.unreadForClient || 0), 0);
   $('#statMessages').textContent = toBn(messageCount);
-
   const unread = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0), 0);
   const val = toBn(unread);
-
   const cBadge = $('#chatsBadge');
   if (unread > 0) { cBadge.textContent = val; cBadge.classList.remove('hidden'); }
   else cBadge.classList.add('hidden');
-
   const mBadge = $('#chatsBadgeMobile');
   if (mBadge) {
     if (unread > 0) { mBadge.textContent = val; mBadge.classList.remove('hidden'); }
@@ -1424,7 +1393,7 @@ function startListeners() {
 }
 
 /* =========================================================
-   COURT FEE HELPERS
+   BADGES
    ========================================================= */
 function courtFeeBadge(o) {
   if (o.courtFeePaid) {
@@ -1442,7 +1411,6 @@ function courtFeeBadge(o) {
     Court fee বাকি
   </span>`;
 }
-
 function statusBadge(s) {
   const map = {
     pending:    ['bg-amber-100','text-amber-700','পেন্ডিং'],
@@ -1480,22 +1448,21 @@ function renderDashboard() {
     wrap.innerHTML = `<p class="rounded-xl bg-slate-50 px-4 py-6 text-center text-xs text-slate-500">এখনো কোনো অর্ডার নেই।</p>`;
   } else {
     wrap.innerHTML = recent.map(o => `
-      <button data-order-id="${o.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200/70 bg-white px-3.5 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
-        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <button data-order-id="${o.id}" class="flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-xl border border-slate-200/70 bg-white px-2.5 py-2 text-left transition hover:border-brand-300 hover:bg-brand-50/40 sm:gap-3 sm:px-3.5 sm:py-3">
+        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600 sm:h-10 sm:w-10 sm:rounded-xl">
+          <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
           </svg>
         </span>
-        <span class="min-w-0 flex-1">
-          <span class="block truncate text-sm font-bold text-slate-900">${escapeHtml(o.orderId || o.id)}</span>
-          <span class="block truncate text-[11px] text-slate-500">${toBn(o.applicantCount || 0)} জন · ${fmtDate(o.createdAt)}</span>
+        <span class="min-w-0 flex-1 overflow-hidden">
+          <span class="block truncate text-[12px] font-bold text-slate-900 sm:text-sm">${escapeHtml(o.orderId || o.id)}</span>
+          <span class="block truncate text-[10px] text-slate-500 sm:text-[11px]">${toBn(o.applicantCount || 0)} জন · ${fmtDate(o.createdAt)}</span>
         </span>
-        <span class="shrink-0 text-right">
-          <span class="block text-sm font-extrabold text-slate-900">৳ ${toBn(o.amount || 0)}</span>
-          <span class="mt-1 inline-block">${statusBadge(o.status)}</span>
+        <span class="shrink-0 max-w-[45%] overflow-hidden text-right">
+          <span class="block truncate text-[12px] font-extrabold text-slate-900 sm:text-sm">৳ ${toBn(o.amount || 0)}</span>
+          <span class="mt-0.5 block">${statusBadge(o.status)}</span>
         </span>
       </button>`).join('');
-
     wrap.querySelectorAll('[data-order-id]').forEach(b =>
       b.addEventListener('click', () => openOrderModal(b.dataset.orderId))
     );
@@ -1508,10 +1475,8 @@ function renderDashboard() {
 function renderOrders() {
   const term = ($('#orderSearch').value || '').toLowerCase().trim();
   const filter = $('#orderFilter').value;
-
   let list = ordersData;
   if (filter !== 'all') list = list.filter(o => (o.status || 'pending') === filter);
-
   if (term) {
     list = list.filter(o => {
       const hay = [
@@ -1794,7 +1759,6 @@ function closeCopyFormModal() {
   }
   copyFormOrderId = null;
 }
-
 function renderCopyFormTabs(o) {
   const wrap = $('#copyFormApplicantTabs');
   const list = o.applicants || [];
@@ -1808,7 +1772,6 @@ function renderCopyFormTabs(o) {
           : 'border border-slate-200 bg-white text-slate-600 hover:border-brand-300 hover:text-brand-700'}">
       আবেদনকারী ${toBn(i+1)}
     </button>`).join('');
-
   wrap.querySelectorAll('[data-cf-tab]').forEach(b => {
     b.addEventListener('click', () => {
       copyFormApplicantIndex = +b.dataset.cfTab;
@@ -1817,7 +1780,6 @@ function renderCopyFormTabs(o) {
     });
   });
 }
-
 function copyFieldCard(label, value) {
   const v = (value ?? '').toString();
   return `
@@ -1836,13 +1798,11 @@ function copyFieldCard(label, value) {
       <p class="mt-1.5 break-words text-sm font-bold text-slate-900">${v ? escapeHtml(v) : '<span class="text-slate-400 font-normal">—</span>'}</p>
     </div>`;
 }
-
 function renderCopyFormBody(o) {
   const list = o.applicants || [];
   const a = list[copyFormApplicantIndex] || {};
   const body = $('#copyFormBody');
   const dlUrl = a.imageUrl ? cloudinaryDownloadUrl(a.imageUrl) : '';
-
   body.innerHTML = `
     <div class="grid gap-3 sm:grid-cols-2">
       ${copyFieldCard('Birth Certificate Number', a.certNo)}
@@ -1854,11 +1814,9 @@ function renderCopyFormBody(o) {
       ${copyFieldCard('জেলা (District)',        a.district)}
       ${copyFieldCard('উপজেলা / সার্কেল',       a.upazila)}
     </div>
-
     <div class="mt-3">
       ${copyFieldCard('ঠিকানা (Address)', a.address)}
     </div>
-
     <div class="mt-3 rounded-xl border border-slate-200 bg-white p-3">
       <div class="flex items-center justify-between gap-2">
         <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">জন্ম নিবন্ধন সনদ</p>
@@ -1878,17 +1836,14 @@ function renderCopyFormBody(o) {
            </a>`
         : `<p class="mt-2 rounded-lg bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700">⚠️ ছবি নেই</p>`}
     </div>
-
     <p class="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-[11px] font-semibold text-slate-500">
       💡 প্রতিটি ফিল্ডের পাশে <b>Copy</b> বাটনে ক্লিক করলে সেই মানটি কপি হবে।
     </p>
   `;
-
   attachCopyHandlers(body);
   $('#copyFormDownloadAll').dataset.orderId = copyFormOrderId;
   $('#copyFormDownloadAll').dataset.applicantIndex = copyFormApplicantIndex;
 }
-
 function attachCopyHandlers(root) {
   root.querySelectorAll('.cf-copy').forEach(btn => {
     btn.addEventListener('click', async () => {
@@ -1911,7 +1866,6 @@ function attachCopyHandlers(root) {
     });
   });
 }
-
 async function copyToClipboard(text) {
   if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
   const ta = document.createElement('textarea');
@@ -1921,12 +1875,10 @@ async function copyToClipboard(text) {
   document.body.removeChild(ta);
   if (!ok) throw new Error('copy failed');
 }
-
 $('#closeCopyFormModal').addEventListener('click', closeCopyFormModal);
 $('#closeCopyFormBtn').addEventListener('click', closeCopyFormModal);
 $('#copyFormModal').addEventListener('click', e => { if (e.target.id === 'copyFormModal') closeCopyFormModal(); });
 $('#modalCopyFormBtn').addEventListener('click', () => { if (modalOrderId) openCopyFormModal(modalOrderId); });
-
 $('#copyFormDownloadAll').addEventListener('click', async () => {
   const id = $('#copyFormDownloadAll').dataset.orderId || copyFormOrderId;
   const idx = +(($('#copyFormDownloadAll').dataset.applicantIndex) || 0);
@@ -2038,7 +1990,6 @@ function renderChatList() {
         </span>
       </button>`;
   }).join('');
-
   wrap.querySelectorAll('[data-chat-id]').forEach(b =>
     b.addEventListener('click', () => selectChat(b.dataset.chatId))
   );
@@ -2051,17 +2002,16 @@ function renderRecentChats() {
     return;
   }
   wrap.innerHTML = chatsData.slice(0, 4).map(c => `
-    <button data-recent-chat="${c.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200/70 bg-white px-3.5 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
-      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-100 text-[11px] font-extrabold text-brand-700">
+    <button data-recent-chat="${c.id}" class="flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-xl border border-slate-200/70 bg-white px-2.5 py-2 text-left transition hover:border-brand-300 hover:bg-brand-50/40 sm:gap-3 sm:px-3.5 sm:py-3">
+      <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-100 text-[10px] font-extrabold text-brand-700 sm:h-9 sm:w-9 sm:text-[11px]">
         ${escapeHtml((c.tag || '?').slice(-2))}
       </span>
-      <span class="min-w-0 flex-1">
-        <span class="block truncate text-xs font-bold text-slate-800">${escapeHtml(c.clientName || 'ক্লায়েন্ট')}</span>
-        <span class="block truncate text-[11px] text-slate-500">${escapeHtml(c.lastMessage || '—')}</span>
+      <span class="min-w-0 flex-1 overflow-hidden">
+        <span class="block truncate text-[11px] font-bold text-slate-800 sm:text-xs">${escapeHtml(c.clientName || 'ক্লায়েন্ট')}</span>
+        <span class="block truncate text-[10px] text-slate-500 sm:text-[11px]">${escapeHtml(c.lastMessage || '—')}</span>
       </span>
       ${(c.unreadForAdmin||0) > 0 ? `<span class="shrink-0 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-bold text-white">${toBn(c.unreadForAdmin)}</span>` : ''}
     </button>`).join('');
-
   wrap.querySelectorAll('[data-recent-chat]').forEach(b =>
     b.addEventListener('click', () => { navigate('chats'); selectChat(b.dataset.recentChat); })
   );
@@ -2070,14 +2020,11 @@ function renderRecentChats() {
 async function selectChat(id) {
   selectedChatId = id;
   renderChatList();
-
   const c = chatsData.find(x => x.id === id);
   $('#chatName').textContent   = c?.clientName || 'ক্লায়েন্ট';
   $('#chatStatus').textContent = 'লাইভ চ্যাট · ' + (c?.tag || '');
   $('#chatAvatar').textContent = (c?.tag || '?').slice(-2);
-
   openMobileChat();
-
   if (chatMsgUnsub) chatMsgUnsub();
   chatMsgUnsub = onSnapshot(
     query(collection(db, 'chats', id, 'messages'), orderBy('createdAt', 'asc')),
@@ -2086,7 +2033,6 @@ async function selectChat(id) {
       renderAdminMessages(msgs);
     }
   );
-
   try { await updateDoc(doc(db, 'chats', id), { unreadForAdmin: 0 }); } catch {}
 }
 
@@ -2110,7 +2056,6 @@ function renderAdminMessages(msgs) {
       </div>`;
     return;
   }
-
   body.innerHTML = msgs.map(m => {
     const mine = m.sender === 'admin';
     return `
@@ -2124,18 +2069,15 @@ function renderAdminMessages(msgs) {
         ${mine ? msgDeleteBtnHtml(m.id) : ''}
       </div>`;
   }).join('');
-
   body.querySelectorAll('[data-msg-del]').forEach(btn => {
     btn.addEventListener('click', () => deleteChatMessage(selectedChatId, btn.dataset.msgDel));
   });
-
   body.scrollTop = body.scrollHeight;
 }
 
 async function deleteChatMessage(chatId, msgId) {
   if (!chatId || !msgId) return;
   if (!confirm('এই মেসেজটি ডিলিট করবেন?\n\nএটি স্থায়ীভাবে মুছে যাবে।')) return;
-
   try {
     await deleteDoc(doc(db, 'chats', chatId, 'messages', msgId));
     let lastText = '';
@@ -2146,11 +2088,9 @@ async function deleteChatMessage(chatId, msgId) {
       const last = remain[remain.length - 1];
       if (last) { lastText = last.text || ''; if (last.createdAt) lastTime = last.createdAt; }
     } catch (_) {}
-
     try {
       await updateDoc(doc(db, 'chats', chatId), { lastMessage: lastText, lastMessageAt: lastTime });
     } catch (e) { console.warn('Could not update chat preview:', e); }
-
     showToast('মেসেজ ডিলিট হয়েছে', 'success');
   } catch (err) {
     console.error('Delete message failed:', err);
@@ -2161,15 +2101,12 @@ async function deleteChatMessage(chatId, msgId) {
 $('#adminChatForm').addEventListener('submit', async e => {
   e.preventDefault();
   if (!selectedChatId) return;
-
   const input = $('#adminChatInput');
   const text = input.value.trim();
   if (!text) return;
-
   const btn = $('#adminSendBtn');
   btn.disabled = true;
   input.value = '';
-
   try {
     await addDoc(collection(db, 'chats', selectedChatId, 'messages'), {
       text, sender: 'admin', createdAt: serverTimestamp()
