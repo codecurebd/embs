@@ -83,9 +83,10 @@
       <h1 class="mt-5 text-2xl font-extrabold text-white">Admin Panel</h1>
       <p class="mt-2 text-sm text-brand-100">eMutation Birth certificate application support</p>
       <p class="mt-6 text-xs leading-relaxed text-brand-100/90">
-        শুধুমাত্র অনুমোদিত অ্যাডমিন Google অ্যাকাউন্ট দিয়ে প্রবেশ করতে পারবেন।
+        শুধুমাত্র অনুমোদিত অ্যাডমিন Google অ্যাকাউন্ট অথবা ইমেইল দিয়ে প্রবেশ করতে পারবেন।
       </p>
 
+      <!-- Google login -->
       <button id="googleLoginBtn"
         class="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-3.5 text-sm font-extrabold text-slate-800 shadow-xl transition hover:bg-brand-50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
         <svg class="h-5 w-5" viewBox="0 0 48 48">
@@ -95,6 +96,15 @@
           <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.3 5.4c-.4.4 6.6-4.8 6.6-15.1 0-1.2-.1-2.3-.4-3.5Z"/>
         </svg>
         Google দিয়ে লগইন করুন
+      </button>
+
+      <!-- Email login (NEW) -->
+      <button id="emailLoginBtn" type="button"
+        class="mt-3 inline-flex w-full items-center justify-center gap-3 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-extrabold text-white backdrop-blur transition hover:bg-white/20 hover:border-white/50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z"/>
+        </svg>
+        ইমেইল দিয়ে লগইন করুন
       </button>
 
       <div id="loginError" class="mt-4 hidden rounded-xl border border-rose-300/40 bg-rose-500/20 px-4 py-3 text-left">
@@ -113,6 +123,71 @@
     <p class="mt-6 text-center text-xs text-brand-100/70">
       Developed by <a href="https://codecurebd.vercel.app/" target="_blank" class="font-bold text-white hover:underline">CodeCureBD</a>
     </p>
+  </div>
+</div>
+
+<!-- ============ EMAIL LOGIN MODAL (NEW) ============ -->
+<div id="emailLoginModal" class="fixed inset-0 z-[55] hidden items-center justify-center bg-slate-900/75 p-4 backdrop-blur-sm">
+  <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl anim-in">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
+      <div class="min-w-0">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Admin Login</p>
+        <h3 class="mt-0.5 text-lg font-extrabold text-slate-900">ইমেইল দিয়ে লগইন</h3>
+        <p class="mt-0.5 text-[11px] text-slate-500">শুধুমাত্র অনুমোদিত অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করুন</p>
+      </div>
+      <button type="button" id="closeEmailLoginModal" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <form id="emailLoginForm" class="p-5" novalidate>
+      <div class="space-y-3.5">
+        <div>
+          <label for="emailLoginEmail" class="mb-1.5 block text-xs font-bold text-slate-700">ইমেইল</label>
+          <input id="emailLoginEmail" type="email" required autocomplete="username"
+            class="input" placeholder="admin@example.com" inputmode="email" />
+        </div>
+        <div>
+          <label for="emailLoginPassword" class="mb-1.5 block text-xs font-bold text-slate-700">পাসওয়ার্ড</label>
+          <div class="relative">
+            <input id="emailLoginPassword" type="password" required autocomplete="current-password"
+              class="input pr-11" placeholder="পাসওয়ার্ড দিন" />
+            <button type="button" id="toggleEmailPassword" title="পাসওয়ার্ড দেখুন/লুকান"
+              class="absolute inset-y-0 right-0 grid w-10 place-items-center rounded-r-xl text-slate-400 transition hover:text-slate-700">
+              <svg id="eyeOpenIcon" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.04 12.32a2 2 0 0 1 0-1.64C3.42 7.51 7.36 4 12 4s8.58 3.51 9.96 6.68a2 2 0 0 1 0 1.64C20.58 15.49 16.64 19 12 19s-8.58-3.51-9.96-6.68Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+              </svg>
+              <svg id="eyeOffIcon" class="hidden h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18M10.58 10.58a3 3 0 0 0 4.24 4.24M9.88 5.09A10.94 10.94 0 0 1 12 5c4.64 0 8.58 3.51 9.96 6.68a2 2 0 0 1 0 1.64 12.29 12.29 0 0 1-2.2 3.05M6.06 6.06A12.33 12.33 0 0 0 2.04 11.68a2 2 0 0 0 0 1.64C3.42 16.49 7.36 20 12 20a10.94 10.94 0 0 0 3.86-.7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="emailLoginError" class="mt-4 hidden rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5">
+        <div class="flex items-start gap-2.5">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+          <p id="emailLoginErrorMsg" class="text-xs font-semibold leading-relaxed text-rose-700"></p>
+        </div>
+      </div>
+
+      <button type="submit" id="emailLoginSubmitBtn" class="btn-primary mt-5 w-full">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H3m0 0 3-3m-3 3 3 3m9-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+        লগইন করুন
+      </button>
+
+      <p class="mt-4 text-center text-[11px] text-slate-500">
+        🔒 শুধুমাত্র অনুমোদিত অ্যাডমিনের জন্য। নতুন অ্যাকাউন্ট তৈরি করার সুযোগ নেই।
+      </p>
+    </form>
   </div>
 </div>
 
@@ -487,7 +562,8 @@ import {
   serverTimestamp, increment, addDoc, getDoc, setDoc, getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
-  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged,
+  signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 /* ================= Firebase ================= */
@@ -568,7 +644,6 @@ let currentPage = 'dashboard';
 let selectedChatId = null;
 let chatMsgUnsub = null;
 
-// Prevent flicker / unnecessary re-renders
 let lastOrdersSig = '';
 let lastChatsSig  = '';
 let pollTimer = null;
@@ -589,6 +664,7 @@ function hideLoginError() {
 const loginScreen = $('#loginScreen');
 const appEl = $('#app');
 
+/* ---------- Google login ---------- */
 $('#googleLoginBtn').addEventListener('click', async () => {
   hideLoginError();
   const btn = $('#googleLoginBtn');
@@ -606,8 +682,109 @@ $('#googleLoginBtn').addEventListener('click', async () => {
   }
 });
 
+/* ---------- Email login modal (NEW) ---------- */
+function openEmailLoginModal() {
+  const form = $('#emailLoginForm');
+  form.reset();
+  $('#emailLoginError').classList.add('hidden');
+  const inp = $('#emailLoginPassword');
+  inp.type = 'password';
+  $('#eyeOpenIcon').classList.remove('hidden');
+  $('#eyeOffIcon').classList.add('hidden');
+
+  const m = $('#emailLoginModal');
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+  setTimeout(() => $('#emailLoginEmail').focus(), 80);
+}
+function closeEmailLoginModal() {
+  const m = $('#emailLoginModal');
+  m.classList.add('hidden');
+  m.classList.remove('flex');
+}
+
+$('#emailLoginBtn').addEventListener('click', openEmailLoginModal);
+$('#closeEmailLoginModal').addEventListener('click', closeEmailLoginModal);
+$('#emailLoginModal').addEventListener('click', e => {
+  if (e.target.id === 'emailLoginModal') closeEmailLoginModal();
+});
+
+/* Password show/hide */
+$('#toggleEmailPassword').addEventListener('click', () => {
+  const inp = $('#emailLoginPassword');
+  const isHidden = inp.type === 'password';
+  inp.type = isHidden ? 'text' : 'password';
+  $('#eyeOpenIcon').classList.toggle('hidden', !isHidden);
+  $('#eyeOffIcon').classList.toggle('hidden', isHidden);
+});
+
+/* Submit email login */
+$('#emailLoginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const email    = $('#emailLoginEmail').value.trim();
+  const password = $('#emailLoginPassword').value;
+
+  const errBox = $('#emailLoginError');
+  const errMsg = $('#emailLoginErrorMsg');
+  errBox.classList.add('hidden');
+
+  if (!email || !password) {
+    errMsg.textContent = 'ইমেইল এবং পাসওয়ার্ড দুটোই দিতে হবে।';
+    errBox.classList.remove('hidden');
+    return;
+  }
+
+  const btn = $('#emailLoginSubmitBtn');
+  const originalHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = 'লগইন হচ্ছে…';
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    closeEmailLoginModal();
+    /* onAuthStateChanged will handle the rest */
+  } catch (err) {
+    console.error('Email login error:', err);
+    let msg = 'লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।';
+
+    switch (err.code) {
+      case 'auth/invalid-email':
+        msg = 'সঠিক ইমেইল ঠিকানা দিন।';
+        break;
+      case 'auth/missing-password':
+        msg = 'পাসওয়ার্ড দিন।';
+        break;
+      case 'auth/invalid-credential':
+      case 'auth/wrong-password':
+      case 'auth/user-not-found':
+        msg = 'ভুল ইমেইল অথবা পাসওয়ার্ড।';
+        break;
+      case 'auth/user-disabled':
+        msg = 'এই অ্যাকাউন্টটি নিষ্ক্রিয় করা হয়েছে।';
+        break;
+      case 'auth/too-many-requests':
+        msg = 'অনেকবার ভুল চেষ্টা হয়েছে। কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।';
+        break;
+      case 'auth/network-request-failed':
+        msg = 'ইন্টারনেট সংযোগে সমস্যা। আবার চেষ্টা করুন।';
+        break;
+      case 'auth/operation-not-allowed':
+        msg = 'Firebase-এ Email/Password sign-in চালু করা নেই।';
+        break;
+    }
+    errMsg.textContent = msg;
+    errBox.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHTML;
+  }
+});
+
+/* ---------- Logout ---------- */
 $('#logoutBtn').addEventListener('click', () => signOut(auth));
 
+/* ---------- Auth state ---------- */
 onAuthStateChanged(auth, async user => {
   if (!user) {
     loginScreen.classList.remove('hidden');
@@ -616,7 +793,7 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
-  if (!ALLOWED_ADMINS.includes(user.email)) {
+  if (!ALLOWED_ADMINS.includes((user.email || '').toLowerCase())) {
     showLoginError('Verify Failed', `আপনার অ্যাকাউন্ট (${user.email}) অ্যাডমিন হিসেবে অনুমোদিত নয়।`);
     loginScreen.classList.remove('hidden');
     loginScreen.classList.add('grid');
@@ -647,6 +824,7 @@ onAuthStateChanged(auth, async user => {
   }
 
   hideLoginError();
+  closeEmailLoginModal();
   loginScreen.classList.add('hidden');
   loginScreen.classList.remove('grid');
   appEl.classList.remove('hidden');
@@ -755,43 +933,28 @@ $('#saveSettingsBtn').addEventListener('click', async () => {
 });
 
 /* =========================================================
-   SIGNATURE HELPERS (Prevent flicker on identical data)
+   SIGNATURE HELPERS
    ========================================================= */
 function ordersSignature(list) {
   return JSON.stringify(list.map(o => [
-    o.id,
-    o.status,
-    o.courtFeePaid ? 1 : 0,
-    o.amount || 0,
-    o.applicantCount || 0,
-    o.paymentStatus || '',
-    o.orderId || '',
-    o.receiverEmail || '',
-    o.bkashSenderNumber || '',
-    o.circle || '',
-    o.createdAt?.seconds || 0,
-    o.statusUpdatedAt?.seconds || 0,
-    o.completedAt?.seconds || 0
+    o.id, o.status, o.courtFeePaid ? 1 : 0, o.amount || 0, o.applicantCount || 0,
+    o.paymentStatus || '', o.orderId || '', o.receiverEmail || '',
+    o.bkashSenderNumber || '', o.circle || '', o.createdAt?.seconds || 0,
+    o.statusUpdatedAt?.seconds || 0, o.completedAt?.seconds || 0
   ]));
 }
-
 function chatsSignature(list) {
   return JSON.stringify(list.map(c => [
-    c.id,
-    c.lastMessage || '',
-    c.lastMessageAt?.seconds || 0,
-    c.unreadForAdmin || 0,
-    c.unreadForClient || 0,
-    c.clientName || '',
-    c.tag || ''
+    c.id, c.lastMessage || '', c.lastMessageAt?.seconds || 0,
+    c.unreadForAdmin || 0, c.unreadForClient || 0, c.clientName || '', c.tag || ''
   ]));
 }
 
 /* =========================================================
-   APPLY DATA (with flicker-free rendering)
+   APPLY DATA
    ========================================================= */
 function applyOrdersSnapshot(list, force = false) {
-  ordersData = list; // always update local state so modals read fresh data
+  ordersData = list;
   const sig = ordersSignature(list);
   if (!force && sig === lastOrdersSig) return;
   lastOrdersSig = sig;
@@ -799,7 +962,6 @@ function applyOrdersSnapshot(list, force = false) {
   renderOrders();
   updateOrdersBadge();
 }
-
 function applyChatsSnapshot(list, force = false) {
   chatsData = list;
   const sig = chatsSignature(list);
@@ -809,14 +971,12 @@ function applyChatsSnapshot(list, force = false) {
   renderRecentChats();
   updateChatsStats();
 }
-
 function updateOrdersBadge() {
   const pending = ordersData.filter(o => o.status === 'pending').length;
   const badge = $('#ordersBadge');
   if (pending > 0) { badge.textContent = toBn(pending); badge.classList.remove('hidden'); }
   else badge.classList.add('hidden');
 }
-
 function updateChatsStats() {
   messageCount = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0) + (c.unreadForClient || 0), 0);
   $('#statMessages').textContent = toBn(messageCount);
@@ -828,7 +988,7 @@ function updateChatsStats() {
 }
 
 /* =========================================================
-   FIRESTORE LISTENERS + 10s FALLBACK POLL
+   FIRESTORE LISTENERS
    ========================================================= */
 let ordersUnsub = null;
 let chatsUnsub  = null;
@@ -838,7 +998,6 @@ function startListeners() {
   if (chatsUnsub) chatsUnsub();
   if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
 
-  // ---- Realtime (primary) ----
   ordersUnsub = onSnapshot(
     query(collection(db, 'orders'), orderBy('createdAt', 'desc')),
     snap => applyOrdersSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
@@ -851,18 +1010,17 @@ function startListeners() {
     err => console.error('chats listener', err)
   );
 
-  // ---- 10s fallback poll (safety net if realtime goes silent) ----
   pollTimer = setInterval(async () => {
     if (document.hidden) return;
     try {
       const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
       applyOrdersSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    } catch (e) { /* silent fallback */ }
+    } catch (e) { /* silent */ }
 
     try {
       const snap = await getDocs(query(collection(db, 'chats'), orderBy('lastMessageAt', 'desc')));
       applyChatsSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    } catch (e) { /* silent fallback */ }
+    } catch (e) { /* silent */ }
   }, 10000);
 }
 
@@ -891,7 +1049,6 @@ function courtFeeBadge(o) {
    ========================================================= */
 function renderDashboard() {
   const total      = ordersData.length;
-  // ✅ Earnings: only completed orders
   const earnings   = ordersData
     .filter(o => o.status === 'completed')
     .reduce((s, o) => s + (o.amount || 0), 0);
@@ -1576,7 +1733,6 @@ async function selectChat(id) {
   try { await updateDoc(doc(db, 'chats', id), { unreadForAdmin: 0 }); } catch {}
 }
 
-/* ---------- Message Delete Button HTML ---------- */
 function msgDeleteBtnHtml(msgId) {
   return `
     <button type="button" data-msg-del="${msgId}" title="মেসেজ ডিলিট করুন"
@@ -1613,7 +1769,6 @@ function renderAdminMessages(msgs) {
       </div>`;
   }).join('');
 
-  // Attach delete handlers
   body.querySelectorAll('[data-msg-del]').forEach(btn => {
     btn.addEventListener('click', () => {
       deleteChatMessage(selectedChatId, btn.dataset.msgDel);
@@ -1623,16 +1778,13 @@ function renderAdminMessages(msgs) {
   body.scrollTop = body.scrollHeight;
 }
 
-/* ---------- Delete specific chat message ---------- */
 async function deleteChatMessage(chatId, msgId) {
   if (!chatId || !msgId) return;
   if (!confirm('এই মেসেজটি ডিলিট করবেন?\n\nএটি স্থায়ীভাবে মুছে যাবে।')) return;
 
   try {
-    // 1. Delete the message
     await deleteDoc(doc(db, 'chats', chatId, 'messages', msgId));
 
-    // 2. Recalculate chat's last message (fresh fetch to avoid race conditions)
     let lastText = '';
     let lastTime = serverTimestamp();
     try {
@@ -1643,7 +1795,7 @@ async function deleteChatMessage(chatId, msgId) {
         lastText = last.text || '';
         if (last.createdAt) lastTime = last.createdAt;
       }
-    } catch (_) { /* fallback: keep empty */ }
+    } catch (_) {}
 
     try {
       await updateDoc(doc(db, 'chats', chatId), {
@@ -1699,6 +1851,10 @@ $('#adminChatForm').addEventListener('submit', async e => {
    ========================================================= */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    if (!$('#emailLoginModal').classList.contains('hidden')) {
+      closeEmailLoginModal();
+      return;
+    }
     if (!$('#deleteModal').classList.contains('hidden')) {
       closeDeleteModal();
       return;
