@@ -50,12 +50,8 @@
              text-sm font-bold text-rose-700 transition hover:border-rose-400 hover:bg-rose-100 active:scale-[.98]
              disabled:cursor-not-allowed disabled:opacity-60;
     }
-    .stat-card {
-      @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm;
-    }
-    .badge {
-      @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold;
-    }
+    .stat-card { @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm; }
+    .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold; }
   }
 </style>
 
@@ -86,7 +82,6 @@
         শুধুমাত্র অনুমোদিত অ্যাডমিন Google অ্যাকাউন্ট অথবা ইমেইল দিয়ে প্রবেশ করতে পারবেন।
       </p>
 
-      <!-- Google login -->
       <button id="googleLoginBtn"
         class="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-3.5 text-sm font-extrabold text-slate-800 shadow-xl transition hover:bg-brand-50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
         <svg class="h-5 w-5" viewBox="0 0 48 48">
@@ -98,7 +93,6 @@
         Google দিয়ে লগইন করুন
       </button>
 
-      <!-- Email login (NEW) -->
       <button id="emailLoginBtn" type="button"
         class="mt-3 inline-flex w-full items-center justify-center gap-3 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-extrabold text-white backdrop-blur transition hover:bg-white/20 hover:border-white/50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -126,7 +120,7 @@
   </div>
 </div>
 
-<!-- ============ EMAIL LOGIN MODAL (NEW) ============ -->
+<!-- ============ EMAIL LOGIN MODAL ============ -->
 <div id="emailLoginModal" class="fixed inset-0 z-[55] hidden items-center justify-center bg-slate-900/75 p-4 backdrop-blur-sm">
   <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl anim-in">
     <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
@@ -431,21 +425,44 @@
       </div>
     </main>
 
-    <!-- SETTINGS PAGE -->
+    <!-- SETTINGS PAGE (Pricing + Password) -->
     <main id="page-settings" class="page hidden p-4 sm:p-6">
-      <div class="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 class="text-lg font-extrabold text-slate-900">গ্লোবাল প্রাইসিং সেটিংস</h2>
-        <p class="mt-1 text-sm text-slate-500">এখান থেকে প্রতি আবেদনকারীর ফি নির্ধারণ করুন। এই ফি স্বয়ংক্রিয়ভাবে ওয়েবসাইটে আপডেট হয়ে যাবে।</p>
-        
-        <div class="mt-5">
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">প্রতি আবেদনকারীর ফি (৳) <span class="text-rose-500">*</span></label>
-          <input type="number" id="globalPriceInput" class="input sm:max-w-xs" placeholder="যেমন: 500" min="1" />
+      <div class="max-w-2xl space-y-4">
+
+        <!-- Pricing Card -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 class="text-lg font-extrabold text-slate-900">গ্লোবাল প্রাইসিং সেটিংস</h2>
+          <p class="mt-1 text-sm text-slate-500">এখান থেকে প্রতি আবেদনকারীর ফি নির্ধারণ করুন। এই ফি স্বয়ংক্রিয়ভাবে ওয়েবসাইটে আপডেট হয়ে যাবে।</p>
+
+          <div class="mt-5">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">প্রতি আবেদনকারীর ফি (৳) <span class="text-rose-500">*</span></label>
+            <input type="number" id="globalPriceInput" class="input sm:max-w-xs" placeholder="যেমন: 500" min="1" />
+          </div>
+
+          <button id="saveSettingsBtn" class="btn-primary mt-4">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            সেভ করুন
+          </button>
         </div>
-        
-        <button id="saveSettingsBtn" class="btn-primary mt-4">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          সেভ করুন
-        </button>
+
+        <!-- Password Card (NEW) -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="text-lg font-extrabold text-slate-900">পাসওয়ার্ড সেটিংস</h2>
+              <p class="mt-1 text-sm text-slate-500">Google ছাড়াও ইমেইল-পাসওয়ার্ড দিয়ে লগইন করতে চাইলে এখান থেকে পাসওয়ার্ড সেট করুন বা পরিবর্তন করুন।</p>
+            </div>
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
+              </svg>
+            </span>
+          </div>
+
+          <div id="pwdStatus" class="mt-4"></div>
+          <div id="pwdFormArea" class="mt-4"></div>
+        </div>
+
       </div>
     </main>
   </div>
@@ -563,7 +580,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword, updatePassword, linkWithCredential,
+  EmailAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 /* ================= Firebase ================= */
@@ -579,6 +597,7 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
 
+/* ✅ শুধুমাত্র একটি admin email */
 const ALLOWED_ADMINS = ['nopqrshov337@gmail.com'];
 
 /* ================= Helpers ================= */
@@ -595,7 +614,6 @@ function fmtDate(ts) {
 function escapeHtml(str='') {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-
 function cloudinaryDownloadUrl(url) {
   if (!url) return '';
   if (url.includes('/upload/')) return url.replace('/upload/', '/upload/fl_attachment/');
@@ -612,11 +630,7 @@ function showToast(text, type='success') {
 
   txt.textContent = text;
 
-  const colors = {
-    success: 'bg-emerald-600',
-    error:   'bg-rose-600',
-    info:    'bg-slate-900'
-  };
+  const colors = { success: 'bg-emerald-600', error: 'bg-rose-600', info: 'bg-slate-900' };
   box.className = `flex items-center gap-2.5 rounded-xl ${colors[type] || colors.info} px-4 py-3 text-sm font-semibold text-white shadow-2xl`;
 
   const icons = {
@@ -643,10 +657,10 @@ let messageCount = 0;
 let currentPage = 'dashboard';
 let selectedChatId = null;
 let chatMsgUnsub = null;
-
 let lastOrdersSig = '';
 let lastChatsSig  = '';
 let pollTimer = null;
+let hasPasswordSet = false;
 
 /* ================= Login Error UI ================= */
 function showLoginError(title, msg) {
@@ -654,9 +668,7 @@ function showLoginError(title, msg) {
   $('#loginErrorMsg').textContent = msg;
   $('#loginError').classList.remove('hidden');
 }
-function hideLoginError() {
-  $('#loginError').classList.add('hidden');
-}
+function hideLoginError() { $('#loginError').classList.add('hidden'); }
 
 /* =========================================================
    AUTH
@@ -682,7 +694,7 @@ $('#googleLoginBtn').addEventListener('click', async () => {
   }
 });
 
-/* ---------- Email login modal (NEW) ---------- */
+/* ---------- Email login modal ---------- */
 function openEmailLoginModal() {
   const form = $('#emailLoginForm');
   form.reset();
@@ -702,7 +714,6 @@ function closeEmailLoginModal() {
   m.classList.add('hidden');
   m.classList.remove('flex');
 }
-
 $('#emailLoginBtn').addEventListener('click', openEmailLoginModal);
 $('#closeEmailLoginModal').addEventListener('click', closeEmailLoginModal);
 $('#emailLoginModal').addEventListener('click', e => {
@@ -721,7 +732,6 @@ $('#toggleEmailPassword').addEventListener('click', () => {
 /* Submit email login */
 $('#emailLoginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const email    = $('#emailLoginEmail').value.trim();
   const password = $('#emailLoginPassword').value;
 
@@ -743,35 +753,19 @@ $('#emailLoginForm').addEventListener('submit', async (e) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
     closeEmailLoginModal();
-    /* onAuthStateChanged will handle the rest */
   } catch (err) {
     console.error('Email login error:', err);
     let msg = 'লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।';
-
     switch (err.code) {
-      case 'auth/invalid-email':
-        msg = 'সঠিক ইমেইল ঠিকানা দিন।';
-        break;
-      case 'auth/missing-password':
-        msg = 'পাসওয়ার্ড দিন।';
-        break;
+      case 'auth/invalid-email':        msg = 'সঠিক ইমেইল ঠিকানা দিন।'; break;
+      case 'auth/missing-password':     msg = 'পাসওয়ার্ড দিন।'; break;
       case 'auth/invalid-credential':
       case 'auth/wrong-password':
-      case 'auth/user-not-found':
-        msg = 'ভুল ইমেইল অথবা পাসওয়ার্ড।';
-        break;
-      case 'auth/user-disabled':
-        msg = 'এই অ্যাকাউন্টটি নিষ্ক্রিয় করা হয়েছে।';
-        break;
-      case 'auth/too-many-requests':
-        msg = 'অনেকবার ভুল চেষ্টা হয়েছে। কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।';
-        break;
-      case 'auth/network-request-failed':
-        msg = 'ইন্টারনেট সংযোগে সমস্যা। আবার চেষ্টা করুন।';
-        break;
-      case 'auth/operation-not-allowed':
-        msg = 'Firebase-এ Email/Password sign-in চালু করা নেই।';
-        break;
+      case 'auth/user-not-found':       msg = 'ভুল ইমেইল অথবা পাসওয়ার্ড।'; break;
+      case 'auth/user-disabled':        msg = 'এই অ্যাকাউন্টটি নিষ্ক্রিয় করা হয়েছে।'; break;
+      case 'auth/too-many-requests':    msg = 'অনেকবার ভুল চেষ্টা হয়েছে। কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।'; break;
+      case 'auth/network-request-failed': msg = 'ইন্টারনেট সংযোগে সমস্যা। আবার চেষ্টা করুন।'; break;
+      case 'auth/operation-not-allowed': msg = 'Firebase-এ Email/Password sign-in চালু করা নেই।'; break;
     }
     errMsg.textContent = msg;
     errBox.classList.remove('hidden');
@@ -781,7 +775,6 @@ $('#emailLoginForm').addEventListener('submit', async (e) => {
   }
 });
 
-/* ---------- Logout ---------- */
 $('#logoutBtn').addEventListener('click', () => signOut(auth));
 
 /* ---------- Auth state ---------- */
@@ -808,7 +801,6 @@ onAuthStateChanged(auth, async user => {
   try {
     const userRef = doc(db, 'users', user.uid);
     const userSnap = await getDoc(userRef);
-    
     if (!userSnap.exists()) {
       await setDoc(userRef, {
         email: user.email,
@@ -819,9 +811,7 @@ onAuthStateChanged(auth, async user => {
     } else if (userSnap.data().role !== 'admin') {
       await setDoc(userRef, { role: 'admin' }, { merge: true });
     }
-  } catch (e) {
-    console.warn('Could not sync user document:', e);
-  }
+  } catch (e) { console.warn('Could not sync user document:', e); }
 
   hideLoginError();
   closeEmailLoginModal();
@@ -835,7 +825,226 @@ onAuthStateChanged(auth, async user => {
 
   startListeners();
   loadSettings();
+  refreshPasswordState();
 });
+
+/* =========================================================
+   PASSWORD MANAGEMENT
+   ========================================================= */
+async function refreshPasswordState() {
+  const user = auth.currentUser;
+  if (!user) {
+    $('#pwdStatus').innerHTML = '';
+    $('#pwdFormArea').innerHTML = '';
+    return;
+  }
+  try { await user.reload(); }
+  catch (e) { console.warn('user.reload failed', e); }
+
+  hasPasswordSet = (auth.currentUser.providerData || []).some(p => p.providerId === 'password');
+  renderPasswordSettings();
+}
+
+function renderPasswordSettings() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const statusEl = $('#pwdStatus');
+  const formEl = $('#pwdFormArea');
+
+  if (hasPasswordSet) {
+    statusEl.innerHTML = `
+      <div class="flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5">
+        <svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
+        </svg>
+        <div class="min-w-0">
+          <p class="text-xs font-bold text-emerald-800">✅ পাসওয়ার্ড সেট করা আছে</p>
+          <p class="mt-0.5 text-[11px] text-emerald-700">আপনি এখন Google এবং ইমেইল-পাসওয়ার্ড দুটোই দিয়ে লগইন করতে পারবেন।</p>
+        </div>
+      </div>`;
+
+    formEl.innerHTML = `
+      <form id="changePasswordForm" class="space-y-3" novalidate>
+        <div>
+          <label for="cp_current" class="mb-1.5 block text-xs font-bold text-slate-700">বর্তমান পাসওয়ার্ড</label>
+          <input id="cp_current" type="password" required autocomplete="current-password" class="input" placeholder="বর্তমান পাসওয়ার্ড" />
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label for="cp_new" class="mb-1.5 block text-xs font-bold text-slate-700">নতুন পাসওয়ার্ড</label>
+            <input id="cp_new" type="password" required minlength="6" autocomplete="new-password" class="input" placeholder="কমপক্ষে ৬ অক্ষর" />
+          </div>
+          <div>
+            <label for="cp_confirm" class="mb-1.5 block text-xs font-bold text-slate-700">নতুন পাসওয়ার্ড আবার</label>
+            <input id="cp_confirm" type="password" required minlength="6" autocomplete="new-password" class="input" placeholder="আবার লিখুন" />
+          </div>
+        </div>
+        <div id="pwdError" class="hidden rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5">
+          <p class="text-xs font-semibold text-rose-700"></p>
+        </div>
+        <button type="submit" class="btn-primary">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+          পাসওয়ার্ড পরিবর্তন করুন
+        </button>
+      </form>`;
+
+    $('#changePasswordForm').addEventListener('submit', handleChangePassword);
+  } else {
+    statusEl.innerHTML = `
+      <div class="flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5">
+        <svg class="mt-0.5 h-4 w-4 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+        </svg>
+        <div class="min-w-0">
+          <p class="text-xs font-bold text-amber-800">⚠️ এখনো পাসওয়ার্ড সেট করা হয়নি</p>
+          <p class="mt-0.5 text-[11px] text-amber-700">শুধু Google দিয়ে লগইন করছেন। ইমেইল লগইন চালু করতে একটি পাসওয়ার্ড সেট করুন।</p>
+        </div>
+      </div>`;
+
+    formEl.innerHTML = `
+      <form id="setPasswordForm" class="space-y-3" novalidate>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label for="sp_new" class="mb-1.5 block text-xs font-bold text-slate-700">নতুন পাসওয়ার্ড</label>
+            <input id="sp_new" type="password" required minlength="6" autocomplete="new-password" class="input" placeholder="কমপক্ষে ৬ অক্ষর" />
+          </div>
+          <div>
+            <label for="sp_confirm" class="mb-1.5 block text-xs font-bold text-slate-700">পাসওয়ার্ড আবার</label>
+            <input id="sp_confirm" type="password" required minlength="6" autocomplete="new-password" class="input" placeholder="আবার লিখুন" />
+          </div>
+        </div>
+        <div id="pwdError" class="hidden rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5">
+          <p class="text-xs font-semibold text-rose-700"></p>
+        </div>
+        <button type="submit" class="btn-primary">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          পাসওয়ার্ড সেট করুন
+        </button>
+      </form>`;
+
+    $('#setPasswordForm').addEventListener('submit', handleSetPassword);
+  }
+}
+
+function showPwdError(msg) {
+  const el = $('#pwdError');
+  if (!el) return;
+  el.querySelector('p').textContent = msg;
+  el.classList.remove('hidden');
+}
+function hidePwdError() {
+  const el = $('#pwdError');
+  if (el) el.classList.add('hidden');
+}
+
+/* ---------- Set password (Google-only account → link password) ---------- */
+async function handleSetPassword(e) {
+  e.preventDefault();
+  hidePwdError();
+
+  const newPwd = $('#sp_new').value;
+  const confirmPwd = $('#sp_confirm').value;
+
+  if (newPwd.length < 6) { showPwdError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।'); return; }
+  if (newPwd !== confirmPwd) { showPwdError('দুটি পাসওয়ার্ড মিলছে না।'); return; }
+
+  const form = e.target;
+  const btn = form.querySelector('button[type="submit"]');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = 'সেট হচ্ছে…';
+
+  try {
+    await setPasswordOnAccount(newPwd);
+    showToast('পাসওয়ার্ড সেট হয়েছে ✅ এখন ইমেইল দিয়েও লগইন করতে পারবেন', 'success');
+    await refreshPasswordState();
+  } catch (err) {
+    console.error('Set password error:', err);
+    let msg = 'পাসওয়ার্ড সেট করা যায়নি। আবার চেষ্টা করুন।';
+    switch (err.code) {
+      case 'auth/email-already-in-use':  msg = 'এই ইমেইলে ইতিমধ্যে পাসওয়ার্ড সেট আছে। "পরিবর্তন" অপশন ব্যবহার করুন।'; break;
+      case 'auth/weak-password':         msg = 'পাসওয়ার্ড দুর্বল। কমপক্ষে ৬ অক্ষরের শক্তিশালী পাসওয়ার্ড দিন।'; break;
+      case 'auth/requires-recent-login': msg = 'নিরাপত্তার জন্য আবার লগইন করে চেষ্টা করুন।'; break;
+      case 'auth/popup-closed-by-user':  msg = 'Google পপআপ বন্ধ করা হয়েছে। আবার চেষ্টা করুন।'; break;
+      case 'auth/provider-already-linked': msg = 'পাসওয়ার্ড ইতিমধ্যে লিংক করা আছে।'; break;
+      case 'auth/operation-not-allowed': msg = 'Firebase Console-এ Email/Password provider চালু করুন।'; break;
+    }
+    showPwdError(msg);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+
+async function setPasswordOnAccount(newPassword) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Not signed in');
+  const email = user.email;
+  if (!email) throw new Error('No email on account');
+
+  try {
+    const cred = EmailAuthProvider.credential(email, newPassword);
+    await linkWithCredential(user, cred);
+  } catch (err) {
+    if (err.code === 'auth/requires-recent-login') {
+      const provider = new GoogleAuthProvider();
+      await reauthenticateWithPopup(auth.currentUser, provider);
+      const cred = EmailAuthProvider.credential(auth.currentUser.email, newPassword);
+      await linkWithCredential(auth.currentUser, cred);
+    } else {
+      throw err;
+    }
+  }
+  await auth.currentUser.reload();
+}
+
+/* ---------- Change password (password already set) ---------- */
+async function handleChangePassword(e) {
+  e.preventDefault();
+  hidePwdError();
+
+  const currentPwd = $('#cp_current').value;
+  const newPwd = $('#cp_new').value;
+  const confirmPwd = $('#cp_confirm').value;
+
+  if (!currentPwd) { showPwdError('বর্তমান পাসওয়ার্ড দিন।'); return; }
+  if (newPwd.length < 6) { showPwdError('নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।'); return; }
+  if (newPwd !== confirmPwd) { showPwdError('নতুন পাসওয়ার্ড দুটি মিলছে না।'); return; }
+  if (newPwd === currentPwd) { showPwdError('নতুন পাসওয়ার্ড বর্তমানের থেকে আলাদা হতে হবে।'); return; }
+
+  const form = e.target;
+  const btn = form.querySelector('button[type="submit"]');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = 'পরিবর্তন হচ্ছে…';
+
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error('Not signed in');
+
+    const cred = EmailAuthProvider.credential(user.email, currentPwd);
+    await reauthenticateWithCredential(user, cred);
+    await updatePassword(auth.currentUser, newPwd);
+
+    showToast('পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে ✅', 'success');
+    form.reset();
+  } catch (err) {
+    console.error('Change password error:', err);
+    let msg = 'পাসওয়ার্ড পরিবর্তন করা যায়নি।';
+    switch (err.code) {
+      case 'auth/wrong-password':
+      case 'auth/invalid-credential':    msg = 'বর্তমান পাসওয়ার্ড ভুল।'; break;
+      case 'auth/weak-password':         msg = 'নতুন পাসওয়ার্ড দুর্বল।'; break;
+      case 'auth/requires-recent-login': msg = 'নিরাপত্তার জন্য আবার লগইন করে চেষ্টা করুন।'; break;
+      case 'auth/too-many-requests':     msg = 'অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পরে করুন।'; break;
+    }
+    showPwdError(msg);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
 
 /* =========================================================
    NAVIGATION
@@ -864,6 +1073,10 @@ function navigate(page) {
     b.classList.toggle('hover:bg-slate-800', !active);
   });
 
+  if (page === 'settings') {
+    refreshPasswordState();
+  }
+
   closeSidebar();
 }
 $$('[data-nav]').forEach(b => b.addEventListener('click', () => navigate(b.dataset.nav)));
@@ -883,48 +1096,38 @@ $('#menuToggle').addEventListener('click', openSidebar);
 $('#sidebarBackdrop').addEventListener('click', closeSidebar);
 
 /* =========================================================
-   SETTINGS LOGIC
+   SETTINGS — PRICING
    ========================================================= */
 const SETTINGS_REF = doc(db, 'settings', 'global');
 
 async function loadSettings() {
   try {
     const snap = await getDoc(SETTINGS_REF);
-    if (snap.exists()) {
-      $('#globalPriceInput').value = snap.data().pricePerPerson || 500;
-    } else {
-      $('#globalPriceInput').value = 500; 
-    }
-  } catch (error) {
-    console.error("Error loading settings", error);
-  }
+    if (snap.exists()) $('#globalPriceInput').value = snap.data().pricePerPerson || 500;
+    else $('#globalPriceInput').value = 500;
+  } catch (error) { console.error("Error loading settings", error); }
 }
 
 $('#saveSettingsBtn').addEventListener('click', async () => {
   const price = Number($('#globalPriceInput').value);
-  if (!price || price <= 0) {
-    showToast('সঠিক মূল্য দিন (০ এর বেশি)', 'error');
-    return;
-  }
-  
+  if (!price || price <= 0) { showToast('সঠিক মূল্য দিন (০ এর বেশি)', 'error'); return; }
+
   const btn = $('#saveSettingsBtn');
   btn.disabled = true;
   const originalHTML = btn.innerHTML;
   btn.innerHTML = 'সেভ হচ্ছে...';
-  
+
   try {
     await setDoc(SETTINGS_REF, { pricePerPerson: price, updatedAt: serverTimestamp() }, { merge: true });
     showToast('প্রাইস সফলভাবে আপডেট হয়েছে', 'success');
   } catch (error) {
     console.error('Settings update error:', error);
     let msg = 'প্রাইস আপডেট করা যায়নি';
-    
     if (error.code === 'permission-denied') {
       msg = `❌ অনুমতি নেই। আপনার ইমেইল: ${auth.currentUser?.email}। Firestore Rules পাবলিশ করেছেন কিনা দেখুন।`;
     } else if (error.message) {
       msg = '❌ ' + error.message;
     }
-    
     showToast(msg, 'error');
   } finally {
     btn.disabled = false;
@@ -950,9 +1153,6 @@ function chatsSignature(list) {
   ]));
 }
 
-/* =========================================================
-   APPLY DATA
-   ========================================================= */
 function applyOrdersSnapshot(list, force = false) {
   ordersData = list;
   const sig = ordersSignature(list);
@@ -1015,12 +1215,11 @@ function startListeners() {
     try {
       const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
       applyOrdersSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    } catch (e) { /* silent */ }
-
+    } catch (e) {}
     try {
       const snap = await getDocs(query(collection(db, 'chats'), orderBy('lastMessageAt', 'desc')));
       applyChatsSnapshot(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    } catch (e) { /* silent */ }
+    } catch (e) {}
   }, 10000);
 }
 
@@ -1049,9 +1248,7 @@ function courtFeeBadge(o) {
    ========================================================= */
 function renderDashboard() {
   const total      = ordersData.length;
-  const earnings   = ordersData
-    .filter(o => o.status === 'completed')
-    .reduce((s, o) => s + (o.amount || 0), 0);
+  const earnings   = ordersData.filter(o => o.status === 'completed').reduce((s, o) => s + (o.amount || 0), 0);
   const pending    = ordersData.filter(o => o.status === 'pending').length;
   const processing = ordersData.filter(o => o.status === 'processing').length;
   const completed  = ordersData.filter(o => o.status === 'completed').length;
@@ -1311,9 +1508,7 @@ function openOrderModal(id) {
             <span class="text-slate-500">সার্কেল / উপজেলা:</span>
             <b class="text-slate-900">${escapeHtml(o.circle || '—')}</b>
           </span>
-        ` : `
-          <span class="text-xs text-emerald-700">গ্রাহক ইতিমধ্যে court fee পরিশোধ করেছেন</span>
-        `}
+        ` : `<span class="text-xs text-emerald-700">গ্রাহক ইতিমধ্যে court fee পরিশোধ করেছেন</span>`}
       </div>
     </div>
 
@@ -1345,9 +1540,7 @@ function openOrderModal(id) {
 function closeOrderModal() {
   $('#orderModal').classList.add('hidden');
   $('#orderModal').classList.remove('flex');
-  if ($('#copyFormModal').classList.contains('hidden')) {
-    document.body.style.overflow = '';
-  }
+  if ($('#copyFormModal').classList.contains('hidden')) document.body.style.overflow = '';
 }
 $('#closeOrderModal').addEventListener('click', closeOrderModal);
 $('#orderModal').addEventListener('click', e => { if (e.target.id === 'orderModal') closeOrderModal(); });
@@ -1396,7 +1589,6 @@ function openCopyFormModal(id) {
   m.classList.add('flex');
   document.body.style.overflow = 'hidden';
 }
-
 function closeCopyFormModal() {
   $('#copyFormModal').classList.add('hidden');
   $('#copyFormModal').classList.remove('flex');
@@ -1409,13 +1601,7 @@ function closeCopyFormModal() {
 function renderCopyFormTabs(o) {
   const wrap = $('#copyFormApplicantTabs');
   const list = o.applicants || [];
-
-  if (list.length <= 1) {
-    wrap.innerHTML = '';
-    wrap.classList.add('hidden');
-    return;
-  }
-
+  if (list.length <= 1) { wrap.innerHTML = ''; wrap.classList.add('hidden'); return; }
   wrap.classList.remove('hidden');
   wrap.innerHTML = list.map((a, i) => `
     <button type="button" data-cf-tab="${i}"
@@ -1458,7 +1644,6 @@ function renderCopyFormBody(o) {
   const list = o.applicants || [];
   const a = list[copyFormApplicantIndex] || {};
   const body = $('#copyFormBody');
-
   const dlUrl = a.imageUrl ? cloudinaryDownloadUrl(a.imageUrl) : '';
 
   body.innerHTML = `
@@ -1532,15 +1717,10 @@ function attachCopyHandlers(root) {
 }
 
 async function copyToClipboard(text) {
-  if (navigator.clipboard && window.isSecureContext) {
-    return navigator.clipboard.writeText(text);
-  }
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
   const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position = 'fixed';
-  ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.select();
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
   const ok = document.execCommand('copy');
   document.body.removeChild(ta);
   if (!ok) throw new Error('copy failed');
@@ -1549,18 +1729,13 @@ async function copyToClipboard(text) {
 $('#closeCopyFormModal').addEventListener('click', closeCopyFormModal);
 $('#closeCopyFormBtn').addEventListener('click', closeCopyFormModal);
 $('#copyFormModal').addEventListener('click', e => { if (e.target.id === 'copyFormModal') closeCopyFormModal(); });
-
-$('#modalCopyFormBtn').addEventListener('click', () => {
-  if (!modalOrderId) return;
-  openCopyFormModal(modalOrderId);
-});
+$('#modalCopyFormBtn').addEventListener('click', () => { if (modalOrderId) openCopyFormModal(modalOrderId); });
 
 $('#copyFormDownloadAll').addEventListener('click', async () => {
   const id = $('#copyFormDownloadAll').dataset.orderId || copyFormOrderId;
   const idx = +(($('#copyFormDownloadAll').dataset.applicantIndex) || 0);
   const o = ordersData.find(x => x.id === id);
   if (!o) return;
-
   const a = (o.applicants || [])[idx] || {};
   const lines = [
     `Order ID: ${o.orderId || o.id}`,
@@ -1595,15 +1770,12 @@ function openDeleteModal(id) {
   const o = ordersData.find(x => x.id === id);
   if (!o) return;
   pendingDeleteId = id;
-
   $('#deleteOrderId').textContent = o.orderId || o.id;
-
   const m = $('#deleteModal');
   m.classList.remove('hidden');
   m.classList.add('flex');
   document.body.style.overflow = 'hidden';
 }
-
 function closeDeleteModal() {
   $('#deleteModal').classList.add('hidden');
   $('#deleteModal').classList.remove('flex');
@@ -1612,36 +1784,23 @@ function closeDeleteModal() {
   }
   pendingDeleteId = null;
 }
-
 $('#cancelDeleteBtn').addEventListener('click', closeDeleteModal);
 $('#deleteModal').addEventListener('click', e => { if (e.target.id === 'deleteModal') closeDeleteModal(); });
-
-$('#modalDeleteBtn').addEventListener('click', () => {
-  if (!modalOrderId) return;
-  openDeleteModal(modalOrderId);
-});
+$('#modalDeleteBtn').addEventListener('click', () => { if (modalOrderId) openDeleteModal(modalOrderId); });
 
 $('#confirmDeleteBtn').addEventListener('click', async () => {
   if (!pendingDeleteId) return;
-
   const btn = $('#confirmDeleteBtn');
   btn.disabled = true;
   const originalHTML = btn.innerHTML;
   btn.innerHTML = 'ডিলিট হচ্ছে…';
-
   try {
     const deletingId = pendingDeleteId;
     await deleteDoc(doc(db, 'orders', deletingId));
     showToast('অর্ডার সফলভাবে ডিলিট হয়েছে', 'success');
     closeDeleteModal();
-
-    if (modalOrderId === deletingId) {
-      closeOrderModal();
-      modalOrderId = null;
-    }
-    if (copyFormOrderId === deletingId) {
-      closeCopyFormModal();
-    }
+    if (modalOrderId === deletingId) { closeOrderModal(); modalOrderId = null; }
+    if (copyFormOrderId === deletingId) closeCopyFormModal();
   } catch (err) {
     console.error(err);
     showToast('ডিলিট করা যায়নি। আবার চেষ্টা করুন।', 'error');
@@ -1745,7 +1904,6 @@ function msgDeleteBtnHtml(msgId) {
 
 function renderAdminMessages(msgs) {
   const body = $('#adminChatBody');
-
   if (!msgs.length) {
     body.innerHTML = `
       <div class="flex h-full flex-col items-center justify-center text-center">
@@ -1770,9 +1928,7 @@ function renderAdminMessages(msgs) {
   }).join('');
 
   body.querySelectorAll('[data-msg-del]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      deleteChatMessage(selectedChatId, btn.dataset.msgDel);
-    });
+    btn.addEventListener('click', () => deleteChatMessage(selectedChatId, btn.dataset.msgDel));
   });
 
   body.scrollTop = body.scrollHeight;
@@ -1784,27 +1940,18 @@ async function deleteChatMessage(chatId, msgId) {
 
   try {
     await deleteDoc(doc(db, 'chats', chatId, 'messages', msgId));
-
     let lastText = '';
     let lastTime = serverTimestamp();
     try {
       const snap = await getDocs(query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt', 'asc')));
       const remain = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       const last = remain[remain.length - 1];
-      if (last) {
-        lastText = last.text || '';
-        if (last.createdAt) lastTime = last.createdAt;
-      }
+      if (last) { lastText = last.text || ''; if (last.createdAt) lastTime = last.createdAt; }
     } catch (_) {}
 
     try {
-      await updateDoc(doc(db, 'chats', chatId), {
-        lastMessage: lastText,
-        lastMessageAt: lastTime
-      });
-    } catch (e) {
-      console.warn('Could not update chat preview:', e);
-    }
+      await updateDoc(doc(db, 'chats', chatId), { lastMessage: lastText, lastMessageAt: lastTime });
+    } catch (e) { console.warn('Could not update chat preview:', e); }
 
     showToast('মেসেজ ডিলিট হয়েছে', 'success');
   } catch (err) {
@@ -1827,9 +1974,7 @@ $('#adminChatForm').addEventListener('submit', async e => {
 
   try {
     await addDoc(collection(db, 'chats', selectedChatId, 'messages'), {
-      text,
-      sender: 'admin',
-      createdAt: serverTimestamp()
+      text, sender: 'admin', createdAt: serverTimestamp()
     });
     await updateDoc(doc(db, 'chats', selectedChatId), {
       lastMessage: text,
@@ -1851,22 +1996,10 @@ $('#adminChatForm').addEventListener('submit', async e => {
    ========================================================= */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    if (!$('#emailLoginModal').classList.contains('hidden')) {
-      closeEmailLoginModal();
-      return;
-    }
-    if (!$('#deleteModal').classList.contains('hidden')) {
-      closeDeleteModal();
-      return;
-    }
-    if (!$('#copyFormModal').classList.contains('hidden')) {
-      closeCopyFormModal();
-      return;
-    }
-    if (!$('#orderModal').classList.contains('hidden')) {
-      closeOrderModal();
-      return;
-    }
+    if (!$('#emailLoginModal').classList.contains('hidden')) { closeEmailLoginModal(); return; }
+    if (!$('#deleteModal').classList.contains('hidden')) { closeDeleteModal(); return; }
+    if (!$('#copyFormModal').classList.contains('hidden')) { closeCopyFormModal(); return; }
+    if (!$('#orderModal').classList.contains('hidden')) { closeOrderModal(); return; }
     closeSidebar();
   }
 });
