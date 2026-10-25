@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Admin Panel — eMutation Birth certificate support</title>
 <meta name="robots" content="noindex, nofollow" />
 
@@ -20,9 +20,14 @@
         fontFamily: { sans: ['"Noto Sans Bengali"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
         colors: {
           brand: {
-            50:'#eef5ff',100:'#d9e8ff',200:'#bcd7ff',300:'#8ebdff',400:'#5996ff',
-            500:'#3372ff',600:'#1d51f5',700:'#163ee1',800:'#1935b6',900:'#1a328f'
+            50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',
+            400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',
+            800:'#3730a3',900:'#312e81'
           }
+        },
+        boxShadow: {
+          'soft': '0 1px 2px 0 rgb(15 23 42 / 0.04), 0 4px 16px -4px rgb(15 23 42 / 0.06)',
+          'lift': '0 4px 12px -2px rgb(15 23 42 / 0.08), 0 12px 32px -8px rgb(15 23 42 / 0.10)',
         }
       }
     }
@@ -32,102 +37,165 @@
 <style type="text/tailwindcss">
   @layer components {
     .input {
-      @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800
+      @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800
              placeholder:text-slate-400 outline-none transition
-             focus:border-brand-500 focus:ring-2 focus:ring-brand-100;
+             focus:border-brand-400 focus:ring-4 focus:ring-brand-100/60;
     }
     .btn-primary {
       @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5
-             text-sm font-bold text-white shadow-md shadow-brand-600/25 transition
-             hover:bg-brand-700 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60;
+             text-sm font-bold text-white shadow-soft transition
+             hover:bg-brand-700 hover:shadow-lift active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60;
     }
     .btn-ghost {
-      @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white
-             px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-700;
+      @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white
+             px-4 py-2.5 text-sm font-semibold text-slate-700 transition
+             hover:border-brand-300 hover:bg-brand-50/40 hover:text-brand-700;
     }
     .btn-danger {
-      @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-rose-50 px-4 py-2.5
-             text-sm font-bold text-rose-700 transition hover:border-rose-400 hover:bg-rose-100 active:scale-[.98]
+      @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5
+             text-sm font-bold text-rose-700 transition hover:border-rose-300 hover:bg-rose-100 active:scale-[.98]
              disabled:cursor-not-allowed disabled:opacity-60;
     }
-    .stat-card { @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm; }
-    .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold; }
+    .stat-card {
+      @apply rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft transition hover:shadow-lift hover:border-slate-300;
+    }
+    .badge {
+      @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold;
+    }
+    .nav-btn {
+      @apply flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold transition-all;
+    }
+    .mobile-nav-btn {
+      @apply flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-bold transition-colors;
+    }
   }
 </style>
 
 <style>
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+  body { -webkit-font-smoothing: antialiased; }
+
+  /* Custom scrollbars */
+  .scroll-slim::-webkit-scrollbar { width: 6px; }
+  .scroll-slim::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+  .scroll-slim::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+  /* Chat body scrollbar */
   .chat-body::-webkit-scrollbar { width: 6px; }
-  .chat-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
-  .sidebar-scroll::-webkit-scrollbar { width: 5px; }
-  .sidebar-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 99px; }
-  @keyframes floatIn { from { opacity:0; transform: translateY(10px) } to { opacity:1; transform:none } }
-  .anim-in { animation: floatIn .35s ease both; }
+  .chat-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+
+  /* Prevent iOS input zoom */
+  @media (max-width: 640px) {
+    .input, input, textarea, select { font-size: 16px !important; }
+  }
+
+  /* Animations */
+  @keyframes floatIn { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
+  .anim-in { animation: floatIn .3s ease both; }
+
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  .fade-in { animation: fadeIn .25s ease both; }
+
+  /* Chat master-detail on mobile */
+  @media (max-width: 1023.98px) {
+    .chat-container:not(.chat-open) .chat-detail-wrap { display: none; }
+    .chat-container.chat-open .chat-list-wrap { display: none; }
+    .chat-container.chat-open {
+      position: fixed;
+      inset: 3.5rem 0 0 0;
+      z-index: 50;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+    }
+    body.chat-full .mobile-bottom-nav { display: none; }
+  }
+
+  /* Bottom sheet modals on mobile */
+  @media (max-width: 640px) {
+    .sheet-modal { align-items: flex-end !important; padding: 0 !important; }
+    .sheet-modal > div { border-radius: 1.5rem 1.5rem 0 0 !important; max-height: 92dvh; }
+  }
+
+  /* Prevent body scroll when modal open */
+  body.no-scroll { overflow: hidden; }
+
+  /* Safe area for iPhone */
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0); }
 </style>
 </head>
 
-<body class="bg-slate-100 font-sans text-slate-800 antialiased">
+<body class="bg-slate-50 font-sans text-slate-800 antialiased">
 
-<!-- ============ LOGIN SCREEN ============ -->
-<div id="loginScreen" class="fixed inset-0 z-50 grid place-items-center bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 p-4">
-  <div class="pointer-events-none absolute inset-0 opacity-[.1]"
-       style="background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size:22px 22px;"></div>
+<!-- ============ LOGIN SCREEN (LIGHT) ============ -->
+<div id="loginScreen" class="fixed inset-0 z-50 grid place-items-center bg-gradient-to-br from-indigo-50 via-white to-sky-50 p-4 overflow-y-auto">
+  <!-- Decorative blur blobs -->
+  <div class="pointer-events-none absolute inset-0 overflow-hidden">
+    <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-brand-200/40 blur-3xl"></div>
+    <div class="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl"></div>
+    <div class="absolute top-1/3 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-violet-200/30 blur-3xl"></div>
+  </div>
 
   <div class="relative w-full max-w-md anim-in">
-    <div class="rounded-3xl border border-white/15 bg-white/10 p-8 text-center backdrop-blur-xl shadow-2xl">
-      <img src="logo.png" alt="eMutation logo" class="mx-auto h-20 w-20 object-contain" />
-      <h1 class="mt-5 text-2xl font-extrabold text-white">Admin Panel</h1>
-      <p class="mt-2 text-sm text-brand-100">eMutation Birth certificate application support</p>
-      <p class="mt-6 text-xs leading-relaxed text-brand-100/90">
-        শুধুমাত্র অনুমোদিত অ্যাডমিন Google অ্যাকাউন্ট অথবা ইমেইল দিয়ে প্রবেশ করতে পারবেন।
-      </p>
+    <div class="rounded-3xl border border-white/80 bg-white/90 p-8 shadow-lift backdrop-blur-xl">
+      <div class="text-center">
+        <img src="logo.png" alt="eMutation logo" class="mx-auto h-20 w-20 object-contain" />
+        <h1 class="mt-5 text-2xl font-extrabold tracking-tight text-slate-900">Admin Panel</h1>
+        <p class="mt-1.5 text-sm text-slate-500">eMutation Birth certificate support</p>
+      </div>
 
-      <button id="googleLoginBtn"
-        class="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-3.5 text-sm font-extrabold text-slate-800 shadow-xl transition hover:bg-brand-50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
-        <svg class="h-5 w-5" viewBox="0 0 48 48">
-          <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.2-.1-2.3-.1-3.5Z"/>
-          <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7Z"/>
-          <path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.4C29.4 34.7 26.9 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.6 39.6 16.3 44 24 44Z"/>
-          <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.3 5.4c-.4.4 6.6-4.8 6.6-15.1 0-1.2-.1-2.3-.4-3.5Z"/>
-        </svg>
-        Google দিয়ে লগইন করুন
-      </button>
+      <div class="mt-7 space-y-2.5">
+        <button id="googleLoginBtn"
+          class="inline-flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-bold text-slate-800 shadow-soft transition hover:border-slate-300 hover:bg-slate-50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
+          <svg class="h-5 w-5" viewBox="0 0 48 48">
+            <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.2-.1-2.3-.1-3.5Z"/>
+            <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7Z"/>
+            <path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.4C29.4 34.7 26.9 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.6 39.6 16.3 44 24 44Z"/>
+            <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.3 5.4c-.4.4 6.6-4.8 6.6-15.1 0-1.2-.1-2.3-.4-3.5Z"/>
+          </svg>
+          Google দিয়ে লগইন করুন
+        </button>
 
-      <button id="emailLoginBtn" type="button"
-        class="mt-3 inline-flex w-full items-center justify-center gap-3 rounded-xl border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-extrabold text-white backdrop-blur transition hover:bg-white/20 hover:border-white/50 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z"/>
-        </svg>
-        ইমেইল দিয়ে লগইন করুন
-      </button>
+        <button id="emailLoginBtn" type="button"
+          class="inline-flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-500/25 transition hover:from-brand-700 hover:to-brand-600 active:scale-[.98]">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2Z"/>
+          </svg>
+          ইমেইল দিয়ে লগইন করুন
+        </button>
+      </div>
 
-      <div id="loginError" class="mt-4 hidden rounded-xl border border-rose-300/40 bg-rose-500/20 px-4 py-3 text-left">
+      <div id="loginError" class="mt-4 hidden rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-left">
         <div class="flex items-start gap-2.5">
-          <svg class="mt-0.5 h-5 w-5 shrink-0 text-rose-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
           </svg>
           <div class="min-w-0">
-            <p id="loginErrorTitle" class="text-sm font-extrabold text-white">Verify Failed</p>
-            <p id="loginErrorMsg" class="mt-1 text-xs leading-relaxed text-rose-50"></p>
+            <p id="loginErrorTitle" class="text-sm font-bold text-rose-800">Verify Failed</p>
+            <p id="loginErrorMsg" class="mt-1 text-xs leading-relaxed text-rose-700"></p>
           </div>
         </div>
       </div>
+
+      <p class="mt-6 text-center text-[11px] text-slate-400">
+        শুধুমাত্র অনুমোদিত অ্যাডমিনের জন্য
+      </p>
     </div>
 
-    <p class="mt-6 text-center text-xs text-brand-100/70">
-      Developed by <a href="https://codecurebd.vercel.app/" target="_blank" class="font-bold text-white hover:underline">CodeCureBD</a>
+    <p class="mt-6 text-center text-xs text-slate-500">
+      Developed by <a href="https://codecurebd.vercel.app/" target="_blank" class="font-bold text-brand-600 hover:underline">CodeCureBD</a>
     </p>
   </div>
 </div>
 
 <!-- ============ EMAIL LOGIN MODAL ============ -->
-<div id="emailLoginModal" class="fixed inset-0 z-[55] hidden items-center justify-center bg-slate-900/75 p-4 backdrop-blur-sm">
-  <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl anim-in">
-    <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
+<div id="emailLoginModal" class="sheet-modal fixed inset-0 z-[55] hidden items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+  <div class="w-full max-w-md rounded-2xl bg-white shadow-lift anim-in">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-100 px-5 py-4">
       <div class="min-w-0">
         <p class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Admin Login</p>
-        <h3 class="mt-0.5 text-lg font-extrabold text-slate-900">ইমেইল দিয়ে লগইন</h3>
-        <p class="mt-0.5 text-[11px] text-slate-500">শুধুমাত্র অনুমোদিত অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করুন</p>
+        <h3 class="mt-0.5 text-lg font-extrabold tracking-tight text-slate-900">ইমেইল দিয়ে লগইন</h3>
+        <p class="mt-0.5 text-[11px] text-slate-500">অনুমোদিত অ্যাডমিন অ্যাকাউন্ট দিয়ে প্রবেশ করুন</p>
       </div>
       <button type="button" id="closeEmailLoginModal" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -164,7 +232,7 @@
 
       <div id="emailLoginError" class="mt-4 hidden rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5">
         <div class="flex items-start gap-2.5">
-          <svg class="mt-0.5 h-4 w-4 shrink-0 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
           </svg>
           <p id="emailLoginErrorMsg" class="text-xs font-semibold leading-relaxed text-rose-700"></p>
@@ -178,8 +246,8 @@
         লগইন করুন
       </button>
 
-      <p class="mt-4 text-center text-[11px] text-slate-500">
-        🔒 শুধুমাত্র অনুমোদিত অ্যাডমিনের জন্য। নতুন অ্যাকাউন্ট তৈরি করার সুযোগ নেই।
+      <p class="mt-4 text-center text-[11px] text-slate-400">
+        🔒 শুধুমাত্র অনুমোদিত অ্যাডমিনের জন্য
       </p>
     </form>
   </div>
@@ -188,55 +256,58 @@
 <!-- ============ APP SHELL ============ -->
 <div id="app" class="hidden min-h-screen">
 
-  <div id="sidebarBackdrop" class="fixed inset-0 z-30 hidden bg-slate-900/60 backdrop-blur-sm md:hidden"></div>
-
-  <aside id="sidebar"
-    class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full bg-slate-900 text-slate-300 transition-transform duration-300 md:translate-x-0">
-    <div class="flex h-16 items-center gap-3 border-b border-slate-800 px-5">
-      <img src="logo.png" alt="eMutation logo" class="h-9 w-9 shrink-0 object-contain" />
+  <!-- ========== DESKTOP SIDEBAR ========== -->
+  <aside id="sidebar" class="hidden md:flex md:flex-col fixed inset-y-0 left-0 z-30 w-64 border-r border-slate-200/80 bg-white">
+    <div class="flex h-16 items-center gap-3 border-b border-slate-100 px-5">
+      <img src="logo.png" alt="logo" class="h-9 w-9 shrink-0 object-contain" />
       <div class="min-w-0">
-        <p class="truncate text-sm font-extrabold text-white">eMutation Admin</p>
-        <p class="text-[10px] uppercase tracking-wider text-brand-400">Control Panel</p>
+        <p class="truncate text-sm font-extrabold tracking-tight text-slate-900">eMutation</p>
+        <p class="text-[10px] font-semibold uppercase tracking-wider text-brand-500">Admin Panel</p>
       </div>
     </div>
 
-    <nav class="sidebar-scroll h-[calc(100vh-8rem)] space-y-1 overflow-y-auto px-3 py-5 text-sm font-semibold">
-      <button data-nav="dashboard" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+    <nav class="scroll-slim flex-1 space-y-1 overflow-y-auto px-3 py-5 text-sm">
+      <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Menu</p>
+
+      <button data-nav="dashboard" class="nav-btn text-slate-600 hover:bg-slate-50 hover:text-slate-900">
         <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h7V3H3v9Zm0 9h7v-6H3v6Zm11 0h7v-9h-7v9Zm0-15v4h7V3h-7Z"/>
         </svg>
-        ড্যাশবোর্ড
+        <span class="flex-1">ড্যাশবোর্ড</span>
       </button>
-      <button data-nav="orders" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+
+      <button data-nav="orders" class="nav-btn text-slate-600 hover:bg-slate-50 hover:text-slate-900">
         <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
         </svg>
-        অর্ডারসমূহ
-        <span id="ordersBadge" class="ml-auto hidden rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold text-white">0</span>
+        <span class="flex-1">অর্ডারসমূহ</span>
+        <span id="ordersBadge" class="hidden rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold text-brand-700">0</span>
       </button>
-      <button data-nav="chats" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+
+      <button data-nav="chats" class="nav-btn text-slate-600 hover:bg-slate-50 hover:text-slate-900">
         <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
         </svg>
-        সাপোর্ট চ্যাট
-        <span id="chatsBadge" class="ml-auto hidden rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white">0</span>
+        <span class="flex-1">সাপোর্ট চ্যাট</span>
+        <span id="chatsBadge" class="hidden rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-700">0</span>
       </button>
-      <button data-nav="settings" class="nav-btn flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left transition">
+
+      <button data-nav="settings" class="nav-btn text-slate-600 hover:bg-slate-50 hover:text-slate-900">
         <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
         </svg>
-        সেটিংস
+        <span class="flex-1">সেটিংস</span>
       </button>
     </nav>
 
-    <div class="absolute inset-x-0 bottom-0 border-t border-slate-800 bg-slate-900 p-3">
-      <div class="flex items-center gap-3 rounded-xl bg-slate-800/60 px-3 py-2.5">
-        <img id="userAvatar" class="h-9 w-9 rounded-full object-cover bg-slate-700" alt="" />
+    <div class="border-t border-slate-100 p-3">
+      <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2.5">
+        <img id="userAvatar" class="h-9 w-9 rounded-full object-cover ring-2 ring-white bg-slate-200" alt="" />
         <div class="min-w-0 flex-1">
-          <p id="userName" class="truncate text-xs font-bold text-white">Admin</p>
-          <p id="userEmail" class="truncate text-[10px] text-slate-400">—</p>
+          <p id="userName" class="truncate text-xs font-bold text-slate-900">Admin</p>
+          <p id="userEmail" class="truncate text-[10px] text-slate-500">—</p>
         </div>
-        <button id="logoutBtn" title="লগআউট" class="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-rose-500/20 hover:text-rose-400">
+        <button id="logoutBtn" title="লগআউট" class="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-rose-50 hover:text-rose-600">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H3m0 0 3-3m-3 3 3 3m9-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
           </svg>
@@ -245,214 +316,264 @@
     </div>
   </aside>
 
+  <!-- ========== MAIN CONTENT ========== -->
   <div class="md:pl-64">
-    <header class="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
-      <div class="flex items-center gap-3">
-        <button id="menuToggle" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-300 text-slate-600 md:hidden">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-        <div>
-          <h1 id="pageTitle" class="text-base font-extrabold text-slate-900 sm:text-lg">ড্যাশবোর্ড</h1>
-          <p id="pageSub" class="text-[11px] text-slate-500 sm:text-xs">সারসংক্ষেপ ও পরিসংখ্যান</p>
-        </div>
-      </div>
 
-      <div class="flex items-center gap-2">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-20 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
+      <div class="flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
+        <div class="min-w-0">
+          <h1 id="pageTitle" class="truncate text-base font-extrabold tracking-tight text-slate-900 sm:text-lg">ড্যাশবোর্ড</h1>
+          <p id="pageSub" class="truncate text-[11px] text-slate-500 sm:text-xs">সারসংক্ষেপ ও পরিসংখ্যান</p>
+        </div>
+
+        <!-- Live indicator (desktop) -->
         <span class="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-700 sm:inline-flex">
           <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
           লাইভ
         </span>
+
+        <!-- Profile avatar (mobile only) -->
+        <div class="relative md:hidden">
+          <button id="profileMenuBtn" class="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-slate-100 ring-2 ring-white">
+            <img id="mobileAvatar" class="h-full w-full object-cover" alt="" />
+          </button>
+          <div id="profileMenu" class="hidden absolute right-0 top-full mt-2 w-64 rounded-2xl border border-slate-200 bg-white p-2 shadow-lift anim-in">
+            <div class="flex items-center gap-3 px-3 py-2.5">
+              <img id="profileMenuAvatar" class="h-10 w-10 rounded-full object-cover ring-2 ring-white bg-slate-200" alt="" />
+              <div class="min-w-0 flex-1">
+                <p id="profileMenuName" class="truncate text-sm font-bold text-slate-900">Admin</p>
+                <p id="profileMenuEmail" class="truncate text-[11px] text-slate-500">—</p>
+              </div>
+            </div>
+            <button id="logoutBtnMobile" class="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-rose-600 transition hover:bg-rose-50">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H3m0 0 3-3m-3 3 3 3m9-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+              </svg>
+              লগআউট
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
-    <!-- DASHBOARD -->
-    <main id="page-dashboard" class="page p-4 sm:p-6">
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- ==================== DASHBOARD ==================== -->
+    <main id="page-dashboard" class="page p-4 pb-28 sm:p-6 sm:pb-6">
+      <div class="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         <div class="stat-card">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand-700">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
-            </svg>
-          </span>
-          <p class="mt-3 text-xs font-semibold text-slate-500">মোট অর্ডার</p>
-          <p id="statTotalOrders" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-xs font-semibold text-slate-500">মোট অর্ডার</p>
+              <p id="statTotalOrders" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">০</p>
+            </div>
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+              </svg>
+            </span>
+          </div>
         </div>
 
         <div class="stat-card">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-          </span>
-          <p class="mt-3 text-xs font-semibold text-slate-500">মোট আর্নিং</p>
-          <p id="statEarnings" class="mt-1 text-3xl font-extrabold text-slate-900">৳ ০</p>
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-xs font-semibold text-slate-500">মোট আর্নিং</p>
+              <p id="statEarnings" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">৳ ০</p>
+            </div>
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+              </svg>
+            </span>
+          </div>
         </div>
 
         <div class="stat-card">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-amber-700">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-          </span>
-          <p class="mt-3 text-xs font-semibold text-slate-500">পেন্ডিং অর্ডার</p>
-          <p id="statPending" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-xs font-semibold text-slate-500">পেন্ডিং অর্ডার</p>
+              <p id="statPending" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">০</p>
+            </div>
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-600">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+              </svg>
+            </span>
+          </div>
         </div>
 
         <div class="stat-card">
-          <span class="grid h-11 w-11 place-items-center rounded-xl bg-rose-50 text-rose-700">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
-            </svg>
-          </span>
-          <p class="mt-3 text-xs font-semibold text-slate-500">মোট মেসেজ</p>
-          <p id="statMessages" class="mt-1 text-3xl font-extrabold text-slate-900">০</p>
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-xs font-semibold text-slate-500">মোট মেসেজ</p>
+              <p id="statMessages" class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">০</p>
+            </div>
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-rose-50 text-rose-500">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+              </svg>
+            </span>
+          </div>
         </div>
       </div>
 
-      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="stat-card">
-          <p class="text-xs font-semibold text-slate-500">সম্পন্ন অর্ডার</p>
-          <p id="statCompleted" class="mt-1 text-2xl font-extrabold text-emerald-700">০</p>
+      <div class="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-4">
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
+          <p class="text-[11px] font-semibold text-slate-500">সম্পন্ন</p>
+          <p id="statCompleted" class="mt-1 text-2xl font-extrabold tracking-tight text-emerald-600">০</p>
         </div>
-        <div class="stat-card">
-          <p class="text-xs font-semibold text-slate-500">প্রসেসিং</p>
-          <p id="statProcessing" class="mt-1 text-2xl font-extrabold text-brand-700">০</p>
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
+          <p class="text-[11px] font-semibold text-slate-500">প্রসেসিং</p>
+          <p id="statProcessing" class="mt-1 text-2xl font-extrabold tracking-tight text-brand-600">০</p>
         </div>
-        <div class="stat-card">
-          <p class="text-xs font-semibold text-slate-500">বাতিল</p>
-          <p id="statCancelled" class="mt-1 text-2xl font-extrabold text-rose-700">০</p>
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
+          <p class="text-[11px] font-semibold text-slate-500">বাতিল</p>
+          <p id="statCancelled" class="mt-1 text-2xl font-extrabold tracking-tight text-rose-500">০</p>
         </div>
-        <div class="stat-card">
-          <p class="text-xs font-semibold text-slate-500">মোট আবেদনকারী</p>
-          <p id="statApplicants" class="mt-1 text-2xl font-extrabold text-slate-900">০</p>
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft">
+          <p class="text-[11px] font-semibold text-slate-500">আবেদনকারী</p>
+          <p id="statApplicants" class="mt-1 text-2xl font-extrabold tracking-tight text-slate-900">০</p>
         </div>
       </div>
 
-      <div class="mt-5 grid gap-4 lg:grid-cols-3">
-        <div class="stat-card lg:col-span-2">
+      <div class="mt-3 grid gap-4 sm:mt-5 lg:grid-cols-3">
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft lg:col-span-2">
           <div class="flex items-center justify-between">
-            <h3 class="text-sm font-extrabold text-slate-900">সাম্প্রতিক অর্ডার</h3>
+            <h3 class="text-sm font-extrabold tracking-tight text-slate-900">সাম্প্রতিক অর্ডার</h3>
             <button data-nav="orders" class="text-xs font-bold text-brand-600 hover:underline">সব দেখুন →</button>
           </div>
-          <div id="recentOrders" class="mt-4 space-y-3"></div>
+          <div id="recentOrders" class="mt-4 space-y-2.5"></div>
         </div>
 
-        <div class="stat-card">
-          <h3 class="text-sm font-extrabold text-slate-900">সাম্প্রতিক সাপোর্ট চ্যাট</h3>
-          <div id="recentChats" class="mt-4 space-y-3"></div>
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft">
+          <h3 class="text-sm font-extrabold tracking-tight text-slate-900">সাম্প্রতিক সাপোর্ট চ্যাট</h3>
+          <div id="recentChats" class="mt-4 space-y-2.5"></div>
         </div>
       </div>
     </main>
 
-    <!-- ORDERS -->
-    <main id="page-orders" class="page hidden p-4 sm:p-6">
-      <div class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div class="flex flex-1 flex-col gap-3 sm:flex-row">
-            <div class="relative flex-1">
-              <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3M17 11a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/>
-              </svg>
-              <input id="orderSearch" type="text" class="input pl-10" placeholder="অর্ডার আইডি, নাম বা ইমেইল দিয়ে খুঁজুন…" />
-            </div>
-            <select id="orderFilter" class="input sm:max-w-[190px]">
+    <!-- ==================== ORDERS ==================== -->
+    <main id="page-orders" class="page hidden p-4 pb-28 sm:p-6 sm:pb-6">
+      <div class="rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft sm:p-4">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div class="relative flex-1">
+            <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.3-4.3M17 11a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/>
+            </svg>
+            <input id="orderSearch" type="text" class="input pl-10" placeholder="অর্ডার আইডি, নাম বা ইমেইল…" />
+          </div>
+          <div class="flex gap-2">
+            <select id="orderFilter" class="input flex-1 sm:w-[180px] sm:flex-none">
               <option value="all">সব অর্ডার</option>
               <option value="pending">পেন্ডিং</option>
               <option value="processing">প্রসেসিং</option>
               <option value="completed">সম্পন্ন</option>
               <option value="cancelled">বাতিল</option>
             </select>
-          </div>
-          <button id="refreshOrders" class="btn-ghost shrink-0">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.6M20 20v-5h-.6M4.6 9A8 8 0 0 1 19.4 9M19.4 15a8 8 0 0 1-14.8 0"/>
-            </svg>
-            রিফ্রেশ
-          </button>
-        </div>
-      </div>
-
-      <div id="ordersList" class="mt-5 space-y-4"></div>
-    </main>
-
-    <!-- CHATS -->
-    <main id="page-chats" class="page hidden p-4 sm:p-6">
-      <div class="grid h-[calc(100vh-8rem)] gap-4 lg:grid-cols-3">
-        <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white lg:col-span-1">
-          <div class="border-b border-slate-200 px-4 py-3.5">
-            <h3 class="text-sm font-extrabold text-slate-900">সাপোর্ট চ্যাট লিস্ট</h3>
-            <p class="mt-0.5 text-xs text-slate-500">সব ক্লায়েন্টের সাথে কথোপকথন</p>
-          </div>
-          <div id="chatList" class="sidebar-scroll flex-1 overflow-y-auto p-2"></div>
-        </div>
-
-        <div class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white lg:col-span-2">
-          <div id="chatHeader" class="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3.5">
-            <div class="flex items-center gap-3">
-              <span class="relative grid h-10 w-10 place-items-center rounded-full bg-brand-100 text-brand-700 font-extrabold" id="chatAvatar">?</span>
-              <div>
-                <p id="chatName" class="text-sm font-extrabold text-slate-900">কোনো চ্যাট নির্বাচন করুন</p>
-                <p id="chatStatus" class="text-[11px] text-slate-500">বাম দিক থেকে একটি চ্যাট বেছে নিন</p>
-              </div>
-            </div>
-          </div>
-
-          <div id="adminChatBody" class="chat-body flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4">
-            <div class="flex h-full flex-col items-center justify-center text-center">
-              <span class="grid h-14 w-14 place-items-center rounded-full bg-slate-100 text-slate-400">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
-                </svg>
-              </span>
-              <p class="mt-3 text-sm font-bold text-slate-700">চ্যাট নির্বাচন করুন</p>
-              <p class="mt-1 text-xs text-slate-500">বাম দিকের তালিকা থেকে একটি ক্লায়েন্ট নির্বাচন করলে তার মেসেজ দেখতে পাবেন।</p>
-            </div>
-          </div>
-
-          <form id="adminChatForm" class="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-3">
-            <input id="adminChatInput" type="text" autocomplete="off" placeholder="উত্তর লিখুন…"
-              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100" />
-            <button type="submit" id="adminSendBtn"
-              class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white transition hover:bg-brand-700 disabled:opacity-50">
+            <button id="refreshOrders" class="btn-ghost shrink-0 !px-3.5" title="রিফ্রেশ">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.3 3.7a1 1 0 0 1 1.3-1.2l16.4 8.4a1 1 0 0 1 0 1.8L4.6 21.5a1 1 0 0 1-1.3-1.2L6 12Zm0 0h6"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.6M20 20v-5h-.6M4.6 9A8 8 0 0 1 19.4 9M19.4 15a8 8 0 0 1-14.8 0"/>
               </svg>
             </button>
-          </form>
+          </div>
+        </div>
+      </div>
+
+      <div id="ordersList" class="mt-4 space-y-3 sm:space-y-4"></div>
+    </main>
+
+    <!-- ==================== CHATS ==================== -->
+    <main id="page-chats" class="page hidden">
+      <div id="chatContainer" class="chat-container flex h-[calc(100dvh-3.5rem)] md:h-[calc(100dvh-4rem)] md:p-6 md:bg-slate-50">
+        <div class="flex w-full overflow-hidden md:rounded-2xl md:border md:border-slate-200/80 md:bg-white md:shadow-soft">
+
+          <!-- Chat list panel -->
+          <div class="chat-list-wrap flex w-full flex-col md:w-80 md:border-r md:border-slate-200 lg:w-96">
+            <div class="border-b border-slate-100 px-4 py-3.5">
+              <h3 class="text-sm font-extrabold tracking-tight text-slate-900">সাপোর্ট চ্যাট</h3>
+              <p class="mt-0.5 text-[11px] text-slate-500">সব ক্লায়েন্টের সাথে কথোপকথন</p>
+            </div>
+            <div id="chatList" class="scroll-slim flex-1 overflow-y-auto p-2"></div>
+          </div>
+
+          <!-- Chat detail panel -->
+          <div class="chat-detail-wrap flex min-w-0 flex-1 flex-col bg-white">
+            <div class="flex items-center gap-3 border-b border-slate-100 bg-white px-3 py-3 md:px-4">
+              <button id="chatBackBtn" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-600 transition hover:bg-slate-100 md:hidden">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
+                </svg>
+              </button>
+              <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-100 text-xs font-extrabold text-brand-700" id="chatAvatar">?</div>
+              <div class="min-w-0 flex-1">
+                <p id="chatName" class="truncate text-sm font-extrabold text-slate-900">চ্যাট নির্বাচন করুন</p>
+                <p id="chatStatus" class="truncate text-[11px] text-slate-500">একটি চ্যাট বেছে নিন</p>
+              </div>
+            </div>
+
+            <div id="adminChatBody" class="chat-body flex-1 space-y-3 overflow-y-auto bg-slate-50 px-3 py-4 md:px-4">
+              <div class="flex h-full flex-col items-center justify-center text-center">
+                <span class="grid h-16 w-16 place-items-center rounded-2xl bg-white text-slate-300 shadow-soft">
+                  <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+                  </svg>
+                </span>
+                <p class="mt-4 text-sm font-bold text-slate-700">চ্যাট নির্বাচন করুন</p>
+                <p class="mt-1 max-w-xs text-xs text-slate-500">তালিকা থেকে একটি ক্লায়েন্ট নির্বাচন করলে তার মেসেজ দেখতে পাবেন।</p>
+              </div>
+            </div>
+
+            <form id="adminChatForm" class="flex items-center gap-2 border-t border-slate-100 bg-white px-3 py-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] md:pb-2.5">
+              <input id="adminChatInput" type="text" autocomplete="off" placeholder="উত্তর লিখুন…"
+                class="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-brand-400 focus:bg-white focus:ring-4 focus:ring-brand-100/60" />
+              <button type="submit" id="adminSendBtn"
+                class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-soft transition hover:bg-brand-700 active:scale-95 disabled:opacity-50">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.3 3.7a1 1 0 0 1 1.3-1.2l16.4 8.4a1 1 0 0 1 0 1.8L4.6 21.5a1 1 0 0 1-1.3-1.2L6 12Zm0 0h6"/>
+                </svg>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </main>
 
-    <!-- SETTINGS PAGE (Pricing + Password) -->
-    <main id="page-settings" class="page hidden p-4 sm:p-6">
+    <!-- ==================== SETTINGS ==================== -->
+    <main id="page-settings" class="page hidden p-4 pb-28 sm:p-6 sm:pb-6">
       <div class="max-w-2xl space-y-4">
-
-        <!-- Pricing Card -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 class="text-lg font-extrabold text-slate-900">গ্লোবাল প্রাইসিং সেটিংস</h2>
-          <p class="mt-1 text-sm text-slate-500">এখান থেকে প্রতি আবেদনকারীর ফি নির্ধারণ করুন। এই ফি স্বয়ংক্রিয়ভাবে ওয়েবসাইটে আপডেট হয়ে যাবে।</p>
+        <!-- Pricing -->
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft sm:p-6">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="text-base font-extrabold tracking-tight text-slate-900 sm:text-lg">গ্লোবাল প্রাইসিং</h2>
+              <p class="mt-1 text-xs text-slate-500 sm:text-sm">প্রতি আবেদনকারীর ফি নির্ধারণ করুন। এটা ওয়েবসাইটে অটো আপডেট হবে।</p>
+            </div>
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.6 1M12 8V6m0 10c-1.11 0-2.08-.402-2.6-1M12 16v2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+              </svg>
+            </span>
+          </div>
 
           <div class="mt-5">
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5">প্রতি আবেদনকারীর ফি (৳) <span class="text-rose-500">*</span></label>
+            <label class="mb-1.5 block text-xs font-bold text-slate-700">প্রতি আবেদনকারীর ফি (৳)</label>
             <input type="number" id="globalPriceInput" class="input sm:max-w-xs" placeholder="যেমন: 500" min="1" />
           </div>
 
-          <button id="saveSettingsBtn" class="btn-primary mt-4">
+          <button id="saveSettingsBtn" class="btn-primary mt-4 w-full sm:w-auto">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             সেভ করুন
           </button>
         </div>
 
-        <!-- Password Card (NEW) -->
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <!-- Password -->
+        <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-soft sm:p-6">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
-              <h2 class="text-lg font-extrabold text-slate-900">পাসওয়ার্ড সেটিংস</h2>
-              <p class="mt-1 text-sm text-slate-500">Google ছাড়াও ইমেইল-পাসওয়ার্ড দিয়ে লগইন করতে চাইলে এখান থেকে পাসওয়ার্ড সেট করুন বা পরিবর্তন করুন।</p>
+              <h2 class="text-base font-extrabold tracking-tight text-slate-900 sm:text-lg">পাসওয়ার্ড সেটিংস</h2>
+              <p class="mt-1 text-xs text-slate-500 sm:text-sm">Google ছাড়াও ইমেইল-পাসওয়ার্ড দিয়ে লগইন করতে চাইলে এখান থেকে সেট করুন।</p>
             </div>
-            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
               </svg>
@@ -462,53 +583,88 @@
           <div id="pwdStatus" class="mt-4"></div>
           <div id="pwdFormArea" class="mt-4"></div>
         </div>
-
       </div>
     </main>
   </div>
+
+  <!-- ========== MOBILE BOTTOM NAV ========== -->
+  <nav class="mobile-bottom-nav md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-slate-200/80 bg-white/95 backdrop-blur-xl pb-safe">
+    <div class="grid grid-cols-4">
+      <button data-nav="dashboard" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h7V3H3v9Zm0 9h7v-6H3v6Zm11 0h7v-9h-7v9Zm0-15v4h7V3h-7Z"/>
+        </svg>
+        <span>হোম</span>
+      </button>
+      <button data-nav="orders" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+        <div class="relative">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4"/>
+          </svg>
+          <span id="ordersBadgeMobile" class="hidden absolute -top-1.5 -right-1.5 min-w-[16px] rounded-full bg-brand-600 px-1 text-center text-[9px] font-bold text-white">0</span>
+        </div>
+        <span>অর্ডার</span>
+      </button>
+      <button data-nav="chats" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+        <div class="relative">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+          </svg>
+          <span id="chatsBadgeMobile" class="hidden absolute -top-1.5 -right-1.5 min-w-[16px] rounded-full bg-rose-500 px-1 text-center text-[9px] font-bold text-white">0</span>
+        </div>
+        <span>চ্যাট</span>
+      </button>
+      <button data-nav="settings" class="mobile-nav-btn text-slate-400 active:text-brand-600">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+        </svg>
+        <span>সেটিংস</span>
+      </button>
+    </div>
+  </nav>
 </div>
 
 <!-- ============ ORDER DETAILS MODAL ============ -->
-<div id="orderModal" class="fixed inset-0 z-[60] hidden items-start justify-center overflow-y-auto bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center">
-  <div class="my-4 w-full max-w-3xl rounded-2xl bg-white shadow-2xl anim-in">
-    <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
-      <div>
+<div id="orderModal" class="sheet-modal fixed inset-0 z-[60] hidden items-start justify-center overflow-y-auto bg-slate-900/40 p-4 backdrop-blur-sm sm:items-center">
+  <div class="my-4 w-full max-w-3xl rounded-2xl bg-white shadow-lift anim-in">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-100 px-5 py-4 sm:px-6">
+      <div class="min-w-0">
         <p class="text-[11px] font-bold uppercase tracking-wider text-brand-600">অর্ডার বিস্তারিত</p>
-        <h3 id="modalOrderId" class="mt-0.5 text-lg font-extrabold text-slate-900">—</h3>
+        <h3 id="modalOrderId" class="mt-0.5 truncate text-lg font-extrabold tracking-tight text-slate-900">—</h3>
       </div>
-      <button id="closeOrderModal" class="grid h-9 w-9 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
+      <button id="closeOrderModal" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
         </svg>
       </button>
     </div>
 
-    <div id="modalOrderBody" class="max-h-[75vh] overflow-y-auto px-5 py-5 sm:px-6"></div>
+    <div id="modalOrderBody" class="max-h-[calc(92dvh-11rem)] overflow-y-auto px-5 py-5 sm:max-h-[75vh] sm:px-6"></div>
 
-    <div class="sticky bottom-0 flex flex-col gap-3 border-t border-slate-200 bg-white px-5 py-4 sm:flex-row sm:justify-between sm:px-6">
-      <button id="modalDeleteBtn" class="btn-danger sm:w-auto">
+    <div class="flex flex-col gap-2 border-t border-slate-100 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+      <button id="modalDeleteBtn" class="btn-danger order-3 sm:order-1 sm:w-auto">
         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
         </svg>
-        অর্ডার ডিলিট করুন
+        ডিলিট
       </button>
-      <div class="flex flex-col gap-3 sm:flex-row">
-        <button id="modalCopyFormBtn" class="btn-ghost sm:w-auto">Copy Form</button>
-        <button id="modalPrintBtn" class="btn-ghost sm:w-auto">প্রিন্ট</button>
-        <button id="modalCompletedBtn" class="btn-primary sm:w-auto" data-status="completed">সম্পন্ন হিসেবে চিহ্নিত করুন</button>
+      <div class="grid grid-cols-2 gap-2 order-1 sm:order-2 sm:flex sm:flex-row">
+        <button id="modalCopyFormBtn" class="btn-ghost !px-3 sm:w-auto">Copy Form</button>
+        <button id="modalPrintBtn" class="btn-ghost !px-3 sm:w-auto">প্রিন্ট</button>
+        <button id="modalCompletedBtn" class="btn-primary col-span-2 sm:col-span-1 sm:w-auto" data-status="completed">✓ সম্পন্ন করুন</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ============ COPY FORM MODAL ============ -->
-<div id="copyFormModal" class="fixed inset-0 z-[65] hidden items-start justify-center overflow-y-auto bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center">
-  <div class="my-4 w-full max-w-3xl rounded-2xl bg-white shadow-2xl anim-in">
-    <div class="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
+<div id="copyFormModal" class="sheet-modal fixed inset-0 z-[65] hidden items-start justify-center overflow-y-auto bg-slate-900/40 p-4 backdrop-blur-sm sm:items-center">
+  <div class="my-4 w-full max-w-3xl rounded-2xl bg-white shadow-lift anim-in">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-100 px-5 py-4 sm:px-6">
       <div class="min-w-0">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Copy Form — দ্রুত কপি</p>
-        <h3 id="copyFormOrderId" class="mt-0.5 truncate text-lg font-extrabold text-slate-900">—</h3>
-        <p class="mt-0.5 text-[11px] text-slate-500">প্রতিটি ফিল্ডের পাশে Copy বাটনে ক্লিক করলে মানটি কপি হয়ে যাবে।</p>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Copy Form</p>
+        <h3 id="copyFormOrderId" class="mt-0.5 truncate text-lg font-extrabold tracking-tight text-slate-900">—</h3>
+        <p class="mt-0.5 text-[11px] text-slate-500">প্রতিটি ফিল্ডের পাশে Copy বাটনে ক্লিক করলে মানটি কপি হবে।</p>
       </div>
       <button id="closeCopyFormModal" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -517,20 +673,20 @@
       </button>
     </div>
 
-    <div id="copyFormApplicantTabs" class="hidden flex-wrap gap-2 border-b border-slate-200 px-5 py-3 sm:px-6"></div>
+    <div id="copyFormApplicantTabs" class="hidden flex-wrap gap-2 border-b border-slate-100 px-5 py-3 sm:px-6"></div>
 
-    <div id="copyFormBody" class="max-h-[72vh] overflow-y-auto px-5 py-5 sm:px-6"></div>
+    <div id="copyFormBody" class="max-h-[calc(92dvh-14rem)] overflow-y-auto px-4 py-5 sm:max-h-[72vh] sm:px-6"></div>
 
-    <div class="flex flex-col gap-3 border-t border-slate-200 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
-      <button id="copyFormDownloadAll" class="btn-ghost sm:w-auto">সব ফিল্ড একসাথে কপি</button>
-      <button id="closeCopyFormBtn" class="btn-primary sm:w-auto">ঠিক আছে</button>
+    <div class="flex flex-col gap-2 border-t border-slate-100 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:flex-row sm:justify-end sm:px-6 sm:py-4">
+      <button id="copyFormDownloadAll" class="btn-ghost order-2 sm:order-1 sm:w-auto">সব একসাথে কপি</button>
+      <button id="closeCopyFormBtn" class="btn-primary order-1 sm:order-2 sm:w-auto">ঠিক আছে</button>
     </div>
   </div>
 </div>
 
 <!-- ============ DELETE CONFIRM MODAL ============ -->
-<div id="deleteModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-slate-900/70 p-4 backdrop-blur-sm">
-  <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl anim-in">
+<div id="deleteModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+  <div class="w-full max-w-md rounded-2xl bg-white shadow-lift anim-in">
     <div class="p-6">
       <div class="flex items-start gap-4">
         <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-rose-100 text-rose-600">
@@ -539,10 +695,8 @@
           </svg>
         </span>
         <div class="min-w-0 flex-1">
-          <h3 class="text-lg font-extrabold text-slate-900">অর্ডার ডিলিট করবেন?</h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-600">
-            এই অর্ডারটি স্থায়ীভাবে মুছে যাবে। এটি আর ফেরত আনা যাবে না।
-          </p>
+          <h3 class="text-lg font-extrabold tracking-tight text-slate-900">অর্ডার ডিলিট করবেন?</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">এই অর্ডারটি স্থায়ীভাবে মুছে যাবে।</p>
           <div class="mt-3 rounded-lg bg-slate-50 px-3 py-2">
             <p class="text-xs text-slate-500">অর্ডার আইডি:</p>
             <p id="deleteOrderId" class="mt-0.5 font-mono text-sm font-bold text-slate-900">—</p>
@@ -550,8 +704,8 @@
         </div>
       </div>
 
-      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <button id="cancelDeleteBtn" class="btn-ghost w-full sm:w-auto">বাতিল করুন</button>
+      <div class="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+        <button id="cancelDeleteBtn" class="btn-ghost w-full sm:w-auto">বাতিল</button>
         <button id="confirmDeleteBtn" class="btn-danger w-full sm:w-auto">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
@@ -564,8 +718,8 @@
 </div>
 
 <!-- ============ TOAST ============ -->
-<div id="toast" class="pointer-events-none fixed left-1/2 top-6 z-[80] -translate-x-1/2 opacity-0 transition-all duration-300">
-  <div id="toastBox" class="flex items-center gap-2.5 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-2xl">
+<div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[80] -translate-x-1/2 opacity-0 transition-all duration-300">
+  <div id="toastBox" class="flex items-center gap-2.5 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-lift">
     <span id="toastIcon"></span>
     <span id="toastText">—</span>
   </div>
@@ -597,7 +751,6 @@ const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);
 const auth = getAuth(app);
 
-/* ✅ শুধুমাত্র একটি admin email */
 const ALLOWED_ADMINS = ['nopqrshov337@gmail.com'];
 
 /* ================= Helpers ================= */
@@ -627,11 +780,10 @@ function showToast(text, type='success') {
   const box = $('#toastBox');
   const icon = $('#toastIcon');
   const txt = $('#toastText');
-
   txt.textContent = text;
 
   const colors = { success: 'bg-emerald-600', error: 'bg-rose-600', info: 'bg-slate-900' };
-  box.className = `flex items-center gap-2.5 rounded-xl ${colors[type] || colors.info} px-4 py-3 text-sm font-semibold text-white shadow-2xl`;
+  box.className = `flex items-center gap-2.5 rounded-xl ${colors[type] || colors.info} px-4 py-3 text-sm font-semibold text-white shadow-lift`;
 
   const icons = {
     success: '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>',
@@ -676,12 +828,10 @@ function hideLoginError() { $('#loginError').classList.add('hidden'); }
 const loginScreen = $('#loginScreen');
 const appEl = $('#app');
 
-/* ---------- Google login ---------- */
 $('#googleLoginBtn').addEventListener('click', async () => {
   hideLoginError();
   const btn = $('#googleLoginBtn');
   btn.disabled = true;
-
   try {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
@@ -694,7 +844,6 @@ $('#googleLoginBtn').addEventListener('click', async () => {
   }
 });
 
-/* ---------- Email login modal ---------- */
 function openEmailLoginModal() {
   const form = $('#emailLoginForm');
   form.reset();
@@ -707,12 +856,14 @@ function openEmailLoginModal() {
   const m = $('#emailLoginModal');
   m.classList.remove('hidden');
   m.classList.add('flex');
+  document.body.classList.add('no-scroll');
   setTimeout(() => $('#emailLoginEmail').focus(), 80);
 }
 function closeEmailLoginModal() {
   const m = $('#emailLoginModal');
   m.classList.add('hidden');
   m.classList.remove('flex');
+  document.body.classList.remove('no-scroll');
 }
 $('#emailLoginBtn').addEventListener('click', openEmailLoginModal);
 $('#closeEmailLoginModal').addEventListener('click', closeEmailLoginModal);
@@ -720,7 +871,6 @@ $('#emailLoginModal').addEventListener('click', e => {
   if (e.target.id === 'emailLoginModal') closeEmailLoginModal();
 });
 
-/* Password show/hide */
 $('#toggleEmailPassword').addEventListener('click', () => {
   const inp = $('#emailLoginPassword');
   const isHidden = inp.type === 'password';
@@ -729,12 +879,10 @@ $('#toggleEmailPassword').addEventListener('click', () => {
   $('#eyeOffIcon').classList.toggle('hidden', isHidden);
 });
 
-/* Submit email login */
 $('#emailLoginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email    = $('#emailLoginEmail').value.trim();
   const password = $('#emailLoginPassword').value;
-
   const errBox = $('#emailLoginError');
   const errMsg = $('#emailLoginErrorMsg');
   errBox.classList.add('hidden');
@@ -763,9 +911,9 @@ $('#emailLoginForm').addEventListener('submit', async (e) => {
       case 'auth/wrong-password':
       case 'auth/user-not-found':       msg = 'ভুল ইমেইল অথবা পাসওয়ার্ড।'; break;
       case 'auth/user-disabled':        msg = 'এই অ্যাকাউন্টটি নিষ্ক্রিয় করা হয়েছে।'; break;
-      case 'auth/too-many-requests':    msg = 'অনেকবার ভুল চেষ্টা হয়েছে। কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।'; break;
-      case 'auth/network-request-failed': msg = 'ইন্টারনেট সংযোগে সমস্যা। আবার চেষ্টা করুন।'; break;
-      case 'auth/operation-not-allowed': msg = 'Firebase-এ Email/Password sign-in চালু করা নেই।'; break;
+      case 'auth/too-many-requests':    msg = 'অনেকবার ভুল চেষ্টা। কিছুক্ষণ পরে করুন।'; break;
+      case 'auth/network-request-failed': msg = 'ইন্টারনেট সংযোগে সমস্যা।'; break;
+      case 'auth/operation-not-allowed': msg = 'Firebase-এ Email/Password চালু করা নেই।'; break;
     }
     errMsg.textContent = msg;
     errBox.classList.remove('hidden');
@@ -776,8 +924,24 @@ $('#emailLoginForm').addEventListener('submit', async (e) => {
 });
 
 $('#logoutBtn').addEventListener('click', () => signOut(auth));
+$('#logoutBtnMobile').addEventListener('click', () => {
+  $('#profileMenu').classList.add('hidden');
+  signOut(auth);
+});
 
-/* ---------- Auth state ---------- */
+/* Profile menu (mobile) */
+$('#profileMenuBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  $('#profileMenu').classList.toggle('hidden');
+});
+document.addEventListener('click', (e) => {
+  const menu = $('#profileMenu');
+  if (!menu || menu.classList.contains('hidden')) return;
+  if (menu.contains(e.target) || e.target.closest('#profileMenuBtn')) return;
+  menu.classList.add('hidden');
+});
+
+/* Auth state */
 onAuthStateChanged(auth, async user => {
   if (!user) {
     loginScreen.classList.remove('hidden');
@@ -795,8 +959,7 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
-  try { await user.getIdToken(true); }
-  catch(e) { console.warn("Token refresh failed", e); }
+  try { await user.getIdToken(true); } catch(e) { console.warn("Token refresh failed", e); }
 
   try {
     const userRef = doc(db, 'users', user.uid);
@@ -819,9 +982,17 @@ onAuthStateChanged(auth, async user => {
   loginScreen.classList.remove('grid');
   appEl.classList.remove('hidden');
 
-  $('#userName').textContent  = user.displayName || 'Admin';
+  const displayName = user.displayName || 'Admin';
+  const avatarFallback = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect fill="%23e2e8f0" width="40" height="40"/><text x="20" y="26" font-size="18" fill="%23475569" text-anchor="middle" font-family="sans-serif">A</text></svg>';
+  const avatarUrl = user.photoURL || avatarFallback;
+
+  $('#userName').textContent  = displayName;
   $('#userEmail').textContent = user.email;
-  $('#userAvatar').src = user.photoURL || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect fill="%23334155" width="40" height="40"/><text x="20" y="26" font-size="18" fill="white" text-anchor="middle" font-family="sans-serif">A</text></svg>';
+  $('#userAvatar').src = avatarUrl;
+  $('#mobileAvatar').src = avatarUrl;
+  $('#profileMenuAvatar').src = avatarUrl;
+  $('#profileMenuName').textContent = displayName;
+  $('#profileMenuEmail').textContent = user.email;
 
   startListeners();
   loadSettings();
@@ -833,14 +1004,8 @@ onAuthStateChanged(auth, async user => {
    ========================================================= */
 async function refreshPasswordState() {
   const user = auth.currentUser;
-  if (!user) {
-    $('#pwdStatus').innerHTML = '';
-    $('#pwdFormArea').innerHTML = '';
-    return;
-  }
-  try { await user.reload(); }
-  catch (e) { console.warn('user.reload failed', e); }
-
+  if (!user) { $('#pwdStatus').innerHTML = ''; $('#pwdFormArea').innerHTML = ''; return; }
+  try { await user.reload(); } catch (e) { console.warn('user.reload failed', e); }
   hasPasswordSet = (auth.currentUser.providerData || []).some(p => p.providerId === 'password');
   renderPasswordSettings();
 }
@@ -848,7 +1013,6 @@ async function refreshPasswordState() {
 function renderPasswordSettings() {
   const user = auth.currentUser;
   if (!user) return;
-
   const statusEl = $('#pwdStatus');
   const formEl = $('#pwdFormArea');
 
@@ -860,7 +1024,7 @@ function renderPasswordSettings() {
         </svg>
         <div class="min-w-0">
           <p class="text-xs font-bold text-emerald-800">✅ পাসওয়ার্ড সেট করা আছে</p>
-          <p class="mt-0.5 text-[11px] text-emerald-700">আপনি এখন Google এবং ইমেইল-পাসওয়ার্ড দুটোই দিয়ে লগইন করতে পারবেন।</p>
+          <p class="mt-0.5 text-[11px] text-emerald-700">Google এবং ইমেইল-পাসওয়ার্ড দুটোই কাজ করবে।</p>
         </div>
       </div>`;
 
@@ -888,7 +1052,6 @@ function renderPasswordSettings() {
           পাসওয়ার্ড পরিবর্তন করুন
         </button>
       </form>`;
-
     $('#changePasswordForm').addEventListener('submit', handleChangePassword);
   } else {
     statusEl.innerHTML = `
@@ -897,8 +1060,8 @@ function renderPasswordSettings() {
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
         </svg>
         <div class="min-w-0">
-          <p class="text-xs font-bold text-amber-800">⚠️ এখনো পাসওয়ার্ড সেট করা হয়নি</p>
-          <p class="mt-0.5 text-[11px] text-amber-700">শুধু Google দিয়ে লগইন করছেন। ইমেইল লগইন চালু করতে একটি পাসওয়ার্ড সেট করুন।</p>
+          <p class="text-xs font-bold text-amber-800">⚠️ পাসওয়ার্ড সেট করা হয়নি</p>
+          <p class="mt-0.5 text-[11px] text-amber-700">ইমেইল লগইন চালু করতে একটি পাসওয়ার্ড সেট করুন।</p>
         </div>
       </div>`;
 
@@ -922,7 +1085,6 @@ function renderPasswordSettings() {
           পাসওয়ার্ড সেট করুন
         </button>
       </form>`;
-
     $('#setPasswordForm').addEventListener('submit', handleSetPassword);
   }
 }
@@ -938,15 +1100,12 @@ function hidePwdError() {
   if (el) el.classList.add('hidden');
 }
 
-/* ---------- Set password (Google-only account → link password) ---------- */
 async function handleSetPassword(e) {
   e.preventDefault();
   hidePwdError();
-
   const newPwd = $('#sp_new').value;
   const confirmPwd = $('#sp_confirm').value;
-
-  if (newPwd.length < 6) { showPwdError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।'); return; }
+  if (newPwd.length < 6) { showPwdError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর।'); return; }
   if (newPwd !== confirmPwd) { showPwdError('দুটি পাসওয়ার্ড মিলছে না।'); return; }
 
   const form = e.target;
@@ -957,18 +1116,18 @@ async function handleSetPassword(e) {
 
   try {
     await setPasswordOnAccount(newPwd);
-    showToast('পাসওয়ার্ড সেট হয়েছে ✅ এখন ইমেইল দিয়েও লগইন করতে পারবেন', 'success');
+    showToast('পাসওয়ার্ড সেট হয়েছে ✅', 'success');
     await refreshPasswordState();
   } catch (err) {
     console.error('Set password error:', err);
-    let msg = 'পাসওয়ার্ড সেট করা যায়নি। আবার চেষ্টা করুন।';
+    let msg = 'পাসওয়ার্ড সেট করা যায়নি।';
     switch (err.code) {
-      case 'auth/email-already-in-use':  msg = 'এই ইমেইলে ইতিমধ্যে পাসওয়ার্ড সেট আছে। "পরিবর্তন" অপশন ব্যবহার করুন।'; break;
-      case 'auth/weak-password':         msg = 'পাসওয়ার্ড দুর্বল। কমপক্ষে ৬ অক্ষরের শক্তিশালী পাসওয়ার্ড দিন।'; break;
-      case 'auth/requires-recent-login': msg = 'নিরাপত্তার জন্য আবার লগইন করে চেষ্টা করুন।'; break;
-      case 'auth/popup-closed-by-user':  msg = 'Google পপআপ বন্ধ করা হয়েছে। আবার চেষ্টা করুন।'; break;
+      case 'auth/email-already-in-use':  msg = 'ইতিমধ্যে পাসওয়ার্ড সেট আছে।'; break;
+      case 'auth/weak-password':         msg = 'পাসওয়ার্ড দুর্বল।'; break;
+      case 'auth/requires-recent-login': msg = 'আবার লগইন করে চেষ্টা করুন।'; break;
+      case 'auth/popup-closed-by-user':  msg = 'Google পপআপ বন্ধ হয়েছে।'; break;
       case 'auth/provider-already-linked': msg = 'পাসওয়ার্ড ইতিমধ্যে লিংক করা আছে।'; break;
-      case 'auth/operation-not-allowed': msg = 'Firebase Console-এ Email/Password provider চালু করুন।'; break;
+      case 'auth/operation-not-allowed': msg = 'Email/Password provider চালু করুন।'; break;
     }
     showPwdError(msg);
   } finally {
@@ -981,7 +1140,7 @@ async function setPasswordOnAccount(newPassword) {
   const user = auth.currentUser;
   if (!user) throw new Error('Not signed in');
   const email = user.email;
-  if (!email) throw new Error('No email on account');
+  if (!email) throw new Error('No email');
 
   try {
     const cred = EmailAuthProvider.credential(email, newPassword);
@@ -999,19 +1158,16 @@ async function setPasswordOnAccount(newPassword) {
   await auth.currentUser.reload();
 }
 
-/* ---------- Change password (password already set) ---------- */
 async function handleChangePassword(e) {
   e.preventDefault();
   hidePwdError();
-
   const currentPwd = $('#cp_current').value;
   const newPwd = $('#cp_new').value;
   const confirmPwd = $('#cp_confirm').value;
-
   if (!currentPwd) { showPwdError('বর্তমান পাসওয়ার্ড দিন।'); return; }
-  if (newPwd.length < 6) { showPwdError('নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।'); return; }
+  if (newPwd.length < 6) { showPwdError('নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষর।'); return; }
   if (newPwd !== confirmPwd) { showPwdError('নতুন পাসওয়ার্ড দুটি মিলছে না।'); return; }
-  if (newPwd === currentPwd) { showPwdError('নতুন পাসওয়ার্ড বর্তমানের থেকে আলাদা হতে হবে।'); return; }
+  if (newPwd === currentPwd) { showPwdError('নতুন পাসওয়ার্ড আলাদা হতে হবে।'); return; }
 
   const form = e.target;
   const btn = form.querySelector('button[type="submit"]');
@@ -1022,12 +1178,10 @@ async function handleChangePassword(e) {
   try {
     const user = auth.currentUser;
     if (!user) throw new Error('Not signed in');
-
     const cred = EmailAuthProvider.credential(user.email, currentPwd);
     await reauthenticateWithCredential(user, cred);
     await updatePassword(auth.currentUser, newPwd);
-
-    showToast('পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে ✅', 'success');
+    showToast('পাসওয়ার্ড পরিবর্তন হয়েছে ✅', 'success');
     form.reset();
   } catch (err) {
     console.error('Change password error:', err);
@@ -1036,8 +1190,8 @@ async function handleChangePassword(e) {
       case 'auth/wrong-password':
       case 'auth/invalid-credential':    msg = 'বর্তমান পাসওয়ার্ড ভুল।'; break;
       case 'auth/weak-password':         msg = 'নতুন পাসওয়ার্ড দুর্বল।'; break;
-      case 'auth/requires-recent-login': msg = 'নিরাপত্তার জন্য আবার লগইন করে চেষ্টা করুন।'; break;
-      case 'auth/too-many-requests':     msg = 'অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পরে করুন।'; break;
+      case 'auth/requires-recent-login': msg = 'আবার লগইন করে চেষ্টা করুন।'; break;
+      case 'auth/too-many-requests':     msg = 'কিছুক্ষণ পরে করুন।'; break;
     }
     showPwdError(msg);
   } finally {
@@ -1063,37 +1217,67 @@ function navigate(page) {
   $('#pageTitle').textContent = NAV_META[page].title;
   $('#pageSub').textContent   = NAV_META[page].sub;
 
+  // Desktop sidebar
   $$('.nav-btn').forEach(b => {
     const active = b.dataset.nav === page;
-    b.classList.toggle('bg-brand-600', active);
-    b.classList.toggle('text-white', active);
-    b.classList.toggle('shadow-md', active);
-    b.classList.toggle('shadow-brand-600/25', active);
-    b.classList.toggle('text-slate-300', !active);
-    b.classList.toggle('hover:bg-slate-800', !active);
+    b.classList.toggle('bg-brand-50', active);
+    b.classList.toggle('text-brand-700', active);
+    b.classList.toggle('text-slate-600', !active);
+    b.classList.toggle('hover:bg-slate-50', !active);
+    b.classList.toggle('hover:text-slate-900', !active);
   });
 
-  if (page === 'settings') {
-    refreshPasswordState();
-  }
+  // Mobile bottom nav
+  $$('.mobile-nav-btn').forEach(b => {
+    const active = b.dataset.nav === page;
+    b.classList.toggle('text-brand-600', active);
+    b.classList.toggle('text-slate-400', !active);
+  });
 
-  closeSidebar();
+  // If leaving chats on mobile, close chat view
+  if (page !== 'chats') closeMobileChat();
+
+  if (page === 'settings') refreshPasswordState();
+
+  // Close profile menu
+  $('#profileMenu').classList.add('hidden');
 }
 $$('[data-nav]').forEach(b => b.addEventListener('click', () => navigate(b.dataset.nav)));
 navigate('dashboard');
 
-function openSidebar() {
-  $('#sidebar').classList.remove('-translate-x-full');
-  $('#sidebarBackdrop').classList.remove('hidden');
+/* =========================================================
+   MOBILE CHAT MASTER-DETAIL
+   ========================================================= */
+function openMobileChat() {
+  if (window.innerWidth >= 1024) return;
+  $('#chatContainer').classList.add('chat-open');
+  document.body.classList.add('chat-full');
 }
-function closeSidebar() {
-  if (window.innerWidth < 768) {
-    $('#sidebar').classList.add('-translate-x-full');
-    $('#sidebarBackdrop').classList.add('hidden');
-  }
+function closeMobileChat() {
+  const c = $('#chatContainer');
+  if (!c.classList.contains('chat-open')) return;
+  c.classList.remove('chat-open');
+  document.body.classList.remove('chat-full');
+
+  if (chatMsgUnsub) { chatMsgUnsub(); chatMsgUnsub = null; }
+  selectedChatId = null;
+  $('#chatName').textContent   = 'চ্যাট নির্বাচন করুন';
+  $('#chatStatus').textContent = 'একটি চ্যাট বেছে নিন';
+  $('#chatAvatar').textContent = '?';
+  $('#adminChatBody').innerHTML = `
+    <div class="flex h-full flex-col items-center justify-center text-center">
+      <span class="grid h-16 w-16 place-items-center rounded-2xl bg-white text-slate-300 shadow-soft">
+        <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
+        </svg>
+      </span>
+      <p class="mt-4 text-sm font-bold text-slate-700">চ্যাট নির্বাচন করুন</p>
+      <p class="mt-1 max-w-xs text-xs text-slate-500">তালিকা থেকে একটি ক্লায়েন্ট নির্বাচন করলে তার মেসেজ দেখতে পাবেন।</p>
+    </div>`;
+  renderChatList();
 }
-$('#menuToggle').addEventListener('click', openSidebar);
-$('#sidebarBackdrop').addEventListener('click', closeSidebar);
+
+$('#chatBackBtn').addEventListener('click', closeMobileChat);
 
 /* =========================================================
    SETTINGS — PRICING
@@ -1119,12 +1303,12 @@ $('#saveSettingsBtn').addEventListener('click', async () => {
 
   try {
     await setDoc(SETTINGS_REF, { pricePerPerson: price, updatedAt: serverTimestamp() }, { merge: true });
-    showToast('প্রাইস সফলভাবে আপডেট হয়েছে', 'success');
+    showToast('প্রাইস আপডেট হয়েছে', 'success');
   } catch (error) {
     console.error('Settings update error:', error);
     let msg = 'প্রাইস আপডেট করা যায়নি';
     if (error.code === 'permission-denied') {
-      msg = `❌ অনুমতি নেই। আপনার ইমেইল: ${auth.currentUser?.email}। Firestore Rules পাবলিশ করেছেন কিনা দেখুন।`;
+      msg = `❌ অনুমতি নেই। ইমেইল: ${auth.currentUser?.email}`;
     } else if (error.message) {
       msg = '❌ ' + error.message;
     }
@@ -1173,18 +1357,34 @@ function applyChatsSnapshot(list, force = false) {
 }
 function updateOrdersBadge() {
   const pending = ordersData.filter(o => o.status === 'pending').length;
-  const badge = $('#ordersBadge');
-  if (pending > 0) { badge.textContent = toBn(pending); badge.classList.remove('hidden'); }
-  else badge.classList.add('hidden');
+  const val = toBn(pending);
+
+  const sBadge = $('#ordersBadge');
+  if (pending > 0) { sBadge.textContent = val; sBadge.classList.remove('hidden'); }
+  else sBadge.classList.add('hidden');
+
+  const mBadge = $('#ordersBadgeMobile');
+  if (mBadge) {
+    if (pending > 0) { mBadge.textContent = val; mBadge.classList.remove('hidden'); }
+    else mBadge.classList.add('hidden');
+  }
 }
 function updateChatsStats() {
   messageCount = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0) + (c.unreadForClient || 0), 0);
   $('#statMessages').textContent = toBn(messageCount);
 
   const unread = chatsData.reduce((s, c) => s + (c.unreadForAdmin || 0), 0);
+  const val = toBn(unread);
+
   const cBadge = $('#chatsBadge');
-  if (unread > 0) { cBadge.textContent = toBn(unread); cBadge.classList.remove('hidden'); }
+  if (unread > 0) { cBadge.textContent = val; cBadge.classList.remove('hidden'); }
   else cBadge.classList.add('hidden');
+
+  const mBadge = $('#chatsBadgeMobile');
+  if (mBadge) {
+    if (unread > 0) { mBadge.textContent = val; mBadge.classList.remove('hidden'); }
+    else mBadge.classList.add('hidden');
+  }
 }
 
 /* =========================================================
@@ -1232,7 +1432,7 @@ function courtFeeBadge(o) {
       <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
       </svg>
-      Court fee পরিশোধিত
+      Court fee ✓
     </span>`;
   }
   return `<span class="badge bg-amber-100 text-amber-700">
@@ -1241,6 +1441,17 @@ function courtFeeBadge(o) {
     </svg>
     Court fee বাকি
   </span>`;
+}
+
+function statusBadge(s) {
+  const map = {
+    pending:    ['bg-amber-100','text-amber-700','পেন্ডিং'],
+    processing: ['bg-brand-100','text-brand-700','প্রসেসিং'],
+    completed:  ['bg-emerald-100','text-emerald-700','সম্পন্ন'],
+    cancelled:  ['bg-rose-100','text-rose-700','বাতিল']
+  };
+  const [bg, fg, label] = map[s] || ['bg-slate-100','text-slate-600', s || '—'];
+  return `<span class="badge ${bg} ${fg}">${label}</span>`;
 }
 
 /* =========================================================
@@ -1269,8 +1480,8 @@ function renderDashboard() {
     wrap.innerHTML = `<p class="rounded-xl bg-slate-50 px-4 py-6 text-center text-xs text-slate-500">এখনো কোনো অর্ডার নেই।</p>`;
   } else {
     wrap.innerHTML = recent.map(o => `
-      <button data-order-id="${o.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
-        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
+      <button data-order-id="${o.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200/70 bg-white px-3.5 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
           </svg>
@@ -1281,7 +1492,7 @@ function renderDashboard() {
         </span>
         <span class="shrink-0 text-right">
           <span class="block text-sm font-extrabold text-slate-900">৳ ${toBn(o.amount || 0)}</span>
-          ${statusBadge(o.status)}
+          <span class="mt-1 inline-block">${statusBadge(o.status)}</span>
         </span>
       </button>`).join('');
 
@@ -1289,17 +1500,6 @@ function renderDashboard() {
       b.addEventListener('click', () => openOrderModal(b.dataset.orderId))
     );
   }
-}
-
-function statusBadge(s) {
-  const map = {
-    pending:    ['bg-amber-100','text-amber-700','পেন্ডিং'],
-    processing: ['bg-brand-100','text-brand-700','প্রসেসিং'],
-    completed:  ['bg-emerald-100','text-emerald-700','সম্পন্ন'],
-    cancelled:  ['bg-rose-100','text-rose-700','বাতিল']
-  };
-  const [bg, fg, label] = map[s] || ['bg-slate-100','text-slate-600', s || '—'];
-  return `<span class="badge mt-1 ${bg} ${fg}">${label}</span>`;
 }
 
 /* =========================================================
@@ -1332,21 +1532,21 @@ function renderOrders() {
           </svg>
         </span>
         <p class="mt-3 text-sm font-bold text-slate-700">কোনো অর্ডার পাওয়া যায়নি</p>
-        <p class="mt-1 text-xs text-slate-500">সার্চ বা ফিল্টার পরিবর্তন করে আবার চেষ্টা করুন।</p>
+        <p class="mt-1 text-xs text-slate-500">সার্চ বা ফিল্টার পরিবর্তন করুন।</p>
       </div>`;
     return;
   }
 
   wrap.innerHTML = list.map(o => `
-    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md sm:p-5">
+    <div class="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-soft transition hover:shadow-lift hover:border-slate-300 sm:p-5">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-center gap-2">
             <span class="rounded-lg bg-slate-900 px-2.5 py-1 font-mono text-xs font-bold text-white">${escapeHtml(o.orderId || o.id)}</span>
             ${statusBadge(o.status)}
             ${courtFeeBadge(o)}
-            <span class="badge bg-slate-100 text-slate-600">${fmtDate(o.createdAt)}</span>
           </div>
+          <p class="mt-2 text-[11px] text-slate-500">${fmtDate(o.createdAt)}</p>
 
           ${!o.courtFeePaid && o.circle ? `
             <p class="mt-2 text-xs font-semibold text-amber-700">
@@ -1354,20 +1554,20 @@ function renderOrders() {
             </p>
           ` : ''}
 
-          <div class="mt-3 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
+          <div class="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm sm:grid-cols-4">
             <div>
               <p class="text-[11px] text-slate-500">আবেদনকারী</p>
               <p class="font-bold text-slate-800">${toBn(o.applicantCount || 0)} জন</p>
             </div>
             <div>
               <p class="text-[11px] text-slate-500">মোট</p>
-              <p class="font-bold text-brand-700">৳ ${toBn(o.amount || 0)}</p>
+              <p class="font-bold text-brand-600">৳ ${toBn(o.amount || 0)}</p>
             </div>
-            <div>
+            <div class="col-span-2 sm:col-span-1">
               <p class="text-[11px] text-slate-500">বিকাশ সেন্ডার</p>
-              <p class="font-bold text-slate-800">${escapeHtml(o.bkashSenderNumber || '—')}</p>
+              <p class="truncate font-bold text-slate-800">${escapeHtml(o.bkashSenderNumber || '—')}</p>
             </div>
-            <div>
+            <div class="col-span-2 sm:col-span-1">
               <p class="text-[11px] text-slate-500">রিসিভার ইমেইল</p>
               <p class="truncate font-bold text-slate-800" title="${escapeHtml(o.receiverEmail || '')}">${escapeHtml(o.receiverEmail || '—')}</p>
             </div>
@@ -1385,11 +1585,11 @@ function renderOrders() {
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M5 8h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/>
             </svg>
-            Copy Form
+            Copy
           </button>
           <button data-view-order="${o.id}" class="btn-primary !px-4 !py-2 !text-xs">বিস্তারিত</button>
           <button data-delete-order="${o.id}" title="ডিলিট করুন"
-            class="grid h-9 w-9 place-items-center rounded-xl border border-rose-200 bg-rose-50 text-rose-600 transition hover:border-rose-400 hover:bg-rose-100">
+            class="grid h-9 w-9 place-items-center rounded-xl border border-rose-200 bg-rose-50 text-rose-600 transition hover:border-rose-300 hover:bg-rose-100">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
             </svg>
@@ -1418,7 +1618,7 @@ function renderOrders() {
         showToast('স্ট্যাটাস আপডেট হয়েছে', 'success');
       } catch (err) {
         console.error(err);
-        showToast('স্ট্যাটাস আপডেট করা যায়নি', 'error');
+        showToast('আপডেট করা যায়নি', 'error');
       }
     })
   );
@@ -1441,7 +1641,6 @@ function openOrderModal(id) {
   const o = ordersData.find(x => x.id === id);
   if (!o) return;
   modalOrderId = id;
-
   $('#modalOrderId').textContent = o.orderId || o.id;
 
   const applicantsHTML = (o.applicants || []).map((a, i) => `
@@ -1463,8 +1662,8 @@ function openOrderModal(id) {
       ${a.imageUrl ? `
         <a href="${a.imageUrl}" target="_blank" rel="noopener" class="mt-3 block">
           <img src="${a.imageUrl}" alt="certificate" class="h-32 w-auto rounded-xl border border-slate-200 object-cover shadow-sm transition hover:scale-[1.02]" />
-          <span class="mt-1.5 inline-block text-[11px] font-bold text-brand-600 hover:underline">সম্পূর্ণ ছবি দেখুন →</span>
-        </a>` : `<p class="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700">⚠️ সনদের ছবি পাওয়া যায়নি</p>`}
+          <span class="mt-1.5 inline-block text-[11px] font-bold text-brand-600 hover:underline">সম্পূর্ণ ছবি →</span>
+        </a>` : `<p class="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700">⚠️ সনদের ছবি নেই</p>`}
     </div>`).join('');
 
   $('#modalOrderBody').innerHTML = `
@@ -1476,7 +1675,7 @@ function openOrderModal(id) {
           <div class="flex justify-between gap-3"><dt class="text-slate-500">পেমেন্ট</dt><dd class="font-semibold">${escapeHtml(o.paymentStatus || '—')}</dd></div>
           <div class="flex justify-between gap-3"><dt class="text-slate-500">আবেদনকারী</dt><dd class="font-bold">${toBn(o.applicantCount||0)} জন</dd></div>
           <div class="flex justify-between gap-3"><dt class="text-slate-500">প্রতি জন</dt><dd class="font-semibold">৳ ${toBn(o.pricePerPerson||0)}</dd></div>
-          <div class="flex justify-between gap-3 border-t border-slate-200 pt-2"><dt class="font-bold text-slate-700">মোট</dt><dd class="font-extrabold text-brand-700">৳ ${toBn(o.amount||0)}</dd></div>
+          <div class="flex justify-between gap-3 border-t border-slate-200 pt-2"><dt class="font-bold text-slate-700">মোট</dt><dd class="font-extrabold text-brand-600">৳ ${toBn(o.amount||0)}</dd></div>
           <div class="flex justify-between gap-3"><dt class="text-slate-500">সময়</dt><dd class="text-xs font-semibold">${fmtDate(o.createdAt)}</dd></div>
         </dl>
       </div>
@@ -1500,7 +1699,7 @@ function openOrderModal(id) {
     </div>
 
     <div class="mt-4 rounded-xl ${o.courtFeePaid ? 'border border-emerald-200 bg-emerald-50/60' : 'border border-amber-200 bg-amber-50/60'} p-4">
-      <p class="text-[11px] font-bold uppercase tracking-wider ${o.courtFeePaid ? 'text-emerald-700' : 'text-amber-700'}">Court Fee তথ্য</p>
+      <p class="text-[11px] font-bold uppercase tracking-wider ${o.courtFeePaid ? 'text-emerald-700' : 'text-amber-700'}">Court Fee</p>
       <div class="mt-3 flex flex-wrap items-center gap-3">
         ${courtFeeBadge(o)}
         ${!o.courtFeePaid ? `
@@ -1529,18 +1728,18 @@ function openOrderModal(id) {
 
   const cb = $('#modalCompletedBtn');
   cb.disabled = (o.status === 'completed');
-  cb.textContent = o.status === 'completed' ? '✓ সম্পন্ন' : 'সম্পন্ন হিসেবে চিহ্নিত করুন';
+  cb.textContent = o.status === 'completed' ? '✓ সম্পন্ন' : '✓ সম্পন্ন করুন';
 
   const m = $('#orderModal');
   m.classList.remove('hidden');
   m.classList.add('flex');
-  document.body.style.overflow = 'hidden';
+  document.body.classList.add('no-scroll');
 }
 
 function closeOrderModal() {
   $('#orderModal').classList.add('hidden');
   $('#orderModal').classList.remove('flex');
-  if ($('#copyFormModal').classList.contains('hidden')) document.body.style.overflow = '';
+  if ($('#copyFormModal').classList.contains('hidden')) document.body.classList.remove('no-scroll');
 }
 $('#closeOrderModal').addEventListener('click', closeOrderModal);
 $('#orderModal').addEventListener('click', e => { if (e.target.id === 'orderModal') closeOrderModal(); });
@@ -1559,7 +1758,7 @@ $('#modalCompletedBtn').addEventListener('click', async () => {
       completedAt: serverTimestamp()
     });
     btn.innerHTML = '✓ সম্পন্ন';
-    showToast('অর্ডার সম্পন্ন হিসেবে চিহ্নিত হয়েছে', 'success');
+    showToast('অর্ডার সম্পন্ন', 'success');
   } catch (err) {
     console.error(err);
     showToast('আপডেট করা যায়নি', 'error');
@@ -1579,21 +1778,19 @@ function openCopyFormModal(id) {
   if (!o) return;
   copyFormOrderId = id;
   copyFormApplicantIndex = 0;
-
   $('#copyFormOrderId').textContent = o.orderId || o.id;
   renderCopyFormTabs(o);
   renderCopyFormBody(o);
-
   const m = $('#copyFormModal');
   m.classList.remove('hidden');
   m.classList.add('flex');
-  document.body.style.overflow = 'hidden';
+  document.body.classList.add('no-scroll');
 }
 function closeCopyFormModal() {
   $('#copyFormModal').classList.add('hidden');
   $('#copyFormModal').classList.remove('flex');
   if ($('#orderModal').classList.contains('hidden') && $('#deleteModal').classList.contains('hidden')) {
-    document.body.style.overflow = '';
+    document.body.classList.remove('no-scroll');
   }
   copyFormOrderId = null;
 }
@@ -1607,7 +1804,7 @@ function renderCopyFormTabs(o) {
     <button type="button" data-cf-tab="${i}"
       class="rounded-xl px-3.5 py-2 text-xs font-bold transition
         ${i === copyFormApplicantIndex
-          ? 'bg-brand-600 text-white shadow-md shadow-brand-600/25'
+          ? 'bg-brand-600 text-white shadow-soft'
           : 'border border-slate-200 bg-white text-slate-600 hover:border-brand-300 hover:text-brand-700'}">
       আবেদনকারী ${toBn(i+1)}
     </button>`).join('');
@@ -1629,7 +1826,7 @@ function copyFieldCard(label, value) {
         <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">${label}</p>
         <button type="button"
           data-copy-text="${escapeHtml(v)}"
-          class="cf-copy inline-flex shrink-0 items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-600 transition hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700">
+          class="cf-copy inline-flex shrink-0 items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700">
           <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M5 8h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/>
           </svg>
@@ -1664,10 +1861,10 @@ function renderCopyFormBody(o) {
 
     <div class="mt-3 rounded-xl border border-slate-200 bg-white p-3">
       <div class="flex items-center justify-between gap-2">
-        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">জন্ম নিবন্ধন সনদের ছবি</p>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">জন্ম নিবন্ধন সনদ</p>
         ${a.imageUrl ? `
           <a href="${escapeHtml(dlUrl)}" download target="_blank" rel="noopener"
-             class="inline-flex shrink-0 items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 transition hover:border-emerald-400 hover:bg-emerald-100">
+             class="inline-flex shrink-0 items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100">
             <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0-4-4m4 4 4-4M4 20h16"/>
             </svg>
@@ -1679,12 +1876,11 @@ function renderCopyFormBody(o) {
              <img src="${escapeHtml(a.imageUrl)}" alt="জন্ম নিবন্ধন সনদ"
                   class="h-40 w-auto rounded-xl border border-slate-200 object-cover shadow-sm transition hover:scale-[1.02]" />
            </a>`
-        : `<p class="mt-2 rounded-lg bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700">⚠️ কোনো ছবি পাওয়া যায়নি</p>`}
+        : `<p class="mt-2 rounded-lg bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700">⚠️ ছবি নেই</p>`}
     </div>
 
     <p class="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-[11px] font-semibold text-slate-500">
-      💡 টিপস: প্রতিটি ফিল্ডের পাশে <b>Copy</b> বাটনে ক্লিক করলে সেই মানটি ক্লিপবোর্ডে কপি হয়ে যাবে। অথবা নিচের
-      <b>সব ফিল্ড একসাথে কপি</b> বাটনে ক্লিক করে সম্পূর্ণ তথ্যটি একবারে কপি করা যাবে।
+      💡 প্রতিটি ফিল্ডের পাশে <b>Copy</b> বাটনে ক্লিক করলে সেই মানটি কপি হবে।
     </p>
   `;
 
@@ -1697,11 +1893,11 @@ function attachCopyHandlers(root) {
   root.querySelectorAll('.cf-copy').forEach(btn => {
     btn.addEventListener('click', async () => {
       const text = btn.dataset.copyText || '';
-      if (!text) { showToast('এই ফিল্ডে কোনো তথ্য নেই', 'info'); return; }
+      if (!text) { showToast('তথ্য নেই', 'info'); return; }
       try {
         await copyToClipboard(text);
         const original = btn.innerHTML;
-        btn.innerHTML = '✓ কপি হয়েছে';
+        btn.innerHTML = '✓ কপি';
         btn.classList.add('!border-emerald-300', '!bg-emerald-50', '!text-emerald-700');
         setTimeout(() => {
           btn.innerHTML = original;
@@ -1754,7 +1950,7 @@ $('#copyFormDownloadAll').addEventListener('click', async () => {
   ];
   try {
     await copyToClipboard(lines.join('\n'));
-    showToast('সব তথ্য একসাথে কপি হয়েছে', 'success');
+    showToast('সব তথ্য কপি হয়েছে', 'success');
   } catch (err) {
     console.error(err);
     showToast('কপি করা যায়নি', 'error');
@@ -1774,13 +1970,13 @@ function openDeleteModal(id) {
   const m = $('#deleteModal');
   m.classList.remove('hidden');
   m.classList.add('flex');
-  document.body.style.overflow = 'hidden';
+  document.body.classList.add('no-scroll');
 }
 function closeDeleteModal() {
   $('#deleteModal').classList.add('hidden');
   $('#deleteModal').classList.remove('flex');
   if ($('#orderModal').classList.contains('hidden') && $('#copyFormModal').classList.contains('hidden')) {
-    document.body.style.overflow = '';
+    document.body.classList.remove('no-scroll');
   }
   pendingDeleteId = null;
 }
@@ -1797,13 +1993,13 @@ $('#confirmDeleteBtn').addEventListener('click', async () => {
   try {
     const deletingId = pendingDeleteId;
     await deleteDoc(doc(db, 'orders', deletingId));
-    showToast('অর্ডার সফলভাবে ডিলিট হয়েছে', 'success');
+    showToast('অর্ডার ডিলিট হয়েছে', 'success');
     closeDeleteModal();
     if (modalOrderId === deletingId) { closeOrderModal(); modalOrderId = null; }
     if (copyFormOrderId === deletingId) closeCopyFormModal();
   } catch (err) {
     console.error(err);
-    showToast('ডিলিট করা যায়নি। আবার চেষ্টা করুন।', 'error');
+    showToast('ডিলিট করা যায়নি', 'error');
   } finally {
     btn.disabled = false;
     btn.innerHTML = originalHTML;
@@ -1827,7 +2023,7 @@ function renderChatList() {
       <button data-chat-id="${c.id}"
         class="flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition
           ${active ? 'bg-brand-50 ring-1 ring-brand-200' : 'hover:bg-slate-50'}">
-        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full ${active ? 'bg-brand-600 text-white' : 'bg-slate-200 text-slate-600'} text-xs font-extrabold">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full ${active ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-600'} text-xs font-extrabold">
           ${escapeHtml(initial)}
         </span>
         <span class="min-w-0 flex-1">
@@ -1855,7 +2051,7 @@ function renderRecentChats() {
     return;
   }
   wrap.innerHTML = chatsData.slice(0, 4).map(c => `
-    <button data-recent-chat="${c.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
+    <button data-recent-chat="${c.id}" class="flex w-full items-center gap-3 rounded-xl border border-slate-200/70 bg-white px-3.5 py-3 text-left transition hover:border-brand-300 hover:bg-brand-50/40">
       <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-100 text-[11px] font-extrabold text-brand-700">
         ${escapeHtml((c.tag || '?').slice(-2))}
       </span>
@@ -1880,6 +2076,8 @@ async function selectChat(id) {
   $('#chatStatus').textContent = 'লাইভ চ্যাট · ' + (c?.tag || '');
   $('#chatAvatar').textContent = (c?.tag || '?').slice(-2);
 
+  openMobileChat();
+
   if (chatMsgUnsub) chatMsgUnsub();
   chatMsgUnsub = onSnapshot(
     query(collection(db, 'chats', id, 'messages'), orderBy('createdAt', 'asc')),
@@ -1894,9 +2092,9 @@ async function selectChat(id) {
 
 function msgDeleteBtnHtml(msgId) {
   return `
-    <button type="button" data-msg-del="${msgId}" title="মেসেজ ডিলিট করুন"
-      class="msg-del-btn grid h-7 w-7 shrink-0 place-items-center rounded-full bg-rose-50 text-rose-600 opacity-100 transition hover:bg-rose-100 hover:text-rose-700 sm:opacity-0 sm:group-hover:opacity-100">
-      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <button type="button" data-msg-del="${msgId}" title="ডিলিট"
+      class="msg-del-btn grid h-8 w-8 shrink-0 place-items-center rounded-full bg-rose-50 text-rose-600 opacity-100 transition hover:bg-rose-100 hover:text-rose-700 md:opacity-0 md:group-hover:opacity-100">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.35 9m-4.78 0L9.26 9m9.97-3.79c.31.05.62.1.93.16M4.77 5.21a21 21 0 0 1 3.08-.35m0 0V4.5A2.25 2.25 0 0 1 10.1 2.25h3.8a2.25 2.25 0 0 1 2.25 2.25v.36m-9.38 0a48.1 48.1 0 0 1 9.38 0M19.5 5.5l-.86 12.87a2.25 2.25 0 0 1-2.25 2.13H7.61a2.25 2.25 0 0 1-2.25-2.13L4.5 5.5"/>
       </svg>
     </button>`;
@@ -1908,7 +2106,7 @@ function renderAdminMessages(msgs) {
     body.innerHTML = `
       <div class="flex h-full flex-col items-center justify-center text-center">
         <p class="text-sm font-bold text-slate-700">এখনো কোনো মেসেজ নেই</p>
-        <p class="mt-1 text-xs text-slate-500">ক্লায়েন্ট মেসেজ পাঠালে এখানে দেখা যাবে।</p>
+        <p class="mt-1 text-xs text-slate-500">ক্লায়েন্ট মেসেজ পাঠালে এখানে দেখাবে।</p>
       </div>`;
     return;
   }
@@ -1919,7 +2117,7 @@ function renderAdminMessages(msgs) {
       <div class="group flex items-end gap-1.5 ${mine ? 'justify-end' : 'justify-start'}">
         ${!mine ? msgDeleteBtnHtml(m.id) : ''}
         <div class="max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm
-          ${mine ? 'rounded-br-sm bg-brand-600 text-white' : 'rounded-bl-sm border border-slate-200 bg-white text-slate-800'}">
+          ${mine ? 'rounded-br-md bg-brand-600 text-white' : 'rounded-bl-md border border-slate-200 bg-white text-slate-800'}">
           <p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
           <p class="mt-1 text-[10px] ${mine ? 'text-brand-100' : 'text-slate-400'}">${fmtDate(m.createdAt)}</p>
         </div>
@@ -1956,7 +2154,7 @@ async function deleteChatMessage(chatId, msgId) {
     showToast('মেসেজ ডিলিট হয়েছে', 'success');
   } catch (err) {
     console.error('Delete message failed:', err);
-    showToast('মেসেজ ডিলিট করা যায়নি', 'error');
+    showToast('ডিলিট করা যায়নি', 'error');
   }
 }
 
@@ -2000,17 +2198,15 @@ document.addEventListener('keydown', e => {
     if (!$('#deleteModal').classList.contains('hidden')) { closeDeleteModal(); return; }
     if (!$('#copyFormModal').classList.contains('hidden')) { closeCopyFormModal(); return; }
     if (!$('#orderModal').classList.contains('hidden')) { closeOrderModal(); return; }
-    closeSidebar();
+    if ($('#chatContainer').classList.contains('chat-open')) { closeMobileChat(); return; }
+    if (!$('#profileMenu').classList.contains('hidden')) { $('#profileMenu').classList.add('hidden'); return; }
   }
 });
 
 window.addEventListener('resize', () => {
-  if (window.innerWidth >= 768) {
-    $('#sidebar').classList.remove('-translate-x-full');
-    $('#sidebarBackdrop').classList.add('hidden');
-  } else {
-    if (!$('#sidebarBackdrop').classList.contains('hidden')) return;
-    $('#sidebar').classList.add('-translate-x-full');
+  if (window.innerWidth >= 1024) {
+    $('#chatContainer').classList.remove('chat-open');
+    document.body.classList.remove('chat-full');
   }
 });
 </script>
