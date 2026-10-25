@@ -1764,6 +1764,7 @@ const CLOUDINARY_UPLOAD_PRESET = 'codecurebd';
 
 let PRICE_PER_PERSON = 500; // Default
 const URGENT_FEE      = 50; // জরুরি অর্ডারের অতিরিক্ত চার্জ
+const COURT_FEE       = 20; // Court Fee (যদি পরিশোধ না করা থাকে)
 const BKASH_NUMBER    = '01860319433';
 const SETTINGS_REF    = doc(db, 'settings', 'global');
 
@@ -1997,6 +1998,7 @@ courtFeePaid.addEventListener('change', () => {
     circleName.value = '';
     circleName.classList.remove('field-error');
   }
+  updateSummary();
 });
 
 let applicantCount = 1;
@@ -2102,7 +2104,8 @@ function updateSummary() {
   const urgentCheck = $('#urgentService');
   const base   = applicantCount * PRICE_PER_PERSON;
   const urgent = urgentCheck && urgentCheck.checked ? URGENT_FEE : 0;
-  const total  = base + urgent;
+  const courtFee = courtFeePaid.checked ? 0 : COURT_FEE;
+  const total  = base + urgent + courtFee;
 
   if ($('#countDisplay')) $('#countDisplay').textContent = toBn(applicantCount);
   countSelect.value = applicantCount;
@@ -2112,7 +2115,8 @@ function updateSummary() {
   if ($('#payBreakdown')) {
     $('#payBreakdown').textContent =
       `${toBn(applicantCount)} জন × ৳ ${toBn(PRICE_PER_PERSON)}` +
-      (urgent ? ` + জরুরি অর্ডার ৳ ${toBn(urgent)}` : '');
+      (urgent ? ` + জরুরি অর্ডার ৳ ${toBn(urgent)}` : '') +
+      (courtFee ? ` + Court Fee ৳ ${toBn(courtFee)}` : '');
   }
 }
 
@@ -2320,7 +2324,8 @@ submitBtn.addEventListener('click', async () => {
   const urgentCheck = $('#urgentService');
   const isUrgent = !!(urgentCheck && urgentCheck.checked);
   const urgentFeeAmount = isUrgent ? URGENT_FEE : 0;
-  const total = (applicantCount * PRICE_PER_PERSON) + urgentFeeAmount;
+  const courtFeeAmount = courtFeePaid.checked ? 0 : COURT_FEE;
+  const total = (applicantCount * PRICE_PER_PERSON) + urgentFeeAmount + courtFeeAmount;
   const orderId = generateOrderId();
 
   submitBtn.disabled = true;
@@ -2373,6 +2378,7 @@ submitBtn.addEventListener('click', async () => {
       pricePerPerson: PRICE_PER_PERSON,
       isUrgent,
       urgentFee: urgentFeeAmount,
+      courtFeeAmount,
       amount: total,
       applicants,
       courtFeePaid: courtFeePaid.checked,
@@ -2393,7 +2399,7 @@ submitBtn.addEventListener('click', async () => {
     $('#invSender').textContent  = sender;
     $('#invCourtFee').innerHTML  = payload.courtFeePaid
       ? '<span class="inline-flex items-center gap-1 text-emerald-600"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>পরিশোধিত</span>'
-      : `বাকি · সার্কেল: ${escapeHtml(payload.circle || '—')}`;
+      : `৳${toBn(COURT_FEE)} (বিলে যোগ) · সার্কেল: ${escapeHtml(payload.circle || '—')}`;
     $('#invTotal').textContent   = `৳ ${toBn(total)}`;
     $('#invUrgent').classList.toggle('hidden', !payload.isUrgent);
 
