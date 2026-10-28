@@ -133,7 +133,6 @@
   @keyframes heroGlow { 0%,100% { transform: translate3d(0,0,0) scale(1); opacity:.55 } 50% { transform: translate3d(0,-14px,0) scale(1.06); opacity:.8 } }
   .hero-glow { animation: heroGlow 9s ease-in-out infinite; }
 
-  /* ===== Banner background section ===== */
   .hero-banner-wrap {
     position: relative;
     overflow: hidden;
@@ -179,7 +178,6 @@
       0 0 20px rgba(255,255,255,0.7);
   }
 
-  /* ===== Animated scroll-down arrow ===== */
   @keyframes scrollBounce {
     0%, 100% { transform: translateY(0);   opacity: .55; }
     50%      { transform: translateY(10px); opacity: 1;  }
@@ -209,7 +207,6 @@
     .scroll-arrow .chev1, .scroll-arrow .chev2, .scroll-arrow .scroll-dot { animation: none; }
   }
 
-  /* ===== Working-time marquee (left → right) ===== */
   .marquee-wrap { position: relative; overflow: hidden; }
   .marquee-track {
     display: flex;
@@ -236,7 +233,6 @@
     .marquee-track { animation: none; transform: translateX(0); }
   }
 
-  /* Call notice phone ring animation */
   @keyframes callRing {
     0%, 100% { transform: rotate(0); }
     10%, 30% { transform: rotate(-14deg); }
@@ -245,42 +241,29 @@
   }
   .call-ring { animation: callRing 1.8s ease-in-out infinite; transform-origin: 50% 60%; display: inline-block; }
 
-  /* ===== Print helpers ===== */
   .print-only { display: none; }
 
-  /* ===== PROFESSIONAL INVOICE PRINT ===== */
   @media print {
     @page { size: A4 portrait; margin: 12mm; }
-
-    /* Force color rendering in print */
     * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
-
-    /* Hide any UI element explicitly marked non-printable */
     .no-print, .no-print * {
       display: none !important;
       visibility: hidden !important;
       height: 0 !important;
       overflow: hidden !important;
     }
-
-    /* The success/call notice popup should never print */
     #callNotice { display: none !important; }
-
-    /* Clean page */
     html, body {
       background: #ffffff !important;
       margin: 0 !important;
       padding: 0 !important;
     }
-
-    /* ==== When invoice modal is open: isolate it as the only printable content ==== */
     body.invoice-open > *:not(#invoiceModal) {
       display: none !important;
     }
-
     body.invoice-open #invoiceModal {
       display: block !important;
       position: static !important;
@@ -293,7 +276,6 @@
       -webkit-backdrop-filter: none !important;
     }
     body.invoice-open #invoiceModal.hidden { display: none !important; }
-
     body.invoice-open #invoiceWrap {
       display: block !important;
       padding: 0 !important;
@@ -302,7 +284,6 @@
       gap: 0 !important;
       align-items: stretch !important;
     }
-
     body.invoice-open #invoiceBox {
       display: block !important;
       width: 100% !important;
@@ -318,17 +299,8 @@
       line-height: 1.55 !important;
       page-break-inside: avoid;
     }
-
-    body.invoice-open #invoiceBox > * {
-      page-break-inside: avoid;
-    }
-
-    body.invoice-open #invoiceBox a {
-      color: inherit !important;
-      text-decoration: none !important;
-    }
-
-    /* Show print-only blocks (e.g. formal invoice header) */
+    body.invoice-open #invoiceBox > * { page-break-inside: avoid; }
+    body.invoice-open #invoiceBox a { color: inherit !important; text-decoration: none !important; }
     .print-only { display: block !important; }
   }
 </style>
@@ -416,7 +388,6 @@
 </header>
 
 <main>
-<!-- ======================= WORKING TIME MARQUEE (TOP) ======================= -->
 <div class="marquee-wrap border-b border-brand-900/30 bg-gradient-to-r from-brand-800 via-brand-700 to-brand-800 py-2.5 text-white" aria-label="কাজের সময় ও জরুরি অর্ডারের তথ্য">
   <div class="marquee-track">
     <span class="marquee-text">
@@ -455,9 +426,7 @@
     </span>
   </div>
 </div>
-<!-- ======================= /WORKING TIME MARQUEE ======================= -->
 
-<!-- ======================= HERO ======================= -->
 <section id="home"
   class="relative overflow-hidden bg-gradient-to-b from-brand-100 via-brand-50 to-white"
   aria-labelledby="hero-heading">
@@ -553,9 +522,7 @@
 
   </div>
 </section>
-<!-- ======================= /HERO ======================= -->
 
-<!-- Services body (pricing + form) on white, continues seamlessly after the banner -->
 <section class="border-b border-slate-200 bg-white pb-14 sm:pb-20" aria-labelledby="service-heading">
   <div class="mx-auto max-w-6xl px-4">
     <div class="mx-auto grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
@@ -600,7 +567,6 @@
       </div>
     </div>
 
-    <!-- ============ Serial / NID notice BEFORE the application form ============ -->
     <div class="mx-auto mt-10 max-w-4xl">
       <div class="anim-in relative overflow-hidden rounded-2xl border-2 border-brand-200 bg-gradient-to-br from-brand-50 via-white to-sky-50 p-5 shadow-sm sm:p-6">
         <div class="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-brand-200/40 blur-2xl" aria-hidden="true"></div>
@@ -633,7 +599,6 @@
         </div>
       </div>
     </div>
-    <!-- ============ /NOTICE ============ -->
 
     <div class="mx-auto mt-5 max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70">
       <div class="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white px-5 py-5 sm:px-7 sm:py-6">
@@ -655,10 +620,8 @@
         </div>
       </div>
 
-      <!-- STEP 1 -->
       <div id="step1" class="p-5 sm:p-7 lg:p-8">
 
-        <!-- Important notice banner inside the form -->
         <a href="#important" class="mb-5 flex items-start gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50/70 p-4 transition hover:border-amber-400 hover:bg-amber-50">
           <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700" aria-hidden="true">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -730,9 +693,7 @@
           </div>
         </div>
 
-        <!-- ============ URGENT SERVICE OPTION (Dynamic) ============ -->
         <div id="urgentBlock" class="mt-4" data-state=""></div>
-        <!-- ============ /URGENT SERVICE OPTION ============ -->
 
         <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
           <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">১</span>
@@ -806,7 +767,6 @@
         </div>
       </div>
 
-      <!-- STEP 2 -->
       <div id="step2" class="hidden p-5 sm:p-7 lg:p-8">
         <button type="button" id="backBtn" class="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 transition hover:text-brand-700">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -826,7 +786,6 @@
           <p id="payBreakdown" class="mt-2 text-xs text-brand-700">১ জন × ৳ ...</p>
         </div>
 
-        <!-- ============ WORKING TIME NOTICE (PAYMENT STEP) ============ -->
         <div class="mt-5 rounded-2xl border border-sky-200 bg-sky-50/70 p-5">
           <h4 class="flex items-center gap-2 text-sm font-extrabold text-sky-900">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -853,7 +812,6 @@
             </li>
           </ul>
         </div>
-        <!-- ============ /WORKING TIME NOTICE ============ -->
 
         <div class="mt-5 rounded-2xl border border-slate-200 bg-white p-5">
           <div class="flex flex-wrap items-center justify-between gap-3">
@@ -903,7 +861,6 @@
   </div>
 </section>
 
-<!-- ======================= WORKING TIME SECTION ======================= -->
 <section id="worktime" class="scroll-mt-24 border-b border-slate-200 bg-white py-14 sm:py-20" aria-labelledby="worktime-heading">
   <div class="mx-auto max-w-6xl px-4">
     <div class="mx-auto max-w-3xl text-center">
@@ -927,7 +884,6 @@
     </div>
 
     <div class="mt-10 grid gap-5 md:grid-cols-2">
-      <!-- Normal service -->
       <article class="card relative overflow-hidden p-6">
         <span class="absolute right-5 top-5 rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">
           সাধারণ সেবা
@@ -951,7 +907,6 @@
         </div>
       </article>
 
-      <!-- Urgent service -->
       <article class="card relative overflow-hidden border-2 border-amber-300 bg-gradient-to-br from-amber-50/80 to-white p-6">
         <span class="absolute right-5 top-5 rounded-full bg-amber-500 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white">
           জরুরি অর্ডার
@@ -987,7 +942,6 @@
     </div>
   </div>
 </section>
-<!-- ======================= /WORKING TIME SECTION ======================= -->
 
 <section id="how" class="border-b border-slate-200 bg-slate-50 py-14 sm:py-20" aria-labelledby="how-heading">
   <div class="mx-auto max-w-7xl px-4">
@@ -1035,10 +989,10 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.5-5 3 3.5L15 10l5 6M5 20h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/>
           </svg>
         </span>
-        <h3 class="mt-4 text-base font-extrabold text-slate-900">৩. সনদের স্পষ্ট ছবি</h3>
+        <h3 class="mt-4 text-base font-extrabold text-slate-900">৩. সনদ ও ছবি</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          গ্রাহক যতজন, তাদের প্রত্যেকের তথ্য যোগ করে অবশ্যই জন্ম নিবন্ধন সনদের <b>পরিষ্কার ছবি</b> তুলে অ্যাটাচ করতে হবে
-          (JPG / PNG ফরম্যাট)।
+          প্রত্যেকের জন্ম নিবন্ধন সনদের <b>পরিষ্কার ছবি</b> (JPG / PNG) এবং <b>আবেদনকারীর ছবি</b> অ্যাটাচ করতে হবে।
+          ছবি না থাকলে ডিফল্ট avatar (dp.png) ব্যবহারের অপশন রয়েছে।
         </p>
       </article>
 
@@ -1084,7 +1038,6 @@
   </div>
 </section>
 
-<!-- ======================= IMPORTANT NOTICE ======================= -->
 <section id="important" class="border-b border-amber-200 bg-gradient-to-b from-amber-50/80 via-amber-50/40 to-white py-14 scroll-mt-24 sm:py-20" aria-labelledby="important-heading">
   <div class="mx-auto max-w-5xl px-4">
     <div class="text-center">
@@ -1274,7 +1227,6 @@
   </div>
 </section>
 
-<!-- ======================= PRIVACY POLICY ======================= -->
 <section id="privacy" class="border-b border-slate-200 bg-slate-50 py-14 scroll-mt-24 sm:py-20" aria-labelledby="privacy-heading">
   <div class="mx-auto max-w-4xl px-4">
     <div class="text-center">
@@ -1300,11 +1252,11 @@
         <h3>১. আমরা যে তথ্য সংগ্রহ করি</h3>
         <ul>
           <li>নাম, জন্ম তারিখ, পিতার নাম, মাতার নাম</li>
-          <li>জন্ম নিবন্ধন নম্বর ও জন্ম নিবন্ধন সনদের ছবি</li>
+          <li>জন্ম নিবন্ধন নম্বর, জন্ম নিবন্ধন সনদের ছবি ও আবেদনকারীর ছবি</li>
           <li>ঠিকানা (বিভাগ, জেলা, উপজেলা/সার্কেল, বিস্তারিত ঠিকানা)</li>
           <li>land.gov.bd অ্যাকাউন্টের মোবাইল নম্বর ও পাসওয়ার্ড</li>
           <li>রিসিভার ইমেইল ও বিকাশ পেমেন্ট নম্বর</li>
-          <li>সাপোর্ট চ্যাটে আপনার প্রদত্ত যেকোনো তথ্য</li>
+          <li>সাপোর্ট চ্যাটে আপনার প্রদত্ত যেকোনো তথ্য (মেসেজ ও ছবি)</li>
         </ul>
       </article>
 
@@ -1332,7 +1284,7 @@
         <h3>৪. তৃতীয় পক্ষের সেবা</h3>
         <ul>
           <li><b>Google Firebase</b> — ডেটাবেস ও অ্যাকাউন্ট ব্যবস্থাপনা</li>
-          <li><b>Cloudinary</b> — জন্ম নিবন্ধন সনদের ছবি হোস্টিং</li>
+          <li><b>Cloudinary</b> — জন্ম নিবন্ধন সনদের ছবি ও আবেদনকারীর ছবি হোস্টিং</li>
           <li><b>bKash</b> — পেমেন্ট প্রসেসিং</li>
         </ul>
         <p class="mt-2">এই সেবাগুলো তাদের নিজস্ব গোপনীয়তা নীতি অনুযায়ী কাজ করে।</p>
@@ -1356,7 +1308,6 @@
   </div>
 </section>
 
-<!-- ======================= DISCLAIMER ======================= -->
 <section id="disclaimer" class="border-b border-slate-200 bg-white py-14 scroll-mt-24 sm:py-20" aria-labelledby="disclaimer-heading">
   <div class="mx-auto max-w-4xl px-4">
     <div class="text-center">
@@ -1536,6 +1487,13 @@
   <div id="chatBody" class="chat-body h-72 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4" aria-live="polite"></div>
 
   <form id="chatForm" class="flex items-center gap-2 border-t border-slate-200 bg-white px-3 py-3">
+    <input type="file" id="chatImageInput" accept="image/jpeg,image/png,image/jpg,image/webp" class="hidden" />
+    <button type="button" id="chatImageBtn" aria-label="Attach image"
+      class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-300 text-slate-600 transition hover:border-brand-400 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-60">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.5-5 3 3.5L15 10l5 6M5 20h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/>
+      </svg>
+    </button>
     <label class="sr-only" for="chatInput">Message</label>
     <input id="chatInput" type="text" autocomplete="off" placeholder="আপনার মেসেজ লিখুন…"
       class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100" />
@@ -1548,11 +1506,9 @@
   </form>
 </div>
 
-<!-- INVOICE + CALL NOTICE OVERLAY -->
 <div id="invoiceModal" role="dialog" aria-modal="true" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
   <div id="invoiceWrap" class="flex min-h-full flex-col items-center justify-center gap-4 p-4">
 
-    <!-- ORDER COMPLETE + CALL NOTICE POPUP -->
     <div id="callNotice"
          class="anim-in w-full max-w-lg overflow-hidden rounded-2xl border-2 border-brand-300 bg-white shadow-2xl shadow-brand-900/25"
          style="animation-delay:.12s">
@@ -1602,10 +1558,8 @@
       </div>
     </div>
 
-    <!-- INVOICE POPUP -->
     <div id="invoiceBox" class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-7">
 
-      <!-- PRINT-ONLY FORMAL INVOICE HEADER -->
       <div class="print-only mb-4 border-b-2 border-slate-800 pb-3">
         <div class="flex items-start justify-between gap-4">
           <div>
@@ -1674,7 +1628,6 @@
         আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে এবং ইমেইলে জানানো হবে। কাজের সময়ের বাইরে অর্ডার করলে <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়। জরুরি অর্ডার নির্বাচন করলে একই দিনে ডেলিভারি নিশ্চিত করতে অবশ্যই <b>০১৩৫০১৪১৭৬২</b> নম্বরে কল করুন। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।
       </p>
 
-      <!-- Buttons — hidden in print -->
       <div class="no-print mt-6 flex flex-col gap-3 sm:flex-row">
         <button type="button" id="printInvoice" class="btn-ghost flex-1">প্রিন্ট / সেভ করুন</button>
         <button type="button" id="closeInvoice" class="btn-primary flex-1">ঠিক আছে</button>
@@ -1684,7 +1637,6 @@
   </div>
 </div>
 
-<!-- ======================= COOKIE / WARNING CONSENT POPUP ======================= -->
 <div id="cookiePopup"
      class="fixed inset-0 z-[80] hidden items-end justify-center bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center"
      role="dialog" aria-modal="true" aria-labelledby="cookieTitle">
@@ -1739,7 +1691,6 @@
     </div>
   </div>
 </div>
-<!-- ======================= /COOKIE POPUP ======================= -->
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -1763,16 +1714,16 @@ const CLOUDINARY_CLOUD_NAME    = 'zmoyykj7';
 const CLOUDINARY_UPLOAD_PRESET = 'codecurebd';
 
 let PRICE_PER_PERSON = 500; // Default
-const URGENT_FEE      = 50; // জরুরি অর্ডারের অতিরিক্ত চার্জ
-const COURT_FEE       = 20; // Court Fee (যদি পরিশোধ না করা থাকে)
+const URGENT_FEE      = 50;
+const COURT_FEE       = 20;
 const BKASH_NUMBER    = '01860319433';
+const DEFAULT_DP      = 'dp.png';
 const SETTINGS_REF    = doc(db, 'settings', 'global');
 
 const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 const toBn = n => String(n).replace(/\d/g, d => BN_DIGITS[+d]);
 const $ = s => document.querySelector(s);
 
-/* ====== Bengali ⇄ English digit helpers (for numbers) ====== */
 const BN_TO_EN = { '০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9' };
 const toEnDigits  = s => String(s ?? '').replace(/[০-৯]/g, d => BN_TO_EN[d]);
 const digitsOnly  = s => toEnDigits(s).replace(/\D/g, '');
@@ -1822,9 +1773,6 @@ function setStep(n) {
   });
 }
 
-/* ============================================================
-   BANGLADESH TIME HELPERS
-   ============================================================ */
 function bdNow() {
   const now = new Date();
   return new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (6 * 60 * 60 * 1000));
@@ -1833,12 +1781,9 @@ function bdNow() {
 function isWithinWorkingHours() {
   const now = bdNow();
   const hourFloat = now.getHours() + now.getMinutes() / 60;
-  return hourFloat >= 10 && hourFloat < 22; // সকাল ১০টা – রাত ১০টা
+  return hourFloat >= 10 && hourFloat < 22;
 }
 
-/* ============================================================
-   COOKIE / WARNING CONSENT POPUP (শুধুমাত্র প্রথমবার)
-   ============================================================ */
 const COOKIE_KEY = 'emb_cookie_consent_v1';
 
 function showCookiePopup() {
@@ -1881,9 +1826,6 @@ function hideCookiePopup(save = false) {
   });
 })();
 
-/* ============================================================
-   WORKING TIME STATUS BADGE
-   ============================================================ */
 function updateWorkStatus() {
   const el = $('#workStatus');
   if (!el) return;
@@ -1901,9 +1843,6 @@ function updateWorkStatus() {
 updateWorkStatus();
 setInterval(updateWorkStatus, 60000);
 
-/* ============================================================
-   URGENT OPTION — Dynamic (কাজের সময়ে নয়, বাইরে প্রযোজ্য)
-   ============================================================ */
 function renderUrgentBlock(force = false) {
   const block = $('#urgentBlock');
   if (!block) return;
@@ -1953,9 +1892,6 @@ function renderUrgentBlock(force = false) {
   updateSummary();
 }
 
-/* ============================================================
-   PRICE
-   ============================================================ */
 async function fetchDynamicPrice() {
   try {
     const snap = await getDoc(SETTINGS_REF);
@@ -2013,7 +1949,9 @@ function snapshotApplicants() {
   return [...document.querySelectorAll('.applicant-card')].map(card => {
     const o = {};
     card.querySelectorAll('[data-field]').forEach(el => {
-      if (el.type !== 'file') o[el.dataset.field] = el.value;
+      if (el.type === 'file') return;
+      if (el.type === 'checkbox') o[el.dataset.field] = el.checked;
+      else o[el.dataset.field] = el.value;
     });
     return o;
   });
@@ -2023,9 +1961,33 @@ function restoreApplicants(snap) {
     const data = snap[i];
     if (!data) return;
     card.querySelectorAll('[data-field]').forEach(el => {
-      if (el.type !== 'file' && data[el.dataset.field] !== undefined) el.value = data[el.dataset.field];
+      if (el.type === 'file') return;
+      if (el.type === 'checkbox') {
+        el.checked = !!data[el.dataset.field];
+      } else if (data[el.dataset.field] !== undefined) {
+        el.value = data[el.dataset.field];
+      }
     });
   });
+}
+
+function applyPhotoState(card) {
+  if (!card) return;
+  const useDefault = card.querySelector('[data-field="useDefaultPhoto"]');
+  const fileInput  = card.querySelector('[data-field="photo"]');
+  const preview    = card.querySelector('[data-photo-preview]');
+  if (!useDefault || !fileInput || !preview) return;
+
+  if (useDefault.checked) {
+    fileInput.disabled = true;
+    fileInput.classList.add('opacity-50', 'cursor-not-allowed');
+    preview.src = DEFAULT_DP;
+  } else {
+    fileInput.disabled = false;
+    fileInput.classList.remove('opacity-50', 'cursor-not-allowed');
+    const f = fileInput.files?.[0];
+    preview.src = f ? URL.createObjectURL(f) : DEFAULT_DP;
+  }
 }
 
 function applicantCardHTML(i) {
@@ -2037,6 +1999,26 @@ function applicantCardHTML(i) {
       <div>
         <h4 class="text-base font-extrabold text-slate-900">আবেদনকারী ${n}</h4>
         <p class="text-xs text-slate-500">জন্ম নিবন্ধন সনদ অনুযায়ী তথ্য দিন</p>
+      </div>
+    </div>
+
+    <div class="mb-4 rounded-xl border border-brand-200 bg-white p-4">
+      <label class="label mb-2">আবেদনকারীর ছবি</label>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
+        <div class="shrink-0">
+          <img data-photo-preview src="dp.png" alt="আবেদনকারীর ছবি"
+               class="h-24 w-24 rounded-xl border-2 border-slate-200 bg-slate-50 object-cover shadow-sm" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <input type="file" data-field="photo" accept="image/jpeg,image/png,image/jpg" class="file-input" />
+          <p class="hint">স্পষ্ট মুখমণ্ডলসহ ছবি দিন। সর্বোচ্চ ৫ MB।</p>
+          <label class="mt-2 flex cursor-pointer items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 transition hover:border-emerald-300">
+            <input type="checkbox" data-field="useDefaultPhoto" class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-emerald-600 accent-emerald-600" />
+            <span class="text-xs font-semibold leading-relaxed text-emerald-800">
+              ডিফল্ট avatar (dp.png) ব্যবহার করুন — আলাদা ছবি আপলোড করতে হবে না
+            </span>
+          </label>
+        </div>
       </div>
     </div>
 
@@ -2097,6 +2079,7 @@ function renderApplicants() {
   for (let i = 0; i < applicantCount; i++) wrap.insertAdjacentHTML('beforeend', applicantCardHTML(i));
   restoreApplicants(snap);
   wrap.querySelectorAll('[data-field="certNo"]').forEach(attachDigitsOnlyFilter);
+  wrap.querySelectorAll('.applicant-card').forEach(applyPhotoState);
   updateSummary();
 }
 
@@ -2130,26 +2113,56 @@ $('#minusBtn').addEventListener('click', () => setCount(applicantCount - 1));
 countSelect.addEventListener('change', e => setCount(+e.target.value));
 
 $('#applicantsWrap').addEventListener('change', e => {
+  const card = e.target.closest('.applicant-card');
+  if (!card) return;
+
+  if (e.target.matches('[data-field="useDefaultPhoto"]')) {
+    applyPhotoState(card);
+    return;
+  }
+
   const input = e.target.closest('input[type="file"]');
   if (!input) return;
-  const box = input.parentElement.querySelector('.file-preview');
-  const img = box?.querySelector('img');
-  const file = input.files?.[0];
-  if (!box || !img) return;
 
-  if (!file) { box.classList.add('hidden'); img.removeAttribute('src'); return; }
-  if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
-    input.value = ''; box.classList.add('hidden');
-    alert('শুধুমাত্র JPG অথবা PNG ফরম্যাটের ছবি আপলোড করুন।');
+  const field = input.dataset.field;
+  const file = input.files?.[0];
+
+  if (field === 'photo') {
+    const preview = card.querySelector('[data-photo-preview]');
+    if (!preview) return;
+    if (!file) { preview.src = DEFAULT_DP; return; }
+    if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
+      input.value = ''; preview.src = DEFAULT_DP;
+      alert('শুধুমাত্র JPG অথবা PNG ফরম্যাটের ছবি আপলোড করুন।');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      input.value = ''; preview.src = DEFAULT_DP;
+      alert('ছবির সাইজ সর্বোচ্চ ৫ MB হতে পারবে।');
+      return;
+    }
+    preview.src = URL.createObjectURL(file);
     return;
   }
-  if (file.size > 5 * 1024 * 1024) {
-    input.value = ''; box.classList.add('hidden');
-    alert('ছবির সাইজ সর্বোচ্চ ৫ MB হতে পারবে।');
-    return;
+
+  if (field === 'file') {
+    const box = input.parentElement.querySelector('.file-preview');
+    const img = box?.querySelector('img');
+    if (!box || !img) return;
+    if (!file) { box.classList.add('hidden'); img.removeAttribute('src'); return; }
+    if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
+      input.value = ''; box.classList.add('hidden');
+      alert('শুধুমাত্র JPG অথবা PNG ফরম্যাটের ছবি আপলোড করুন।');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      input.value = ''; box.classList.add('hidden');
+      alert('ছবির সাইজ সর্বোচ্চ ৫ MB হতে পারবে।');
+      return;
+    }
+    img.src = URL.createObjectURL(file);
+    box.classList.remove('hidden');
   }
-  img.src = URL.createObjectURL(file);
-  box.classList.remove('hidden');
 });
 
 $('#togglePwd').addEventListener('click', () => {
@@ -2177,6 +2190,7 @@ function showError(msg) {
   fe.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 function markError(el) {
+  if (!el) return;
   el.classList.add('field-error');
   el.addEventListener('input', () => el.classList.remove('field-error'), { once: true });
   el.addEventListener('change', () => el.classList.remove('field-error'), { once: true });
@@ -2189,6 +2203,7 @@ function collectApplicants(validate = true) {
 
   cards.forEach(card => {
     const get = f => card.querySelector(`[data-field="${f}"]`);
+    const useDefaultPhoto = !!get('useDefaultPhoto')?.checked;
     const rec = {
       certNo:     digitsOnly(get('certNo').value),
       birthDate:  get('birthDate').value,
@@ -2200,6 +2215,8 @@ function collectApplicants(validate = true) {
       upazila:    get('upazila').value.trim(),
       address:    get('address').value.trim(),
       file:       get('file').files?.[0] || null,
+      photo:      get('photo')?.files?.[0] || null,
+      useDefaultPhoto,
     };
 
     if (validate) {
@@ -2210,6 +2227,11 @@ function collectApplicants(validate = true) {
         ok = false;
         markError(get('file'));
         firstBad = firstBad || get('file');
+      }
+      if (!rec.useDefaultPhoto && !rec.photo) {
+        ok = false;
+        markError(get('photo'));
+        firstBad = firstBad || get('photo');
       }
     }
     list.push(rec);
@@ -2231,7 +2253,7 @@ $('#nextBtn').addEventListener('click', () => {
   const { ok, firstBad } = collectApplicants(true);
 
   if (!ok) {
-    showError('অনুগ্রহ করে প্রতিটি আবেদনকারীর সকল তথ্য পূরণ করুন এবং জন্ম নিবন্ধন সনদের ছবি অ্যাটাচ করুন।');
+    showError('অনুগ্রহ করে প্রতিটি আবেদনকারীর সকল তথ্য পূরণ করুন, জন্ম নিবন্ধন সনদের ছবি এবং আবেদনকারীর ছবি অ্যাটাচ করুন (অথবা ডিফল্ট avatar নির্বাচন করুন)।');
     firstBad?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
@@ -2316,7 +2338,7 @@ submitBtn.addEventListener('click', async () => {
   if (!/^01[3-9]\d{8}$/.test(sender)) { markError($('#senderNumber')); showError('সঠিক ১১ ডিজিটের বিকাশ নম্বর দিন।'); return; }
 
   const { list, ok } = collectApplicants(false);
-  if (!ok || list.some(a => !a.file)) {
+  if (!ok || list.some(a => !a.file || (!a.useDefaultPhoto && !a.photo))) {
     showError('কিছু তথ্য অনুপস্থিত। অনুগ্রহ করে পূর্বের ধাপে ফিরে সব তথ্য পূরণ করুন।');
     return;
   }
@@ -2334,23 +2356,33 @@ submitBtn.addEventListener('click', async () => {
   $('#progressWrap').classList.remove('hidden');
 
   try {
-    const totalFiles = list.length;
-    let done = 0;
+    const tasks = [];
+    list.forEach((a, idx) => {
+      tasks.push({ type: 'cert', idx, file: a.file });
+      if (!a.useDefaultPhoto && a.photo) tasks.push({ type: 'photo', idx, file: a.photo });
+    });
+    const totalUploads = tasks.length;
+    let doneUploads = 0;
 
-    for (let i = 0; i < list.length; i++) {
-      const base = Math.round((done / totalFiles) * 100);
-      $('#progressText').textContent = `আবেদনকারী ${toBn(i+1)} এর সনদ আপলোড হচ্ছে…`;
+    for (const task of tasks) {
+      const base = Math.round((doneUploads / totalUploads) * 100);
+      $('#progressText').textContent = task.type === 'cert'
+        ? `আবেদনকারী ${toBn(task.idx+1)} এর সনদ আপলোড হচ্ছে…`
+        : `আবেদনকারী ${toBn(task.idx+1)} এর ছবি আপলোড হচ্ছে…`;
       $('#progressBar').style.width = `${base}%`;
       $('#progressPct').textContent = `${base}%`;
 
-      const url = await uploadToCloudinary(list[i].file, pct => {
-        const overall = Math.round(((done + pct/100) / totalFiles) * 100);
+      const url = await uploadToCloudinary(task.file, pct => {
+        const overall = Math.round(((doneUploads + pct/100) / totalUploads) * 100);
         $('#progressBar').style.width = `${overall}%`;
         $('#progressPct').textContent = `${overall}%`;
       });
-      list[i].imageUrl = url;
-      done++;
+      if (task.type === 'cert') list[task.idx].imageUrl = url;
+      else list[task.idx].photoUrl = url;
+      doneUploads++;
     }
+
+    list.forEach(a => { if (a.useDefaultPhoto || !a.photoUrl) a.photoUrl = DEFAULT_DP; });
 
     $('#progressText').textContent = 'অর্ডার সংরক্ষণ হচ্ছে…';
     $('#progressBar').style.width = '100%';
@@ -2366,7 +2398,9 @@ submitBtn.addEventListener('click', async () => {
       district:   a.district,
       upazila:    a.upazila,
       address:    a.address,
-      imageUrl:   a.imageUrl
+      imageUrl:   a.imageUrl,
+      photoUrl:   a.photoUrl,
+      useDefaultPhoto: !!a.useDefaultPhoto,
     }));
 
     const payload = {
@@ -2405,7 +2439,7 @@ submitBtn.addEventListener('click', async () => {
 
     $('#invApplicants').innerHTML = applicants.map((a, i) => `
       <li class="flex items-start gap-2.5">
-        <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-700">${toBn(i+1)}</span>
+        <img src="${escapeHtml(a.photoUrl || DEFAULT_DP)}" alt="" class="mt-0.5 h-10 w-10 shrink-0 rounded-lg border border-slate-200 object-cover" onerror="this.style.display='none'" />
         <span class="min-w-0">
           <b class="text-slate-900">${escapeHtml(a.name)}</b>
           <span class="block text-xs text-slate-500">নিবন্ধন নং: ${escapeHtml(a.certNo || '—')} · জন্ম তারিখ: ${escapeHtml(a.birthDate || '—')}</span>
@@ -2420,7 +2454,6 @@ submitBtn.addEventListener('click', async () => {
 
     const modal = $('#invoiceModal');
     modal.classList.remove('hidden');
-    /* === PRINT FIX: mark body so print CSS isolates the invoice === */
     document.body.classList.add('invoice-open');
     document.body.style.overflow = 'hidden';
 
@@ -2440,7 +2473,6 @@ submitBtn.addEventListener('click', async () => {
 
 function closeInvoice() {
   $('#invoiceModal').classList.add('hidden');
-  /* === PRINT FIX: remove isolation class when modal closes === */
   document.body.classList.remove('invoice-open');
   document.body.style.overflow = '';
 }
@@ -2510,11 +2542,19 @@ function renderChatMessages(msgs) {
 
   body.innerHTML = msgs.map(m => {
     const mine = m.sender === 'client';
+    const imageHtml = m.imageUrl
+      ? `<a href="${escapeHtml(m.imageUrl)}" target="_blank" rel="noopener" class="block">
+           <img src="${escapeHtml(m.imageUrl)}" alt="attachment" loading="lazy"
+                class="mb-1 max-h-48 w-full rounded-lg object-cover" />
+         </a>`
+      : '';
+    const textHtml = m.text ? `<p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>` : '';
     return `
       <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
         <div class="max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm
           ${mine ? 'rounded-br-sm bg-brand-600 text-white' : 'rounded-bl-sm border border-slate-200 bg-white text-slate-800'}">
-          <p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
+          ${imageHtml}
+          ${textHtml}
           <p class="mt-1 text-[10px] ${mine ? 'text-brand-100' : 'text-slate-400'}">${fmtDate(m.createdAt)}</p>
         </div>
       </div>`;
@@ -2584,6 +2624,61 @@ $('#chatForm').addEventListener('submit', async e => {
   } finally {
     btn.disabled = false;
     input.focus();
+  }
+});
+
+/* ============================================================
+   CHAT IMAGE UPLOAD
+   ============================================================ */
+$('#chatImageBtn').addEventListener('click', () => $('#chatImageInput').click());
+
+$('#chatImageInput').addEventListener('change', async e => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const inputEl = e.target;
+
+  if (!['image/jpeg','image/png','image/jpg','image/webp'].includes(file.type)) {
+    alert('শুধুমাত্র JPG / PNG / WEBP ফরম্যাটের ছবি আপলোড করুন।');
+    inputEl.value = '';
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    alert('ছবির সাইজ সর্বোচ্চ ৫ MB হতে পারবে।');
+    inputEl.value = '';
+    return;
+  }
+
+  const btn = $('#chatImageBtn');
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = `
+    <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity=".25"/>
+      <path fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"/>
+    </svg>`;
+
+  try {
+    const url = await uploadToCloudinary(file);
+    const id = await ensureChat();
+    await addDoc(collection(db, 'chats', id, 'messages'), {
+      text: '',
+      imageUrl: url,
+      sender: 'client',
+      createdAt: serverTimestamp()
+    });
+    await updateDoc(doc(db, 'chats', id), {
+      lastMessage: '📷 ছবি',
+      lastMessageAt: serverTimestamp(),
+      unreadForAdmin: increment(1)
+    });
+  } catch (err) {
+    console.error(err);
+    alert(err?.message || 'ছবি পাঠানো যায়নি। আবার চেষ্টা করুন।');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+    inputEl.value = '';
   }
 });
 
