@@ -1286,7 +1286,7 @@ function ordersSignature(list) {
     o.id, o.status, o.amount || 0, o.applicantCount || 0,
     o.paymentStatus || '', o.orderId || '', o.receiverEmail || '',
     o.bkashSenderNumber || '', o.draftNumber || '',
-    o.usedDemoInfo ? 1 : 0, o.createdAt?.seconds || 0,
+    o.usedDemoInfo ? 1 : 0, o.usedRepresentativeInfo ? 1 : 0, o.createdAt?.seconds || 0,
     o.statusUpdatedAt?.seconds || 0, o.completedAt?.seconds || 0
   ]));
 }
@@ -1385,17 +1385,25 @@ function statusBadge(s) {
   return `<span class="badge ${bg} ${fg}">${label}</span>`;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✅ UPDATED: demoBadge — "(ডেমো)" সরানো হয়েছে
-   ═══════════════════════════════════════════════════════════ */
 function demoBadge(o) {
-  if (!o.usedDemoInfo) return '';
-  return `<span class="badge bg-amber-100 text-amber-700">
-    <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
-    </svg>
-    একক গ্রাহিতা
-  </span>`;
+  let html = '';
+  if (o.usedDemoInfo) {
+    html += `<span class="badge bg-amber-100 text-amber-700">
+      <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+      </svg>
+      একক গ্রাহিতা
+    </span>`;
+  }
+  if (o.usedRepresentativeInfo) {
+    html += `<span class="badge bg-blue-100 text-blue-700 ml-1">
+      <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+      </svg>
+      প্রতিনিধি
+    </span>`;
+  }
+  return html;
 }
 
 function draftBadge(o) {
@@ -1658,6 +1666,18 @@ function openOrderModal(id) {
           </svg>
           একক গ্রাহিতা
         </p>
+      </div>
+    ` : ''}
+    
+    ${o.usedRepresentativeInfo ? `
+      <div class="mt-4 rounded-xl border border-blue-200 bg-blue-50/60 p-4">
+        <p class="flex items-center gap-2 text-sm font-bold text-blue-900">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+          </svg>
+          প্রতিনিধির মাধ্যমে আবেদন
+        </p>
+        <p class="mt-1 text-xs text-blue-800">গ্রাহকের তথ্যে প্রতিনিধির তথ্য যুক্ত করা হয়েছে। অ্যাডমিন টিম প্রতিনিধির তথ্য remove করে গ্রাহকের তথ্য add করবে।</p>
       </div>
     ` : ''}
 
