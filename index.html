@@ -63,7 +63,6 @@
              placeholder:text-slate-400 outline-none transition
              focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100;
     }
-    .input[readonly] { @apply bg-slate-100 cursor-not-allowed; }
     .label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
     .hint  { @apply mt-1.5 text-xs text-slate-500; }
     .file-input {
@@ -162,10 +161,6 @@
   @keyframes scrollBounce2 {
     0%, 100% { transform: translateY(0);   opacity: .35; }
     50%      { transform: translateY(10px); opacity: .9;  }
-  }
-  @keyframes scrollRing {
-    0%, 100% { transform: translateY(0) scale(1);   opacity: .5; }
-    50%      { transform: translateY(6px) scale(1.08); opacity: 1; }
   }
   .scroll-arrow {
     display: inline-flex;
@@ -604,19 +599,18 @@
           </div>
         </a>
 
-        <!-- ═══ Court Fee Note (Replacing old court fee system) ═══ -->
+        <!-- ═══ আবেদন এর খসড়া তৈরি (Application Draft Note) ═══ -->
         <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50/60 p-5">
           <div class="flex items-start gap-3">
             <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-emerald-100 text-emerald-700" aria-hidden="true">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.6 2A9.6 9.6 0 0 1 12 21a9.6 9.6 0 0 1-8.6-9A9.6 9.6 0 0 1 12 3a9.6 9.6 0 0 1 8.6 9Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
               </svg>
             </span>
             <div class="min-w-0">
-              <h3 class="text-sm font-extrabold text-emerald-900">Court Fee সম্পর্কিত তথ্য</h3>
+              <h3 class="text-sm font-extrabold text-emerald-900">আবেদন এর খসড়া তৈরি</h3>
               <p class="mt-1 text-xs leading-relaxed text-emerald-800">
-                Court fee সহ যাবতীয় তথ্য স্বয়ংক্রিয়ভাবে ভূমি অফিসে যাচাই ও নিষ্পত্তি হবে — এই ফর্মে আলাদা করে কোনো তথ্য দেওয়ার প্রয়োজন নেই।
-                গ্রাহকের তথ্য বাদে অন্য সব তথ্য দিয়ে খসড়া সংরক্ষণ করা হবে, যা পরবর্তীতে সম্পূর্ণ করা যাবে।
+                Court fee পরিশোধ করে আবেদনে জন্ম নিবন্ধনের গ্রাহকের তথ্য টি বাদ রেখে অন্যান্য সমস্ত তথ্য নিজে add করে খসড়া সংরক্ষণ করে তারপর <b>EMBS</b> এ order করুন।
               </p>
             </div>
           </div>
@@ -646,15 +640,17 @@
           </div>
         </div>
 
-        <!-- ═══ Single Applicant Demo Checkbox (only for 1 applicant) ═══ -->
+        <!-- ═══ একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন ═══ -->
         <div id="singleApplicantDemoWrap" class="mt-4 hidden rounded-2xl border-2 border-brand-200 bg-brand-50/50 p-5">
           <label class="flex cursor-pointer items-start gap-3">
             <input type="checkbox" id="singleApplicantDemo" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
             <span class="min-w-0">
-              <span class="block text-sm font-bold text-slate-900">একক গ্রাহিতা — গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করা হয়েছে</span>
-              <span class="mt-1 block text-xs leading-relaxed text-slate-600">
-                যেহেতু একক গ্রাহিতা, তাই গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করে খসড়া সংরক্ষণ করা হবে।
-                ভূমি অফিসে পরবর্তীতে প্রকৃত তথ্য দিয়ে সম্পন্ন করা যাবে। চেক করলে আবেদনকারীর টেক্সট ফিল্ডগুলো ডেমো ডাটা দিয়ে পূরণ হবে এবং ফাইল আপলোড ঐচ্ছিক হবে।
+              <span class="block text-sm font-bold text-slate-900">একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন</span>
+              <span class="mt-1.5 block text-xs leading-relaxed text-slate-600">
+                যেহেতু গ্রাহকের তথ্য প্রদান ছাড়া খসড়া সংরক্ষণ হয় না, তাই একক গ্রাহিতা (Birth Certificate) এর আবেদনের জন্য <b class="text-slate-900">একক গ্রাহিতা</b> option টি mark করুন এবং আবেদনে গ্রাহকের তথ্যে <b class="text-slate-900">Account Holder / প্রতিনিধির তথ্য</b> add করে খসড়া সংরক্ষণ করুন।
+              </span>
+              <span class="mt-1.5 block rounded-lg bg-white/70 px-2.5 py-1.5 text-[11.5px] leading-relaxed text-brand-800">
+                <b>বিশেষ দৃষ্টি আকর্ষণ:</b> একক গ্রাহিতা select করার মাধ্যমে আমরা Account Holder / প্রতিনিধির তথ্য remove করে Birth Certificate এর গ্রাহকের তথ্য add করে দিবো।
               </span>
             </span>
           </label>
@@ -964,7 +960,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">৩. সনদ ও ছবি</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          প্রত্যেকের জন্ম নিবন্ধন সনদের <b>পরিষ্কার ছবি</b> এবং <b>আবেদনকারীর ছবি</b> অ্যাটাচ করতে হবে। একক গ্রাহিতা + ডেমো মোডে ফাইল আপলোড ঐচ্ছিক।
+          প্রত্যেকের জন্ম নিবন্ধন সনদের <b>পরিষ্কার ছবি</b> এবং <b>আবেদনকারীর ছবি</b> অ্যাটাচ করতে হবে।
         </p>
       </article>
 
@@ -1104,13 +1100,13 @@
 
       <details class="group card p-5 open:shadow-md">
         <summary class="flex cursor-pointer items-center justify-between gap-4">
-          <h3 class="text-base font-extrabold text-slate-900">একক গ্রাহিতা (Demo Info) কী?</h3>
+          <h3 class="text-base font-extrabold text-slate-900">একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন কী?</h3>
           <svg class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600">
-          যদি একক গ্রাহিতা হয়, তাহলে গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করে খসড়া সংরক্ষণ করা যায়। চেকবক্স টিক দিলে আবেদনকারীর টেক্সট ফিল্ডগুলো ডেমো ডাটা দিয়ে পূরণ হবে এবং ফাইল আপলোড ঐচ্ছিক হবে। ভূমি অফিসে পরবর্তীতে প্রকৃত তথ্য দিয়ে সম্পন্ন করা যাবে।
+          একক গ্রাহিতা (Birth Certificate) এর আবেদনের ক্ষেত্রে গ্রাহকের তথ্যে Account Holder / প্রতিনিধির তথ্য দিয়ে খসড়া সংরক্ষণ করা হয়। একক গ্রাহিতা option mark করলে আমাদের টিম Account Holder / প্রতিনিধির তথ্য remove করে Birth Certificate এর প্রকৃত গ্রাহকের তথ্য add করে দেয়।
         </p>
       </details>
 
@@ -1520,8 +1516,8 @@
         </div>
       </div>
 
-      <div id="invDemoWrap" class="mt-3 hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs font-semibold text-amber-800">
-        ⚠️ একক গ্রাহিতা — গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করা হয়েছে। ভূমি অফিসে প্রকৃত তথ্য দিয়ে সম্পন্ন করা হবে।
+      <div id="invDemoWrap" class="mt-3 hidden rounded-xl border border-brand-200 bg-brand-50 px-4 py-2.5 text-xs font-semibold text-brand-800">
+        একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন — গ্রাহকের তথ্যে Account Holder / প্রতিনিধির তথ্য যুক্ত করা হয়েছে। আমাদের টিম Account Holder / প্রতিনিধির তথ্য remove করে Birth Certificate এর গ্রাহকের তথ্য add করবে।
       </div>
 
       <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
@@ -1624,18 +1620,6 @@ const URGENT_FEE      = 50;
 const BKASH_NUMBER    = '01860319433';
 const DEFAULT_DP      = 'dp.png';
 const SETTINGS_REF    = doc(db, 'settings', 'global');
-
-const DEMO_APPLICANT_DATA = {
-  name: 'প্রতিনিধি (ডেমো)',
-  fatherName: 'পিতা (ডেমো)',
-  motherName: 'মাতা (ডেমো)',
-  division: 'ঢাকা',
-  district: 'ঢাকা',
-  upazila: 'সাভার',
-  address: 'গ্রাহকের ঠিকানা (ডেমো)',
-  birthDate: '2000-01-01',
-  certNo: '00000000000000000'
-};
 
 const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 const toBn = n => String(n).replace(/\d/g, d => BN_DIGITS[+d]);
@@ -2020,45 +2004,9 @@ function toggleSingleApplicantDemo() {
   } else {
     wrap.classList.add('hidden');
     const cb = $('#singleApplicantDemo');
-    if (cb) {
-      cb.checked = false;
-      applyDemoMode(false);
-    }
+    if (cb) cb.checked = false;
   }
 }
-
-function applyDemoMode(isDemo) {
-  const card = document.querySelector('.applicant-card');
-  if (!card) return;
-  
-  const fields = ['name', 'fatherName', 'motherName', 'division', 'district', 'upazila', 'address', 'birthDate', 'certNo'];
-  
-  fields.forEach(f => {
-    const el = card.querySelector(`[data-field="${f}"]`);
-    if (!el) return;
-    if (isDemo) {
-      if (!el.dataset.originalValue) el.dataset.originalValue = el.value;
-      el.value = DEMO_APPLICANT_DATA[f] || '';
-      el.readOnly = true;
-    } else {
-      el.value = el.dataset.originalValue || '';
-      el.readOnly = false;
-    }
-  });
-
-  if (isDemo) {
-    card.classList.add('ring-2', 'ring-brand-300', 'bg-brand-50/40');
-  } else {
-    card.classList.remove('ring-2', 'ring-brand-300', 'bg-brand-50/40');
-  }
-}
-
-// Single applicant demo checkbox handler
-document.addEventListener('change', e => {
-  if (e.target.id === 'singleApplicantDemo') {
-    applyDemoMode(e.target.checked);
-  }
-});
 
 function setCount(n) {
   applicantCount = Math.min(MAX_COUNT, Math.max(MIN_COUNT, n));
@@ -2154,7 +2102,6 @@ function markError(el) {
 }
 
 function collectApplicants(validate = true) {
-  const isDemo = applicantCount === 1 && $('#singleApplicantDemo')?.checked;
   const cards = [...document.querySelectorAll('.applicant-card')];
   const list = [];
   let ok = true, firstBad = null;
@@ -2178,7 +2125,7 @@ function collectApplicants(validate = true) {
       useDefaultPhoto,
     };
 
-    if (validate && !isDemo) {
+    if (validate) {
       ['certNo','birthDate','name','fatherName','motherName','division','district','upazila','address'].forEach(f => {
         if (!rec[f]) { ok = false; markError(get(f)); firstBad = firstBad || get(f); }
       });
@@ -2196,7 +2143,7 @@ function collectApplicants(validate = true) {
     list.push(rec);
   });
 
-  return { list, ok, firstBad, isDemo };
+  return { list, ok, firstBad };
 }
 
 $('#nextBtn').addEventListener('click', () => {
@@ -2289,8 +2236,8 @@ submitBtn.addEventListener('click', async () => {
   if (!sender) { markError($('#senderNumber')); showError('যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি লিখুন।'); return; }
   if (!/^01[3-9]\d{8}$/.test(sender)) { markError($('#senderNumber')); showError('সঠিক ১১ ডিজিটের বিকাশ নম্বর দিন।'); return; }
 
-  const { list, ok, isDemo } = collectApplicants(false);
-  if (!ok || (!isDemo && list.some(a => !a.file || (!a.useDefaultPhoto && !a.photo)))) {
+  const { list, ok } = collectApplicants(false);
+  if (!ok || list.some(a => !a.file || (!a.useDefaultPhoto && !a.photo))) {
     showError('কিছু তথ্য অনুপস্থিত। অনুগ্রহ করে পূর্বের ধাপে ফিরে সব তথ্য পূরণ করুন।');
     return;
   }
@@ -2301,6 +2248,7 @@ submitBtn.addEventListener('click', async () => {
   const total = (applicantCount * PRICE_PER_PERSON) + urgentFeeAmount;
   const orderId = generateOrderId();
   const draftNumber = $('#draftNumber').value.trim();
+  const usedDemoInfo = applicantCount === 1 && !!$('#singleApplicantDemo')?.checked;
 
   submitBtn.disabled = true;
   const originalHTML = submitBtn.innerHTML;
@@ -2371,7 +2319,7 @@ submitBtn.addEventListener('click', async () => {
       amount: total,
       applicants,
       draftNumber: draftNumber || '',
-      usedDemoInfo: isDemo,
+      usedDemoInfo,
       landAccountNumber: digitsOnly($('#landNumber').value),
       landAccountPassword: $('#landPassword').value.trim(),
       receiverEmail: $('#receiverEmail').value.trim(),
@@ -2397,8 +2345,8 @@ submitBtn.addEventListener('click', async () => {
       $('#invDraftNumberWrap').classList.add('hidden');
     }
 
-    // Demo info display
-    $('#invDemoWrap').classList.toggle('hidden', !isDemo);
+    // Single applicant with representative display
+    $('#invDemoWrap').classList.toggle('hidden', !usedDemoInfo);
 
     $('#invApplicants').innerHTML = applicants.map((a, i) => `
       <li class="flex items-start gap-2.5">
@@ -2591,9 +2539,6 @@ $('#chatForm').addEventListener('submit', async e => {
   }
 });
 
-/* ============================================================
-   CHAT IMAGE UPLOAD
-   ============================================================ */
 $('#chatImageBtn').addEventListener('click', () => $('#chatImageInput').click());
 
 $('#chatImageInput').addEventListener('change', async e => {
