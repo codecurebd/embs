@@ -10,21 +10,8 @@
 <meta name="author" content="eMutation Birth Certificate Application Support" />
 <meta name="publisher" content="CodeCureBD" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-<meta name="googlebot" content="index, follow" />
-<meta name="bingbot" content="index, follow" />
 <meta name="language" content="Bengali" />
 <meta name="content-language" content="bn-BD" />
-<meta name="revisit-after" content="2 days" />
-<meta name="rating" content="general" />
-<meta name="distribution" content="global" />
-<meta name="coverage" content="Bangladesh" />
-<meta name="target" content="all" />
-<meta name="audience" content="all" />
-<meta name="classification" content="Government Services, Birth Certificate, Mutation Application" />
-<meta name="geo.region" content="BD" />
-<meta name="geo.placename" content="Bangladesh" />
-<meta name="geo.position" content="23.6850;90.3563" />
-<meta name="ICBM" content="23.6850, 90.3563" />
 
 <link rel="canonical" href="https://emb-support.vercel.app/" />
 <link rel="alternate" hreflang="bn-BD" href="https://emb-support.vercel.app/" />
@@ -35,16 +22,9 @@
 <meta property="og:title" content="eMutation Birth Certificate Application Online | 18+ Birth Certificate Mutation Service" />
 <meta property="og:description" content="18+ Birth Certificate Mutation Application Online — ১০-৩০ মিনিটে ডেলিভারি। ২৪/৭ লাইভ সাপোর্ট।" />
 <meta property="og:image" content="https://emb-support.vercel.app/banner-img.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="eMutation Birth Certificate Application Online Bangladesh" />
 <meta property="og:locale" content="bn_BD" />
-<meta property="og:locale:alternate" content="en_US" />
-<meta property="og:site_name" content="eMutation Birth Certificate Application Support" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@codecurebd" />
-<meta name="twitter:creator" content="@codecurebd" />
 <meta name="twitter:title" content="eMutation Birth Certificate Application | 18+ Mutation Online" />
 <meta name="twitter:description" content="18+ Birth Certificate Mutation Application Online — ১০-৩০ মিনিট ডেলিভারি, ২৪/৭ সাপোর্ট।" />
 <meta name="twitter:image" content="https://emb-support.vercel.app/banner-img.png" />
@@ -53,13 +33,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://cdn.tailwindcss.com" />
 <link rel="preconnect" href="https://api.cloudinary.com" />
-<link rel="dns-prefetch" href="https://www.gstatic.com" />
-<link rel="dns-prefetch" href="https://firestore.googleapis.com" />
 
 <meta name="theme-color" content="#1d51f5" />
 <link rel="icon" type="image/png" href="logo.png" />
-<link rel="apple-touch-icon" href="logo.png" />
-<link rel="manifest" href="manifest.json" />
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 <script src="https://cdn.tailwindcss.com"></script>
@@ -87,6 +63,7 @@
              placeholder:text-slate-400 outline-none transition
              focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100;
     }
+    .input[readonly] { @apply bg-slate-100 cursor-not-allowed; }
     .label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
     .hint  { @apply mt-1.5 text-xs text-slate-500; }
     .file-input {
@@ -200,11 +177,8 @@
   }
   .scroll-arrow .chev1 { animation: scrollBounce 1.8s ease-in-out infinite; }
   .scroll-arrow .chev2 { animation: scrollBounce2 1.8s ease-in-out infinite .18s; }
-  .scroll-arrow .scroll-dot { animation: scrollRing 1.8s ease-in-out infinite; }
-  .scroll-arrow:hover .chev1,
-  .scroll-arrow:hover .chev2 { animation-play-state: paused; }
   @media (prefers-reduced-motion: reduce) {
-    .scroll-arrow .chev1, .scroll-arrow .chev2, .scroll-arrow .scroll-dot { animation: none; }
+    .scroll-arrow .chev1, .scroll-arrow .chev2 { animation: none; }
   }
 
   .marquee-wrap { position: relative; overflow: hidden; }
@@ -329,7 +303,7 @@
   <nav class="h-16 border-b border-slate-200 bg-white/95 backdrop-blur" role="navigation" aria-label="Main navigation">
     <div class="mx-auto flex h-full max-w-7xl items-center gap-4 px-5 sm:px-8 lg:px-12">
       <a href="#home" class="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="eMutation Birth Certificate Application Home">
-        <img src="logo.png" alt="eMutation Birth Certificate Application Support Logo" width="44" height="44" class="h-11 w-11 shrink-0 object-contain" />
+        <img src="logo.png" alt="eMutation Logo" width="44" height="44" class="h-11 w-11 shrink-0 object-contain" />
         <span class="min-w-0">
           <span class="block truncate text-[13px] font-extrabold leading-tight text-slate-900 sm:text-[15px]">
             eMutation Birth certificate
@@ -435,8 +409,6 @@
   <div class="hero-mesh pointer-events-none absolute inset-0" aria-hidden="true"></div>
   <div class="hero-glow pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-brand-300/30 blur-3xl" aria-hidden="true"></div>
   <div class="pointer-events-none absolute -bottom-36 -left-28 h-96 w-96 rounded-full bg-sky-200/50 blur-3xl" aria-hidden="true"></div>
-  <div class="pointer-events-none absolute left-1/2 top-10 h-64 w-[34rem] -translate-x-1/2 rounded-full bg-white/70 blur-3xl" aria-hidden="true"></div>
-  <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent" aria-hidden="true"></div>
 
   <div class="relative z-10 mx-auto max-w-7xl px-4 pt-20 pb-4 text-center sm:pt-28 sm:pb-5 lg:pt-32 lg:pb-6">
     <span class="anim-in inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-700 shadow-sm shadow-brand-100 backdrop-blur sm:text-xs">
@@ -459,7 +431,7 @@
 
   <div class="hero-banner-wrap">
     <img src="banner-img.png"
-         alt="eMutation Birth Certificate Application Online - 18+ Birth Certificate Mutation Application Bangladesh"
+         alt="eMutation Birth Certificate Application Online"
          width="1600" height="600" loading="eager" fetchpriority="high"
          class="hero-banner-bg" aria-hidden="true" />
     <div class="hero-banner-overlay pointer-events-none" aria-hidden="true"></div>
@@ -467,29 +439,29 @@
     <div class="hero-banner-content mx-auto max-w-7xl px-4 pt-4 pb-0 sm:pt-5">
       <div class="anim-in flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
         <a href="#service"
-           class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/30 transition hover:bg-brand-700 hover:shadow-xl hover:shadow-brand-600/35 active:scale-[.98] sm:w-auto">
+           class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/30 transition hover:bg-brand-700 sm:w-auto">
           আবেদন শুরু করুন
           <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
           </svg>
         </a>
         <button type="button" data-open-chat
-          class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand-200 bg-white/95 px-8 py-3.5 text-sm font-bold text-brand-700 shadow-md shadow-slate-900/5 backdrop-blur transition hover:border-brand-300 hover:bg-white sm:w-auto">
+          class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand-200 bg-white/95 px-8 py-3.5 text-sm font-bold text-brand-700 shadow-md backdrop-blur transition hover:border-brand-300 hover:bg-white sm:w-auto">
           সাপোর্টের সাথে কথা বলুন
         </button>
       </div>
 
       <div class="trust-badge anim-in mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-bold text-slate-800 sm:text-xs">
         <span class="inline-flex items-center gap-1.5">
-          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
           ১০০% গোপনীয়তা
         </span>
         <span class="inline-flex items-center gap-1.5">
-          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
           ১০-৩০ মিনিটে ডেলিভারি
         </span>
         <span class="inline-flex items-center gap-1.5">
-          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+          <svg class="h-3.5 w-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
           ২৪/৭ লাইভ সাপোর্ট
         </span>
       </div>
@@ -570,25 +542,20 @@
     <div class="mx-auto mt-10 max-w-4xl">
       <div class="anim-in relative overflow-hidden rounded-2xl border-2 border-brand-200 bg-gradient-to-br from-brand-50 via-white to-sky-50 p-5 shadow-sm sm:p-6">
         <div class="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-brand-200/40 blur-2xl" aria-hidden="true"></div>
-        <div class="pointer-events-none absolute -bottom-12 -left-10 h-28 w-28 rounded-full bg-sky-200/40 blur-2xl" aria-hidden="true"></div>
-
         <div class="relative flex items-start gap-3.5">
           <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-md shadow-brand-600/25" aria-hidden="true">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
             </svg>
           </span>
-
           <div class="min-w-0">
             <h3 class="text-sm font-extrabold leading-snug text-slate-900 sm:text-base">
               আবেদন করার আগে জরুরি নির্দেশনা — নথিপত্রের সিরিয়াল
             </h3>
-
             <p class="mt-1.5 text-[13px] leading-relaxed text-slate-700 sm:text-sm">
               নথিপত্রের সিরিয়াল অনুযায়ী যদি <b class="font-bold text-slate-900">আগে এমন কোনো গ্রাহক থাকে যার NID ইতিমধ্যে বিদ্যমান</b>,
               তাহলে প্রথমে সেই <b class="font-bold text-slate-900">NID গ্রহীতাদের তথ্য নিজে সংরক্ষণ</b> করে নিন — এরপর আবেদনটি সম্পন্ন করুন।
             </p>
-
             <p class="mt-2 flex items-start gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-[12.5px] font-semibold leading-relaxed text-emerald-800 sm:text-sm">
               <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
@@ -637,35 +604,21 @@
           </div>
         </a>
 
-        <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-5">
+        <!-- ═══ Court Fee Note (Replacing old court fee system) ═══ -->
+        <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50/60 p-5">
           <div class="flex items-start gap-3">
-            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700" aria-hidden="true">
+            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-emerald-100 text-emerald-700" aria-hidden="true">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.6 2A9.6 9.6 0 0 1 12 21a9.6 9.6 0 0 1-8.6-9A9.6 9.6 0 0 1 12 3a9.6 9.6 0 0 1 8.6 9Z"/>
               </svg>
             </span>
             <div class="min-w-0">
-              <h3 class="text-sm font-extrabold text-amber-900">Court Fee তথ্য</h3>
-              <p class="mt-1 text-xs leading-relaxed text-amber-800">
-                সম্পূর্ণ আবেদনের জন্য এই তথ্য একবারই দিতে হবে।
+              <h3 class="text-sm font-extrabold text-emerald-900">Court Fee সম্পর্কিত তথ্য</h3>
+              <p class="mt-1 text-xs leading-relaxed text-emerald-800">
+                Court fee সহ যাবতীয় তথ্য স্বয়ংক্রিয়ভাবে ভূমি অফিসে যাচাই ও নিষ্পত্তি হবে — এই ফর্মে আলাদা করে কোনো তথ্য দেওয়ার প্রয়োজন নেই।
+                গ্রাহকের তথ্য বাদে অন্য সব তথ্য দিয়ে খসড়া সংরক্ষণ করা হবে, যা পরবর্তীতে সম্পূর্ণ করা যাবে।
               </p>
             </div>
-          </div>
-
-          <label class="mt-4 flex cursor-pointer items-start gap-3 rounded-xl border border-amber-200 bg-white p-3.5 transition hover:border-amber-300">
-            <input type="checkbox" id="courtFeePaid" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
-            <span class="min-w-0">
-              <span class="block text-sm font-bold text-slate-800">Court fee ইতিমধ্যে পরিশোধ করা হয়েছে</span>
-              <span class="mt-0.5 block text-xs text-slate-500">
-                যদি ইতিমধ্যে court fee দেওয়া থাকে, টিক দিন — সার্কেল/উপজেলা লেখার দরকার নেই।
-              </span>
-            </span>
-          </label>
-
-          <div id="circleFields" class="mt-4 rounded-xl border border-amber-200 bg-white p-4">
-            <label class="label" for="circleName">সার্কেল / উপজেলা <span class="text-rose-500">*</span></label>
-            <input type="text" id="circleName" class="input" placeholder="যেমন: সাভার" />
-            <p class="hint">যে সার্কেল/উপজেলায় আবেদন করা হবে, সেটি লিখুন — court fee পরিশোধের জন্য প্রয়োজন।</p>
           </div>
         </div>
 
@@ -689,6 +642,36 @@
             <div class="rounded-xl border-2 border-brand-200 bg-brand-50 px-4 py-3">
               <p class="text-[11px] font-semibold uppercase tracking-wider text-brand-600">মোট বিল</p>
               <p id="sumTotal" class="mt-0.5 text-base font-extrabold text-brand-800">৳ ...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ Single Applicant Demo Checkbox (only for 1 applicant) ═══ -->
+        <div id="singleApplicantDemoWrap" class="mt-4 hidden rounded-2xl border-2 border-brand-200 bg-brand-50/50 p-5">
+          <label class="flex cursor-pointer items-start gap-3">
+            <input type="checkbox" id="singleApplicantDemo" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
+            <span class="min-w-0">
+              <span class="block text-sm font-bold text-slate-900">একক গ্রাহিতা — গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করা হয়েছে</span>
+              <span class="mt-1 block text-xs leading-relaxed text-slate-600">
+                যেহেতু একক গ্রাহিতা, তাই গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করে খসড়া সংরক্ষণ করা হবে।
+                ভূমি অফিসে পরবর্তীতে প্রকৃত তথ্য দিয়ে সম্পন্ন করা যাবে। চেক করলে আবেদনকারীর টেক্সট ফিল্ডগুলো ডেমো ডাটা দিয়ে পূরণ হবে এবং ফাইল আপলোড ঐচ্ছিক হবে।
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <!-- ═══ Draft Number (Optional) ═══ -->
+        <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50/50 p-5">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-slate-200 text-slate-700" aria-hidden="true">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
+              </svg>
+            </span>
+            <div class="min-w-0 flex-1">
+              <label class="label" for="draftNumber">খসড়া নম্বর <span class="text-slate-400 font-normal text-xs">(ঐচ্ছিক)</span></label>
+              <input type="text" id="draftNumber" class="input" placeholder="পূর্বে খসড়া তৈরি করে থাকলে সেই নম্বরটি লিখুন" />
+              <p class="hint">পূর্বে খসড়া তৈরি করে থাকলে সেই খসড়া নম্বরটি দিন। না থাকলে ফাঁকা রাখুন — এতে submit-এ কোনো সমস্যা হবে না।</p>
             </div>
           </div>
         </div>
@@ -934,12 +917,6 @@
         </div>
       </article>
     </div>
-
-    <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
-      <p class="text-center text-[13px] leading-relaxed text-slate-600">
-        <b class="text-slate-900">বিশেষ দৃষ্টি আকর্ষণ:</b> জরুরি অর্ডারের সুবিধা কাজের সময়ের (সকাল ১০টা – রাত ১০টা) বাইরে প্রযোজ্য — অর্থাৎ যদি এই সময়ের বাইরে অর্ডার করেও একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি হয়, তখন অতিরিক্ত ৫০ টাকা পরিশোধ করে কল করে অর্ডারটি নিশ্চিত করতে হবে।
-      </p>
-    </div>
   </div>
 </section>
 
@@ -952,9 +929,6 @@
       <h2 id="how-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl lg:text-4xl">
         কিভাবে কাজ করে — eMutation Birth Certificate Application
       </h2>
-      <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
-        <strong class="font-semibold text-slate-800">18+ Birth Certificate Mutation Application Online</strong> অর্ডার সম্পন্ন করার পূর্বে নিচের নির্দেশাবলী ভালোভাবে পড়ে নিন।
-      </p>
     </div>
 
     <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -966,8 +940,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">১. land.gov.bd অ্যাকাউন্ট</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          land.gov.bd ওয়েবসাইটে যে অ্যাকাউন্ট দিয়ে আবেদন করা হবে, সেই অ্যাকাউন্টের <b>মোবাইল নম্বর ও পাসওয়ার্ড</b>
-          অবশ্যই এন্ট্রি করতে হবে। এটি ছাড়া আবেদন প্রক্রিয়া সম্পন্ন করা সম্ভব নয়।
+          land.gov.bd ওয়েবসাইটে যে অ্যাকাউন্ট দিয়ে আবেদন করা হবে, সেই অ্যাকাউন্টের <b>মোবাইল নম্বর ও পাসওয়ার্ড</b> অবশ্যই এন্ট্রি করতে হবে।
         </p>
       </article>
 
@@ -979,7 +952,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">২. ডেলিভারি সময়</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          কাজের সময় (সকাল ১০টা – রাত ১০টা) অর্ডার করলে সাধারণত <b>১০ মিনিট থেকে ৩০ মিনিটের</b> মধ্যে ডেলিভারি হয়ে থাকে — যদি সার্ভারে কোনো সমস্যা না থাকে। কাজের সময়ের বাইরে অর্ডার করলে পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়।
+          কাজের সময় (সকাল ১০টা – রাত ১০টা) অর্ডার করলে সাধারণত <b>১০ মিনিট থেকে ৩০ মিনিটের</b> মধ্যে ডেলিভারি হয়ে থাকে।
         </p>
       </article>
 
@@ -991,8 +964,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">৩. সনদ ও ছবি</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          প্রত্যেকের জন্ম নিবন্ধন সনদের <b>পরিষ্কার ছবি</b> (JPG / PNG) এবং <b>আবেদনকারীর ছবি</b> অ্যাটাচ করতে হবে।
-          ছবি না থাকলে ডিফল্ট avatar (dp.png) ব্যবহারের অপশন রয়েছে।
+          প্রত্যেকের জন্ম নিবন্ধন সনদের <b>পরিষ্কার ছবি</b> এবং <b>আবেদনকারীর ছবি</b> অ্যাটাচ করতে হবে। একক গ্রাহিতা + ডেমো মোডে ফাইল আপলোড ঐচ্ছিক।
         </p>
       </article>
 
@@ -1004,8 +976,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">৪. বিকাশে পেমেন্ট</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          পেমেন্ট অবশ্যই <b>বিকাশ (bKash)</b> এ Send Money করে পাঠাতে হবে। প্রাপক নম্বর:
-          <b class="text-slate-900">01860319433</b>।
+          পেমেন্ট অবশ্যই <b>বিকাশ (bKash)</b> এ Send Money করে পাঠাতে হবে। প্রাপক নম্বর: <b class="text-slate-900">01860319433</b>।
         </p>
       </article>
 
@@ -1018,7 +989,6 @@
         <h3 class="mt-4 text-base font-extrabold text-slate-900">৫. চূড়ান্ত ডেলিভারি</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
           আমরা আপনার <b>land.gov.bd অ্যাকাউন্টে লগইন করে</b> প্রতিটি গ্রাহকের জন্ম নিবন্ধন আবেদন <b>যোগ করে খসড়া (draft) সংরক্ষণ</b> করে দিব।
-          এটাই আমাদের <b class="text-emerald-700">চূড়ান্ত ডেলিভারি</b>। সম্পন্ন হওয়ার পর রিসিভার ইমেইলে জানিয়ে দেওয়া হয়।
         </p>
       </article>
 
@@ -1050,9 +1020,6 @@
       <h2 id="important-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl">
         গুরুত্বপূর্ণ তথ্য — ১৮+ জন্ম নিবন্ধন আবেদন সম্পর্কে
       </h2>
-      <p class="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-        আমাদের সেবা ব্যবহারের পূর্বে নিচের তথ্যগুলো অবশ্যই মনোযোগ দিয়ে পড়ুন। এটি আপনার আবেদনের বৈধতা ও নিরাপত্তার জন্য অত্যন্ত গুরুত্বপূর্ণ।
-      </p>
     </div>
 
     <div class="mt-10 grid gap-5 md:grid-cols-2">
@@ -1064,7 +1031,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">প্রযুক্তিগত সীমাবদ্ধতা</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          <b>mutation.land.gov.bd</b> পোর্টালে ১৮ বছর বয়সোর্ধ্ব (18+) গ্রাহকের ক্ষেত্রে <b>NID বাধ্যতামূলক</b>। অন্যদিকে জন্ম নিবন্ধন সনদ মূলত ১৮ বছরের কম বয়সীদের জন্য, ফলে জন্ম নিবন্ধন যোগ করার সময় <b>২০০৮ সালের আগের তারিখ নির্বাচন করা যায় না</b>।
+          <b>mutation.land.gov.bd</b> পোর্টালে ১৮ বছর বয়সোর্ধ্ব (18+) গ্রাহকের ক্ষেত্রে <b>NID বাধ্যতামূলক</b>। অন্যদিকে জন্ম নিবন্ধন সনদ মূলত ১৮ বছরের কম বয়সীদের জন্য।
         </p>
       </article>
 
@@ -1076,10 +1043,7 @@
         </span>
         <h3 class="mt-4 text-base font-extrabold text-slate-900">আমাদের সমাধান</h3>
         <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          কোনো গ্রাহক <b>প্রবাসী (probashi)</b> হলে বা তার NID এখনো ইস্যু হয়নি কিন্তু ব্যক্তি ১৮+ বয়সোর্ধ্ব হয়ে গেছেন — সেক্ষেত্রে জন্ম নিবন্ধনের মাধ্যমে আবেদন করলে <b>ভূমি অফিস যাচাই করে তা গ্রহণও করে থাকে</b>। কিন্তু ওয়েবসাইটের টেকনিক্যাল ইস্যুর কারণে সাধারণ জনগণ এই কাজটি করতে পারেন না, কারণ NID বা জন্ম নিবন্ধন সরকারি সার্ভার থেকে ভেরিফাই হয় না।
-        </p>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600">
-          আমাদের প্রতিষ্ঠানের নিজস্ব ওয়েবসাইট, সার্ভার ও ব্যাকএন্ড থাকায় <b>আমরা সেই এন্ট্রিগুলো করতে পারি যা সাধারণ জনগণ পারেন না</b>।
+          প্রবাসী (probashi) বা NID ইস্যু না হলেও ১৮+ বয়সোর্ধ্ব — সেক্ষেত্রে জন্ম নিবন্ধনের মাধ্যমে আবেদন করলে <b>ভূমি অফিস যাচাই করে তা গ্রহণও করে থাকে</b>।
         </p>
       </article>
     </div>
@@ -1094,44 +1058,9 @@
         <div class="min-w-0">
           <h3 class="text-base font-extrabold text-rose-900">তথ্যের সঠিকতা ও দায়বদ্ধতা</h3>
           <p class="mt-2 text-sm leading-relaxed text-rose-800">
-            আমাদের হাতে অপশন থাকার কারণে ভুল তথ্য দেওয়ার সুযোগ রয়েছে — তাই আমরা এ বিষয়ে <b>অত্যন্ত সচেতন ও কঠোর</b>। emb-support সমস্ত তথ্য সংগ্রহ ও সংরক্ষণ করে এবং যতটা সম্ভব যাচাই করে নেয়।
-          </p>
-          <p class="mt-2 text-sm leading-relaxed text-rose-800">
             যদি কোনো ব্যক্তি <b>ভুল বা মিথ্যা তথ্য</b> প্রদান করেন, তার দায় আমরা নেব না। ভবিষ্যতে কোনো সমস্যা হলে তথ্য প্রদানকারীর তথ্য <b>আইনের কাছে প্রদান করা হবে</b>।
           </p>
         </div>
-      </div>
-    </div>
-
-    <div class="mt-5 rounded-2xl border border-amber-200 bg-white p-6">
-      <h3 class="flex items-center gap-2 text-base font-extrabold text-slate-900">
-        <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
-        </svg>
-        সতর্কতা — যা মেনে চলা আবশ্যক
-      </h3>
-      <ul class="mt-4 space-y-3">
-        <li class="flex items-start gap-3">
-          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-rose-100 text-[11px] font-bold text-rose-700">১</span>
-          <p class="text-sm leading-relaxed text-slate-700">ভুল বা মিথ্যা তথ্য দিলে <b>আবেদন বাতিল হতে পারে</b>।</p>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-rose-100 text-[11px] font-bold text-rose-700">২</span>
-          <p class="text-sm leading-relaxed text-slate-700">এই ক্ষেত্রে <b>রিফান্ডের কোনো সুযোগ নেই</b>।</p>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber-100 text-[11px] font-bold text-amber-700">৩</span>
-          <p class="text-sm leading-relaxed text-slate-700">ভুলবশত কোনো ভুল তথ্য এসে পড়লে <b>৩০ মিনিটের মধ্যে সাপোর্ট চ্যাটে</b> কথা বলে ঠিক করে নিন।</p>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-700">৪</span>
-          <p class="text-sm leading-relaxed text-slate-700">আপনার প্রদত্ত তথ্য <b>সম্পূর্ণ গোপন</b> রাখা হয় এবং শুধুমাত্র আবেদন সম্পন্ন করার জন্য ব্যবহার করা হয়।</p>
-        </li>
-      </ul>
-      <div class="mt-5 rounded-xl bg-brand-50 px-4 py-3">
-        <p class="text-xs text-brand-800">
-          <b>প্রশ্ন বা সংশোধন প্রয়োজন?</b> সাপোর্ট চ্যাটে যোগাযোগ করুন অথবা <a href="tel:01350141762" class="font-bold underline decoration-brand-400 underline-offset-2">01350141762</a> নম্বরে কল করুন।
-        </p>
       </div>
     </div>
   </div>
@@ -1146,9 +1075,6 @@
       <h2 id="faq-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl">
         eMutation Birth Certificate Application — FAQ
       </h2>
-      <p class="mt-3 text-sm text-slate-600 sm:text-base">
-        <strong>18+ Birth Certificate Mutation Application Online</strong> সম্পর্কে সাধারণ প্রশ্ন ও উত্তর।
-      </p>
     </div>
 
     <div class="mt-10 space-y-4">
@@ -1160,43 +1086,55 @@
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600">
-          eMutation Birth Certificate Application হল ১৮ বছর বয়সোর্ধ্ব নাগরিকদের জন্য জন্ম নিবন্ধন মিউটেশন আবেদন সেবা। land.gov.bd পোর্টালে আবেদনটি যোগ করে খসড়া (draft) সংরক্ষণ করা হয়, যা পরবর্তীতে সম্পন্ন করা যায়।
+          eMutation Birth Certificate Application হল ১৮ বছর বয়সোর্ধ্ব নাগরিকদের জন্য জন্ম নিবন্ধন মিউটেশন আবেদন সেবা। land.gov.bd পোর্টালে আবেদনটি যোগ করে খসড়া (draft) সংরক্ষণ করা হয়।
         </p>
       </details>
 
       <details class="group card p-5 open:shadow-md">
         <summary class="flex cursor-pointer items-center justify-between gap-4">
-          <h3 class="text-base font-extrabold text-slate-900">18+ Birth Certificate Mutation Application ফি কত?</h3>
+          <h3 class="text-base font-extrabold text-slate-900">ফি কত?</h3>
           <svg class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600" id="faqPriceText">
-          প্রতি আবেদনকারীর জন্য ফি নির্ধারিত থাকে। জরুরি অর্ডারের ক্ষেত্রে অতিরিক্ত ৫০ টাকা (কাজের সময়ের বাইরে একই দিনে ডেলিভারি প্রয়োজন হলে)। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।
+          প্রতি আবেদনকারীর জন্য ফি নির্ধারিত থাকে। জরুরি অর্ডারের ক্ষেত্রে অতিরিক্ত ৫০ টাকা। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।
         </p>
       </details>
 
       <details class="group card p-5 open:shadow-md">
         <summary class="flex cursor-pointer items-center justify-between gap-4">
-          <h3 class="text-base font-extrabold text-slate-900">কাজের সময় ও ডেলিভারি সময় কেমন?</h3>
+          <h3 class="text-base font-extrabold text-slate-900">একক গ্রাহিতা (Demo Info) কী?</h3>
           <svg class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600">
-          আমাদের কাজের সময় <b>সকাল ১০:০০টা থেকে রাত ১০:০০টা</b>। এই সময়ে অর্ডার করলে সাধারণত ১০ থেকে ৩০ মিনিটের মধ্যে ডেলিভারি সম্পন্ন হয়। কাজের সময়ের বাইরে অর্ডার করলে <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়।
+          যদি একক গ্রাহিতা হয়, তাহলে গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করে খসড়া সংরক্ষণ করা যায়। চেকবক্স টিক দিলে আবেদনকারীর টেক্সট ফিল্ডগুলো ডেমো ডাটা দিয়ে পূরণ হবে এবং ফাইল আপলোড ঐচ্ছিক হবে। ভূমি অফিসে পরবর্তীতে প্রকৃত তথ্য দিয়ে সম্পন্ন করা যাবে।
         </p>
       </details>
 
       <details class="group card p-5 open:shadow-md">
         <summary class="flex cursor-pointer items-center justify-between gap-4">
-          <h3 class="text-base font-extrabold text-slate-900">জরুরি (আর্জেন্ট) অর্ডার কীভাবে করব?</h3>
+          <h3 class="text-base font-extrabold text-slate-900">খসড়া নম্বর কী?</h3>
           <svg class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600">
-          যদি কাজের সময়ের (<b>সকাল ১০টা – রাত ১০টা</b>) বাইরে অর্ডার করা হয় এবং সেই অর্ডারটি <b>একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি</b> হয়, তাহলে অতিরিক্ত <b>৫০ টাকা</b> পরিশোধ করতে হবে। অর্ডার সম্পন্ন করার পর অবশ্যই <a href="tel:01350141762" class="font-bold text-brand-700 underline">০১৩৫০১৪১৭৬২</a> নম্বরে কল করে আপনার জরুরি অর্ডারটি সম্পর্কে অবহিত করতে হবে।
+          পূর্বে কোনো খসড়া তৈরি করে থাকলে সেই খসড়া নম্বরটি লিখুন। এটি সম্পূর্ণ ঐচ্ছিক — না থাকলে ফাঁকা রাখতে পারেন। এতে submit-এ কোনো সমস্যা হবে না।
+        </p>
+      </details>
+
+      <details class="group card p-5 open:shadow-md">
+        <summary class="flex cursor-pointer items-center justify-between gap-4">
+          <h3 class="text-base font-extrabold text-slate-900">গ্রাহকের সম্পর্ক কী?</h3>
+          <svg class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-slate-600">
+          উত্তরাধিকার সূত্রে সম্পত্তি প্রাপ্ত হলে আবেদনকারীর সাথে মূল মালিকের সম্পর্ক উল্লেখ করুন (যেমন: স্ত্রী, পুত্র, কন্যা)। এটি সম্পূর্ণ ঐচ্ছিক।
         </p>
       </details>
 
@@ -1208,7 +1146,7 @@
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600">
-          হ্যাঁ। যে land.gov.bd অ্যাকাউন্ট দিয়ে আবেদন করা হবে, সেই অ্যাকাউন্টের মোবাইল নম্বর ও পাসওয়ার্ড দিতে হবে। আপনার তথ্য ১০০% গোপন রাখা হয় এবং শুধুমাত্র আবেদন সম্পন্ন করার জন্য ব্যবহার করা হয়।
+          হ্যাঁ। যে land.gov.bd অ্যাকাউন্ট দিয়ে আবেদন করা হবে, সেই অ্যাকাউন্টের মোবাইল নম্বর ও পাসওয়ার্ড দিতে হবে। আপনার তথ্য ১০০% গোপন রাখা হয়।
         </p>
       </details>
 
@@ -1220,7 +1158,7 @@
           </svg>
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-slate-600">
-          বিকাশ (bKash) এ Send Money করে 01860319433 নম্বরে পাঠাতে হবে। Cash Out নয় — শুধুমাত্র Send Money। পেমেন্টের পর ট্রানজেকশন নম্বর ফর্মে দিতে হবে।
+          বিকাশ (bKash) এ Send Money করে 01860319433 নম্বরে পাঠাতে হবে। Cash Out নয় — শুধুমাত্র Send Money।
         </p>
       </details>
     </div>
@@ -1236,15 +1174,12 @@
       <h2 id="privacy-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl">
         গোপনীয়তা নীতি (Privacy Policy)
       </h2>
-      <p class="mt-3 text-sm text-slate-600 sm:text-base">
-        সর্বশেষ আপডেট: ১ জানুয়ারি ২০২৬ · <a href="https://emb-support.vercel.app/" class="text-brand-700 underline">emb-support.vercel.app</a>
-      </p>
     </div>
 
     <div class="legal-prose mt-10 space-y-5">
       <article class="card p-6">
         <p>
-          <b>emb-support</b> ( <a href="https://emb-support.vercel.app/" class="text-brand-700 underline decoration-brand-300 underline-offset-2">https://emb-support.vercel.app/</a> ) আপনার ব্যক্তিগত তথ্যের গোপনীয়তাকে সর্বোচ্চ গুরুত্ব দেয়। এই নীতিতে আমরা কীভাবে আপনার তথ্য সংগ্রহ, ব্যবহার ও সুরক্ষিত রাখি তা বর্ণনা করা হয়েছে। আমাদের সেবা ব্যবহার করার মাধ্যমে আপনি এই নীতিতে সম্মত হচ্ছেন।
+          <b>emb-support</b> আপনার ব্যক্তিগত তথ্যের গোপনীয়তাকে সর্বোচ্চ গুরুত্ব দেয়। এই নীতিতে আমরা কীভাবে আপনার তথ্য সংগ্রহ, ব্যবহার ও সুরক্ষিত রাখি তা বর্ণনা করা হয়েছে।
         </p>
       </article>
 
@@ -1254,9 +1189,10 @@
           <li>নাম, জন্ম তারিখ, পিতার নাম, মাতার নাম</li>
           <li>জন্ম নিবন্ধন নম্বর, জন্ম নিবন্ধন সনদের ছবি ও আবেদনকারীর ছবি</li>
           <li>ঠিকানা (বিভাগ, জেলা, উপজেলা/সার্কেল, বিস্তারিত ঠিকানা)</li>
+          <li>গ্রাহকের সম্পর্ক (ঐচ্ছিক)</li>
+          <li>খসড়া নম্বর (ঐচ্ছিক)</li>
           <li>land.gov.bd অ্যাকাউন্টের মোবাইল নম্বর ও পাসওয়ার্ড</li>
           <li>রিসিভার ইমেইল ও বিকাশ পেমেন্ট নম্বর</li>
-          <li>সাপোর্ট চ্যাটে আপনার প্রদত্ত যেকোনো তথ্য (মেসেজ ও ছবি)</li>
         </ul>
       </article>
 
@@ -1276,7 +1212,6 @@
           <li>সমস্ত তথ্য এনক্রিপ্টেড সার্ভারে সংরক্ষিত থাকে</li>
           <li>শুধুমাত্র অনুমোদিত ব্যক্তিরা তথ্য অ্যাক্সেস করতে পারেন</li>
           <li>তৃতীয় পক্ষের কাছে আপনার তথ্য বিক্রি বা বাণিজ্যিকভাবে শেয়ার করা হয় না</li>
-          <li>আইনি প্রয়োজনে সংশ্লিষ্ট কর্তৃপক্ষকে তথ্য প্রদান করা হতে পারে</li>
         </ul>
       </article>
 
@@ -1284,10 +1219,9 @@
         <h3>৪. তৃতীয় পক্ষের সেবা</h3>
         <ul>
           <li><b>Google Firebase</b> — ডেটাবেস ও অ্যাকাউন্ট ব্যবস্থাপনা</li>
-          <li><b>Cloudinary</b> — জন্ম নিবন্ধন সনদের ছবি ও আবেদনকারীর ছবি হোস্টিং</li>
+          <li><b>Cloudinary</b> — ছবি হোস্টিং</li>
           <li><b>bKash</b> — পেমেন্ট প্রসেসিং</li>
         </ul>
-        <p class="mt-2">এই সেবাগুলো তাদের নিজস্ব গোপনীয়তা নীতি অনুযায়ী কাজ করে।</p>
       </article>
 
       <article class="card p-6">
@@ -1298,11 +1232,6 @@
           <li>আবেদন সম্পন্ন হওয়ার পর তথ্য মুছে ফেলার অনুরোধ করার অধিকার</li>
         </ul>
         <p class="mt-2">অনুরোধ পাঠাতে পারেন <a href="mailto:nopqrshov337@gmail.com" class="text-brand-700 underline">nopqrshov337@gmail.com</a> ঠিকানায়।</p>
-      </article>
-
-      <article class="card p-6">
-        <h3>৬. কুকিজ ও স্থানীয় স্টোরেজ</h3>
-        <p>আমাদের ওয়েবসাইট সাপোর্ট চ্যাট সেশন ও আপনার পছন্দ মনে রাখার জন্য ব্রাউজারের স্থানীয় স্টোরেজ ব্যবহার করে। এটি ব্যক্তিগত তথ্য সংগ্রহ করে না।</p>
       </article>
     </div>
   </div>
@@ -1317,9 +1246,6 @@
       <h2 id="disclaimer-heading" class="mt-4 text-2xl font-extrabold text-slate-900 sm:text-3xl">
         দাবিত্যাগ (Disclaimer)
       </h2>
-      <p class="mt-3 text-sm text-slate-600 sm:text-base">
-        সর্বশেষ আপডেট: ১ জানুয়ারি ২০২৬
-      </p>
     </div>
 
     <div class="legal-prose mt-10 space-y-5">
@@ -1334,7 +1260,7 @@
         <ul>
           <li>আমরা শুধুমাত্র গ্রাহকের পক্ষ থেকে land.gov.bd পোর্টালে আবেদন প্রস্তুত ও জমা দেওয়ার সাপোর্ট প্রদান করি</li>
           <li>আবেদন অনুমোদন বা প্রত্যাখ্যানের চূড়ান্ত সিদ্ধান্ত সংশ্লিষ্ট সরকারি অফিসের এখতিয়ারভুক্ত</li>
-          <li>উল্লেখিত ডেলিভারি সময় (১০-৩০ মিনিট) সরকারি সার্ভারের অবস্থার উপর নির্ভরশীল এবং এটি কোনো নিশ্চিত গ্যারান্টি নয়</li>
+          <li>উল্লেখিত ডেলিভারি সময় (১০-৩০ মিনিট) সরকারি সার্ভারের অবস্থার উপর নির্ভরশীল</li>
         </ul>
       </article>
 
@@ -1343,30 +1269,19 @@
         <ul>
           <li>গ্রাহকের প্রদত্ত ভুল বা মিথ্যা তথ্যের জন্য emb-support দায়ী নয়</li>
           <li>সরকারি সার্ভার ডাউন, টেকনিক্যাল ত্রুটি বা নেটওয়ার্ক সমস্যার জন্য আমরা দায়ী নয়</li>
-          <li>আবেদন বাতিল বা প্রত্যাখ্যাত হলে (বিশেষত ভুল তথ্যের কারণে) কোনো রিফান্ড প্রযোজ্য নয়</li>
-          <li>গ্রাহকের অ্যাকাউন্ট সংক্রান্ত যেকোনো সমস্যার চূড়ান্ত দায় গ্রাহকের নিজের</li>
+          <li>আবেদন বাতিল বা প্রত্যাখ্যাত হলে কোনো রিফান্ড প্রযোজ্য নয়</li>
         </ul>
       </article>
 
       <article class="card p-6">
-        <h3>৩. আইনি সম্মতি</h3>
-        <ul>
-          <li>গ্রাহককে অবশ্যই সঠিক ও সত্য তথ্য প্রদান করতে হবে</li>
-          <li>মিথ্যা তথ্য প্রদান করা হলে তা আইনগতভাবে দণ্ডনীয় এবং তথ্য প্রদানকারীর তথ্য প্রয়োজন হলে আইন প্রয়োগকারী সংস্থাকে প্রদান করা হবে</li>
-          <li>কোনো বিতর্ক দেখা দিলে বাংলাদেশের প্রচলিত আইন প্রযোজ্য হবে</li>
-        </ul>
-      </article>
-
-      <article class="card p-6">
-        <h3>৪. তথ্য সংশোধনের সময়সীমা</h3>
+        <h3>৩. তথ্য সংশোধনের সময়সীমা</h3>
         <p>
-          ভুলবশত কোনো ভুল বা অসম্পূর্ণ তথ্য জমা হয়ে গেলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে যোগাযোগ করে তা সংশোধন করে নিতে হবে। এই সময়সীমার পরে কোনো পরিবর্তন বা রিফান্ডের দাবি গ্রহণযোগ্য নাও হতে পারে।
+          ভুলবশত কোনো ভুল বা অসম্পূর্ণ তথ্য জমা হয়ে গেলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে যোগাযোগ করে তা সংশোধন করে নিতে হবে।
         </p>
       </article>
 
       <article class="card p-6">
-        <h3>৫. যোগাযোগ</h3>
-        <p>এই দাবিত্যাগ সম্পর্কে কোনো প্রশ্ন থাকলে যোগাযোগ করুন:</p>
+        <h3>৪. যোগাযোগ</h3>
         <ul class="mt-2">
           <li>ফোন: <a href="tel:01350141762" class="text-brand-700 underline">01350141762</a></li>
           <li>ইমেইল: <a href="mailto:nopqrshov337@gmail.com" class="text-brand-700 underline">nopqrshov337@gmail.com</a></li>
@@ -1383,7 +1298,7 @@
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
       <div>
         <div class="flex items-center gap-2.5">
-          <img src="logo.png" alt="eMutation Birth Certificate Application Support Logo" width="44" height="44" loading="lazy" class="h-11 w-11 shrink-0 object-contain" />
+          <img src="logo.png" alt="logo" width="44" height="44" loading="lazy" class="h-11 w-11 shrink-0 object-contain" />
           <div>
             <p class="text-sm font-extrabold text-white">eMutation Birth certificate</p>
             <p class="text-[11px] uppercase tracking-wider text-brand-400">application support</p>
@@ -1425,7 +1340,6 @@
           <li><a href="#home"     class="text-slate-400 transition hover:text-white">হোম</a></li>
           <li><a href="#service"  class="text-slate-400 transition hover:text-white">eMutation Application Service</a></li>
           <li><a href="#worktime" class="text-slate-400 transition hover:text-white">কাজের সময় ও জরুরি সেবা</a></li>
-          <li><a href="#how"      class="text-slate-400 transition hover:text-white">কিভাবে কাজ করে</a></li>
           <li><a href="#faq"      class="text-slate-400 transition hover:text-white">সচরাচর জিজ্ঞাসা</a></li>
           <li><button type="button" data-open-chat class="text-slate-400 transition hover:text-white">সাপোর্ট চ্যাট</button></li>
         </ul>
@@ -1444,7 +1358,6 @@
           </li>
           <li><a href="#privacy"    class="text-slate-400 transition hover:text-white">গোপনীয়তা নীতি</a></li>
           <li><a href="#disclaimer" class="text-slate-400 transition hover:text-white">দাবিত্যাগ (Disclaimer)</a></li>
-          <li><a href="#faq"        class="text-slate-400 transition hover:text-white">সচরাচর জিজ্ঞাসা</a></li>
         </ul>
       </div>
     </div>
@@ -1535,8 +1448,7 @@
           <p class="mt-1.5 text-[13px] leading-relaxed text-amber-800 sm:text-sm">
             দ্রুত কাজ সম্পন্ন হওয়ার জন্য
             <a href="tel:+8801350141762" class="font-extrabold text-amber-900 underline decoration-amber-400 underline-offset-2">+880 1350-141762</a>
-            নম্বরে কল করে জানিয়ে দিন। অনেক সময় বেশি অর্ডার থাকার কারণে কাজ সম্পন্ন হতে দেরি হতে পারে —
-            কল করলে আপনার অর্ডারটি <b>গুরুত্বসহকারে আগে</b> সম্পন্ন করা হবে।
+            নম্বরে কল করে জানিয়ে দিন।
           </p>
         </div>
 
@@ -1602,10 +1514,14 @@
           <p class="text-xs text-slate-500">যে নম্বর থেকে বিকাশে পেমেন্ট</p>
           <p id="invSender" class="mt-0.5 font-semibold text-slate-800">—</p>
         </div>
-        <div>
-          <p class="text-xs text-slate-500">Court Fee</p>
-          <p id="invCourtFee" class="mt-0.5 font-semibold text-slate-800">—</p>
+        <div id="invDraftNumberWrap" class="hidden">
+          <p class="text-xs text-slate-500">খসড়া নম্বর</p>
+          <p id="invDraftNumber" class="mt-0.5 font-semibold text-slate-800">—</p>
         </div>
+      </div>
+
+      <div id="invDemoWrap" class="mt-3 hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs font-semibold text-amber-800">
+        ⚠️ একক গ্রাহিতা — গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করা হয়েছে। ভূমি অফিসে প্রকৃত তথ্য দিয়ে সম্পন্ন করা হবে।
       </div>
 
       <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
@@ -1619,13 +1535,13 @@
       </div>
 
       <p id="invUrgent" class="mt-3 hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs font-semibold leading-relaxed text-amber-800">
-        ⚡ জরুরি (আর্জেন্ট) অর্ডার অন্তর্ভুক্ত (অতিরিক্ত ৳৫০) — কাজের সময়ের বাইরে একই দিনে ডেলিভারির জন্য। অর্ডারটি নিশ্চিত করতে অবশ্যই
+        ⚡ জরুরি (আর্জেন্ট) অর্ডার অন্তর্ভুক্ত (অতিরিক্ত ৳৫০)। অর্ডারটি নিশ্চিত করতে অবশ্যই
         <a href="tel:01350141762" class="underline decoration-amber-400 underline-offset-2">০১৩৫০১৪১৭৬২</a> নম্বরে কল করুন।
       </p>
 
       <p class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-800">
         আপনার অর্ডার সফলভাবে জমা হয়েছে। পেমেন্ট যাচাইয়ের পর <b>কাজের সময়ের (সকাল ১০টা – রাত ১০টা)</b> মধ্যে সাধারণত <b>১০ থেকে ৩০ মিনিটে</b>
-        আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে এবং ইমেইলে জানানো হবে। কাজের সময়ের বাইরে অর্ডার করলে <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়। জরুরি অর্ডার নির্বাচন করলে একই দিনে ডেলিভারি নিশ্চিত করতে অবশ্যই <b>০১৩৫০১৪১৭৬২</b> নম্বরে কল করুন। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।
+        আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।
       </p>
 
       <div class="no-print mt-6 flex flex-col gap-3 sm:flex-row">
@@ -1661,7 +1577,6 @@
       <p class="text-sm leading-relaxed text-slate-700">
         ওয়েবসাইটটি ব্যবহার করার পূর্বে আমাদের <b class="text-slate-900">গুরুত্বপূর্ণ সতর্কতা</b>,
         <b class="text-slate-900">গোপনীয়তা নীতি</b> ও <b class="text-slate-900">দাবিত্যাগ</b> পড়ে নেওয়ার জন্য বিনীত অনুরোধ করা হচ্ছে।
-        ভুল বা মিথ্যা তথ্য প্রদান করলে আবেদন বাতিল হতে পারে এবং রিফান্ডের কোনো সুযোগ নেই।
       </p>
 
       <ul class="mt-3 space-y-2 text-[13px] leading-relaxed text-slate-600">
@@ -1671,11 +1586,7 @@
         </li>
         <li class="flex items-start gap-2">
           <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-          কাজের সময়: সকাল ১০টা – রাত ১০টা। এই সময়ের বাইরে অর্ডার করলে পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়।
-        </li>
-        <li class="flex items-start gap-2">
-          <svg class="mt-0.5 h-4 w-4 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/></svg>
-          <span><b>জরুরি (আর্জেন্ট) অর্ডার:</b> কাজের সময়ের বাইরে অর্ডার করেও যদি একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি হয়, তাহলে অতিরিক্ত ৳৫০ পরিশোধ করতে হবে এবং অবশ্যই <a href="tel:01350141762" class="underline">০১৩৫০১৪১৭৬২</a> নম্বরে কল করে অর্ডারটি নিশ্চিত করতে হবে।</span>
+          কাজের সময়: সকাল ১০টা – রাত ১০টা।
         </li>
       </ul>
 
@@ -1683,11 +1594,6 @@
         <a href="#important" id="cookieReadMore" class="btn-ghost flex-1">সতর্কতা পড়ুন</a>
         <button type="button" id="cookieAccept" class="btn-primary flex-1">সম্মত আছি</button>
       </div>
-
-      <p class="mt-3 text-center text-[11px] leading-relaxed text-slate-400">
-        "সম্মত আছি" ক্লিক করার মাধ্যমে আপনি আমাদের শর্তাবলি ও নীতিমালায় সম্মতি দিচ্ছেন।
-        এই বার্তাটি শুধুমাত্র প্রথমবার প্রদর্শিত হবে।
-      </p>
     </div>
   </div>
 </div>
@@ -1713,12 +1619,23 @@ const db  = getFirestore(app);
 const CLOUDINARY_CLOUD_NAME    = 'zmoyykj7';
 const CLOUDINARY_UPLOAD_PRESET = 'codecurebd';
 
-let PRICE_PER_PERSON = 500; // Default
+let PRICE_PER_PERSON = 500;
 const URGENT_FEE      = 50;
-const COURT_FEE       = 20;
 const BKASH_NUMBER    = '01860319433';
 const DEFAULT_DP      = 'dp.png';
 const SETTINGS_REF    = doc(db, 'settings', 'global');
+
+const DEMO_APPLICANT_DATA = {
+  name: 'প্রতিনিধি (ডেমো)',
+  fatherName: 'পিতা (ডেমো)',
+  motherName: 'মাতা (ডেমো)',
+  division: 'ঢাকা',
+  district: 'ঢাকা',
+  upazila: 'সাভার',
+  address: 'গ্রাহকের ঠিকানা (ডেমো)',
+  birthDate: '2000-01-01',
+  certNo: '00000000000000000'
+};
 
 const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 const toBn = n => String(n).replace(/\d/g, d => BN_DIGITS[+d]);
@@ -1837,7 +1754,7 @@ function updateWorkStatus() {
     el.innerHTML = '<span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span> এখন কাজের সময় চলছে — ১০–৩০ মিনিটে ডেলিভারি';
   } else {
     el.className = 'inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-100 px-4 py-1.5 text-xs font-bold text-amber-800';
-    el.innerHTML = '<span class="h-2 w-2 animate-pulse rounded-full bg-amber-500"></span> এখন কাজের সময়ের বাইরে — পরবর্তী কর্মদিবস সকাল ১০টার পর ডেলিভারি (একই দিনে প্রয়োজন হলে জরুরি অর্ডার করুন)';
+    el.innerHTML = '<span class="h-2 w-2 animate-pulse rounded-full bg-amber-500"></span> এখন কাজের সময়ের বাইরে — পরবর্তী কর্মদিবস সকাল ১০টার পর ডেলিভারি';
   }
 }
 updateWorkStatus();
@@ -1865,7 +1782,7 @@ function renderUrgentBlock(force = false) {
           <div class="min-w-0">
             <p class="text-sm font-extrabold text-emerald-900">এখন কাজের সময় চলছে — জরুরি অর্ডারের প্রয়োজন নেই</p>
             <p class="mt-1 text-xs leading-relaxed text-emerald-800">
-              আমাদের কাজের সময় সকাল ১০টা থেকে রাত ১০টা। এখন এই সময়ের মধ্যে আছেন, তাই আপনার ডেলিভারি সাধারণত ১০–৩০ মিনিটেই সম্পন্ন হবে — অতিরিক্ত কোনো চার্জ ছাড়াই।
+              আমাদের কাজের সময় সকাল ১০টা থেকে রাত ১০টা। এখন এই সময়ের মধ্যে আছেন, তাই ডেলিভারি সাধারণত ১০–৩০ মিনিটেই সম্পন্ন হবে।
             </p>
           </div>
         </div>
@@ -1880,7 +1797,7 @@ function renderUrgentBlock(force = false) {
             <span class="rounded-full bg-amber-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-900">একই দিনে ডেলিভারি</span>
           </span>
           <span class="mt-1 block text-xs leading-relaxed text-amber-800">
-            কাজের সময়ের (সকাল ১০টা – রাত ১০টা) বাইরে অর্ডার করলে সাধারণত পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়। কিন্তু যদি এই সময়ের বাইরে অর্ডার করেও <b>একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি</b> হয়, তাহলে এই অপশনটি নির্বাচন করে অতিরিক্ত ৫০ টাকা পরিশোধ করুন। এরপর অবশ্যই <b>০১৩৫০১৪১৭৬২</b> নম্বরে কল করে আপনার জরুরি অর্ডারটি সম্পর্কে অবহিত করতে হবে।
+            কাজের সময়ের বাইরে অর্ডার করলে সাধারণত পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়। কিন্তু একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি হলে এই অপশনটি নির্বাচন করে অতিরিক্ত ৫০ টাকা পরিশোধ করুন।
           </span>
         </span>
       </label>`;
@@ -1906,7 +1823,7 @@ async function fetchDynamicPrice() {
   if ($('#priceLabel')) $('#priceLabel').textContent = `${bnPrice} টাকা`;
   if ($('#cardPrice')) $('#cardPrice').textContent = `৳ ${bnPrice}`;
   if ($('#faqPriceText')) {
-    $('#faqPriceText').innerHTML = `প্রতি আবেদনকারীর জন্য ফি মাত্র ${bnPrice} টাকা। জরুরি অর্ডারের ক্ষেত্রে অতিরিক্ত ৫০ টাকা (কাজের সময়ের বাইরে একই দিনে ডেলিভারি প্রয়োজন হলে)। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।`;
+    $('#faqPriceText').innerHTML = `প্রতি আবেদনকারীর জন্য ফি মাত্র ${bnPrice} টাকা। জরুরি অর্ডারের ক্ষেত্রে অতিরিক্ত ৫০ টাকা। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।`;
   }
 
   updateSummary();
@@ -1924,19 +1841,7 @@ document.querySelectorAll('#mobileMenu a').forEach(a =>
 );
 $('#year').textContent = new Date().getFullYear();
 
-const courtFeePaid = $('#courtFeePaid');
-const circleFields = $('#circleFields');
-const circleName   = $('#circleName');
-
-courtFeePaid.addEventListener('change', () => {
-  circleFields.classList.toggle('hidden', courtFeePaid.checked);
-  if (courtFeePaid.checked) {
-    circleName.value = '';
-    circleName.classList.remove('field-error');
-  }
-  updateSummary();
-});
-
+// ═══ Applicant count management ═══
 let applicantCount = 1;
 const MIN_COUNT = 1, MAX_COUNT = 10;
 const countSelect = $('#countSelect');
@@ -2056,9 +1961,13 @@ function applicantCardHTML(i) {
         <input type="text" data-field="upazila" class="input" placeholder="যেমন: সাভার" />
       </div>
       <div class="sm:col-span-2">
+        <label class="label">গ্রাহকের সম্পর্ক <span class="text-slate-400 font-normal text-xs">(ঐচ্ছিক)</span></label>
+        <input type="text" data-field="relationship" class="input" placeholder="যেমন: স্ত্রী, পুত্র, কন্যা — উত্তরাধিকার সূত্রে হলে উল্লেখ করুন" />
+        <p class="hint">উত্তরাধিকার সূত্রে সম্পত্তি প্রাপ্ত হলে মূল মালিকের সাথে সম্পর্ক লিখুন।</p>
+      </div>
+      <div class="sm:col-span-2">
         <label class="label">ঠিকানা (দলিল / ওয়ারিশ সনদ অনুযায়ী) <span class="text-rose-500">*</span></label>
         <textarea data-field="address" rows="2" class="input" placeholder="দলিল / ওয়ারিশ সনদ অনুযায়ী সম্পূর্ণ ঠিকানা"></textarea>
-        <p class="hint">এই ঠিকানাটিই আবেদনে গ্রাহকের ঠিকানা হিসেবে ব্যবহার করা হবে।</p>
       </div>
       <div class="sm:col-span-2">
         <label class="label">জন্ম নিবন্ধন সনদের ছবি (JPG / PNG) <span class="text-rose-500">*</span></label>
@@ -2087,8 +1996,7 @@ function updateSummary() {
   const urgentCheck = $('#urgentService');
   const base   = applicantCount * PRICE_PER_PERSON;
   const urgent = urgentCheck && urgentCheck.checked ? URGENT_FEE : 0;
-  const courtFee = courtFeePaid.checked ? 0 : COURT_FEE;
-  const total  = base + urgent + courtFee;
+  const total  = base + urgent;
 
   if ($('#countDisplay')) $('#countDisplay').textContent = toBn(applicantCount);
   countSelect.value = applicantCount;
@@ -2098,10 +2006,59 @@ function updateSummary() {
   if ($('#payBreakdown')) {
     $('#payBreakdown').textContent =
       `${toBn(applicantCount)} জন × ৳ ${toBn(PRICE_PER_PERSON)}` +
-      (urgent ? ` + জরুরি অর্ডার ৳ ${toBn(urgent)}` : '') +
-      (courtFee ? ` + Court Fee ৳ ${toBn(courtFee)}` : '');
+      (urgent ? ` + জরুরি অর্ডার ৳ ${toBn(urgent)}` : '');
+  }
+
+  toggleSingleApplicantDemo();
+}
+
+function toggleSingleApplicantDemo() {
+  const wrap = $('#singleApplicantDemoWrap');
+  if (!wrap) return;
+  if (applicantCount === 1) {
+    wrap.classList.remove('hidden');
+  } else {
+    wrap.classList.add('hidden');
+    const cb = $('#singleApplicantDemo');
+    if (cb) {
+      cb.checked = false;
+      applyDemoMode(false);
+    }
   }
 }
+
+function applyDemoMode(isDemo) {
+  const card = document.querySelector('.applicant-card');
+  if (!card) return;
+  
+  const fields = ['name', 'fatherName', 'motherName', 'division', 'district', 'upazila', 'address', 'birthDate', 'certNo'];
+  
+  fields.forEach(f => {
+    const el = card.querySelector(`[data-field="${f}"]`);
+    if (!el) return;
+    if (isDemo) {
+      if (!el.dataset.originalValue) el.dataset.originalValue = el.value;
+      el.value = DEMO_APPLICANT_DATA[f] || '';
+      el.readOnly = true;
+    } else {
+      el.value = el.dataset.originalValue || '';
+      el.readOnly = false;
+    }
+  });
+
+  if (isDemo) {
+    card.classList.add('ring-2', 'ring-brand-300', 'bg-brand-50/40');
+  } else {
+    card.classList.remove('ring-2', 'ring-brand-300', 'bg-brand-50/40');
+  }
+}
+
+// Single applicant demo checkbox handler
+document.addEventListener('change', e => {
+  if (e.target.id === 'singleApplicantDemo') {
+    applyDemoMode(e.target.checked);
+  }
+});
 
 function setCount(n) {
   applicantCount = Math.min(MAX_COUNT, Math.max(MIN_COUNT, n));
@@ -2197,6 +2154,7 @@ function markError(el) {
 }
 
 function collectApplicants(validate = true) {
+  const isDemo = applicantCount === 1 && $('#singleApplicantDemo')?.checked;
   const cards = [...document.querySelectorAll('.applicant-card')];
   const list = [];
   let ok = true, firstBad = null;
@@ -2213,13 +2171,14 @@ function collectApplicants(validate = true) {
       division:   get('division').value.trim(),
       district:   get('district').value.trim(),
       upazila:    get('upazila').value.trim(),
+      relationship: get('relationship')?.value.trim() || '',
       address:    get('address').value.trim(),
       file:       get('file').files?.[0] || null,
       photo:      get('photo')?.files?.[0] || null,
       useDefaultPhoto,
     };
 
-    if (validate) {
+    if (validate && !isDemo) {
       ['certNo','birthDate','name','fatherName','motherName','division','district','upazila','address'].forEach(f => {
         if (!rec[f]) { ok = false; markError(get(f)); firstBad = firstBad || get(f); }
       });
@@ -2237,18 +2196,11 @@ function collectApplicants(validate = true) {
     list.push(rec);
   });
 
-  return { list, ok, firstBad };
+  return { list, ok, firstBad, isDemo };
 }
 
 $('#nextBtn').addEventListener('click', () => {
   clearErrors();
-
-  if (!courtFeePaid.checked && !circleName.value.trim()) {
-    markError(circleName);
-    showError('অনুগ্রহ করে সার্কেল/উপজেলা লিখুন, অথবা "Court fee ইতিমধ্যে পরিশোধ করা হয়েছে" টিক দিন।');
-    circleName.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
 
   const { ok, firstBad } = collectApplicants(true);
 
@@ -2337,8 +2289,8 @@ submitBtn.addEventListener('click', async () => {
   if (!sender) { markError($('#senderNumber')); showError('যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি লিখুন।'); return; }
   if (!/^01[3-9]\d{8}$/.test(sender)) { markError($('#senderNumber')); showError('সঠিক ১১ ডিজিটের বিকাশ নম্বর দিন।'); return; }
 
-  const { list, ok } = collectApplicants(false);
-  if (!ok || list.some(a => !a.file || (!a.useDefaultPhoto && !a.photo))) {
+  const { list, ok, isDemo } = collectApplicants(false);
+  if (!ok || (!isDemo && list.some(a => !a.file || (!a.useDefaultPhoto && !a.photo)))) {
     showError('কিছু তথ্য অনুপস্থিত। অনুগ্রহ করে পূর্বের ধাপে ফিরে সব তথ্য পূরণ করুন।');
     return;
   }
@@ -2346,9 +2298,9 @@ submitBtn.addEventListener('click', async () => {
   const urgentCheck = $('#urgentService');
   const isUrgent = !!(urgentCheck && urgentCheck.checked);
   const urgentFeeAmount = isUrgent ? URGENT_FEE : 0;
-  const courtFeeAmount = courtFeePaid.checked ? 0 : COURT_FEE;
-  const total = (applicantCount * PRICE_PER_PERSON) + urgentFeeAmount + courtFeeAmount;
+  const total = (applicantCount * PRICE_PER_PERSON) + urgentFeeAmount;
   const orderId = generateOrderId();
+  const draftNumber = $('#draftNumber').value.trim();
 
   submitBtn.disabled = true;
   const originalHTML = submitBtn.innerHTML;
@@ -2358,14 +2310,14 @@ submitBtn.addEventListener('click', async () => {
   try {
     const tasks = [];
     list.forEach((a, idx) => {
-      tasks.push({ type: 'cert', idx, file: a.file });
+      if (a.file) tasks.push({ type: 'cert', idx, file: a.file });
       if (!a.useDefaultPhoto && a.photo) tasks.push({ type: 'photo', idx, file: a.photo });
     });
     const totalUploads = tasks.length;
     let doneUploads = 0;
 
     for (const task of tasks) {
-      const base = Math.round((doneUploads / totalUploads) * 100);
+      const base = totalUploads === 0 ? 100 : Math.round((doneUploads / totalUploads) * 100);
       $('#progressText').textContent = task.type === 'cert'
         ? `আবেদনকারী ${toBn(task.idx+1)} এর সনদ আপলোড হচ্ছে…`
         : `আবেদনকারী ${toBn(task.idx+1)} এর ছবি আপলোড হচ্ছে…`;
@@ -2382,7 +2334,10 @@ submitBtn.addEventListener('click', async () => {
       doneUploads++;
     }
 
-    list.forEach(a => { if (a.useDefaultPhoto || !a.photoUrl) a.photoUrl = DEFAULT_DP; });
+    list.forEach(a => {
+      if (a.useDefaultPhoto || !a.photoUrl) a.photoUrl = DEFAULT_DP;
+      if (!a.imageUrl) a.imageUrl = null;
+    });
 
     $('#progressText').textContent = 'অর্ডার সংরক্ষণ হচ্ছে…';
     $('#progressBar').style.width = '100%';
@@ -2397,6 +2352,7 @@ submitBtn.addEventListener('click', async () => {
       division:   a.division,
       district:   a.district,
       upazila:    a.upazila,
+      relationship: a.relationship || '',
       address:    a.address,
       imageUrl:   a.imageUrl,
       photoUrl:   a.photoUrl,
@@ -2412,11 +2368,10 @@ submitBtn.addEventListener('click', async () => {
       pricePerPerson: PRICE_PER_PERSON,
       isUrgent,
       urgentFee: urgentFeeAmount,
-      courtFeeAmount,
       amount: total,
       applicants,
-      courtFeePaid: courtFeePaid.checked,
-      circle: courtFeePaid.checked ? '' : circleName.value.trim(),
+      draftNumber: draftNumber || '',
+      usedDemoInfo: isDemo,
       landAccountNumber: digitsOnly($('#landNumber').value),
       landAccountPassword: $('#landPassword').value.trim(),
       receiverEmail: $('#receiverEmail').value.trim(),
@@ -2431,17 +2386,26 @@ submitBtn.addEventListener('click', async () => {
     $('#invCount').textContent   = `${toBn(applicantCount)} জন`;
     $('#invEmail').textContent   = payload.receiverEmail;
     $('#invSender').textContent  = sender;
-    $('#invCourtFee').innerHTML  = payload.courtFeePaid
-      ? '<span class="inline-flex items-center gap-1 text-emerald-600"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>পরিশোধিত</span>'
-      : `৳${toBn(COURT_FEE)} (বিলে যোগ) · সার্কেল: ${escapeHtml(payload.circle || '—')}`;
     $('#invTotal').textContent   = `৳ ${toBn(total)}`;
     $('#invUrgent').classList.toggle('hidden', !payload.isUrgent);
+
+    // Draft number display
+    if (draftNumber) {
+      $('#invDraftNumberWrap').classList.remove('hidden');
+      $('#invDraftNumber').textContent = draftNumber;
+    } else {
+      $('#invDraftNumberWrap').classList.add('hidden');
+    }
+
+    // Demo info display
+    $('#invDemoWrap').classList.toggle('hidden', !isDemo);
 
     $('#invApplicants').innerHTML = applicants.map((a, i) => `
       <li class="flex items-start gap-2.5">
         <img src="${escapeHtml(a.photoUrl || DEFAULT_DP)}" alt="" class="mt-0.5 h-10 w-10 shrink-0 rounded-lg border border-slate-200 object-cover" onerror="this.style.display='none'" />
         <span class="min-w-0">
           <b class="text-slate-900">${escapeHtml(a.name)}</b>
+          ${a.relationship ? `<span class="ml-1 text-xs text-brand-700">(${escapeHtml(a.relationship)})</span>` : ''}
           <span class="block text-xs text-slate-500">নিবন্ধন নং: ${escapeHtml(a.certNo || '—')} · জন্ম তারিখ: ${escapeHtml(a.birthDate || '—')}</span>
           <span class="block text-xs text-slate-500">${escapeHtml(a.division || '—')} · ${escapeHtml(a.district || '—')} · ${escapeHtml(a.upazila || '—')}</span>
         </span>
