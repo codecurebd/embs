@@ -1384,15 +1384,20 @@ function statusBadge(s) {
   const [bg, fg, label] = map[s] || ['bg-slate-100','text-slate-600', s || '—'];
   return `<span class="badge ${bg} ${fg}">${label}</span>`;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   ✅ UPDATED: demoBadge — "(ডেমো)" সরানো হয়েছে
+   ═══════════════════════════════════════════════════════════ */
 function demoBadge(o) {
   if (!o.usedDemoInfo) return '';
   return `<span class="badge bg-amber-100 text-amber-700">
     <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
     </svg>
-    একক গ্রাহিতা (ডেমো)
+    একক গ্রাহিতা
   </span>`;
 }
+
 function draftBadge(o) {
   if (!o.draftNumber) return '';
   return `<span class="badge bg-slate-100 text-slate-700">খসড়া: ${escapeHtml(o.draftNumber)}</span>`;
@@ -1647,14 +1652,11 @@ function openOrderModal(id) {
 
     ${o.usedDemoInfo ? `
       <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50/60 p-4">
-        <p class="flex items-start gap-2 text-sm font-bold text-amber-900">
-          <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <p class="flex items-center gap-2 text-sm font-bold text-amber-900">
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
           </svg>
-          একক গ্রাহিতা — গ্রাহকের তথ্যে ডেমো তথ্য ব্যবহার করা হয়েছে
-        </p>
-        <p class="mt-1 text-xs leading-relaxed text-amber-800">
-          আবেদনকারীর তথ্যে ডেমো ডাটা ব্যবহার করা হয়েছে। ভূমি অফিসে পরবর্তীতে প্রকৃত তথ্য দিয়ে খসড়া সম্পন্ন করতে হবে।
+          একক গ্রাহিতা
         </p>
       </div>
     ` : ''}
