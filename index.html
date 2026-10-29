@@ -58,19 +58,6 @@
 
 <style type="text/tailwindcss">
   @layer components {
-    .input {
-      @apply w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-800
-             placeholder:text-slate-400 outline-none transition
-             focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100;
-    }
-    .label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
-    .hint  { @apply mt-1.5 text-xs text-slate-500; }
-    .file-input {
-      @apply block w-full cursor-pointer rounded-xl border border-dashed border-slate-300 bg-slate-50 px-3 py-3
-             text-sm text-slate-600 transition hover:border-brand-400 hover:bg-brand-50/40
-             file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-brand-600
-             file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-700;
-    }
     .btn-primary {
       @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-bold
              text-white shadow-lg shadow-brand-600/25 transition hover:bg-brand-700 active:scale-[.98]
@@ -81,7 +68,6 @@
              text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-700;
     }
     .card { @apply rounded-2xl border border-slate-200 bg-white shadow-sm; }
-    .field-error { @apply !border-rose-400 !bg-rose-50 ring-2 !ring-rose-100; }
     .legal-prose h3 { @apply mt-6 text-base font-extrabold text-slate-900; }
     .legal-prose p  { @apply mt-2 text-sm leading-relaxed text-slate-700; }
     .legal-prose ul { @apply mt-2 space-y-1.5 text-sm text-slate-700; }
@@ -99,12 +85,6 @@
   .chat-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
   @keyframes floatIn { from { opacity:0; transform: translateY(14px) } to { opacity:1; transform:none } }
   .anim-in { animation: floatIn .45s ease both; }
-  .step-item .step-circle { transition: all .3s ease; }
-  .step-item .step-label { transition: color .3s ease; }
-  .step-item.active .step-circle { background: #1d51f5; color: #fff; box-shadow: 0 0 0 4px rgba(29,81,245,.15); }
-  .step-item.active .step-label { color: #0f172a; font-weight: 700; }
-  .step-item.done .step-circle { background: #10b981; color: #fff; }
-  .step-item.done .step-label { color: #059669; font-weight: 700; }
   .hero-mesh { background-image: linear-gradient(to right, rgba(29,81,245,.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(29,81,245,.055) 1px, transparent 1px); background-size: 46px 46px; -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 34%, #000 32%, transparent 100%); mask-image: radial-gradient(ellipse 72% 62% at 50% 34%, #000 32%, transparent 100%); }
   @keyframes heroGlow { 0%,100% { transform: translate3d(0,0,0) scale(1); opacity:.55 } 50% { transform: translate3d(0,-14px,0) scale(1.06); opacity:.8 } }
   .hero-glow { animation: heroGlow 9s ease-in-out infinite; }
@@ -209,69 +189,6 @@
     50%      { transform: rotate(0); }
   }
   .call-ring { animation: callRing 1.8s ease-in-out infinite; transform-origin: 50% 60%; display: inline-block; }
-
-  .print-only { display: none; }
-
-  @media print {
-    @page { size: A4 portrait; margin: 12mm; }
-    * {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    .no-print, .no-print * {
-      display: none !important;
-      visibility: hidden !important;
-      height: 0 !important;
-      overflow: hidden !important;
-    }
-    #callNotice { display: none !important; }
-    html, body {
-      background: #ffffff !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-    body.invoice-open > *:not(#invoiceModal) {
-      display: none !important;
-    }
-    body.invoice-open #invoiceModal {
-      display: block !important;
-      position: static !important;
-      inset: auto !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      background: #ffffff !important;
-      overflow: visible !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-    }
-    body.invoice-open #invoiceModal.hidden { display: none !important; }
-    body.invoice-open #invoiceWrap {
-      display: block !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      min-height: 0 !important;
-      gap: 0 !important;
-      align-items: stretch !important;
-    }
-    body.invoice-open #invoiceBox {
-      display: block !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      background: #ffffff !important;
-      box-shadow: none !important;
-      border: none !important;
-      border-radius: 0 !important;
-      color: #0f172a !important;
-      font-size: 12.5px !important;
-      line-height: 1.55 !important;
-      page-break-inside: avoid;
-    }
-    body.invoice-open #invoiceBox > * { page-break-inside: avoid; }
-    body.invoice-open #invoiceBox a { color: inherit !important; text-decoration: none !important; }
-    .print-only { display: block !important; }
-  }
 </style>
 </head>
 
@@ -297,7 +214,7 @@
 
   <nav class="h-16 border-b border-slate-200 bg-white/95 backdrop-blur" role="navigation" aria-label="Main navigation">
     <div class="mx-auto flex h-full max-w-7xl items-center gap-4 px-5 sm:px-8 lg:px-12">
-      <a href="#home" class="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="eMutation Birth Certificate Application Home">
+      <a href="index.html" class="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="eMutation Birth Certificate Application Home">
         <img src="logo.png" alt="eMutation Logo" width="44" height="44" class="h-11 w-11 shrink-0 object-contain" />
         <span class="min-w-0">
           <span class="block truncate text-[13px] font-extrabold leading-tight text-slate-900 sm:text-[15px]">
@@ -320,13 +237,9 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <button type="button" data-open-chat aria-label="Open support chat"
-            class="hidden items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-md shadow-brand-600/25 transition hover:bg-brand-700 sm:inline-flex">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/>
-            </svg>
-            সাপোর্ট চ্যাট
-          </button>
+          <a href="application.html" class="hidden items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-md shadow-brand-600/25 transition hover:bg-brand-700 sm:inline-flex">
+            আবেদন করুন
+          </a>
 
           <button type="button" id="menuBtn" aria-label="Toggle mobile menu" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-300 text-slate-600 md:hidden">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -341,16 +254,13 @@
       <div class="mx-auto max-w-7xl space-y-1 px-5 py-3 text-sm font-semibold text-slate-700 sm:px-8">
         <a href="#home"      class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">হোম</a>
         <a href="#service"   class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সেবাসমূহ</a>
-        <a href="#worktime"  class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">⏰ কাজের সময় ও জরুরি সেবা</a>
+        <a href="#worktime"  class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">⏰ কাজের সময়</a>
         <a href="#how"       class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">কিভাবে কাজ করে</a>
         <a href="#important" class="block rounded-lg px-3 py-2.5 text-amber-700 hover:bg-amber-50">⚠️ গুরুত্বপূর্ণ সতর্কতা</a>
         <a href="#faq"       class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">সচরাচর জিজ্ঞাসা</a>
-        <a href="#privacy"   class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">গোপনীয়তা নীতি</a>
-        <a href="#disclaimer" class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">দাবিত্যাগ</a>
-        <a href="#footer"    class="block rounded-lg px-3 py-2.5 hover:bg-slate-50">যোগাযোগ</a>
-        <button type="button" data-open-chat class="mt-1 block w-full rounded-lg bg-brand-600 px-3 py-2.5 text-center font-bold text-white">
-          সাপোর্ট চ্যাট
-        </button>
+        <a href="application.html" class="mt-1 block w-full rounded-lg bg-brand-600 px-3 py-2.5 text-center font-bold text-white">
+          আবেদন করুন
+        </a>
       </div>
     </div>
   </nav>
@@ -433,9 +343,9 @@
 
     <div class="hero-banner-content mx-auto max-w-7xl px-4 pt-4 pb-0 sm:pt-5">
       <div class="anim-in flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
-        <a href="#service"
+        <a href="application.html"
            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-brand-600/30 transition hover:bg-brand-700 sm:w-auto">
-          আবেদন শুরু করুন
+          আবেদন ফর্মে যান
           <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
           </svg>
@@ -534,307 +444,21 @@
       </div>
     </div>
 
-    <div class="mx-auto mt-10 max-w-4xl">
-      <div class="anim-in relative overflow-hidden rounded-2xl border-2 border-brand-200 bg-gradient-to-br from-brand-50 via-white to-sky-50 p-5 shadow-sm sm:p-6">
-        <div class="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-brand-200/40 blur-2xl" aria-hidden="true"></div>
-        <div class="relative flex items-start gap-3.5">
-          <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-600 text-white shadow-md shadow-brand-600/25" aria-hidden="true">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
+    <!-- CTA Section -->
+    <div class="mx-auto mt-10 max-w-4xl text-center">
+      <div class="anim-in relative overflow-hidden rounded-3xl border-2 border-brand-300 bg-gradient-to-br from-brand-600 to-brand-800 p-8 shadow-xl sm:p-12">
+        <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-brand-400/20 blur-3xl"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center gap-4 text-center">
+          <h3 class="text-2xl font-extrabold text-white sm:text-3xl">আবেদন করতে প্রস্তুত?</h3>
+          <p class="max-w-lg text-sm text-brand-100 sm:text-base">আপনার তথ্য দেওয়া সম্পূর্ণ নিরাপদ। নিচের বাটনে ক্লিক করে সরাসরি আবেদন ফর্মে যান এবং মাত্র ১০-৩০ মিনিটে সেবা গ্রহণ করুন।</p>
+          <a href="application.html" class="mt-2 inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-extrabold text-brand-700 shadow-lg transition hover:bg-brand-50 hover:scale-105 active:scale-95">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
             </svg>
-          </span>
-          <div class="min-w-0">
-            <h3 class="text-sm font-extrabold leading-snug text-slate-900 sm:text-base">
-              আবেদন করার আগে জরুরি নির্দেশনা — নথিপত্রের সিরিয়াল
-            </h3>
-            <p class="mt-1.5 text-[13px] leading-relaxed text-slate-700 sm:text-sm">
-              নথিপত্রের সিরিয়াল অনুযায়ী যদি <b class="font-bold text-slate-900">আগে এমন কোনো গ্রাহক থাকে যার NID ইতিমধ্যে বিদ্যমান</b>,
-              তাহলে প্রথমে সেই <b class="font-bold text-slate-900">NID গ্রহীতাদের তথ্য নিজে সংরক্ষণ</b> করে নিন — এরপর আবেদনটি সম্পন্ন করুন।
-            </p>
-            <p class="mt-2 flex items-start gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-[12.5px] font-semibold leading-relaxed text-emerald-800 sm:text-sm">
-              <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
-              </svg>
-              এতে নথিপত্রের সিরিয়াল অপরিবর্তিত থাকবে এবং আবেদনটি সঠিকভাবে সম্পন্ন হবে।
-            </p>
-          </div>
+            এখনই আবেদন করুন
+          </a>
         </div>
-      </div>
-    </div>
-
-    <div class="mx-auto mt-5 max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70">
-      <div class="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white px-5 py-5 sm:px-7 sm:py-6">
-        <div class="flex items-center gap-2 sm:gap-3">
-          <div class="step-item active flex items-center gap-2.5" data-step="1">
-            <span class="step-circle grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">১</span>
-            <span class="step-label hidden text-xs font-semibold text-slate-500 sm:inline">তথ্য প্রদান</span>
-          </div>
-          <div class="h-px flex-1 bg-slate-200"></div>
-          <div class="step-item flex items-center gap-2.5" data-step="2">
-            <span class="step-circle grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">২</span>
-            <span class="step-label hidden text-xs font-semibold text-slate-500 sm:inline">পেমেন্ট</span>
-          </div>
-          <div class="h-px flex-1 bg-slate-200"></div>
-          <div class="step-item flex items-center gap-2.5" data-step="3">
-            <span class="step-circle grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">৩</span>
-            <span class="step-label hidden text-xs font-semibold text-slate-500 sm:inline">সম্পন্ন</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="step1" class="p-5 sm:p-7 lg:p-8">
-
-        <a href="#important" class="mb-5 flex items-start gap-3 rounded-2xl border-2 border-amber-300 bg-amber-50/70 p-4 transition hover:border-amber-400 hover:bg-amber-50">
-          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700" aria-hidden="true">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
-            </svg>
-          </span>
-          <div class="min-w-0">
-            <h3 class="text-sm font-extrabold text-amber-900">তথ্য দেওয়ার আগে গুরুত্বপূর্ণ সতর্কতা পড়ুন</h3>
-            <p class="mt-1 text-xs leading-relaxed text-amber-800">
-              ভুল বা মিথ্যা তথ্য প্রদান করলে আবেদন বাতিল হতে পারে এবং রিফান্ডের কোনো সুযোগ নেই। বিস্তারিত জানতে
-              <b class="underline decoration-amber-500 underline-offset-2">এখানে ক্লিক করুন</b>।
-            </p>
-          </div>
-        </a>
-
-        <!-- ═══ আবেদন এর খসড়া তৈরি (Application Draft Note) ═══ -->
-        <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50/60 p-5">
-          <div class="flex items-start gap-3">
-            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-emerald-100 text-emerald-700" aria-hidden="true">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
-              </svg>
-            </span>
-            <div class="min-w-0">
-              <h3 class="text-sm font-extrabold text-emerald-900">আবেদন এর খসড়া তৈরি</h3>
-              <p class="mt-1 text-xs leading-relaxed text-emerald-800">
-                Court fee পরিশোধ করে আবেদনে জন্ম নিবন্ধনের গ্রাহকের তথ্য টি বাদ রেখে অন্যান্য সমস্ত তথ্য নিজে add করে খসড়া সংরক্ষণ করে তারপর <b>EMBS</b> এ order করুন।
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-brand-50/60 to-slate-50 p-5">
-          <label class="label" for="countSelect">কতজন আবেদনকারীর তথ্য যোগ করবেন? <span class="text-rose-500">*</span></label>
-
-          <div class="mt-2 flex flex-wrap items-center gap-3">
-            <div class="flex items-center overflow-hidden rounded-xl border border-slate-300 bg-white shadow-sm">
-              <button type="button" id="minusBtn" aria-label="Decrease applicant count" class="grid h-11 w-11 place-items-center text-xl font-bold text-slate-600 transition hover:bg-slate-100">−</button>
-              <span id="countDisplay" class="grid h-11 w-16 place-items-center border-x border-slate-200 text-base font-extrabold text-slate-900">১</span>
-              <button type="button" id="plusBtn" aria-label="Increase applicant count" class="grid h-11 w-11 place-items-center text-xl font-bold text-slate-600 transition hover:bg-slate-100">+</button>
-            </div>
-            <select id="countSelect" class="input max-w-[200px]" aria-label="Select number of applicants"></select>
-          </div>
-
-          <div class="mt-4 grid grid-cols-2 gap-3">
-            <div class="rounded-xl border border-slate-200 bg-white px-4 py-3">
-              <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">আবেদনকারী</p>
-              <p id="sumCount" class="mt-0.5 text-base font-extrabold text-slate-900">১ জন</p>
-            </div>
-            <div class="rounded-xl border-2 border-brand-200 bg-brand-50 px-4 py-3">
-              <p class="text-[11px] font-semibold uppercase tracking-wider text-brand-600">মোট বিল</p>
-              <p id="sumTotal" class="mt-0.5 text-base font-extrabold text-brand-800">৳ ...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন ═══ -->
-        <div id="singleApplicantDemoWrap" class="mt-4 hidden rounded-2xl border-2 border-brand-200 bg-brand-50/50 p-5">
-          <label class="flex cursor-pointer items-start gap-3">
-            <input type="checkbox" id="singleApplicantDemo" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
-            <span class="min-w-0">
-              <span class="block text-sm font-bold text-slate-900">একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন</span>
-              <span class="mt-1.5 block text-xs leading-relaxed text-slate-600">
-                যেহেতু গ্রাহকের তথ্য প্রদান ছাড়া খসড়া সংরক্ষণ হয় না, তাই একক গ্রাহিতা (Birth Certificate) এর আবেদনের জন্য <b class="text-slate-900">একক গ্রাহিতা</b> option টি mark করুন এবং আবেদনে গ্রাহকের তথ্যে <b class="text-slate-900">Account Holder / প্রতিনিধির তথ্য</b> add করে খসড়া সংরক্ষণ করুন।
-              </span>
-              <span class="mt-1.5 block rounded-lg bg-white/70 px-2.5 py-1.5 text-[11.5px] leading-relaxed text-brand-800">
-                <b>বিশেষ দৃষ্টি আকর্ষণ:</b> একক গ্রাহিতা select করার মাধ্যমে আমরা Account Holder / প্রতিনিধির তথ্য remove করে Birth Certificate এর গ্রাহকের তথ্য add করে দিবো।
-              </span>
-            </span>
-          </label>
-        </div>
-
-        <!-- ═══ Draft Number (Optional) ═══ -->
-        <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50/50 p-5">
-          <div class="flex items-start gap-3">
-            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-slate-200 text-slate-700" aria-hidden="true">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
-              </svg>
-            </span>
-            <div class="min-w-0 flex-1">
-              <label class="label" for="draftNumber">খসড়া নম্বর <span class="text-slate-400 font-normal text-xs">(ঐচ্ছিক)</span></label>
-              <input type="text" id="draftNumber" class="input" placeholder="খসড়া নম্বরটি লিখুন" />
-              <p class="hint">খসড়া তৈরি করে সেই খসড়া নম্বরটি দিন। </p>
-            </div>
-          </div>
-        </div>
-
-        <div id="urgentBlock" class="mt-4" data-state=""></div>
-
-        <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
-          <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">১</span>
-          আবেদনকারীর তথ্য
-        </h3>
-        <p class="mt-1 text-xs text-slate-500">জন্ম নিবন্ধন সনদ অনুযায়ী প্রতিটি তথ্য সঠিকভাবে পূরণ করুন।</p>
-
-        <div id="applicantsWrap" class="mt-4 space-y-5"></div>
-
-        <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
-          <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">২</span>
-          land.gov.bd অ্যাকাউন্ট তথ্য
-        </h3>
-        <p class="mt-1 text-xs text-slate-500">
-          যে অ্যাকাউন্ট দিয়ে land.gov.bd ওয়েবসাইটে আবেদন করা হবে, সেই অ্যাকাউন্টের তথ্য দিন।
-        </p>
-
-        <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
-          <div class="flex items-start gap-3">
-            <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700" aria-hidden="true">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>
-              </svg>
-            </span>
-            <p class="text-xs leading-relaxed text-amber-800">
-              এই তথ্য শুধুমাত্র আপনার আবেদন সম্পন্ন করার জন্য ব্যবহৃত হবে এবং সম্পূর্ণ গোপন রাখা হবে।
-            </p>
-          </div>
-
-          <div class="mt-4 grid gap-4 sm:grid-cols-2">
-            <div>
-              <label class="label" for="landNumber">অ্যাকাউন্ট মোবাইল নম্বর <span class="text-rose-500">*</span></label>
-              <input type="tel" id="landNumber" class="input" placeholder="01XXXXXXXXX" inputmode="numeric" autocomplete="tel" />
-              <p class="hint">বাংলা (০-৯) বা ইংরেজি (0-9) — যেকোনো ডিজিটে লিখতে পারেন।</p>
-            </div>
-            <div>
-              <label class="label" for="landPassword">অ্যাকাউন্ট পাসওয়ার্ড <span class="text-rose-500">*</span></label>
-              <div class="relative">
-                <input type="password" id="landPassword" class="input pr-11" placeholder="পাসওয়ার্ড লিখুন" autocomplete="current-password" />
-                <button type="button" id="togglePwd" aria-label="Toggle password visibility"
-                  class="absolute inset-y-0 right-0 grid w-11 place-items-center text-slate-400 hover:text-slate-700">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <h3 class="mt-8 flex items-center gap-2 text-base font-extrabold text-slate-900">
-          <span class="grid h-7 w-7 place-items-center rounded-lg bg-slate-900 text-xs font-bold text-white">৩</span>
-          রিসিভার ইমেইল
-        </h3>
-        <p class="mt-1 text-xs text-slate-500">অর্ডার সম্পন্ন হলে এই ইমেইলে আবেদনকারীর জন্ম নিবন্ধন অনুযায়ী তথ্য পাঠানো হবে।</p>
-
-        <div class="mt-4">
-          <label class="label sr-only" for="receiverEmail">Receiver Email</label>
-          <input type="email" id="receiverEmail" class="input" placeholder="example@email.com" autocomplete="email" />
-        </div>
-
-        <div class="mt-8 flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p class="text-xs text-slate-500">* চিহ্নিত সকল ঘর পূরণ করা আবশ্যক।</p>
-          <button type="button" id="nextBtn" class="btn-primary w-full sm:w-auto">
-            পেমেন্টে যান
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <div id="step2" class="hidden p-5 sm:p-7 lg:p-8">
-        <button type="button" id="backBtn" class="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 transition hover:text-brand-700">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m6 6-6-6 6-6"/>
-          </svg>
-          তথ্য সম্পাদনা করুন
-        </button>
-
-        <h3 class="text-xl font-extrabold text-slate-900">পেমেন্ট সম্পন্ন করুন</h3>
-        <p class="mt-1.5 text-sm text-slate-600">
-          নিচের বিকাশ নম্বরে <b>Send Money</b> করে টাকা পাঠান, তারপর ফর্মটি সাবমিট করুন।
-        </p>
-
-        <div class="mt-6 rounded-2xl border-2 border-dashed border-brand-300 bg-gradient-to-br from-brand-50 to-brand-100/40 p-6 text-center">
-          <p class="text-xs font-bold uppercase tracking-wider text-brand-700">মোট পরিশোধযোগ্য বিল</p>
-          <p id="payTotal" class="mt-2 text-5xl font-extrabold text-brand-900">৳ ...</p>
-          <p id="payBreakdown" class="mt-2 text-xs text-brand-700">১ জন × ৳ ...</p>
-        </div>
-
-        <div class="mt-5 rounded-2xl border border-sky-200 bg-sky-50/70 p-5">
-          <h4 class="flex items-center gap-2 text-sm font-extrabold text-sky-900">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-            </svg>
-            কাজের সময় ও ডেলিভারি সংক্রান্ত নির্দেশনা
-          </h4>
-          <ul class="mt-3 space-y-2 text-[13px] leading-relaxed text-sky-900">
-            <li class="flex items-start gap-2">
-              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500"></span>
-              আমাদের কাজের সময় <b>সকাল ১০:০০টা থেকে রাত ১০:০০টা</b>। এই সময়ের মধ্যে অর্ডার করলে সাধারণত <b>১০–৩০ মিনিটে</b> ডেলিভারি সম্পন্ন হয়।
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500"></span>
-              কাজের সময়ের <b>বাইরে</b> অর্ডার করলে আপনার আবেদনটি <b>পরবর্তী কর্মদিবসের সকাল ১০টার পর</b> ডেলিভারি দেওয়া হয়।
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500"></span>
-              <span>
-                <b>জরুরি (আর্জেন্ট) অর্ডার:</b> কাজের সময়ের বাইরে অর্ডার করেও যদি <b>একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি</b> হয়, তাহলে অতিরিক্ত <b>৳৫০</b> পরিশোধ করতে হবে এবং অবশ্যই
-                <a href="tel:01350141762" class="font-extrabold text-brand-700 underline decoration-brand-300 underline-offset-2">০১৩৫০১৪১৭৬২</a>
-                নম্বরে কল করে আপনার জরুরি অর্ডারটি সম্পর্কে অবহিত করতে হবে।
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="mt-5 rounded-2xl border border-slate-200 bg-white p-5">
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">বিকাশ (Send Money) নম্বর</p>
-              <p class="mt-1 text-3xl font-extrabold tracking-wide text-slate-900">01860319433</p>
-            </div>
-            <button type="button" id="copyBkash"
-              class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M5 8h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/>
-              </svg>
-              কপি করুন
-            </button>
-          </div>
-          <p class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">
-            ⚠️ শুধুমাত্র <b>Send Money</b> করুন, Cash Out নয়।
-          </p>
-        </div>
-
-        <div class="mt-5">
-          <label class="label" for="senderNumber">যে নম্বর থেকে টাকা পাঠিয়েছেন <span class="text-rose-500">*</span></label>
-          <input type="tel" id="senderNumber" class="input" placeholder="01XXXXXXXXX" inputmode="numeric" autocomplete="tel" />
-          <p class="hint">ম্যানুয়াল পেমেন্ট যাচাইয়ের জন্য সঠিক নম্বর দিন (বাংলা/ইংরেজি উভয়ই গ্রহণযোগ্য)।</p>
-        </div>
-
-        <button type="button" id="submitBtn" class="btn-primary mt-6 w-full py-4 text-base">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4m5.6 2A9.6 9.6 0 0 1 12 21a9.6 9.6 0 0 1-8.6-9A9.6 9.6 0 0 1 12 3a9.6 9.6 0 0 1 8.6 9Z"/>
-          </svg>
-          পেমেন্ট যাচাই করে অর্ডার সাবমিট করুন
-        </button>
-
-        <div id="progressWrap" class="mt-5 hidden">
-          <div class="mb-2 flex items-center justify-between text-xs font-semibold text-slate-600">
-            <span id="progressText">আপলোড হচ্ছে…</span>
-            <span id="progressPct">0%</span>
-          </div>
-          <div class="h-2 w-full overflow-hidden rounded-full bg-slate-200">
-            <div id="progressBar" class="h-full w-0 rounded-full bg-brand-600 transition-all duration-300"></div>
-          </div>
-        </div>
-
-        <p id="formError" class="mt-4 hidden rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700" role="alert"></p>
       </div>
     </div>
   </div>
@@ -1333,10 +957,10 @@
       <div>
         <h3 class="text-sm font-extrabold uppercase tracking-wider text-white">দ্রুত লিংক</h3>
         <ul class="mt-4 space-y-2.5 text-sm">
-          <li><a href="#home"     class="text-slate-400 transition hover:text-white">হোম</a></li>
-          <li><a href="#service"  class="text-slate-400 transition hover:text-white">eMutation Application Service</a></li>
+          <li><a href="index.html" class="text-slate-400 transition hover:text-white">হোম</a></li>
+          <li><a href="application.html" class="text-slate-400 transition hover:text-white">আবেদন ফর্ম</a></li>
           <li><a href="#worktime" class="text-slate-400 transition hover:text-white">কাজের সময় ও জরুরি সেবা</a></li>
-          <li><a href="#faq"      class="text-slate-400 transition hover:text-white">সচরাচর জিজ্ঞাসা</a></li>
+          <li><a href="#faq" class="text-slate-400 transition hover:text-white">সচরাচর জিজ্ঞাসা</a></li>
           <li><button type="button" data-open-chat class="text-slate-400 transition hover:text-white">সাপোর্ট চ্যাট</button></li>
         </ul>
       </div>
@@ -1415,140 +1039,6 @@
   </form>
 </div>
 
-<div id="invoiceModal" role="dialog" aria-modal="true" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
-  <div id="invoiceWrap" class="flex min-h-full flex-col items-center justify-center gap-4 p-4">
-
-    <div id="callNotice"
-         class="anim-in w-full max-w-lg overflow-hidden rounded-2xl border-2 border-brand-300 bg-white shadow-2xl shadow-brand-900/25"
-         style="animation-delay:.12s">
-      <div class="flex items-start gap-3.5 bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-4 text-white">
-        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/20">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
-          </svg>
-        </span>
-        <div class="min-w-0">
-          <h3 class="text-base font-extrabold leading-tight sm:text-lg">🎉 অর্ডার সম্পন্ন হয়েছে!</h3>
-          <p class="mt-0.5 text-xs text-emerald-50 sm:text-sm">আপনার অর্ডারটি সফলভাবে জমা হয়েছে।</p>
-        </div>
-      </div>
-
-      <div class="px-5 py-5">
-        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
-          <p class="flex items-center gap-1.5 text-sm font-extrabold text-amber-900">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/>
-            </svg>
-            দ্রুত কাজ সম্পন্ন করাতে চান?
-          </p>
-          <p class="mt-1.5 text-[13px] leading-relaxed text-amber-800 sm:text-sm">
-            দ্রুত কাজ সম্পন্ন হওয়ার জন্য
-            <a href="tel:+8801350141762" class="font-extrabold text-amber-900 underline decoration-amber-400 underline-offset-2">+880 1350-141762</a>
-            নম্বরে কল করে জানিয়ে দিন।
-          </p>
-        </div>
-
-        <div class="mt-4 flex flex-col gap-2.5 sm:flex-row">
-          <a href="tel:+8801350141762"
-             class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-emerald-600/25 transition hover:bg-emerald-700 active:scale-[.98]">
-            <svg class="call-ring h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.25 1.05l-1.3 1.3a15 15 0 0 0 6.17 6.17l1.3-1.3a1 1 0 0 1 1.05-.25l3.6 1.2a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.7 21 3 14.3 3 6V5Z"/>
-            </svg>
-            এখনই কল করুন
-          </a>
-          <button type="button" id="closeCallNotice"
-             class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
-            বন্ধ করুন
-          </button>
-        </div>
-
-        <p class="mt-3 text-center text-[11px] text-slate-500">অর্ডার আইডি: <b class="text-slate-700" id="noticeOrderId">—</b></p>
-      </div>
-    </div>
-
-    <div id="invoiceBox" class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-7">
-
-      <div class="print-only mb-4 border-b-2 border-slate-800 pb-3">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <p class="text-lg font-extrabold leading-tight text-slate-900">eMutation Birth Certificate Application Support</p>
-            <p class="mt-0.5 text-[11px] font-semibold text-slate-600">emb-support.vercel.app</p>
-          </div>
-          <div class="text-right text-[11px] leading-relaxed text-slate-700">
-            <p><b class="text-slate-900">Hotline:</b> 01350141762</p>
-            <p><b class="text-slate-900">Email:</b> nopqrshov337@gmail.com</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-5">
-        <div>
-          <p class="text-xs font-bold uppercase tracking-wider text-brand-600">ইনভয়েস</p>
-          <h3 class="mt-1 text-lg font-extrabold text-slate-900">eMutation Birth certificate support</h3>
-        </div>
-        <span class="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold text-amber-700">যাচাইাধীন</span>
-      </div>
-
-      <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
-        <div>
-          <p class="text-xs text-slate-500">অর্ডার আইডি</p>
-          <p id="invOrderId" class="mt-0.5 font-extrabold text-slate-900">—</p>
-        </div>
-        <div>
-          <p class="text-xs text-slate-500">তারিখ</p>
-          <p id="invDate" class="mt-0.5 font-semibold text-slate-800">—</p>
-        </div>
-        <div>
-          <p class="text-xs text-slate-500">আবেদনকারী</p>
-          <p id="invCount" class="mt-0.5 font-semibold text-slate-800">—</p>
-        </div>
-        <div>
-          <p class="text-xs text-slate-500">রিসিভার ইমেইল</p>
-          <p id="invEmail" class="mt-0.5 break-all font-semibold text-slate-800">—</p>
-        </div>
-        <div>
-          <p class="text-xs text-slate-500">যে নম্বর থেকে বিকাশে পেমেন্ট</p>
-          <p id="invSender" class="mt-0.5 font-semibold text-slate-800">—</p>
-        </div>
-        <div id="invDraftNumberWrap" class="hidden">
-          <p class="text-xs text-slate-500">খসড়া নম্বর</p>
-          <p id="invDraftNumber" class="mt-0.5 font-semibold text-slate-800">—</p>
-        </div>
-      </div>
-
-      <div id="invDemoWrap" class="mt-3 hidden rounded-xl border border-brand-200 bg-brand-50 px-4 py-2.5 text-xs font-semibold text-brand-800">
-        একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন — গ্রাহকের তথ্যে Account Holder / প্রতিনিধির তথ্য যুক্ত করা হয়েছে। আমাদের টিম Account Holder / প্রতিনিধির তথ্য remove করে Birth Certificate এর গ্রাহকের তথ্য add করবে।
-      </div>
-
-      <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">আবেদনকারীর তালিকা</p>
-        <ul id="invApplicants" class="mt-3 space-y-2 text-sm text-slate-700"></ul>
-      </div>
-
-      <div class="mt-5 flex items-center justify-between rounded-xl bg-brand-50 px-4 py-3.5">
-        <span class="text-sm font-bold text-brand-800">মোট পরিশোধিত</span>
-        <span id="invTotal" class="text-xl font-extrabold text-brand-900">৳ ০</span>
-      </div>
-
-      <p id="invUrgent" class="mt-3 hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs font-semibold leading-relaxed text-amber-800">
-        ⚡ জরুরি (আর্জেন্ট) অর্ডার অন্তর্ভুক্ত (অতিরিক্ত ৳৫০)। অর্ডারটি নিশ্চিত করতে অবশ্যই
-        <a href="tel:01350141762" class="underline decoration-amber-400 underline-offset-2">০১৩৫০১৪১৭৬২</a> নম্বরে কল করুন।
-      </p>
-
-      <p class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-800">
-        আপনার অর্ডার সফলভাবে জমা হয়েছে। পেমেন্ট যাচাইয়ের পর <b>কাজের সময়ের (সকাল ১০টা – রাত ১০টা)</b> মধ্যে সাধারণত <b>১০ থেকে ৩০ মিনিটে</b>
-        আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।
-      </p>
-
-      <div class="no-print mt-6 flex flex-col gap-3 sm:flex-row">
-        <button type="button" id="printInvoice" class="btn-ghost flex-1">প্রিন্ট / সেভ করুন</button>
-        <button type="button" id="closeInvoice" class="btn-primary flex-1">ঠিক আছে</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
 <div id="cookiePopup"
      class="fixed inset-0 z-[80] hidden items-end justify-center bg-slate-900/70 p-4 backdrop-blur-sm sm:items-center"
      role="dialog" aria-modal="true" aria-labelledby="cookieTitle">
@@ -1616,62 +1106,19 @@ const CLOUDINARY_CLOUD_NAME    = 'zmoyykj7';
 const CLOUDINARY_UPLOAD_PRESET = 'codecurebd';
 
 let PRICE_PER_PERSON = 500;
-const URGENT_FEE      = 50;
-const BKASH_NUMBER    = '01860319433';
-const DEFAULT_DP      = 'dp.png';
 const SETTINGS_REF    = doc(db, 'settings', 'global');
 
 const BN_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
 const toBn = n => String(n).replace(/\d/g, d => BN_DIGITS[+d]);
 const $ = s => document.querySelector(s);
 
-const BN_TO_EN = { '০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9' };
-const toEnDigits  = s => String(s ?? '').replace(/[০-৯]/g, d => BN_TO_EN[d]);
-const digitsOnly  = s => toEnDigits(s).replace(/\D/g, '');
-
-function attachDigitsOnlyFilter(input) {
-  if (!input || input.dataset.digitsOnlyFilter === '1') return;
-  input.dataset.digitsOnlyFilter = '1';
-
-  const clean = () => {
-    const original = input.value;
-    const filtered = original.replace(/[^\d০-৯]/g, '');
-    if (original !== filtered) {
-      const pos = input.selectionStart ?? filtered.length;
-      const diff = original.length - filtered.length;
-      input.value = filtered;
-      try { input.setSelectionRange(Math.max(0, pos - diff), Math.max(0, pos - diff)); } catch {}
-    }
-  };
-
-  input.addEventListener('input', clean);
-  input.addEventListener('blur', () => {
-    const normalized = digitsOnly(input.value);
-    if (input.value && normalized !== input.value) input.value = normalized;
-  });
-  clean();
-}
-
 function fmtDate(ts) {
   if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
 }
-function generateOrderId() {
-  const d = new Date();
-  const ymd = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  const rand = Math.random().toString(36).slice(2,7).toUpperCase();
-  return `EMB-${ymd}-${rand}`;
-}
 function escapeHtml(str='') {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function setStep(n) {
-  document.querySelectorAll('.step-item').forEach(el => {
-    const s = +el.dataset.step;
-    el.classList.toggle('active', s === n);
-    el.classList.toggle('done',   s <  n);
-  });
 }
 
 function bdNow() {
@@ -1744,55 +1191,6 @@ function updateWorkStatus() {
 updateWorkStatus();
 setInterval(updateWorkStatus, 60000);
 
-function renderUrgentBlock(force = false) {
-  const block = $('#urgentBlock');
-  if (!block) return;
-
-  const inHours = isWithinWorkingHours();
-  const state = inHours ? 'in-hours' : 'out-of-hours';
-
-  if (!force && block.dataset.state === state) return;
-  block.dataset.state = state;
-
-  if (inHours) {
-    block.innerHTML = `
-      <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-4">
-        <div class="flex items-start gap-3">
-          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-emerald-100 text-emerald-700" aria-hidden="true">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/>
-            </svg>
-          </span>
-          <div class="min-w-0">
-            <p class="text-sm font-extrabold text-emerald-900">এখন কাজের সময় চলছে — জরুরি অর্ডারের প্রয়োজন নেই</p>
-            <p class="mt-1 text-xs leading-relaxed text-emerald-800">
-              আমাদের কাজের সময় সকাল ১০টা থেকে রাত ১০টা। এখন এই সময়ের মধ্যে আছেন, তাই ডেলিভারি সাধারণত ১০–৩০ মিনিটেই সম্পন্ন হবে।
-            </p>
-          </div>
-        </div>
-      </div>`;
-  } else {
-    block.innerHTML = `
-      <label class="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-amber-200 bg-amber-50/50 p-4 transition hover:border-amber-300">
-        <input type="checkbox" id="urgentService" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-amber-600 accent-amber-600" />
-        <span class="min-w-0">
-          <span class="flex flex-wrap items-center gap-2 text-sm font-extrabold text-amber-900">
-            জরুরি (আর্জেন্ট) অর্ডার — অতিরিক্ত ৳৫০
-            <span class="rounded-full bg-amber-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-900">একই দিনে ডেলিভারি</span>
-          </span>
-          <span class="mt-1 block text-xs leading-relaxed text-amber-800">
-            কাজের সময়ের বাইরে অর্ডার করলে সাধারণত পরবর্তী কর্মদিবসের সকাল ১০টার পর ডেলিভারি দেওয়া হয়। কিন্তু একই দিনে ডেলিভারি নেওয়া অত্যন্ত জরুরি হলে এই অপশনটি নির্বাচন করে অতিরিক্ত ৫০ টাকা পরিশোধ করুন।
-          </span>
-        </span>
-      </label>`;
-
-    const check = block.querySelector('#urgentService');
-    if (check) check.addEventListener('change', updateSummary);
-  }
-
-  updateSummary();
-}
-
 async function fetchDynamicPrice() {
   try {
     const snap = await getDoc(SETTINGS_REF);
@@ -1809,8 +1207,6 @@ async function fetchDynamicPrice() {
   if ($('#faqPriceText')) {
     $('#faqPriceText').innerHTML = `প্রতি আবেদনকারীর জন্য ফি মাত্র ${bnPrice} টাকা। জরুরি অর্ডারের ক্ষেত্রে অতিরিক্ত ৫০ টাকা। পেমেন্ট বিকাশ (bKash) Send Money এর মাধ্যমে 01860319433 নম্বরে পাঠাতে হবে।`;
   }
-
-  updateSummary();
 }
 
 const topbar = $('#topbar');
@@ -1825,372 +1221,7 @@ document.querySelectorAll('#mobileMenu a').forEach(a =>
 );
 $('#year').textContent = new Date().getFullYear();
 
-// ═══ Applicant count management ═══
-let applicantCount = 1;
-const MIN_COUNT = 1, MAX_COUNT = 10;
-const countSelect = $('#countSelect');
-for (let i = MIN_COUNT; i <= MAX_COUNT; i++) {
-  countSelect.insertAdjacentHTML('beforeend', `<option value="${i}">${toBn(i)} জন আবেদনকারী</option>`);
-}
-countSelect.value = 1;
-
-function snapshotApplicants() {
-  return [...document.querySelectorAll('.applicant-card')].map(card => {
-    const o = {};
-    card.querySelectorAll('[data-field]').forEach(el => {
-      if (el.type === 'file') return;
-      if (el.type === 'checkbox') o[el.dataset.field] = el.checked;
-      else o[el.dataset.field] = el.value;
-    });
-    return o;
-  });
-}
-function restoreApplicants(snap) {
-  document.querySelectorAll('.applicant-card').forEach((card, i) => {
-    const data = snap[i];
-    if (!data) return;
-    card.querySelectorAll('[data-field]').forEach(el => {
-      if (el.type === 'file') return;
-      if (el.type === 'checkbox') {
-        el.checked = !!data[el.dataset.field];
-      } else if (data[el.dataset.field] !== undefined) {
-        el.value = data[el.dataset.field];
-      }
-    });
-  });
-}
-
-function applyPhotoState(card) {
-  if (!card) return;
-  const useDefault = card.querySelector('[data-field="useDefaultPhoto"]');
-  const fileInput  = card.querySelector('[data-field="photo"]');
-  const preview    = card.querySelector('[data-photo-preview]');
-  if (!useDefault || !fileInput || !preview) return;
-
-  if (useDefault.checked) {
-    fileInput.disabled = true;
-    fileInput.classList.add('opacity-50', 'cursor-not-allowed');
-    preview.src = DEFAULT_DP;
-  } else {
-    fileInput.disabled = false;
-    fileInput.classList.remove('opacity-50', 'cursor-not-allowed');
-    const f = fileInput.files?.[0];
-    preview.src = f ? URL.createObjectURL(f) : DEFAULT_DP;
-  }
-}
-
-function applicantCardHTML(i) {
-  const n = toBn(i + 1);
-  return `
-  <div class="applicant-card anim-in rounded-2xl border border-slate-200 bg-slate-50/50 p-5 sm:p-6" data-index="${i}">
-    <div class="mb-5 flex items-center gap-3">
-      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-brand-600 text-sm font-extrabold text-white">${n}</span>
-      <div>
-        <h4 class="text-base font-extrabold text-slate-900">আবেদনকারী ${n}</h4>
-        <p class="text-xs text-slate-500">জন্ম নিবন্ধন সনদ অনুযায়ী তথ্য দিন</p>
-      </div>
-    </div>
-
-    <div class="mb-4 rounded-xl border border-brand-200 bg-white p-4">
-      <label class="label mb-2">আবেদনকারীর ছবি</label>
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
-        <div class="shrink-0">
-          <img data-photo-preview src="dp.png" alt="আবেদনকারীর ছবি"
-               class="h-24 w-24 rounded-xl border-2 border-slate-200 bg-slate-50 object-cover shadow-sm" />
-        </div>
-        <div class="min-w-0 flex-1">
-          <input type="file" data-field="photo" accept="image/jpeg,image/png,image/jpg" class="file-input" />
-          <p class="hint">স্পষ্ট মুখমণ্ডলসহ ছবি দিন। সর্বোচ্চ ৫ MB।</p>
-          <label class="mt-2 flex cursor-pointer items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 transition hover:border-emerald-300">
-            <input type="checkbox" data-field="useDefaultPhoto" class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-emerald-600 accent-emerald-600" />
-            <span class="text-xs font-semibold leading-relaxed text-emerald-800">
-              ডিফল্ট avatar (dp.png) ব্যবহার করুন — আলাদা ছবি আপলোড করতে হবে না
-            </span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid gap-4 sm:grid-cols-2">
-      <div>
-        <label class="label">জন্ম নিবন্ধন নম্বর <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="certNo" class="input" placeholder="১৭ ডিজিটের জন্ম নিবন্ধন নম্বর" inputmode="numeric" />
-      </div>
-      <div>
-        <label class="label">জন্ম তারিখ <span class="text-rose-500">*</span></label>
-        <input type="date" data-field="birthDate" class="input" />
-      </div>
-      <div>
-        <label class="label">নাম <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="name" class="input" placeholder="আবেদনকারীর পূর্ণ নাম" />
-      </div>
-      <div>
-        <label class="label">পিতার নাম <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="fatherName" class="input" placeholder="পিতার নাম" />
-      </div>
-      <div>
-        <label class="label">মাতার নাম <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="motherName" class="input" placeholder="মাতার নাম" />
-      </div>
-      <div>
-        <label class="label">বিভাগ <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="division" class="input" placeholder="যেমন: ঢাকা" />
-      </div>
-      <div>
-        <label class="label">জেলা <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="district" class="input" placeholder="যেমন: ঢাকা" />
-      </div>
-      <div>
-        <label class="label">উপজেলা / সার্কেল <span class="text-rose-500">*</span></label>
-        <input type="text" data-field="upazila" class="input" placeholder="যেমন: সাভার" />
-      </div>
-      <div class="sm:col-span-2">
-        <label class="label">গ্রাহকের সম্পর্ক <span class="text-slate-400 font-normal text-xs">(ঐচ্ছিক)</span></label>
-        <input type="text" data-field="relationship" class="input" placeholder="যেমন: স্ত্রী, পুত্র, কন্যা — উত্তরাধিকার সূত্রে হলে উল্লেখ করুন" />
-        <p class="hint">উত্তরাধিকার সূত্রে সম্পত্তি প্রাপ্ত হলে মূল মালিকের সাথে সম্পর্ক লিখুন।</p>
-      </div>
-      <div class="sm:col-span-2">
-        <label class="label">ঠিকানা (হোল্ডিং, গ্রাম/রাস্তা এবং ডাকঘর উল্লেখ করে দিন।) <span class="text-rose-500">*</span></label>
-        <textarea data-field="address" rows="2" class="input" placeholder="দলিল / ওয়ারিশ সনদ অনুযায়ী সম্পূর্ণ ঠিকানা"></textarea>
-      </div>
-      <div class="sm:col-span-2">
-        <label class="label">জন্ম নিবন্ধন সনদের ছবি (JPG / PNG) <span class="text-rose-500">*</span></label>
-        <input type="file" data-field="file" accept="image/jpeg,image/png,image/jpg" class="file-input" />
-        <p class="hint">স্পষ্টভাবে তোলা ছবি আপলোড করুন। সর্বোচ্চ ৫ MB।</p>
-        <div class="file-preview mt-3 hidden">
-          <img class="h-28 w-auto rounded-xl border border-slate-200 object-cover shadow-sm" alt="জন্ম নিবন্ধন সনদের প্রিভিউ" />
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderApplicants() {
-  const snap = snapshotApplicants();
-  const wrap = $('#applicantsWrap');
-  wrap.innerHTML = '';
-  for (let i = 0; i < applicantCount; i++) wrap.insertAdjacentHTML('beforeend', applicantCardHTML(i));
-  restoreApplicants(snap);
-  wrap.querySelectorAll('[data-field="certNo"]').forEach(attachDigitsOnlyFilter);
-  wrap.querySelectorAll('.applicant-card').forEach(applyPhotoState);
-  updateSummary();
-}
-
-function updateSummary() {
-  const urgentCheck = $('#urgentService');
-  const base   = applicantCount * PRICE_PER_PERSON;
-  const urgent = urgentCheck && urgentCheck.checked ? URGENT_FEE : 0;
-  const total  = base + urgent;
-
-  if ($('#countDisplay')) $('#countDisplay').textContent = toBn(applicantCount);
-  countSelect.value = applicantCount;
-  if ($('#sumCount')) $('#sumCount').textContent = `${toBn(applicantCount)} জন`;
-  if ($('#sumTotal')) $('#sumTotal').textContent = `৳ ${toBn(total)}`;
-  if ($('#payTotal')) $('#payTotal').textContent = `৳ ${toBn(total)}`;
-  if ($('#payBreakdown')) {
-    $('#payBreakdown').textContent =
-      `${toBn(applicantCount)} জন × ৳ ${toBn(PRICE_PER_PERSON)}` +
-      (urgent ? ` + জরুরি অর্ডার ৳ ${toBn(urgent)}` : '');
-  }
-
-  toggleSingleApplicantDemo();
-}
-
-function toggleSingleApplicantDemo() {
-  const wrap = $('#singleApplicantDemoWrap');
-  if (!wrap) return;
-  if (applicantCount === 1) {
-    wrap.classList.remove('hidden');
-  } else {
-    wrap.classList.add('hidden');
-    const cb = $('#singleApplicantDemo');
-    if (cb) cb.checked = false;
-  }
-}
-
-function setCount(n) {
-  applicantCount = Math.min(MAX_COUNT, Math.max(MIN_COUNT, n));
-  renderApplicants();
-}
-
-$('#plusBtn').addEventListener('click', () => setCount(applicantCount + 1));
-$('#minusBtn').addEventListener('click', () => setCount(applicantCount - 1));
-countSelect.addEventListener('change', e => setCount(+e.target.value));
-
-$('#applicantsWrap').addEventListener('change', e => {
-  const card = e.target.closest('.applicant-card');
-  if (!card) return;
-
-  if (e.target.matches('[data-field="useDefaultPhoto"]')) {
-    applyPhotoState(card);
-    return;
-  }
-
-  const input = e.target.closest('input[type="file"]');
-  if (!input) return;
-
-  const field = input.dataset.field;
-  const file = input.files?.[0];
-
-  if (field === 'photo') {
-    const preview = card.querySelector('[data-photo-preview]');
-    if (!preview) return;
-    if (!file) { preview.src = DEFAULT_DP; return; }
-    if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
-      input.value = ''; preview.src = DEFAULT_DP;
-      alert('শুধুমাত্র JPG অথবা PNG ফরম্যাটের ছবি আপলোড করুন।');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      input.value = ''; preview.src = DEFAULT_DP;
-      alert('ছবির সাইজ সর্বোচ্চ ৫ MB হতে পারবে।');
-      return;
-    }
-    preview.src = URL.createObjectURL(file);
-    return;
-  }
-
-  if (field === 'file') {
-    const box = input.parentElement.querySelector('.file-preview');
-    const img = box?.querySelector('img');
-    if (!box || !img) return;
-    if (!file) { box.classList.add('hidden'); img.removeAttribute('src'); return; }
-    if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
-      input.value = ''; box.classList.add('hidden');
-      alert('শুধুমাত্র JPG অথবা PNG ফরম্যাটের ছবি আপলোড করুন।');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      input.value = ''; box.classList.add('hidden');
-      alert('ছবির সাইজ সর্বোচ্চ ৫ MB হতে পারবে।');
-      return;
-    }
-    img.src = URL.createObjectURL(file);
-    box.classList.remove('hidden');
-  }
-});
-
-$('#togglePwd').addEventListener('click', () => {
-  const el = $('#landPassword');
-  el.type = el.type === 'password' ? 'text' : 'password';
-});
-
-renderApplicants();
-renderUrgentBlock(true);
-setInterval(() => renderUrgentBlock(), 60000);
 fetchDynamicPrice();
-
-attachDigitsOnlyFilter($('#landNumber'));
-attachDigitsOnlyFilter($('#senderNumber'));
-
-function clearErrors() {
-  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
-  const fe = $('#formError');
-  fe.classList.add('hidden'); fe.textContent = '';
-}
-function showError(msg) {
-  const fe = $('#formError');
-  fe.textContent = msg;
-  fe.classList.remove('hidden');
-  fe.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-function markError(el) {
-  if (!el) return;
-  el.classList.add('field-error');
-  el.addEventListener('input', () => el.classList.remove('field-error'), { once: true });
-  el.addEventListener('change', () => el.classList.remove('field-error'), { once: true });
-}
-
-function collectApplicants(validate = true) {
-  const cards = [...document.querySelectorAll('.applicant-card')];
-  const list = [];
-  let ok = true, firstBad = null;
-
-  cards.forEach(card => {
-    const get = f => card.querySelector(`[data-field="${f}"]`);
-    const useDefaultPhoto = !!get('useDefaultPhoto')?.checked;
-    const rec = {
-      certNo:     digitsOnly(get('certNo').value),
-      birthDate:  get('birthDate').value,
-      name:       get('name').value.trim(),
-      fatherName: get('fatherName').value.trim(),
-      motherName: get('motherName').value.trim(),
-      division:   get('division').value.trim(),
-      district:   get('district').value.trim(),
-      upazila:    get('upazila').value.trim(),
-      relationship: get('relationship')?.value.trim() || '',
-      address:    get('address').value.trim(),
-      file:       get('file').files?.[0] || null,
-      photo:      get('photo')?.files?.[0] || null,
-      useDefaultPhoto,
-    };
-
-    if (validate) {
-      ['certNo','birthDate','name','fatherName','motherName','division','district','upazila','address'].forEach(f => {
-        if (!rec[f]) { ok = false; markError(get(f)); firstBad = firstBad || get(f); }
-      });
-      if (!rec.file) {
-        ok = false;
-        markError(get('file'));
-        firstBad = firstBad || get('file');
-      }
-      if (!rec.useDefaultPhoto && !rec.photo) {
-        ok = false;
-        markError(get('photo'));
-        firstBad = firstBad || get('photo');
-      }
-    }
-    list.push(rec);
-  });
-
-  return { list, ok, firstBad };
-}
-
-$('#nextBtn').addEventListener('click', () => {
-  clearErrors();
-
-  const { ok, firstBad } = collectApplicants(true);
-
-  if (!ok) {
-    showError('অনুগ্রহ করে প্রতিটি আবেদনকারীর সকল তথ্য পূরণ করুন, জন্ম নিবন্ধন সনদের ছবি এবং আবেদনকারীর ছবি অ্যাটাচ করুন (অথবা ডিফল্ট avatar নির্বাচন করুন)।');
-    firstBad?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
-
-  const landNumber = digitsOnly($('#landNumber').value);
-  const landPassword = $('#landPassword').value.trim();
-
-  if (!landNumber) { markError($('#landNumber')); showError('land.gov.bd অ্যাকাউন্টের মোবাইল নম্বর দিন।'); return; }
-  if (!/^01[3-9]\d{8}$/.test(landNumber)) { markError($('#landNumber')); showError('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।'); return; }
-  if (!landPassword) { markError($('#landPassword')); showError('land.gov.bd অ্যাকাউন্টের পাসওয়ার্ড দিন।'); return; }
-
-  const email = $('#receiverEmail').value.trim();
-  if (!email) { markError($('#receiverEmail')); showError('রিসিভার ইমেইল দিন।'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { markError($('#receiverEmail')); showError('সঠিক ইমেইল এড্রেস দিন।'); return; }
-
-  $('#step1').classList.add('hidden');
-  $('#step2').classList.remove('hidden');
-  updateSummary();
-  setStep(2);
-  $('#step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
-
-$('#backBtn').addEventListener('click', () => {
-  $('#step2').classList.add('hidden');
-  $('#step1').classList.remove('hidden');
-  setStep(1);
-  $('#step1').scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
-
-$('#copyBkash').addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(BKASH_NUMBER);
-    const btn = $('#copyBkash');
-    const html = btn.innerHTML;
-    btn.innerHTML = '✓ কপি হয়েছে';
-    setTimeout(() => (btn.innerHTML = html), 1600);
-  } catch { alert('কপি করা যায়নি। নম্বরটি ম্যানুয়ালি লিখুন: ' + BKASH_NUMBER); }
-});
 
 function uploadToCloudinary(file, onProgress) {
   return new Promise((resolve, reject) => {
@@ -2225,177 +1256,6 @@ function uploadToCloudinary(file, onProgress) {
     xhr.send(fd);
   });
 }
-
-const submitBtn = $('#submitBtn');
-
-submitBtn.addEventListener('click', async () => {
-  clearErrors();
-
-  const sender = digitsOnly($('#senderNumber').value);
-
-  if (!sender) { markError($('#senderNumber')); showError('যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি লিখুন।'); return; }
-  if (!/^01[3-9]\d{8}$/.test(sender)) { markError($('#senderNumber')); showError('সঠিক ১১ ডিজিটের বিকাশ নম্বর দিন।'); return; }
-
-  const { list, ok } = collectApplicants(false);
-  if (!ok || list.some(a => !a.file || (!a.useDefaultPhoto && !a.photo))) {
-    showError('কিছু তথ্য অনুপস্থিত। অনুগ্রহ করে পূর্বের ধাপে ফিরে সব তথ্য পূরণ করুন।');
-    return;
-  }
-
-  const urgentCheck = $('#urgentService');
-  const isUrgent = !!(urgentCheck && urgentCheck.checked);
-  const urgentFeeAmount = isUrgent ? URGENT_FEE : 0;
-  const total = (applicantCount * PRICE_PER_PERSON) + urgentFeeAmount;
-  const orderId = generateOrderId();
-  const draftNumber = $('#draftNumber').value.trim();
-  const usedDemoInfo = applicantCount === 1 && !!$('#singleApplicantDemo')?.checked;
-
-  submitBtn.disabled = true;
-  const originalHTML = submitBtn.innerHTML;
-  submitBtn.innerHTML = 'প্রক্রিয়া চলছে…';
-  $('#progressWrap').classList.remove('hidden');
-
-  try {
-    const tasks = [];
-    list.forEach((a, idx) => {
-      if (a.file) tasks.push({ type: 'cert', idx, file: a.file });
-      if (!a.useDefaultPhoto && a.photo) tasks.push({ type: 'photo', idx, file: a.photo });
-    });
-    const totalUploads = tasks.length;
-    let doneUploads = 0;
-
-    for (const task of tasks) {
-      const base = totalUploads === 0 ? 100 : Math.round((doneUploads / totalUploads) * 100);
-      $('#progressText').textContent = task.type === 'cert'
-        ? `আবেদনকারী ${toBn(task.idx+1)} এর সনদ আপলোড হচ্ছে…`
-        : `আবেদনকারী ${toBn(task.idx+1)} এর ছবি আপলোড হচ্ছে…`;
-      $('#progressBar').style.width = `${base}%`;
-      $('#progressPct').textContent = `${base}%`;
-
-      const url = await uploadToCloudinary(task.file, pct => {
-        const overall = Math.round(((doneUploads + pct/100) / totalUploads) * 100);
-        $('#progressBar').style.width = `${overall}%`;
-        $('#progressPct').textContent = `${overall}%`;
-      });
-      if (task.type === 'cert') list[task.idx].imageUrl = url;
-      else list[task.idx].photoUrl = url;
-      doneUploads++;
-    }
-
-    list.forEach(a => {
-      if (a.useDefaultPhoto || !a.photoUrl) a.photoUrl = DEFAULT_DP;
-      if (!a.imageUrl) a.imageUrl = null;
-    });
-
-    $('#progressText').textContent = 'অর্ডার সংরক্ষণ হচ্ছে…';
-    $('#progressBar').style.width = '100%';
-    $('#progressPct').textContent = '100%';
-
-    const applicants = list.map(a => ({
-      certNo:     a.certNo,
-      birthDate:  a.birthDate,
-      name:       a.name,
-      fatherName: a.fatherName,
-      motherName: a.motherName,
-      division:   a.division,
-      district:   a.district,
-      upazila:    a.upazila,
-      relationship: a.relationship || '',
-      address:    a.address,
-      imageUrl:   a.imageUrl,
-      photoUrl:   a.photoUrl,
-      useDefaultPhoto: !!a.useDefaultPhoto,
-    }));
-
-    const payload = {
-      orderId,
-      createdAt: serverTimestamp(),
-      status: 'pending',
-      paymentStatus: 'pending-verification',
-      applicantCount,
-      pricePerPerson: PRICE_PER_PERSON,
-      isUrgent,
-      urgentFee: urgentFeeAmount,
-      amount: total,
-      applicants,
-      draftNumber: draftNumber || '',
-      usedDemoInfo,
-      landAccountNumber: digitsOnly($('#landNumber').value),
-      landAccountPassword: $('#landPassword').value.trim(),
-      receiverEmail: $('#receiverEmail').value.trim(),
-      bkashReceiverNumber: BKASH_NUMBER,
-      bkashSenderNumber: sender
-    };
-
-    await addDoc(collection(db, 'orders'), payload);
-
-    $('#invOrderId').textContent = orderId;
-    $('#invDate').textContent    = fmtDate(new Date());
-    $('#invCount').textContent   = `${toBn(applicantCount)} জন`;
-    $('#invEmail').textContent   = payload.receiverEmail;
-    $('#invSender').textContent  = sender;
-    $('#invTotal').textContent   = `৳ ${toBn(total)}`;
-    $('#invUrgent').classList.toggle('hidden', !payload.isUrgent);
-
-    // Draft number display
-    if (draftNumber) {
-      $('#invDraftNumberWrap').classList.remove('hidden');
-      $('#invDraftNumber').textContent = draftNumber;
-    } else {
-      $('#invDraftNumberWrap').classList.add('hidden');
-    }
-
-    // Single applicant with representative display
-    $('#invDemoWrap').classList.toggle('hidden', !usedDemoInfo);
-
-    $('#invApplicants').innerHTML = applicants.map((a, i) => `
-      <li class="flex items-start gap-2.5">
-        <img src="${escapeHtml(a.photoUrl || DEFAULT_DP)}" alt="" class="mt-0.5 h-10 w-10 shrink-0 rounded-lg border border-slate-200 object-cover" onerror="this.style.display='none'" />
-        <span class="min-w-0">
-          <b class="text-slate-900">${escapeHtml(a.name)}</b>
-          ${a.relationship ? `<span class="ml-1 text-xs text-brand-700">(${escapeHtml(a.relationship)})</span>` : ''}
-          <span class="block text-xs text-slate-500">নিবন্ধন নং: ${escapeHtml(a.certNo || '—')} · জন্ম তারিখ: ${escapeHtml(a.birthDate || '—')}</span>
-          <span class="block text-xs text-slate-500">${escapeHtml(a.division || '—')} · ${escapeHtml(a.district || '—')} · ${escapeHtml(a.upazila || '—')}</span>
-        </span>
-      </li>`).join('');
-
-    $('#noticeOrderId').textContent = orderId;
-    $('#callNotice').classList.remove('hidden');
-
-    setStep(3);
-
-    const modal = $('#invoiceModal');
-    modal.classList.remove('hidden');
-    document.body.classList.add('invoice-open');
-    document.body.style.overflow = 'hidden';
-
-    $('#senderNumber').value = '';
-
-  } catch (err) {
-    console.error(err);
-    showError(err?.message || 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = originalHTML;
-    $('#progressWrap').classList.add('hidden');
-    $('#progressBar').style.width = '0%';
-    $('#progressPct').textContent = '0%';
-  }
-});
-
-function closeInvoice() {
-  $('#invoiceModal').classList.add('hidden');
-  document.body.classList.remove('invoice-open');
-  document.body.style.overflow = '';
-}
-$('#closeInvoice').addEventListener('click', () => { closeInvoice(); setStep(1); });
-$('#invoiceWrap').addEventListener('click', e => {
-  if (e.target.id === 'invoiceWrap') { closeInvoice(); setStep(1); }
-});
-$('#closeCallNotice').addEventListener('click', () => {
-  $('#callNotice').classList.add('hidden');
-});
-$('#printInvoice').addEventListener('click', () => window.print());
 
 /* ============================================================
    SUPPORT CHAT
