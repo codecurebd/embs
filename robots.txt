@@ -3,6 +3,5 @@ Allow: /
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
-Disallow: /application.html
 
 Sitemap: https://emb-support.vercel.app/sitemap.xml
