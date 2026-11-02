@@ -13,12 +13,13 @@
     </image:image>
   </url>
 
+  <!-- ✅ FIXED: /guide/ prefix সরানো হয়েছে -->
   <url>
-    <loc>https://emb-support.vercel.app/guide/18-plus-birth-certificate-mutation.html</loc>
+    <loc>https://emb-support.vercel.app/18-plus-birth-certificate-mutation.html</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- application.html ইচ্ছাকৃতভাবে বাদ দেওয়া হয়েছে (noindex) -->
+  <!-- application.html সচেতনভাবে বাদ দেওয়া (noindex) -->
 </urlset>
