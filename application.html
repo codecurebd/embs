@@ -69,13 +69,33 @@ tailwind.config = {
   .toast.err { background: #e11d48; }
   .toast.ok { background: #059669; }
   .photo-preview { width: 80px; height: 80px; border-radius: 0.75rem; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background: #f1f5f9; }
+  .btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; border-radius: 0.75rem; border: 1px solid #cbd5e1; background: #fff; padding: 0.6rem 1.1rem; font-size: 0.85rem; font-weight: 600; color: #334155; transition: all .15s; }
+  .btn-ghost:hover { border-color: #93c5fd; color: #163ee1; }
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; border-radius: 0.75rem; background: #1d51f5; padding: 0.6rem 1.1rem; font-size: 0.85rem; font-weight: 700; color: #fff; transition: all .15s; box-shadow: 0 4px 12px -4px rgba(29,81,245,0.4); }
+  .btn-primary:hover { background: #163ee1; }
   @media (max-width: 640px) { .sheet-modal { align-items: flex-end !important; padding: 0 !important; } .sheet-modal > div { border-radius: 1.5rem 1.5rem 0 0 !important; } }
+
+  .print-only { display: none; }
+  @media print {
+    @page { size: A4 portrait; margin: 12mm; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .no-print, .no-print * { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+    #callNotice { display: none !important; }
+    html, body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+    body.invoice-open > *:not(#invoiceModal) { display: none !important; }
+    body.invoice-open #invoiceModal { display: block !important; position: static !important; inset: auto !important; padding: 0 !important; margin: 0 !important; background: #ffffff !important; overflow: visible !important; backdrop-filter: none !important; }
+    body.invoice-open #invoiceModal.hidden { display: none !important; }
+    body.invoice-open #invoiceWrap { display: block !important; padding: 0 !important; margin: 0 !important; min-height: auto !important; }
+    body.invoice-open #invoiceBox { display: block !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; background: #ffffff !important; box-shadow: none !important; border: none !important; border-radius: 0 !important; color: #0f172a !important; font-size: 12.5px !important; line-height: 1.55 !important; page-break-inside: avoid; }
+    body.invoice-open #invoiceBox > * { page-break-inside: avoid; }
+    body.invoice-open #invoiceBox a { color: inherit !important; text-decoration: none !important; }
+    .print-only { display: block !important; }
+  }
 </style>
 </head>
 
 <body class="bg-slate-50 font-sans text-slate-800 antialiased">
 
-<!-- ═══ TOPBAR + HEADER ═══ -->
 <header class="fixed inset-x-0 top-0 z-50">
   <div id="topbar" class="flex h-9 items-center overflow-hidden bg-slate-900 text-slate-200">
     <div class="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 text-[11px] sm:text-xs">
@@ -110,7 +130,6 @@ tailwind.config = {
 
 <main class="max-w-4xl mx-auto px-4 py-6">
 
-  <!-- STEP PROGRESS -->
   <div class="bg-white rounded-2xl border border-slate-200 p-3 sm:p-4 mb-4 sticky top-[100px] z-20 shadow-sm">
     <div class="flex items-center gap-1 sm:gap-2">
       <div class="step-item active flex items-center gap-1.5 sm:gap-2 shrink-0" data-step="1">
@@ -135,10 +154,7 @@ tailwind.config = {
     </div>
   </div>
 
-  <!-- ═══════════ STEP 1 ═══════════ -->
   <section id="step1" class="space-y-4">
-
-    <!-- Trust banner -->
     <div class="bg-gradient-to-r from-emerald-50 to-white border-2 border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
       <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 grid place-items-center shrink-0">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z"/></svg>
@@ -149,23 +165,6 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- Saved profile -->
-    <div id="savedProfileCard" class="hidden bg-white border-2 border-brand-200 rounded-2xl p-4">
-      <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="w-10 h-10 bg-brand-100 text-brand-700 rounded-full grid place-items-center shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z"/></svg>
-          </div>
-          <div class="min-w-0">
-            <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">সেভড অ্যাকাউন্ট</p>
-            <p id="savedName" class="font-bold text-sm truncate">—</p>
-          </div>
-        </div>
-        <button id="loadSavedBtn" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-lg whitespace-nowrap shrink-0">লোড</button>
-      </div>
-    </div>
-
-    <!-- AGE CATEGORY -->
     <div class="bg-white rounded-2xl border border-slate-200 p-5">
       <h2 class="font-extrabold text-base mb-1">১. গ্রাহকের বয়সের ধরণ</h2>
       <p class="text-xs text-slate-500 mb-3">উভয় ক্ষেত্রেই জন্ম নিবন্ধন নম্বর লাগবে — শুধু প্রিন্ট লেবেল আলাদা</p>
@@ -197,7 +196,6 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- COUNT + PRICE -->
     <div class="bg-white rounded-2xl border border-slate-200 p-5">
       <div class="flex items-start justify-between gap-2 mb-4">
         <div>
@@ -232,7 +230,6 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- SINGLE APPLICANT (count === 1) -->
     <div id="singleApplicantDemoWrap" class="hidden bg-white rounded-2xl border-2 border-brand-200 p-4 sm:p-5">
       <label class="flex cursor-pointer items-start gap-3">
         <input type="checkbox" id="singleApplicantDemo" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
@@ -244,7 +241,6 @@ tailwind.config = {
       </label>
     </div>
 
-    <!-- REPRESENTATIVE (count > 1) -->
     <div id="representativeDemoWrap" class="hidden bg-white rounded-2xl border-2 border-brand-200 p-4 sm:p-5">
       <label class="flex cursor-pointer items-start gap-3">
         <input type="checkbox" id="representativeDemo" class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-slate-300 text-brand-600 accent-brand-600" />
@@ -261,27 +257,22 @@ tailwind.config = {
     </button>
   </section>
 
-  <!-- ═══════════ STEP 2 ═══════════ -->
   <section id="step2" class="space-y-4 hidden">
     <div class="bg-white rounded-2xl border border-slate-200 p-5">
       <h2 class="font-extrabold text-base">গ্রাহকের তথ্য</h2>
       <p class="text-xs text-slate-500 mt-1">সনদ অনুযায়ী প্রতিটি তথ্য সঠিকভাবে পূরণ করুন</p>
     </div>
-
     <div id="applicantsWrap" class="space-y-3"></div>
-
     <button type="button" id="addApplicantBtn" class="w-full border-2 border-dashed border-brand-400 text-brand-700 hover:bg-brand-50 font-bold py-3 rounded-2xl flex items-center justify-center gap-2 transition">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
       আরেকজন গ্রাহক যোগ করুন
     </button>
-
     <div class="flex gap-2">
       <button type="button" onclick="goStep(1)" class="flex-1 bg-white border-2 border-slate-200 text-slate-700 font-bold py-3.5 rounded-2xl">← পিছনে</button>
       <button type="button" onclick="goStep(3)" class="flex-[2] bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-brand-600/30">পরবর্তী — অ্যাকাউন্ট →</button>
     </div>
   </section>
 
-  <!-- ═══════════ STEP 3 ═══════════ -->
   <section id="step3" class="space-y-4 hidden">
     <div class="bg-white rounded-2xl border border-slate-200 p-5">
       <div class="flex items-start justify-between mb-4">
@@ -293,7 +284,6 @@ tailwind.config = {
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </button>
       </div>
-
       <div class="space-y-3">
         <div>
           <label class="text-xs font-bold text-slate-700 mb-1 block">মোবাইল নম্বর <span class="text-rose-500">*</span></label>
@@ -319,23 +309,14 @@ tailwind.config = {
           <input type="email" id="receiverEmail" class="input" placeholder="আপনার@email.com" autocomplete="email" />
           <p class="err-msg" id="receiverEmail-err">সঠিক ইমেইল দিন</p>
         </div>
-        <label class="flex items-start gap-2 bg-brand-50 rounded-xl p-3 cursor-pointer">
-          <input type="checkbox" id="saveProfileCheck" class="mt-0.5 w-4 h-4 accent-brand-600" checked />
-          <div class="text-xs">
-            <p class="font-bold text-brand-900">পরের বারে দ্রুত ব্যবহারের জন্য সেভ করুন</p>
-            <p class="text-brand-700 text-[11px] mt-0.5">শুধু মোবাইল ও ইমেইল সেভ হবে, পাসওয়ার্ড নয়</p>
-          </div>
-        </label>
       </div>
     </div>
-
     <div class="flex gap-2">
       <button type="button" onclick="goStep(2)" class="flex-1 bg-white border-2 border-slate-200 text-slate-700 font-bold py-3.5 rounded-2xl">← পিছনে</button>
       <button type="button" onclick="goStep(4)" class="flex-[2] bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-brand-600/30">পরবর্তী — রিভিউ →</button>
     </div>
   </section>
 
-  <!-- ═══════════ STEP 4 ═══════════ -->
   <section id="step4" class="space-y-4 hidden">
     <div class="bg-white rounded-2xl border border-slate-200 p-5">
       <div class="flex items-center gap-2 mb-3">
@@ -391,15 +372,12 @@ tailwind.config = {
 
     <div class="flex gap-2">
       <button type="button" onclick="goStep(3)" class="flex-1 bg-white border-2 border-slate-200 text-slate-700 font-bold py-3.5 rounded-2xl">← পিছনে</button>
-      <button type="button" id="submitBtn" class="flex-[2] bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition active:scale-[.98]">
-        অর্ডার সাবমিট করুন
-      </button>
+      <button type="button" id="submitBtn" class="flex-[2] bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition active:scale-[.98]">অর্ডার সাবমিট করুন</button>
     </div>
   </section>
 
 </main>
 
-<!-- STICKY BOTTOM TOTAL -->
 <div class="fixed bottom-0 inset-x-0 bg-white border-t-2 border-slate-200 shadow-2xl z-30">
   <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
     <div>
@@ -413,13 +391,11 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- CHAT TOGGLE -->
 <button type="button" id="chatToggleBtn" class="fixed bottom-24 right-4 w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full grid place-items-center shadow-xl z-40 transition hover:scale-105 active:scale-95" aria-label="Support chat">
   <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/></svg>
   <span id="chatBadge" class="hidden absolute -top-1 -right-1 min-w-[20px] bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">0</span>
 </button>
 
-<!-- CHAT PANEL -->
 <div id="chatPanel" class="fixed bottom-24 right-4 z-50 hidden w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
   <div class="flex items-center justify-between gap-3 bg-gradient-to-r from-brand-700 to-brand-900 px-4 py-3 text-white">
     <div class="flex items-center gap-2.5">
@@ -448,80 +424,94 @@ tailwind.config = {
   </form>
 </div>
 
-<!-- INVOICE / SUCCESS MODAL -->
 <div id="invoiceModal" class="fixed inset-0 z-[60] hidden overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
-  <div class="flex min-h-full flex-col items-center justify-center gap-4 p-4">
-    <div id="callNotice" class="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
-      <div class="flex items-start gap-3 bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-4 text-white">
-        <span class="grid h-11 w-11 place-items-center rounded-full bg-white/20 shrink-0">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+  <div id="invoiceWrap" class="flex min-h-full flex-col items-center justify-center gap-4 p-4">
+    <div id="callNotice" class="w-full max-w-lg overflow-hidden rounded-2xl border-2 border-emerald-300 bg-white shadow-2xl anim-in">
+      <div class="flex items-start gap-3.5 bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-4 text-white">
+        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/20">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
         </span>
         <div class="min-w-0">
-          <h3 class="text-base font-extrabold">অর্ডার সম্পন্ন হয়েছে</h3>
-          <p class="text-xs text-emerald-50 mt-0.5">আপনার অর্ডারটি সফলভাবে জমা হয়েছে।</p>
+          <h3 class="text-base font-extrabold leading-tight sm:text-lg">অর্ডার সফলভাবে জমা হয়েছে</h3>
+          <p class="mt-0.5 text-xs text-emerald-50 sm:text-sm">আপনার অর্ডারটি গ্রহণ করা হয়েছে।</p>
         </div>
       </div>
       <div class="px-5 py-5">
         <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
-          <p class="text-sm font-extrabold text-amber-900 flex items-center gap-1.5">
-            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg>
-            দ্রুত কাজ চান?
+          <p class="flex items-center gap-1.5 text-sm font-extrabold text-amber-900">
+            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg>
+            দ্রুত কাজ সম্পন্ন করাতে চান?
           </p>
-          <p class="mt-1.5 text-[13px] text-amber-800 leading-relaxed">দ্রুত ডেলিভারির জন্য <a href="tel:+8801350141762" class="font-extrabold underline">+880 1350-141762</a> নম্বরে কল করুন।</p>
+          <p class="mt-1.5 text-[13px] leading-relaxed text-amber-800 sm:text-sm">দ্রুত ডেলিভারির জন্য <a href="tel:+8801350141762" class="font-extrabold text-amber-900 underline decoration-amber-400 underline-offset-2">+880 1350-141762</a> নম্বরে কল করে জানিয়ে দিন।</p>
         </div>
-        <div class="mt-4 flex flex-col sm:flex-row gap-2">
-          <a href="tel:+8801350141762" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl text-sm text-center inline-flex items-center justify-center gap-1.5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.25 1.05l-1.3 1.3a15 15 0 0 0 6.17 6.17l1.3-1.3a1 1 0 0 1 1.05-.25l3.6 1.2a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.7 21 3 14.3 3 6V5Z"/></svg>
-            কল করুন
+        <div class="mt-4 flex flex-col gap-2.5 sm:flex-row">
+          <a href="tel:+8801350141762" class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-emerald-600/25 transition hover:bg-emerald-700 active:scale-[.98]">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2.6a1 1 0 0 1 .95.68l1.2 3.6a1 1 0 0 1-.25 1.05l-1.3 1.3a15 15 0 0 0 6.17 6.17l1.3-1.3a1 1 0 0 1 1.05-.25l3.6 1.2a1 1 0 0 1 .68.95V19a2 2 0 0 1-2 2h-1C9.7 21 3 14.3 3 6V5Z"/></svg>
+            এখনই কল করুন
           </a>
-          <button type="button" id="closeCallNotice" class="flex-1 border border-slate-300 text-slate-600 font-semibold py-3 rounded-xl text-sm">বন্ধ করুন</button>
+          <button type="button" id="closeCallNotice" class="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">বন্ধ করুন</button>
         </div>
         <p class="mt-3 text-center text-[11px] text-slate-500">অর্ডার আইডি: <b class="text-slate-700" id="noticeOrderId">—</b></p>
       </div>
     </div>
 
-    <div id="invoiceBox" class="w-full max-w-lg bg-white rounded-2xl p-6 shadow-2xl">
-      <div class="flex items-start justify-between gap-4 pb-4 border-b border-slate-200">
+    <div id="invoiceBox" class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-7">
+      <div class="print-only mb-4 border-b-2 border-slate-800 pb-3">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-lg font-extrabold leading-tight text-slate-900">eMutation Birth Certificate Application Support</p>
+            <p class="mt-0.5 text-[11px] font-semibold text-slate-600">emb-support.vercel.app</p>
+          </div>
+          <div class="text-right text-[11px] leading-relaxed text-slate-700">
+            <p><b class="text-slate-900">Hotline:</b> 01350141762</p>
+            <p><b class="text-slate-900">Email:</b> nopqrshov337@gmail.com</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <p class="text-[10px] font-bold uppercase tracking-wider text-brand-600">ইনভয়েস</p>
-          <h3 class="mt-1 text-base font-extrabold text-slate-900">eMutation Birth certificate support</h3>
+          <p class="text-xs font-bold uppercase tracking-wider text-brand-600">ইনভয়েস</p>
+          <h3 class="mt-1 text-lg font-extrabold text-slate-900">eMutation Birth certificate support</h3>
         </div>
-        <div class="flex flex-wrap items-center gap-1">
-          <span id="invAgeBadge" class="text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-1 rounded-full">Minor</span>
-          <span class="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-1 rounded-full">যাচাইাধীন</span>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span id="invAgeBadge" class="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-bold text-amber-900 ring-1 ring-amber-200">Minor</span>
+          <span class="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-bold text-amber-700">যাচাইাধীন</span>
         </div>
       </div>
 
-      <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
-        <div><p class="text-xs text-slate-500">অর্ডার আইডি</p><p id="invOrderId" class="font-extrabold text-slate-900 mt-0.5">—</p></div>
-        <div><p class="text-xs text-slate-500">তারিখ</p><p id="invDate" class="font-semibold text-slate-800 mt-0.5">—</p></div>
-        <div><p class="text-xs text-slate-500">আবেদনকারী</p><p id="invCount" class="font-semibold text-slate-800 mt-0.5">—</p></div>
-        <div><p class="text-xs text-slate-500">গ্রহীতার ধরন</p><p id="invAgeCategory" class="font-semibold text-slate-800 mt-0.5">—</p></div>
-        <div class="col-span-2"><p class="text-xs text-slate-500">রিসিভার ইমেইল</p><p id="invEmail" class="font-semibold text-slate-800 mt-0.5 break-all">—</p></div>
-        <div class="col-span-2"><p class="text-xs text-slate-500">বিকাশ সেন্ডার</p><p id="invSender" class="font-semibold text-slate-800 mt-0.5">—</p></div>
+      <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
+        <div><p class="text-xs text-slate-500">অর্ডার আইডি</p><p id="invOrderId" class="mt-0.5 font-extrabold text-slate-900 break-all">—</p></div>
+        <div><p class="text-xs text-slate-500">তারিখ</p><p id="invDate" class="mt-0.5 font-semibold text-slate-800">—</p></div>
+        <div><p class="text-xs text-slate-500">আবেদনকারী</p><p id="invCount" class="mt-0.5 font-semibold text-slate-800">—</p></div>
+        <div><p class="text-xs text-slate-500">গ্রহীতার ধরন</p><p id="invAgeCategory" class="mt-0.5 font-semibold text-slate-800">—</p></div>
+        <div class="col-span-2"><p class="text-xs text-slate-500">রিসিভার ইমেইল</p><p id="invEmail" class="mt-0.5 break-all font-semibold text-slate-800">—</p></div>
+        <div class="col-span-2"><p class="text-xs text-slate-500">বিকাশ পেমেন্ট নম্বর</p><p id="invSender" class="mt-0.5 font-semibold text-slate-800">—</p></div>
       </div>
 
-      <div class="mt-4 rounded-xl bg-slate-50 p-3">
-        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">আবেদনকারী তালিকা</p>
-        <ul id="invApplicants" class="mt-2 space-y-2 text-sm"></ul>
+      <div id="invDemoWrap" class="mt-3 hidden rounded-xl border border-brand-200 bg-brand-50 px-4 py-2.5 text-xs font-semibold text-brand-800">একক গ্রাহিতা এবং প্রতিনিধির মাধ্যমে আবেদন — আমাদের টিম Account Holder / প্রতিনিধির তথ্য remove করে Birth Certificate এর গ্রাহকের তথ্য add করবে।</div>
+      <div id="invRepWrap" class="mt-3 hidden rounded-xl border border-brand-200 bg-brand-50 px-4 py-2.5 text-xs font-semibold text-brand-800">প্রতিনিধির মাধ্যমে আবেদন — আমাদের টিম প্রতিনিধির তথ্য remove করে দিবে।</div>
+
+      <div class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-500">আবেদনকারীর তালিকা</p>
+        <ul id="invApplicants" class="mt-3 space-y-3 text-sm text-slate-700"></ul>
       </div>
 
-      <div class="mt-4 flex items-center justify-between bg-brand-50 rounded-xl px-4 py-3">
-        <span class="text-sm font-bold text-brand-800">মোট</span>
+      <div class="mt-5 flex items-center justify-between rounded-xl bg-brand-50 px-4 py-3.5">
+        <span class="text-sm font-bold text-brand-800">মোট পরিশোধিত</span>
         <span id="invTotal" class="text-xl font-extrabold text-brand-900">৳ ০</span>
       </div>
 
-      <p class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800 leading-relaxed">অর্ডার জমা হয়েছে। পেমেন্ট যাচাইয়ের পর কাজের সময়ের (১০AM – ১০PM) মধ্যে <b>land.gov.bd</b> অ্যাকাউন্টে আবেদন তৈরি করে দেওয়া হবে। অর্ডার আইডি সংরক্ষণ করুন।</p>
+      <p class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-800">আপনার অর্ডার সফলভাবে জমা হয়েছে। পেমেন্ট যাচাইয়ের পর <b>কাজের সময়ের (সকাল ১০টা – রাত ১০টা)</b> মধ্যে আপনার land.gov.bd অ্যাকাউন্টে আবেদন যোগ করে খসড়া সংরক্ষণ করে দেওয়া হবে। অর্ডার আইডি সংরক্ষণ করুন। প্রদত্ত তথ্য ভুল হলে <b>৩০ মিনিটের মধ্যে</b> সাপোর্ট চ্যাটে সংশোধনের অনুরোধ করুন।</p>
 
-      <div class="mt-4 flex gap-2">
-        <button type="button" onclick="window.print()" class="flex-1 border border-slate-300 text-slate-700 font-semibold py-2.5 rounded-xl text-sm">প্রিন্ট</button>
-        <button type="button" id="closeInvoice" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl text-sm">ঠিক আছে</button>
+      <div class="no-print mt-6 flex flex-col gap-3 sm:flex-row">
+        <button type="button" id="printInvoice" class="btn-ghost flex-1">প্রিন্ট / সেভ করুন</button>
+        <button type="button" id="closeInvoice" class="btn-primary flex-1">ঠিক আছে</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MY ORDERS MODAL -->
 <div id="myOrdersModal" class="fixed inset-0 z-[60] hidden bg-slate-900/70 backdrop-blur-sm items-center justify-center p-4">
   <div class="bg-white rounded-3xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
     <div class="flex items-center justify-between mb-4">
@@ -534,7 +524,6 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast" class="toast"></div>
 
 <script type="module">
@@ -567,7 +556,6 @@ const BN_TO_EN = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','�
 const toEnDigits = s => String(s ?? '').replace(/[০-৯]/g, d => BN_TO_EN[d]);
 const digitsOnly = s => toEnDigits(s).replace(/\D/g, '');
 
-// ═══ STATE ═══
 const state = {
   step: 1,
   ageCategory: 'minor',
@@ -603,7 +591,6 @@ function showToast(msg, type='info') {
   setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-// NAVIGATION
 function goStep(n) {
   if (n > state.step) {
     if (!validateStep(state.step)) return;
@@ -679,7 +666,6 @@ function validateStep(s) {
   return true;
 }
 
-// AGE CATEGORY
 $$('.sel-card[data-agecat]').forEach(card => {
   card.addEventListener('click', () => {
     $$('.sel-card[data-agecat]').forEach(c => { c.classList.remove('selected'); c.querySelector('.agecat-check').classList.add('hidden'); });
@@ -691,7 +677,6 @@ $$('.sel-card[data-agecat]').forEach(card => {
   });
 });
 
-// COUNT
 function updateCountUI() {
   $('#countDisplay').textContent = toBn(state.count);
   const total = getTotal(state.count);
@@ -748,7 +733,6 @@ $('#addApplicantBtn').addEventListener('click', () => {
 $('#singleApplicantDemo')?.addEventListener('change', saveDraft);
 $('#representativeDemo')?.addEventListener('change', saveDraft);
 
-// APPLICANTS
 function snapshotApplicants() {
   const list = [];
   $$('.applicant-card').forEach(card => {
@@ -1002,7 +986,6 @@ function showTrustInfo() {
 }
 window.showTrustInfo = showTrustInfo;
 
-// REVIEW
 function renderReview() {
   const body = $('#reviewBody');
   if (!body) return;
@@ -1036,7 +1019,6 @@ function renderReview() {
   body.innerHTML = html;
 }
 
-// UPLOAD
 function uploadToCloudinary(file, onProgress) {
   return new Promise((resolve, reject) => {
     const fd = new FormData();
@@ -1055,7 +1037,6 @@ function uploadToCloudinary(file, onProgress) {
   });
 }
 
-// SUBMIT
 $('#submitBtn').addEventListener('click', async () => {
   const sender = digitsOnly($('#senderNumber').value);
   const senderInp = $('#senderNumber');
@@ -1160,19 +1141,18 @@ $('#submitBtn').addEventListener('click', async () => {
 
     await addDoc(collection(db, 'orders'), payload);
 
-    if ($('#saveProfileCheck')?.checked) {
-      try {
-        localStorage.setItem('em_saved_profile', JSON.stringify({ landNumber: landAccountNumber, receiverEmail }));
-      } catch {}
-    }
-
     try {
       const myOrders = JSON.parse(localStorage.getItem('em_my_orders') || '[]');
       myOrders.unshift({ orderId, createdAt: Date.now(), amount: total, applicantCount: state.count, name: applicants[0]?.name || '—', status: 'pending' });
       localStorage.setItem('em_my_orders', JSON.stringify(myOrders.slice(0, 20)));
     } catch {}
 
-    renderInvoice({ orderId, amount: total, applicantCount: state.count, receiverEmail, sender, applicants, draftNumber });
+    renderInvoice({
+      orderId, amount: total, applicantCount: state.count,
+      receiverEmail, sender, applicants, draftNumber,
+      usedDemoInfo, usedRepresentativeInfo
+    });
+    document.body.classList.add('invoice-open');
     $('#invoiceModal').classList.remove('hidden');
 
     try { localStorage.removeItem('em_draft_v2'); } catch {}
@@ -1202,32 +1182,39 @@ function renderInvoice(data) {
   const badge = $('#invAgeBadge');
   if (isMinor) {
     badge.textContent = 'Minor (অপ্রাপ্তবয়স্ক)';
-    badge.className = 'text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-1 rounded-full';
+    badge.className = 'rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-bold text-amber-900 ring-1 ring-amber-200';
   } else {
     badge.textContent = 'Adult (প্রাপ্তবয়স্ক)';
-    badge.className = 'text-[10px] font-bold bg-brand-100 text-brand-700 px-2 py-1 rounded-full';
+    badge.className = 'rounded-full bg-brand-100 px-2.5 py-1 text-[10px] font-bold text-brand-700';
   }
 
   const idLabel = isMinor ? 'জন্ম নিবন্ধন নম্বর' : 'জাতীয় পরিচয়পত্র / NID';
   const minorBadge = isMinor ? '<span class="text-[9px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded-full ml-1">(NID ব্যতীত)</span>' : '';
 
   $('#invApplicants').innerHTML = data.applicants.map((a, i) => `
-    <li class="flex items-start gap-2">
-      <span class="w-6 h-6 bg-brand-100 text-brand-700 rounded-full grid place-items-center text-[10px] font-bold shrink-0">${toBn(i+1)}</span>
+    <li class="flex items-start gap-2.5 pb-2.5 border-b border-slate-200 last:border-0 last:pb-0">
+      <span class="w-6 h-6 bg-brand-600 text-white rounded-full grid place-items-center text-[10px] font-bold shrink-0 mt-0.5">${toBn(i+1)}</span>
       <div class="min-w-0 flex-1">
-        <p class="font-bold text-slate-900 text-xs">${escapeHtml(a.name)}${minorBadge}</p>
-        <p class="text-[11px] text-slate-600 mt-0.5">${idLabel}: ${escapeHtml(a.certNo || '—')}</p>
-        <p class="text-[10px] text-slate-500">${escapeHtml(a.division || '')} · ${escapeHtml(a.district || '')}</p>
+        <p class="font-bold text-slate-900 text-xs">${escapeHtml(a.name || '—')}${minorBadge}</p>
+        <p class="text-[11px] text-slate-700 mt-0.5">${idLabel}: <b>${escapeHtml(a.certNo || '—')}</b></p>
+        <p class="text-[10px] text-slate-500 mt-0.5">জন্ম তারিখ: ${escapeHtml(a.birthDate || '—')}</p>
+        <p class="text-[10px] text-slate-500">${escapeHtml(a.division || '')} · ${escapeHtml(a.district || '')} · ${escapeHtml(a.upazila || '')}</p>
+        ${a.relationship ? `<p class="text-[10px] text-brand-700 font-semibold mt-0.5">সম্পর্ক: ${escapeHtml(a.relationship)}</p>` : ''}
       </div>
     </li>
   `).join('');
+
+  $('#invDemoWrap').classList.toggle('hidden', !data.usedDemoInfo);
+  $('#invRepWrap').classList.toggle('hidden', !data.usedRepresentativeInfo);
 }
 
 $('#closeInvoice').addEventListener('click', () => {
+  document.body.classList.remove('invoice-open');
   $('#invoiceModal').classList.add('hidden');
   resetAll();
 });
 $('#closeCallNotice').addEventListener('click', () => $('#callNotice').classList.add('hidden'));
+$('#printInvoice').addEventListener('click', () => window.print());
 
 function resetAll() {
   state.step = 1;
@@ -1244,12 +1231,12 @@ function resetAll() {
   $('#landNumber-err').classList.remove('show'); $('#receiverEmail-err').classList.remove('show');
   const singleCb = $('#singleApplicantDemo'); if (singleCb) singleCb.checked = false;
   const repCb = $('#representativeDemo'); if (repCb) repCb.checked = false;
+  $('#callNotice').classList.remove('hidden');
   updateCountUI();
   renderApplicants();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// SAVE/LOAD DRAFT
 function saveDraft() {
   try {
     const snap = snapshotApplicants();
@@ -1305,28 +1292,6 @@ function loadDraft() {
   } catch { return false; }
 }
 
-// SAVED PROFILE
-function loadSavedProfile() {
-  try {
-    const p = JSON.parse(localStorage.getItem('em_saved_profile') || 'null');
-    if (p && p.landNumber) {
-      $('#savedProfileCard').classList.remove('hidden');
-      $('#savedName').textContent = `${p.landNumber} · ${p.receiverEmail || ''}`;
-    }
-  } catch {}
-}
-$('#loadSavedBtn')?.addEventListener('click', () => {
-  try {
-    const p = JSON.parse(localStorage.getItem('em_saved_profile') || 'null');
-    if (p) {
-      $('#landNumber').value = p.landNumber || '';
-      $('#receiverEmail').value = p.receiverEmail || '';
-      showToast('অ্যাকাউন্ট লোড হয়েছে', 'ok');
-    }
-  } catch {}
-});
-
-// MY ORDERS
 function showMyOrders() {
   const modal = $('#myOrdersModal');
   const list = $('#myOrdersList');
@@ -1357,7 +1322,6 @@ function showMyOrders() {
 $('#myOrdersTopLink')?.addEventListener('click', e => { e.preventDefault(); showMyOrders(); });
 $('#closeMyOrders')?.addEventListener('click', () => { $('#myOrdersModal').classList.add('hidden'); $('#myOrdersModal').classList.remove('flex'); });
 
-// DYNAMIC PRICE
 async function fetchDynamicPrice() {
   try {
     const legacy = await getDoc(LEGACY_SETTINGS_REF);
@@ -1370,14 +1334,28 @@ async function fetchDynamicPrice() {
       }
     }
   } catch (e) { console.warn(e); }
-
   updateCountUI();
   if (state.step === 4) renderReview();
 }
 
-// CHAT
-const CHAT_KEY = 'em_chat_id_v2';
-const TAG_KEY = 'em_chat_tag_v2';
+// ═══════════════════════════════════════════════
+// CHAT SYSTEM — SHARED WITH index.html
+// ═══════════════════════════════════════════════
+const CHAT_KEY = 'em_chat_id';
+const TAG_KEY  = 'em_chat_tag';
+
+// Migration: v2 keys (from older application.html) → shared keys
+try {
+  const v2Id = localStorage.getItem('em_chat_id_v2');
+  const v2Tag = localStorage.getItem('em_chat_tag_v2');
+  if (v2Id && !localStorage.getItem('em_chat_id')) {
+    localStorage.setItem('em_chat_id', v2Id);
+    if (v2Tag) localStorage.setItem('em_chat_tag', v2Tag);
+  }
+  localStorage.removeItem('em_chat_id_v2');
+  localStorage.removeItem('em_chat_tag_v2');
+} catch {}
+
 let chatId = localStorage.getItem(CHAT_KEY);
 let chatTag = localStorage.getItem(TAG_KEY);
 let chatUnsub = null;
@@ -1385,33 +1363,41 @@ let chatOpen = false;
 if (!chatTag) { chatTag = 'C-' + Math.random().toString(36).slice(2, 6).toUpperCase(); localStorage.setItem(TAG_KEY, chatTag); }
 
 async function ensureChat() {
-  if (chatId) { try { const s = await getDoc(doc(db, 'chats', chatId)); if (s.exists()) return chatId; } catch {} }
+  if (chatId) {
+    try {
+      const s = await getDoc(doc(db, 'chats', chatId));
+      if (s.exists()) return chatId;
+    } catch {}
+  }
   const ref = await addDoc(collection(db, 'chats'), {
     tag: chatTag, clientName: 'ক্লায়েন্ট ' + chatTag,
     createdAt: serverTimestamp(), lastMessage: 'চ্যাট শুরু হয়েছে',
     lastMessageAt: serverTimestamp(), unreadForAdmin: 0, unreadForClient: 0
   });
-  chatId = ref.id; localStorage.setItem(CHAT_KEY, chatId);
+  chatId = ref.id;
+  localStorage.setItem(CHAT_KEY, chatId);
   return chatId;
 }
 
 function renderChatMessages(msgs) {
   const body = $('#chatBody');
   if (!msgs.length) {
-    body.innerHTML = `<div class="flex h-full flex-col items-center justify-center text-center px-4">
-      <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-full grid place-items-center">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/></svg>
-      </div>
-      <p class="mt-2 text-sm font-bold text-slate-700">স্বাগতম</p>
-      <p class="text-xs text-slate-500 mt-1">আপনার প্রশ্ন লিখুন</p>
+    body.innerHTML = `<div class="flex h-full flex-col items-center justify-center px-6 text-center">
+      <span class="grid h-12 w-12 place-items-center rounded-full bg-brand-50 text-brand-600">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/></svg>
+      </span>
+      <p class="mt-3 text-sm font-bold text-slate-700">স্বাগতম!</p>
+      <p class="mt-1 text-xs leading-relaxed text-slate-500">আপনার যেকোনো প্রশ্ন বা সমস্যা লিখুন।</p>
     </div>`;
     return;
   }
   body.innerHTML = msgs.map(m => {
     const mine = m.sender === 'client';
-    const img = m.imageUrl ? `<a href="${escapeHtml(m.imageUrl)}" target="_blank"><img src="${escapeHtml(m.imageUrl)}" class="mb-1 max-h-48 w-full rounded-lg object-cover" /></a>` : '';
-    const txt = m.text ? `<p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>` : '';
-    return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm ${mine ? 'bg-brand-600 text-white' : 'bg-white border border-slate-200 text-slate-800'}">${img}${txt}</div></div>`;
+    const imageHtml = m.imageUrl
+      ? `<a href="${escapeHtml(m.imageUrl)}" target="_blank" rel="noopener" class="block"><img src="${escapeHtml(m.imageUrl)}" alt="attachment" loading="lazy" decoding="async" class="mb-1 max-h-48 w-full rounded-lg object-cover" /></a>`
+      : '';
+    const textHtml = m.text ? `<p class="whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>` : '';
+    return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm ${mine ? 'rounded-br-sm bg-brand-600 text-white' : 'rounded-bl-sm border border-slate-200 bg-white text-slate-800'}">${imageHtml}${textHtml}<p class="mt-1 text-[10px] ${mine ? 'text-brand-100' : 'text-slate-400'}">${fmtDate(m.createdAt)}</p></div></div>`;
   }).join('');
   body.scrollTop = body.scrollHeight;
 }
@@ -1478,9 +1464,7 @@ async function initChatBadge() {
   } catch {}
 }
 
-// INIT
 loadDraft();
-loadSavedProfile();
 updateCountUI();
 renderApplicants();
 fetchDynamicPrice();
@@ -1498,7 +1482,6 @@ window.copyBkash = function() {
 
 </script>
 
-<!-- Visitor tracking -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
