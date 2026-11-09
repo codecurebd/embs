@@ -1289,5 +1289,78 @@ window.addEventListener('resize', () => {
   }
 });
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = { /* একই config */ };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const VISITOR_KEY = 'emb_vid';
+const SESSION_KEY = 'emb_sid';
+let visitorId = localStorage.getItem(VISITOR_KEY);
+let isNew = false;
+if (!visitorId) {
+  visitorId = 'v_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+  localStorage.setItem(VISITOR_KEY, visitorId);
+  isNew = true;
+}
+let sessionId = sessionStorage.getItem(SESSION_KEY);
+if (!sessionId) {
+  sessionId = 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+  sessionStorage.setItem(SESSION_KEY, sessionId);
+}
+
+function getDevice() {
+  const ua = navigator.userAgent;
+  if (/Tablet|iPad/i.test(ua)) return 'tablet';
+  if (/Mobile|Android|iPhone|iPod/i.test(ua)) return 'mobile';
+  return 'desktop';
+}
+function getBrowser() {
+  const ua = navigator.userAgent;
+  if (/Edg\//i.test(ua)) return 'Edge';
+  if (/OPR\//i.test(ua)) return 'Opera';
+  if (/Chrome\//i.test(ua)) return 'Chrome';
+  if (/Firefox\//i.test(ua)) return 'Firefox';
+  if (/Safari\//i.test(ua)) return 'Safari';
+  return 'Other';
+}
+function getOS() {
+  const ua = navigator.userAgent;
+  if (/Windows/i.test(ua)) return 'Windows';
+  if (/Mac OS/i.test(ua)) return 'macOS';
+  if (/Android/i.test(ua)) return 'Android';
+  if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS';
+  if (/Linux/i.test(ua)) return 'Linux';
+  return 'Other';
+}
+
+async function trackVisit() {
+  try {
+    await addDoc(collection(db, 'visitors'), {
+      visitorId, sessionId,
+      page: window.location.pathname,
+      fullUrl: window.location.href,
+      title: document.title,
+      referrer: document.referrer || 'direct',
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      screen: `${screen.width}x${screen.height}`,
+      viewport: `${innerWidth}x${innerHeight}`,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      isNewVisitor: isNew,
+      device: getDevice(),
+      browser: getBrowser(),
+      os: getOS(),
+      visitedAt: serverTimestamp(),
+    });
+  } catch (e) { console.warn('Visit tracking failed:', e); }
+}
+trackVisit();
+</script>
+
 </body>
 </html>
