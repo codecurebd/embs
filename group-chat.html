@@ -4,7 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Group Chat — eMutation Community</title>
-<meta name="robots" content="noindex, nofollow" />
+<meta name="description" content="eMutation কমিউনিটির গ্রুপ চ্যাট — সবাই একসাথে আলোচনা করুন।" />
+<meta name="robots" content="index, follow" />
 <meta name="theme-color" content="#1d51f5" />
 <link rel="icon" type="image/png" href="logo.png" />
 
@@ -66,23 +67,12 @@ tailwind.config = {
   .emoji-btn { transition: transform 0.15s ease, background-color 0.15s ease; }
   .emoji-btn:hover { transform: scale(1.2); background: rgba(99, 102, 241, 0.1); }
 
-  /* ═══ MESSAGE ACTIONS — DESKTOP HOVER, MOBILE ALWAYS VISIBLE ═══ */
-  .msg-actions {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.15s ease;
-  }
+  .msg-actions { opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.15s ease; }
   @media (hover: hover) {
-    .msg-container:hover .msg-actions {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .msg-container:hover .msg-actions { opacity: 1; pointer-events: auto; }
   }
   @media (hover: none) {
-    .msg-actions {
-      opacity: 0.85;
-      pointer-events: auto;
-    }
+    .msg-actions { opacity: 0.85; pointer-events: auto; }
   }
 
   body, body * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease; }
@@ -123,44 +113,19 @@ tailwind.config = {
   }
   .locked-chat-pulse { animation: pulseWarning 2s ease-in-out infinite; }
 
-  /* ═══ REACTION PICKER POPUP ═══ */
   @keyframes reactIn { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
   .reaction-picker-pop { animation: reactIn 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
 
-  /* ═══ IMAGE VIEWER ═══ */
   @keyframes viewerIn { 0% { opacity: 0; } 100% { opacity: 1; } }
   .viewer-in { animation: viewerIn 0.2s ease-out; }
 
-  /* ═══ EDIT MODE ═══ */
-  .edit-textarea {
-    width: 100%;
-    background: transparent;
-    outline: none;
-    resize: none;
-    border: none;
-    color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: 1.5;
-  }
-  .edit-textarea.own { color: white; }
-  .edit-textarea.other { color: inherit; }
-
-  /* Edited badge */
-  .edited-badge {
-    font-size: 9px;
-    opacity: 0.7;
-    font-weight: 600;
-    margin-left: 4px;
-  }
+  .edited-badge { font-size: 9px; opacity: 0.7; font-weight: 600; margin-left: 4px; }
 </style>
 </head>
 
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased">
 
-<!-- ═══════════════════════════════════════════════
-     SETUP SCREEN
-═══════════════════════════════════════════════ -->
+<!-- ═══ SETUP SCREEN ═══ -->
 <div id="setupScreen" class="setup-bg fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" style="display: none;">
   <div class="setup-blob w-72 h-72 bg-pink-400 -top-20 -left-20 blob-float"></div>
   <div class="setup-blob w-80 h-80 bg-blue-400 -bottom-32 -right-20 blob-float" style="animation-delay: 2s"></div>
@@ -205,9 +170,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     MAIN CHAT
-═══════════════════════════════════════════════ -->
+<!-- ═══ MAIN CHAT ═══ -->
 <div id="chatScreen" class="hidden h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
 
   <!-- HEADER -->
@@ -248,9 +211,6 @@ tailwind.config = {
         <svg class="sun-icon w-5 h-5 text-slate-600 dark:text-slate-300 dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2M5.6 5.6l1.4 1.4m10 10l1.4 1.4M3 12h2m14 0h2M5.6 18.4l1.4-1.4m10-10l1.4-1.4M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
         <svg class="moon-icon hidden dark:block w-5 h-5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
-      <button type="button" id="adminBtn" class="hidden sm:block p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Admin">
-        <svg class="w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      </button>
 
       <div class="relative">
         <button type="button" id="profileBtn" class="ml-1 w-9 h-9 rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-slate-800 transition hover:scale-105">
@@ -267,10 +227,6 @@ tailwind.config = {
           <button type="button" id="changeNicknameBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition text-left">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             নাম পরিবর্তন
-          </button>
-          <button type="button" id="exportChatBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition text-left">
-            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-            চ্যাট এক্সপোর্ট
           </button>
           <button type="button" id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition text-left border-t border-slate-200 dark:border-slate-700">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -318,9 +274,6 @@ tailwind.config = {
           <p class="text-[10px] font-extrabold text-brand-700 dark:text-brand-300 uppercase tracking-wider">📢 Announcement</p>
           <p id="announcementText" class="text-xs font-semibold text-slate-800 dark:text-slate-200 mt-0.5"></p>
         </div>
-        <button type="button" id="dismissAnnouncement" class="hidden p-1 rounded hover:bg-brand-100 dark:hover:bg-brand-900/50 shrink-0">
-          <svg class="w-4 h-4 text-brand-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
       </div>
 
       <!-- LOCKED -->
@@ -335,9 +288,6 @@ tailwind.config = {
         <button type="button" id="pinnedBannerClick" class="min-w-0 flex-1 text-left">
           <p class="text-[10px] font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider">Pinned message</p>
           <p id="pinnedBannerText" class="text-xs font-semibold text-amber-900 dark:text-amber-100 truncate">—</p>
-        </button>
-        <button type="button" id="unpinBtn" class="hidden p-1 rounded-lg hover:bg-amber-200 dark:hover:bg-amber-900/50 transition" title="Unpin">
-          <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
@@ -376,13 +326,6 @@ tailwind.config = {
           <button type="button" id="cancelReply" class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
-        </div>
-
-        <div id="adminModeBar" class="hidden mb-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-950/40 dark:to-amber-900/40 px-3 py-2 border border-amber-300 dark:border-amber-700">
-          <svg class="w-4 h-4 text-amber-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-          <p class="text-xs font-bold text-amber-800 dark:text-amber-200 flex-1">Admin mode ON</p>
-          <button type="button" id="adminPanelBtn" class="px-2 py-1 rounded-md bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold transition">Controls</button>
-          <button type="button" id="exitAdminBtn" class="text-xs font-bold text-amber-700 dark:text-amber-300 underline">Exit</button>
         </div>
 
         <div id="imagePreview" class="hidden mb-2 relative inline-block">
@@ -428,7 +371,7 @@ tailwind.config = {
   <div id="emojiGrid" class="p-2 grid grid-cols-8 gap-1 max-h-64 overflow-y-auto scroll-slim"></div>
 </div>
 
-<!-- ═══ REACTION PICKER (floating) ═══ -->
+<!-- ═══ REACTION PICKER ═══ -->
 <div id="reactionPicker" class="hidden fixed z-[65] bg-white dark:bg-slate-800 rounded-full shadow-2xl border-2 border-slate-200 dark:border-slate-700 px-2 py-1.5 flex gap-0.5 reaction-picker-pop">
   <button type="button" data-react-pick="👍" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">👍</button>
   <button type="button" data-react-pick="❤️" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">❤️</button>
@@ -438,7 +381,7 @@ tailwind.config = {
   <button type="button" data-react-pick="🔥" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">🔥</button>
 </div>
 
-<!-- ═══ CUSTOM IMAGE VIEWER ═══ -->
+<!-- ═══ IMAGE VIEWER ═══ -->
 <div id="imageViewer" class="hidden fixed inset-0 z-[75] bg-black/95 flex flex-col viewer-in">
   <div class="shrink-0 flex items-center justify-between gap-2 p-3 bg-gradient-to-b from-black/60 to-transparent">
     <button type="button" id="viewerClose" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition active:scale-95">
@@ -505,15 +448,12 @@ tailwind.config = {
           <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>Online</span>
         </div>
       </div>
-      <div class="mt-5 flex gap-2">
-        <button type="button" id="profileModalBanBtn" class="hidden flex-1 rounded-xl bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 py-2.5 text-sm font-bold text-rose-700 dark:text-rose-400 transition">Ban User</button>
-        <button type="button" id="closeProfileBtn" class="flex-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2.5 text-sm font-bold transition">বন্ধ করুন</button>
-      </div>
+      <button type="button" id="closeProfileBtn" class="mt-5 w-full rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2.5 text-sm font-bold transition">বন্ধ করুন</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ ACTION MENU ═══ -->
+<!-- ═══ ACTION MENU (user-only: copy/reply/forward) ═══ -->
 <div id="actionMenu" class="hidden fixed z-[60] bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 py-1 min-w-[170px]">
   <button type="button" data-action="copy" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 012-2h9a2 2 0 012 2v9a2 2 0 01-2 2h-2M5 8h9a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2z"/></svg>Copy text
@@ -524,130 +464,6 @@ tailwind.config = {
   <button type="button" data-action="forward" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6-6m6 6l-6 6"/></svg>Forward
   </button>
-  <button type="button" data-action="edit" class="hidden w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left border-t border-slate-100 dark:border-slate-700">
-    <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Edit
-  </button>
-  <button type="button" data-action="pin" class="hidden w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
-    <svg class="w-3.5 h-3.5 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Pin
-  </button>
-  <button type="button" data-action="delete" class="hidden w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition text-left border-t border-slate-100 dark:border-slate-700">
-    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Delete
-  </button>
-</div>
-
-<!-- ═══ ADMIN PANEL ═══ -->
-<div id="adminPanel" class="hidden fixed inset-0 z-[70] bg-slate-900/70 backdrop-blur-sm items-center justify-center p-2 sm:p-4">
-  <div class="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]">
-    <div class="shrink-0 flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white">
-      <div class="flex items-center gap-2 min-w-0">
-        <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-        <div class="min-w-0"><h2 class="text-base font-extrabold truncate">Admin Control Panel</h2><p class="text-[10px] text-amber-100">Full group management</p></div>
-      </div>
-      <button type="button" id="closeAdminPanelBtn" class="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition shrink-0">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-    </div>
-
-    <div class="shrink-0 flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 overflow-x-auto no-scrollbar">
-      <button type="button" data-tab="overview" class="admin-tab flex-1 min-w-fit px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition whitespace-nowrap">📊 Overview</button>
-      <button type="button" data-tab="moderation" class="admin-tab flex-1 min-w-fit px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition whitespace-nowrap">🛡️ Moderation</button>
-      <button type="button" data-tab="danger" class="admin-tab flex-1 min-w-fit px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition whitespace-nowrap">⚠️ Danger</button>
-    </div>
-
-    <div class="flex-1 overflow-y-auto scroll-slim p-4">
-      <div data-tab-content="overview" class="space-y-4">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <div class="rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Messages</p><p id="adminStatMessages" class="text-2xl font-extrabold mt-0.5">0</p></div>
-          <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Online</p><p id="adminStatOnline" class="text-2xl font-extrabold mt-0.5">0</p></div>
-          <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Pins</p><p id="adminStatPins" class="text-2xl font-extrabold mt-0.5">0</p></div>
-          <div class="rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Banned</p><p id="adminStatBanned" class="text-2xl font-extrabold mt-0.5">0</p></div>
-        </div>
-
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-          <h3 class="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3">Chat Settings</h3>
-          <div class="space-y-2">
-            <div class="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-              <div class="min-w-0 flex-1"><p class="text-xs font-bold">Chat Lock</p><p class="text-[10px] text-slate-500">শুধু admin message পাঠাতে পারবে</p></div>
-              <label class="relative inline-flex items-center cursor-pointer shrink-0">
-                <input type="checkbox" id="toggleLockChat" class="sr-only peer" />
-                <div class="w-11 h-6 bg-slate-300 dark:bg-slate-600 peer-checked:bg-amber-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-              </label>
-            </div>
-            <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-              <div class="flex items-center justify-between gap-3 mb-2"><div class="min-w-0 flex-1"><p class="text-xs font-bold">Slow Mode</p><p class="text-[10px] text-slate-500">মেসেজ পাঠানোর মাঝে বিরতি</p></div></div>
-              <select id="slowModeSelect" class="w-full text-xs font-bold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2">
-                <option value="0">Off — কোনো সীমা নেই</option>
-                <option value="5">৫ সেকেন্ড</option>
-                <option value="10">১০ সেকেন্ড</option>
-                <option value="30">৩০ সেকেন্ড</option>
-                <option value="60">১ মিনিট</option>
-              </select>
-            </div>
-            <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-              <label class="block text-xs font-bold mb-2">📢 Announcement (সবাই দেখবে)</label>
-              <textarea id="announcementInput" rows="2" maxlength="200" placeholder="গ্রুপের সবাইকে কিছু জানাতে চান?" class="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 outline-none focus:border-brand-500 resize-none"></textarea>
-              <div class="flex gap-2 mt-2">
-                <button type="button" id="saveAnnouncementBtn" class="flex-1 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold py-2 transition">Save</button>
-                <button type="button" id="clearAnnouncementBtn" class="rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 text-xs font-bold px-3 py-2 transition">Clear</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div data-tab-content="moderation" class="hidden space-y-4">
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">🚫 Banned Users</h3>
-            <span id="bannedCount" class="text-[10px] font-bold bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 px-2 py-0.5 rounded-full">0</span>
-          </div>
-          <div id="bannedList" class="space-y-1.5 max-h-64 overflow-y-auto scroll-slim"><p class="text-xs text-slate-500 text-center py-4">কোনো banned user নেই</p></div>
-        </div>
-        <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-          <h3 class="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">🟢 Online Users</h3>
-          <div id="adminOnlineList" class="space-y-1.5 max-h-64 overflow-y-auto scroll-slim"><p class="text-xs text-slate-500 text-center py-4">কেউ online নেই</p></div>
-        </div>
-      </div>
-
-      <div data-tab-content="danger" class="hidden space-y-3">
-        <div class="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-3"><p class="text-xs font-bold text-rose-700 dark:text-rose-400 mb-2">⚠️ এই অপশনগুলো ব্যবহারে সতর্ক থাকুন</p></div>
-        <button type="button" id="clearPinsBtn" class="w-full rounded-xl bg-amber-100 dark:bg-amber-950/40 hover:bg-amber-200 dark:hover:bg-amber-900/60 border border-amber-300 dark:border-amber-800 p-3 text-left transition"><p class="text-sm font-extrabold text-amber-800 dark:text-amber-300">📌 Clear all pins</p><p class="text-[11px] text-amber-700 dark:text-amber-400">সব pinned message সরানো হবে</p></button>
-        <button type="button" id="clearTypingBtn" class="w-full rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 p-3 text-left transition"><p class="text-sm font-extrabold text-slate-800 dark:text-slate-200">⌨️ Clear typing indicators</p><p class="text-[11px] text-slate-600 dark:text-slate-400">সব "typing..." স্ট্যাটাস রিসেট</p></button>
-        <button type="button" id="clearAllMessagesBtn" class="w-full rounded-xl bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 border border-rose-300 dark:border-rose-800 p-3 text-left transition"><p class="text-sm font-extrabold text-rose-800 dark:text-rose-300">🗑️ Clear all messages</p><p class="text-[11px] text-rose-700 dark:text-rose-400">সব মেসেজ স্থায়ীভাবে মুছে যাবে</p></button>
-        <button type="button" id="deleteChatBtn" class="w-full rounded-xl bg-rose-600 hover:bg-rose-700 border border-rose-700 p-3 text-left transition"><p class="text-sm font-extrabold text-white">💥 Delete entire chat</p><p class="text-[11px] text-rose-100">সব ডিলিট। নতুন করে শুরু হবে।</p></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ ADMIN LOGIN ═══ -->
-<div id="adminModal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-  <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-700 p-6">
-    <div class="text-center">
-      <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg mb-3"><svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></div>
-      <h3 class="text-lg font-extrabold">Admin Login</h3>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">শুধুমাত্র অনুমোদিত অ্যাডমিন</p>
-    </div>
-    <button type="button" id="googleAdminLogin" class="mt-5 w-full flex items-center justify-center gap-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 px-4 py-3 text-sm font-bold transition">
-      <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.2-.1-2.3-.1-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.4C29.4 34.7 26.9 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.3 5.4c-.4.4 6.6-4.8 6.6-15.1 0-1.2-.1-2.3-.4-3.5z"/></svg>
-      Google দিয়ে লগইন
-    </button>
-    <button type="button" id="closeAdminModal" class="mt-3 w-full text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 py-2">বাতিল</button>
-  </div>
-</div>
-
-<!-- ═══ CONFIRM MODAL ═══ -->
-<div id="confirmModal" class="hidden fixed inset-0 z-[80] bg-slate-900/70 backdrop-blur-sm items-center justify-center p-4">
-  <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-700 p-6">
-    <div class="flex items-start gap-3 mb-4">
-      <div class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/40 grid place-items-center shrink-0"><svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></div>
-      <div class="min-w-0 flex-1"><h3 id="confirmTitle" class="text-sm font-extrabold">Are you sure?</h3><p id="confirmMessage" class="text-xs text-slate-600 dark:text-slate-400 mt-1">This action cannot be undone.</p></div>
-    </div>
-    <div class="flex gap-2">
-      <button type="button" id="confirmCancel" class="flex-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2.5 text-sm font-bold transition">Cancel</button>
-      <button type="button" id="confirmOk" class="flex-1 rounded-xl bg-rose-600 hover:bg-rose-700 text-white py-2.5 text-sm font-bold transition">Confirm</button>
-    </div>
-  </div>
 </div>
 
 <!-- ═══ TOAST ═══ -->
@@ -659,9 +475,8 @@ tailwind.config = {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
   getFirestore, collection, addDoc, doc, setDoc, deleteDoc, onSnapshot, updateDoc,
-  query, orderBy, limit, serverTimestamp, getDocs, getDoc, writeBatch
+  query, orderBy, limit, serverTimestamp, getDoc, getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDbNC1ZD67zcwpLHZL3WB41dE_z8WmjbK8",
@@ -673,9 +488,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-const ALLOWED_ADMIN = 'nopqrshov337@gmail.com';
 const CHAT_ID = 'main';
 const CLOUDINARY_CLOUD_NAME = 'zmoyykj7';
 const CLOUDINARY_UPLOAD_PRESET = 'codecurebd';
@@ -694,8 +507,9 @@ const $$ = s => [...document.querySelectorAll(s)];
 
 const KEYS = { nickname: 'em_group_nickname', userId: 'em_group_userid', sound: 'em_group_sound', theme: 'em_group_theme', lastSeenMsg: 'em_group_lastseen' };
 
+// ═══ STATE — NO ADMIN LOGIN, ALWAYS USER ═══
 const state = {
-  userId: null, nickname: null, isAdmin: false, adminUser: null,
+  userId: null, nickname: null,
   messages: [], members: {}, typingUsers: {}, pins: [], banned: {},
   settings: { locked: false, slowMode: 0, announcement: '' },
   replyTo: null, pendingImage: null, soundEnabled: true,
@@ -707,7 +521,6 @@ const state = {
   unreadCount: 0, mentionMatches: [], mentionDropdownIndex: 0,
   lastMessageTime: 0, profileModalUserId: null,
   viewerImageUrl: null, reactionPickerMsgId: null,
-  editingMsgId: null,
 };
 
 function escapeHtml(str='') { return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -738,17 +551,6 @@ function showToast(msg, type='info') {
   const t = $('#toast'); t.style.opacity = '1';
   setTimeout(() => { t.style.opacity = '0'; }, 2400);
 }
-
-let confirmCallback = null;
-function showConfirm(title, message, onOk) {
-  $('#confirmTitle').textContent = title;
-  $('#confirmMessage').textContent = message;
-  confirmCallback = onOk;
-  $('#confirmModal').classList.remove('hidden');
-  $('#confirmModal').classList.add('flex');
-}
-$('#confirmCancel').addEventListener('click', () => { $('#confirmModal').classList.add('hidden'); $('#confirmModal').classList.remove('flex'); confirmCallback = null; });
-$('#confirmOk').addEventListener('click', async () => { $('#confirmModal').classList.add('hidden'); $('#confirmModal').classList.remove('flex'); if (confirmCallback) await confirmCallback(); confirmCallback = null; });
 
 // MARKDOWN
 function renderMarkdown(text, isOwn = false) {
@@ -809,7 +611,6 @@ function playSound(type = 'receive') {
   } catch (e) {}
 }
 
-// THEME — LIGHT DEFAULT
 function initTheme() {
   if (localStorage.getItem(KEYS.theme) === 'dark') document.documentElement.classList.add('dark');
   $('#themeToggle')?.addEventListener('click', () => {
@@ -866,24 +667,23 @@ function enterChat() {
 async function initChat() {
   setupMessageForm(); setupEmojiPicker(); setupImageUpload(); setupReply();
   setupProfileMenu(); setupMobileDrawer(); setupAutoResize(); setupScrollBehavior();
-  setupAdminAuth(); setupMentions(); setupSearch(); setupPinned(); setupActionMenu();
-  setupExport(); setupAdminPanel(); setupReactionPicker(); setupImageViewer();
+  setupMentions(); setupSearch(); setupPinned(); setupActionMenu();
+  setupReactionPicker(); setupImageViewer();
   await updatePresence();
   listenMessages(); listenPresence(); listenTyping(); listenPins(); listenBanned(); listenSettings();
   setInterval(updatePresence, 25000);
 }
 
-// PRESENCE
 async function updatePresence() {
   if (!state.userId) return;
-  try { await setDoc(doc(PRESENCE_REF, state.userId), { userId: state.userId, nickname: state.nickname, isAdmin: state.isAdmin, lastSeen: serverTimestamp() }, { merge: true }); } catch {}
+  try { await setDoc(doc(PRESENCE_REF, state.userId), { userId: state.userId, nickname: state.nickname, isAdmin: false, lastSeen: serverTimestamp() }, { merge: true }); } catch {}
 }
 function listenPresence() {
   onSnapshot(PRESENCE_REF, snap => {
     const now = Date.now(), members = {};
     snap.forEach(d => { const data = d.data(); const ls = data.lastSeen?.toDate ? data.lastSeen.toDate().getTime() : 0; if (now - ls < 60000) members[d.id] = { ...data, isOnline: true }; });
     state.members = members;
-    renderMembers(); renderAdminOnline();
+    renderMembers();
   });
 }
 function renderMembers() {
@@ -910,39 +710,17 @@ function openProfileModal(userId) {
   $('#profileModalName').textContent = m.nickname;
   $('#profileModalAdmin').classList.toggle('hidden', !m.isAdmin);
   $('#profileModalAdmin').classList.toggle('flex', !!m.isAdmin);
-  const banBtn = $('#profileModalBanBtn');
-  const isBanned = !!state.banned[userId];
-  const isMe = userId === state.userId;
-  if (state.isAdmin && !isMe && !m.isAdmin) {
-    banBtn.classList.remove('hidden');
-    banBtn.textContent = isBanned ? 'Unban User' : 'Ban User';
-    banBtn.className = isBanned ? 'flex-1 rounded-xl bg-emerald-100 dark:bg-emerald-950/40 hover:bg-emerald-200 dark:hover:bg-emerald-900/60 py-2.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 transition' : 'flex-1 rounded-xl bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 py-2.5 text-sm font-bold text-rose-700 dark:text-rose-400 transition';
-  } else banBtn.classList.add('hidden');
   $('#profileModal').classList.remove('hidden'); $('#profileModal').classList.add('flex');
 }
 $('#closeProfileBtn')?.addEventListener('click', () => { $('#profileModal').classList.add('hidden'); $('#profileModal').classList.remove('flex'); });
-$('#profileModalBanBtn')?.addEventListener('click', async () => {
-  const uid = state.profileModalUserId; if (!uid || !state.isAdmin) return;
-  const isBanned = !!state.banned[uid];
-  if (isBanned) { await deleteDoc(doc(BANNED_REF, uid)).catch(() => {}); showToast('Unbanned', 'success'); }
-  else { const m = state.members[uid]; await setDoc(doc(BANNED_REF, uid), { userId: uid, nickname: m?.nickname || 'Unknown', bannedBy: state.nickname, bannedAt: serverTimestamp() }).catch(() => {}); showToast('User banned', 'success'); }
-  $('#profileModal').classList.add('hidden'); $('#profileModal').classList.remove('flex');
-});
 
 function listenBanned() {
   onSnapshot(BANNED_REF, snap => {
     const banned = {}; snap.forEach(d => banned[d.id] = d.data());
     state.banned = banned;
-    renderBannedList(); renderAdminStats();
-    if (banned[state.userId] && !state.isAdmin) { showToast('আপনি ban হয়েছেন', 'error'); $('#messageInput').disabled = true; $('#sendBtn').disabled = true; $('#imageBtn').disabled = true; }
+    if (banned[state.userId]) { showToast('আপনি ban হয়েছেন — message পাঠাতে পারবেন না', 'error'); $('#messageInput').disabled = true; $('#sendBtn').disabled = true; $('#imageBtn').disabled = true; }
+    else if (!state.settings.locked) { $('#messageInput').disabled = false; $('#imageBtn').disabled = false; }
   });
-}
-function renderBannedList() {
-  const list = $('#bannedList'), banned = Object.values(state.banned);
-  $('#bannedCount').textContent = toBn(banned.length);
-  if (banned.length === 0) { list.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">কোনো banned user নেই</p>'; return; }
-  list.innerHTML = banned.map(b => `<div class="flex items-center gap-2 p-2 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800"><div class="min-w-0 flex-1"><p class="text-xs font-bold text-rose-800 dark:text-rose-300 truncate">${escapeHtml(b.nickname || 'Unknown')}</p><p class="text-[10px] text-rose-600 dark:text-rose-400">Banned by ${escapeHtml(b.bannedBy || 'Admin')}</p></div><button type="button" data-unban="${b.userId}" class="px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold shrink-0">Unban</button></div>`).join('');
-  list.querySelectorAll('[data-unban]').forEach(b => b.addEventListener('click', async () => { await deleteDoc(doc(BANNED_REF, b.dataset.unban)).catch(() => {}); showToast('Unbanned', 'success'); }));
 }
 
 function listenSettings() {
@@ -952,22 +730,19 @@ function listenSettings() {
   });
 }
 function applySettingsUI() {
-  const locked = !!state.settings.locked, slowMode = state.settings.slowMode || 0, ann = state.settings.announcement || '';
-  $('#lockedBanner').classList.toggle('hidden', !locked || state.isAdmin);
-  if (locked && !state.isAdmin) { $('#messageInput').disabled = true; $('#sendBtn').disabled = true; $('#imageBtn').disabled = true; $('#messageInput').placeholder = 'চ্যাট লক করা আছে'; }
-  else if (!state.banned[state.userId] || state.isAdmin) { $('#messageInput').disabled = false; $('#imageBtn').disabled = false; $('#messageInput').placeholder = 'মেসেজ লিখুন…'; $('#sendBtn').disabled = !$('#messageInput').value.trim() && !state.pendingImage; }
+  const locked = !!state.settings.locked, ann = state.settings.announcement || '';
+  $('#lockedBanner').classList.toggle('hidden', !locked);
+  if (locked) { $('#messageInput').disabled = true; $('#sendBtn').disabled = true; $('#imageBtn').disabled = true; $('#messageInput').placeholder = 'চ্যাট লক করা আছে'; }
+  else if (!state.banned[state.userId]) { $('#messageInput').disabled = false; $('#imageBtn').disabled = false; $('#messageInput').placeholder = 'মেসেজ লিখুন…'; $('#sendBtn').disabled = !$('#messageInput').value.trim() && !state.pendingImage; }
   const banner = $('#announcementBanner');
-  if (ann) { $('#announcementText').textContent = ann; banner.classList.remove('hidden'); if (state.isAdmin) $('#dismissAnnouncement').classList.remove('hidden'); }
+  if (ann) { $('#announcementText').textContent = ann; banner.classList.remove('hidden'); }
   else banner.classList.add('hidden');
-  const toggle = $('#toggleLockChat'); if (toggle) toggle.checked = locked;
-  const ss = $('#slowModeSelect'); if (ss) ss.value = String(slowMode);
-  const ai = $('#announcementInput'); if (ai && ai !== document.activeElement) ai.value = ann;
 }
 
 let typingTimeout = null, lastTypingWrite = 0;
 function handleTyping() {
-  if (state.settings.locked && !state.isAdmin) return;
-  if (state.banned[state.userId] && !state.isAdmin) return;
+  if (state.settings.locked) return;
+  if (state.banned[state.userId]) return;
   const now = Date.now(); if (now - lastTypingWrite < 2500) return;
   lastTypingWrite = now;
   setDoc(doc(TYPING_REF, state.userId), { userId: state.userId, nickname: state.nickname, updatedAt: serverTimestamp() }, { merge: true }).catch(() => {});
@@ -991,7 +766,6 @@ function renderTyping() {
   else $('#typingText').textContent = `${names.length} people are typing...`;
 }
 
-// MESSAGES
 function listenMessages() {
   onSnapshot(query(MESSAGES_REF, orderBy('createdAt', 'asc'), limit(200)), snap => {
     const messages = []; snap.forEach(d => messages.push({ id: d.id, ...d.data() }));
@@ -1000,7 +774,7 @@ function listenMessages() {
     messages.forEach(m => state.seenMessageIds.add(m.id));
     state.messages = messages;
     $('#msgCount').textContent = toBn(messages.length);
-    renderMessages(); renderAdminStats();
+    renderMessages();
     if (otherNew.length > 0) {
       const mentionsMe = otherNew.some(m => m.text && m.text.toLowerCase().includes('@' + (state.nickname || '').toLowerCase()));
       playSound(mentionsMe ? 'mention' : 'receive');
@@ -1049,9 +823,8 @@ function renderMessages() {
 
 function renderMessage(m, isConsecutive) {
   const isOwn = m.userId === state.userId;
-  const isAdmin = !!m.isAdmin;
+  const isAdminMsg = !!m.isAdmin;
   const isPinned = state.pins.some(p => p.msgId === m.id);
-  const isEditing = state.editingMsgId === m.id;
   const isEdited = !!m.editedAt;
   const [c1, c2] = avatarColor(m.userId);
   const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
@@ -1069,37 +842,22 @@ function renderMessage(m, isConsecutive) {
     }
   }
   
-  // Image with click-to-view (custom viewer)
   const imageHtml = m.imageUrl ? `<div class="mt-1.5"><img src="${escapeHtml(m.imageUrl)}" data-view-image="${escapeHtml(m.imageUrl)}" alt="attachment" loading="lazy" class="max-w-full max-h-72 rounded-lg border border-black/10 dark:border-white/10 cursor-pointer active:opacity-80 transition" /></div>` : '';
   
-  // Reply quote (clickable to jump)
   const replyHtml = m.replyTo ? `<button type="button" data-jump-to="${m.replyTo.msgId}" class="block w-full text-left mb-1.5 px-2.5 py-1.5 rounded-lg bg-black/10 dark:bg-white/10 border-l-2 ${isOwn ? 'border-white/60' : 'border-brand-500'} hover:bg-black/20 dark:hover:bg-white/20 transition"><p class="text-[10px] font-bold ${isOwn ? 'text-white/90' : 'text-brand-600 dark:text-brand-400'}">${escapeHtml(m.replyTo.nickname)}</p><p class="text-[11px] truncate ${isOwn ? 'text-white/80' : 'text-slate-600 dark:text-slate-400'}">${escapeHtml(m.replyTo.text || '📷')}</p></button>` : '';
   
-  // Text — editing mode replaces with textarea
-  let textHtml = '';
-  if (isEditing) {
-    textHtml = `<div class="edit-wrap">
-      <textarea class="edit-textarea ${isOwn ? 'own' : 'other'}" rows="2" maxlength="1000">${escapeHtml(m.text || '')}</textarea>
-      <div class="flex gap-2 mt-2">
-        <button type="button" data-save-edit="${m.id}" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold">Save</button>
-        <button type="button" data-cancel-edit="${m.id}" class="px-3 py-1 bg-slate-500 hover:bg-slate-600 text-white rounded text-xs font-bold">Cancel</button>
-      </div>
-    </div>`;
-  } else if (m.text) {
-    textHtml = `<div class="text-sm leading-relaxed break-words whitespace-pre-wrap">${renderMarkdown(m.text, isOwn)}${isEdited ? '<span class="edited-badge opacity-70">(edited)</span>' : ''}</div>`;
-  }
+  const textHtml = m.text ? `<div class="text-sm leading-relaxed break-words whitespace-pre-wrap">${renderMarkdown(m.text, isOwn)}${isEdited ? '<span class="edited-badge opacity-70">(edited)</span>' : ''}</div>` : '';
   
-  const adminBadge = isAdmin ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-amber-400 text-amber-950 ml-1"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>ADMIN</span>` : '';
+  const adminBadge = isAdminMsg ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-amber-400 text-amber-950 ml-1"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>ADMIN</span>` : '';
   const pinIndicator = isPinned ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 ml-1"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>PINNED</span>` : '';
   
   let bubbleClass = '';
-  if (isAdmin) bubbleClass = 'bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/50 dark:to-amber-900/40 border border-amber-300 dark:border-amber-700/60 text-slate-800 dark:text-amber-50 admin-bubble';
+  if (isAdminMsg) bubbleClass = 'bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/50 dark:to-amber-900/40 border border-amber-300 dark:border-amber-700/60 text-slate-800 dark:text-amber-50 admin-bubble';
   else if (isOwn) bubbleClass = 'bg-gradient-to-br from-brand-600 to-purple-600 text-white shadow-md shadow-brand-500/20 own-bubble';
   else bubbleClass = 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 shadow-sm';
   
-  const nameColor = isAdmin ? 'text-amber-700 dark:text-amber-400' : isOwn ? 'text-brand-600 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300';
+  const nameColor = isAdminMsg ? 'text-amber-700 dark:text-amber-400' : isOwn ? 'text-brand-600 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300';
   
-  // ═══ ACTION BUTTONS — react + more (no hover bar) ═══
   const actionsBtn = `<div class="msg-actions absolute ${isOwn ? 'right-full mr-1.5' : 'left-full ml-1.5'} top-1 flex flex-col gap-1 z-20">
     <button type="button" data-show-react="${m.id}" class="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-white dark:bg-slate-800 shadow border border-slate-200 dark:border-slate-700 grid place-items-center hover:bg-slate-50 dark:hover:bg-slate-700 transition" title="React">
       <svg class="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-600 dark:text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.5-9c.83 0 1.5-.67 1.5-1.5S17.33 8 16.5 8 15 8.67 15 9.5s.67 1.5 1.5 1.5zm-9 0c.83 0 1.5-.67 1.5-1.5S8.33 8 7.5 8 6 8.67 6 9.5 6.67 11 7.5 11zm4.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
@@ -1122,8 +880,6 @@ function attachMessageHandlers() {
   $$('[data-show-react]').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); showReactionPicker(b.dataset.showReact, e.currentTarget); }));
   $$('[data-member-profile]').forEach(b => b.addEventListener('click', () => openProfileModal(b.dataset.memberProfile)));
   $$('[data-view-image]').forEach(img => img.addEventListener('click', () => openImageViewer(img.dataset.viewImage)));
-  $$('[data-save-edit]').forEach(b => b.addEventListener('click', () => saveEditMessage(b.dataset.saveEdit)));
-  $$('[data-cancel-edit]').forEach(b => b.addEventListener('click', () => { state.editingMsgId = null; renderMessages(); }));
 }
 
 async function toggleReaction(msgId, emoji) {
@@ -1141,19 +897,15 @@ async function toggleReaction(msgId, emoji) {
   } catch (e) { showToast('Reaction failed', 'error'); }
 }
 
-// ═══ REACTION PICKER ═══
 function setupReactionPicker() {
   $('#reactionPicker').addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-react-pick]');
-    if (!btn) return;
-    const emoji = btn.dataset.reactPick;
-    const msgId = state.reactionPickerMsgId;
+    const btn = e.target.closest('[data-react-pick]'); if (!btn) return;
+    const emoji = btn.dataset.reactPick, msgId = state.reactionPickerMsgId;
     hideReactionPicker();
     if (msgId) toggleReaction(msgId, emoji);
   });
   document.addEventListener('click', (e) => {
-    const picker = $('#reactionPicker');
-    if (picker.classList.contains('hidden')) return;
+    const picker = $('#reactionPicker'); if (picker.classList.contains('hidden')) return;
     if (picker.contains(e.target) || e.target.closest('[data-show-react]')) return;
     hideReactionPicker();
   });
@@ -1170,38 +922,28 @@ function showReactionPicker(msgId, anchor) {
     let top = rect.top - ph - 8;
     if (top < 60) top = rect.bottom + 8;
     if (top + ph > window.innerHeight - 8) top = rect.top - ph - 8;
-    picker.style.left = left + 'px';
-    picker.style.top = top + 'px';
+    picker.style.left = left + 'px'; picker.style.top = top + 'px';
   });
 }
-function hideReactionPicker() {
-  $('#reactionPicker').classList.add('hidden');
-  state.reactionPickerMsgId = null;
-}
+function hideReactionPicker() { $('#reactionPicker').classList.add('hidden'); state.reactionPickerMsgId = null; }
 
-// ═══ CUSTOM IMAGE VIEWER ═══
+// IMAGE VIEWER
 function setupImageViewer() {
   $('#viewerClose').addEventListener('click', closeImageViewer);
-  $('#imageViewer').addEventListener('click', (e) => {
-    if (e.target.id === 'imageViewer' || e.target.id === 'viewerImageWrap') closeImageViewer();
-  });
+  $('#imageViewer').addEventListener('click', (e) => { if (e.target.id === 'imageViewer' || e.target.id === 'viewerImageWrap') closeImageViewer(); });
   $('#viewerDownload').addEventListener('click', async () => {
     if (!state.viewerImageUrl) return;
     try {
       const response = await fetch(state.viewerImageUrl, { mode: 'cors' });
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
+      const a = document.createElement('a'); a.href = url;
       const ext = blob.type.split('/')[1] || 'jpg';
       a.download = `chat-image-${Date.now()}.${ext}`;
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
       URL.revokeObjectURL(url);
       showToast('Download started', 'success');
-    } catch (e) {
-      window.open(state.viewerImageUrl, '_blank');
-      showToast('Opened in new tab', 'info');
-    }
+    } catch (e) { window.open(state.viewerImageUrl, '_blank'); showToast('Opened in new tab', 'info'); }
   });
   $('#viewerShare').addEventListener('click', async () => {
     if (!state.viewerImageUrl) return;
@@ -1212,16 +954,10 @@ function setupImageViewer() {
           const blob = await response.blob();
           const ext = blob.type.split('/')[1] || 'jpg';
           const file = new File([blob], `image.${ext}`, { type: blob.type });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: 'Shared image' });
-            return;
-          }
+          if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Shared image' }); return; }
         } catch {}
         await navigator.share({ title: 'Shared image', url: state.viewerImageUrl });
-      } else {
-        await navigator.clipboard.writeText(state.viewerImageUrl);
-        showToast('Link copied to clipboard', 'success');
-      }
+      } else { await navigator.clipboard.writeText(state.viewerImageUrl); showToast('Link copied to clipboard', 'success'); }
     } catch (e) {
       if (e.name !== 'AbortError') {
         try { await navigator.clipboard.writeText(state.viewerImageUrl); showToast('Link copied', 'success'); }
@@ -1229,71 +965,21 @@ function setupImageViewer() {
       }
     }
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !$('#imageViewer').classList.contains('hidden')) closeImageViewer();
-  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#imageViewer').classList.contains('hidden')) closeImageViewer(); });
 }
-function openImageViewer(url) {
-  state.viewerImageUrl = url;
-  const viewer = $('#imageViewer');
-  $('#viewerImage').src = url;
-  viewer.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
-function closeImageViewer() {
-  $('#imageViewer').classList.add('hidden');
-  $('#viewerImage').src = '';
-  state.viewerImageUrl = null;
-  document.body.style.overflow = '';
-}
+function openImageViewer(url) { state.viewerImageUrl = url; $('#viewerImage').src = url; $('#imageViewer').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function closeImageViewer() { $('#imageViewer').classList.add('hidden'); $('#viewerImage').src = ''; state.viewerImageUrl = null; document.body.style.overflow = ''; }
 
-// ═══ EDIT MESSAGE ═══
-function startEditMessage(msgId) {
-  const msg = state.messages.find(m => m.id === msgId);
-  if (!msg || !state.isAdmin) return;
-  state.editingMsgId = msgId;
-  renderMessages();
-  setTimeout(() => {
-    const el = document.querySelector(`[data-msg-id="${msgId}"] .edit-textarea`);
-    if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
-  }, 50);
-}
-async function saveEditMessage(msgId) {
-  const msg = state.messages.find(m => m.id === msgId);
-  if (!msg || !state.isAdmin) return;
-  const el = document.querySelector(`[data-msg-id="${msgId}"] .edit-textarea`);
-  if (!el) return;
-  const newText = el.value.trim();
-  if (!newText) { showToast('মেসেজ খালি রাখা যাবে না', 'error'); return; }
-  if (newText === msg.text) { state.editingMsgId = null; renderMessages(); return; }
-  try {
-    await updateDoc(doc(db, 'groupChats', CHAT_ID, 'messages', msgId), { text: newText, editedAt: serverTimestamp() });
-    state.editingMsgId = null;
-    showToast('Message edited', 'success');
-  } catch (e) {
-    console.error(e);
-    showToast('Edit failed (check rules)', 'error');
-  }
-}
-
-// ACTION MENU
+// ACTION MENU (user-only)
 function openActionMenu(msgId, anchorBtn) {
   state.activeActionMsgId = msgId;
-  const msg = state.messages.find(m => m.id === msgId); if (!msg) return;
   const menu = $('#actionMenu');
   const rect = anchorBtn.getBoundingClientRect();
-  menu.querySelector('[data-action="delete"]').classList.toggle('hidden', !state.isAdmin);
-  menu.querySelector('[data-action="pin"]').classList.toggle('hidden', !state.isAdmin);
-  menu.querySelector('[data-action="edit"]').classList.toggle('hidden', !state.isAdmin || !msg.text);
   menu.classList.remove('hidden');
   const mw = menu.offsetWidth;
-  let left = rect.left;
-  if (left + mw > window.innerWidth - 8) left = window.innerWidth - mw - 8;
-  if (left < 8) left = 8;
-  let top = rect.bottom + 4;
-  if (top + 220 > window.innerHeight) top = rect.top - 220;
-  menu.style.left = left + 'px';
-  menu.style.top = top + 'px';
+  let left = rect.left; if (left + mw > window.innerWidth - 8) left = window.innerWidth - mw - 8; if (left < 8) left = 8;
+  let top = rect.bottom + 4; if (top + 200 > window.innerHeight) top = rect.top - 200;
+  menu.style.left = left + 'px'; menu.style.top = top + 'px';
 }
 function closeActionMenu() { $('#actionMenu').classList.add('hidden'); state.activeActionMsgId = null; }
 document.addEventListener('click', (e) => { if (!e.target.closest('#actionMenu') && !e.target.closest('[data-action-menu]')) closeActionMenu(); });
@@ -1314,13 +1000,6 @@ function setupActionMenu() {
       $('#messageInput').value = `"${msg.text || ''}" — ${msg.nickname}\n\n`;
       $('#messageInput').focus(); $('#messageInput').dispatchEvent(new Event('input'));
       showToast('Forwarded text in input', 'info');
-    } else if (action === 'edit') startEditMessage(msgId);
-    else if (action === 'pin') await togglePin(msg);
-    else if (action === 'delete') {
-      showConfirm('Delete message?', 'এই মেসেজটি স্থায়ীভাবে মুছে যাবে।', async () => {
-        try { await deleteDoc(doc(MESSAGES_REF, msgId)); showToast('Message deleted', 'success'); }
-        catch { showToast('Delete failed', 'error'); }
-      });
     }
   });
 }
@@ -1330,16 +1009,8 @@ function listenPins() {
   onSnapshot(PINS_REF, snap => {
     const pins = []; snap.forEach(d => pins.push({ msgId: d.id, ...d.data() }));
     state.pins = pins;
-    renderPins(); renderMessages(); renderAdminStats();
+    renderPins(); renderMessages();
   });
-}
-async function togglePin(msg) {
-  try {
-    const pinDoc = doc(PINS_REF, msg.id);
-    const existing = await getDoc(pinDoc);
-    if (existing.exists()) { await deleteDoc(pinDoc); showToast('Unpinned', 'success'); }
-    else { await setDoc(pinDoc, { msgId: msg.id, nickname: msg.nickname, text: (msg.text || '').slice(0, 100), pinnedBy: state.nickname, pinnedAt: serverTimestamp() }); showToast('Pinned ✓', 'success'); }
-  } catch { showToast('Pin failed', 'error'); }
 }
 function renderPins() {
   const badge = $('#pinBadge');
@@ -1349,14 +1020,12 @@ function renderPins() {
     const latest = state.pins[state.pins.length - 1];
     $('#pinnedBannerText').textContent = `${latest.nickname}: ${latest.text || '(media)'}`;
     banner.classList.remove('hidden');
-    $('#unpinBtn').classList.toggle('hidden', !state.isAdmin);
   } else banner.classList.add('hidden');
 }
 function setupPinned() {
   $('#pinnedBtn').addEventListener('click', () => { $('#pinnedOverlay').classList.remove('hidden'); $('#pinnedOverlay').classList.add('flex'); renderPinnedList(); });
   $('#closePinnedBtn').addEventListener('click', () => { $('#pinnedOverlay').classList.add('hidden'); $('#pinnedOverlay').classList.remove('flex'); });
   $('#pinnedBannerClick').addEventListener('click', () => { if (state.pins.length > 0) jumpToMessage(state.pins[state.pins.length - 1].msgId); });
-  $('#unpinBtn').addEventListener('click', async () => { if (state.pins.length === 0) return; await deleteDoc(doc(PINS_REF, state.pins[state.pins.length - 1].msgId)).catch(() => {}); showToast('Unpinned', 'success'); });
 }
 function renderPinnedList() {
   const list = $('#pinnedList');
@@ -1391,18 +1060,18 @@ function setupMessageForm() {
 async function sendMessage() {
   const input = $('#messageInput'), text = input.value.trim();
   if (!text && !state.pendingImage) return;
-  if (!state.isAdmin && state.settings.slowMode > 0) {
+  if (state.settings.slowMode > 0) {
     const elapsed = (Date.now() - state.lastMessageTime) / 1000;
     if (elapsed < state.settings.slowMode) { showToast(`Slow mode: ${Math.ceil(state.settings.slowMode - elapsed)}s অপেক্ষা করুন`, 'error'); return; }
   }
-  if (state.settings.locked && !state.isAdmin) { showToast('চ্যাট লক করা আছে', 'error'); return; }
-  if (state.banned[state.userId] && !state.isAdmin) { showToast('আপনি ban হয়েছেন', 'error'); return; }
+  if (state.settings.locked) { showToast('চ্যাট লক করা আছে', 'error'); return; }
+  if (state.banned[state.userId]) { showToast('আপনি ban হয়েছেন', 'error'); return; }
   const sendBtn = $('#sendBtn'); sendBtn.disabled = true;
   try {
     let imageUrl = null;
     if (state.pendingImage) imageUrl = await uploadToCloudinary(state.pendingImage);
     const payload = { userId: state.userId, nickname: state.nickname, text: text || '', imageUrl: imageUrl || null, replyTo: state.replyTo ? { msgId: state.replyTo.msgId, nickname: state.replyTo.nickname, text: (state.replyTo.text || '').slice(0, 80) } : null, reactions: {}, createdAt: serverTimestamp() };
-    if (state.isAdmin) payload.isAdmin = true;
+    // NOTE: isAdmin is NEVER sent from this page
     await addDoc(MESSAGES_REF, payload);
     input.value = ''; input.style.height = 'auto';
     state.pendingImage = null; state.replyTo = null;
@@ -1508,8 +1177,7 @@ async function compressImage(file, maxDim = 1600, quality = 0.85) {
       img.onload = () => {
         let w = img.width, h = img.height;
         if (w > maxDim || h > maxDim) { if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; } else { w = Math.round(w * maxDim / h); h = maxDim; } }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
+        const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
         canvas.toBlob((blob) => resolve(blob ? new File([blob], file.name, { type: 'image/jpeg' }) : file), 'image/jpeg', quality);
       };
@@ -1586,26 +1254,6 @@ function setupProfileMenu() {
   });
 }
 
-// EXPORT
-function setupExport() {
-  $('#exportChatBtn').addEventListener('click', () => {
-    $('#profileMenu').classList.add('hidden');
-    if (state.messages.length === 0) { showToast('কোনো মেসেজ নেই', 'info'); return; }
-    let text = `=== eMutation Group Chat Export ===\nExported: ${new Date().toLocaleString()}\nTotal: ${state.messages.length}\n\n`;
-    state.messages.forEach(m => {
-      const time = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleString() : '';
-      text += `[${time}] ${m.nickname}${m.isAdmin ? ' (ADMIN)' : ''}:\n${m.text || ''}\n`;
-      if (m.imageUrl) text += `[Image: ${m.imageUrl}]\n`;
-      text += '\n';
-    });
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `group-chat-${Date.now()}.txt`; a.click();
-    URL.revokeObjectURL(url);
-    showToast('Export সফল', 'success');
-  });
-}
-
 // MOBILE DRAWER
 function setupMobileDrawer() {
   const drawer = $('#mobileDrawer'), aside = drawer.querySelector('aside');
@@ -1624,92 +1272,93 @@ function setupScrollBehavior() {
 function isScrolledToBottom() { const a = $('#messagesArea'); return a.scrollHeight - a.scrollTop - a.clientHeight < 100; }
 function scrollToBottom() { const a = $('#messagesArea'); a.scrollTop = a.scrollHeight; }
 
-// ADMIN
-function setupAdminAuth() {
-  $('#adminBtn').addEventListener('click', () => {
-    if (state.isAdmin) {
-      showConfirm('Exit admin mode?', 'Admin mode থেকে বের হবেন?', () => {
-        state.isAdmin = false;
-        $('#adminModeBar').classList.add('hidden');
-        $('#adminPanel').classList.add('hidden'); $('#adminPanel').classList.remove('flex');
-        updatePresence(); applySettingsUI();
-        showToast('Admin mode off', 'info');
-      });
-    } else { $('#adminModal').classList.remove('hidden'); $('#adminModal').classList.add('flex'); }
-  });
-  $('#closeAdminModal').addEventListener('click', () => { $('#adminModal').classList.add('hidden'); $('#adminModal').classList.remove('flex'); });
-  $('#googleAdminLogin').addEventListener('click', async () => {
-    const btn = $('#googleAdminLogin'); btn.disabled = true;
-    try { const p = new GoogleAuthProvider(); await signInWithPopup(auth, p); }
-    catch { showToast('লগইন ব্যর্থ', 'error'); }
-    finally { btn.disabled = false; }
-  });
-  $('#exitAdminBtn').addEventListener('click', () => { state.isAdmin = false; $('#adminModeBar').classList.add('hidden'); updatePresence(); applySettingsUI(); });
-  $('#adminPanelBtn').addEventListener('click', () => { $('#adminPanel').classList.remove('hidden'); $('#adminPanel').classList.add('flex'); renderAdminStats(); renderAdminOnline(); });
-  onAuthStateChanged(auth, user => {
-    if (user && user.email?.toLowerCase() === ALLOWED_ADMIN) {
-      state.isAdmin = true; state.adminUser = user;
-      $('#adminModal').classList.add('hidden'); $('#adminModal').classList.remove('flex');
-      $('#adminModeBar').classList.remove('hidden');
-      updatePresence(); applySettingsUI();
-      showToast('Admin mode ON', 'success');
-    } else if (user) { showToast('এই email অনুমোদিত নয়', 'error'); signOut(auth); }
-  });
-}
-
-function setupAdminPanel() {
-  $('#closeAdminPanelBtn').addEventListener('click', () => { $('#adminPanel').classList.add('hidden'); $('#adminPanel').classList.remove('flex'); });
-  $$('.admin-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const name = tab.dataset.tab;
-      $$('.admin-tab').forEach(t => { t.classList.remove('border-amber-500', 'text-amber-600', 'dark:text-amber-400'); t.classList.add('border-transparent', 'text-slate-500'); });
-      tab.classList.remove('border-transparent', 'text-slate-500'); tab.classList.add('border-amber-500', 'text-amber-600', 'dark:text-amber-400');
-      $$('[data-tab-content]').forEach(c => c.classList.add('hidden'));
-      $(`[data-tab-content="${name}"]`).classList.remove('hidden');
-    });
-  });
-  $('.admin-tab[data-tab="overview"]').click();
-  $('#toggleLockChat').addEventListener('change', async (e) => { try { await setDoc(SETTINGS_REF, { locked: e.target.checked }, { merge: true }); showToast(e.target.checked ? 'চ্যাট লক' : 'চ্যাট আনলক', 'success'); } catch { showToast('Failed', 'error'); } });
-  $('#slowModeSelect').addEventListener('change', async (e) => { try { await setDoc(SETTINGS_REF, { slowMode: Number(e.target.value) }, { merge: true }); showToast('Slow mode updated', 'success'); } catch { showToast('Failed', 'error'); } });
-  $('#saveAnnouncementBtn').addEventListener('click', async () => { const text = $('#announcementInput').value.trim(); try { await setDoc(SETTINGS_REF, { announcement: text }, { merge: true }); showToast(text ? 'Saved' : 'Cleared', 'success'); } catch { showToast('Failed', 'error'); } });
-  $('#clearAnnouncementBtn').addEventListener('click', async () => { $('#announcementInput').value = ''; try { await setDoc(SETTINGS_REF, { announcement: '' }, { merge: true }); showToast('Cleared', 'success'); } catch { showToast('Failed', 'error'); } });
-  $('#dismissAnnouncement')?.addEventListener('click', () => $('#announcementBanner').classList.add('hidden'));
-  $('#clearPinsBtn').addEventListener('click', () => { showConfirm('Clear all pins?', 'সব pinned message সরানো হবে।', async () => { try { const snap = await getDocs(PINS_REF); const b = writeBatch(db); snap.forEach(d => b.delete(d.ref)); await b.commit(); showToast('Pins cleared', 'success'); } catch { showToast('Failed', 'error'); } }); });
-  $('#clearTypingBtn').addEventListener('click', () => { showConfirm('Clear typing?', 'সব typing indicator রিসেট হবে।', async () => { try { const snap = await getDocs(TYPING_REF); const b = writeBatch(db); snap.forEach(d => b.delete(d.ref)); await b.commit(); showToast('Cleared', 'success'); } catch { showToast('Failed', 'error'); } }); });
-  $('#clearAllMessagesBtn').addEventListener('click', () => { showConfirm('Clear ALL messages?', `সব ${state.messages.length}টি মেসেজ স্থায়ীভাবে মুছে যাবে।`, async () => { try { const snap = await getDocs(MESSAGES_REF); const b = writeBatch(db); snap.forEach(d => b.delete(d.ref)); await b.commit(); showToast('All deleted', 'success'); } catch { showToast('Failed', 'error'); } }); });
-  $('#deleteChatBtn').addEventListener('click', () => { showConfirm('DELETE ENTIRE CHAT?', 'সব ডিলিট হবে। ফেরানো যাবে না।', async () => { try { const [m, p, t] = await Promise.all([getDocs(MESSAGES_REF), getDocs(PINS_REF), getDocs(TYPING_REF)]); const b = writeBatch(db); m.forEach(d => b.delete(d.ref)); p.forEach(d => b.delete(d.ref)); t.forEach(d => b.delete(d.ref)); await b.commit(); showToast('Chat deleted', 'success'); } catch { showToast('Failed', 'error'); } }); });
-}
-function renderAdminStats() {
-  $('#adminStatMessages').textContent = toBn(state.messages.length);
-  $('#adminStatOnline').textContent = toBn(Object.keys(state.members).length);
-  $('#adminStatPins').textContent = toBn(state.pins.length);
-  $('#adminStatBanned').textContent = toBn(Object.keys(state.banned).length);
-}
-function renderAdminOnline() {
-  const list = $('#adminOnlineList');
-  const members = Object.values(state.members).filter(m => !m.isAdmin);
-  if (members.length === 0) { list.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">কেউ online নেই</p>'; return; }
-  list.innerHTML = members.map(m => {
-    const isBanned = !!state.banned[m.userId];
-    const [c1, c2] = avatarColor(m.userId);
-    return `<div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50"><div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-extrabold shrink-0" style="background: linear-gradient(135deg, ${c1}, ${c2});">${escapeHtml(getInitials(m.nickname))}</div><p class="text-xs font-bold truncate flex-1">${escapeHtml(m.nickname)}</p><button type="button" data-admin-ban="${m.userId}" data-banned="${isBanned}" class="px-2 py-1 rounded-md text-[10px] font-bold shrink-0 ${isBanned ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-rose-500 hover:bg-rose-600 text-white'}">${isBanned ? 'Unban' : 'Ban'}</button></div>`;
-  }).join('');
-  list.querySelectorAll('[data-admin-ban]').forEach(b => b.addEventListener('click', async () => {
-    const uid = b.dataset.adminBan, isBanned = b.dataset.banned === 'true';
-    if (isBanned) { await deleteDoc(doc(BANNED_REF, uid)).catch(() => {}); showToast('Unbanned', 'success'); }
-    else { const m = state.members[uid]; await setDoc(doc(BANNED_REF, uid), { userId: uid, nickname: m?.nickname || 'Unknown', bannedBy: state.nickname, bannedAt: serverTimestamp() }).catch(() => {}); showToast('Banned', 'success'); }
-  }));
-}
-
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { state.unreadCount = 0; document.title = state.baseTitle; } });
 
 initTheme(); initSoundToggle(); initNicknameSetup();
+
 setTimeout(() => {
   if ('Notification' in window && Notification.permission === 'default') {
     document.addEventListener('click', function once() { Notification.requestPermission().catch(() => {}); document.removeEventListener('click', once); }, { once: true });
   }
 }, 5000);
 
+</script>
+
+<!-- ═══ VISITOR TRACKING ═══ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDbNC1ZD67zcwpLHZL3WB41dE_z8WmjbK8",
+  authDomain: "emutationbirth.firebaseapp.com",
+  projectId: "emutationbirth",
+  storageBucket: "emutationbirth.firebasestorage.app",
+  messagingSenderId: "200454817186",
+  appId: "1:200454817186:web:b28e3cbe6f72a1f4cfdefb"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const VISITOR_KEY = 'emb_vid';
+const SESSION_KEY = 'emb_sid';
+let visitorId = localStorage.getItem(VISITOR_KEY);
+let isNew = false;
+if (!visitorId) {
+  visitorId = 'v_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+  localStorage.setItem(VISITOR_KEY, visitorId);
+  isNew = true;
+}
+let sessionId = sessionStorage.getItem(SESSION_KEY);
+if (!sessionId) {
+  sessionId = 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+  sessionStorage.setItem(SESSION_KEY, sessionId);
+}
+
+function getDevice() {
+  const ua = navigator.userAgent;
+  if (/Tablet|iPad/i.test(ua)) return 'tablet';
+  if (/Mobile|Android|iPhone|iPod/i.test(ua)) return 'mobile';
+  return 'desktop';
+}
+function getBrowser() {
+  const ua = navigator.userAgent;
+  if (/Edg\//i.test(ua)) return 'Edge';
+  if (/OPR\//i.test(ua)) return 'Opera';
+  if (/Chrome\//i.test(ua)) return 'Chrome';
+  if (/Firefox\//i.test(ua)) return 'Firefox';
+  if (/Safari\//i.test(ua)) return 'Safari';
+  return 'Other';
+}
+function getOS() {
+  const ua = navigator.userAgent;
+  if (/Windows/i.test(ua)) return 'Windows';
+  if (/Mac OS/i.test(ua)) return 'macOS';
+  if (/Android/i.test(ua)) return 'Android';
+  if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS';
+  if (/Linux/i.test(ua)) return 'Linux';
+  return 'Other';
+}
+
+try {
+  await addDoc(collection(db, 'visitors'), {
+    visitorId, sessionId,
+    page: window.location.pathname,
+    fullUrl: window.location.href,
+    title: document.title,
+    referrer: document.referrer || 'direct',
+    userAgent: navigator.userAgent,
+    language: navigator.language,
+    screen: `${screen.width}x${screen.height}`,
+    viewport: `${innerWidth}x${innerHeight}`,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    isNewVisitor: isNew,
+    device: getDevice(),
+    browser: getBrowser(),
+    os: getOS(),
+    visitedAt: serverTimestamp(),
+  });
+} catch (e) { console.warn('Visit tracking failed:', e); }
 </script>
 
 </body>
