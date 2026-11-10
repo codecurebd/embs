@@ -188,9 +188,15 @@
   }
   .call-ring { animation: callRing 1.8s ease-in-out infinite; transform-origin: 50% 60%; display: inline-block; }
 
+  /* ═══ GROUP CHAT SECTION ANIMATIONS ═══ */
+  @keyframes gcFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .gc-float { animation: gcFloat 3s ease-in-out infinite; }
+  @keyframes gcBubblePop { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .gc-bubble-pop { animation: gcBubblePop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
   @media (prefers-reduced-motion: reduce) {
     .scroll-arrow .chev1, .scroll-arrow .chev2, .marquee-track,
-    .hero-glow, .anim-in, .call-ring { animation: none !important; }
+    .hero-glow, .anim-in, .call-ring, .gc-float, .gc-bubble-pop { animation: none !important; }
   }
 
   :focus-visible { outline: 2px solid #1d51f5; outline-offset: 2px; border-radius: 6px; }
@@ -233,9 +239,10 @@
         </span>
       </a>
 
+      <!-- DESKTOP NAV — কাজের সময় replaced with গ্রুপ চ্যাট -->
       <div class="hidden md:flex md:items-center md:gap-0.5 lg:gap-1">
         <a href="#home" class="nav-link">হোম</a>
-        <a href="#worktime" class="nav-link">কাজের সময়</a>
+        <a href="group-chat.html" class="nav-link">গ্রুপ চ্যাট</a>
         <a href="#how" class="nav-link">কিভাবে কাজ করে</a>
         <a href="#important" class="nav-link">সতর্কতা</a>
         <button type="button" data-open-chat class="nav-link">যোগাযোগ</button>
@@ -252,15 +259,16 @@
       </button>
     </div>
 
+    <!-- MOBILE MENU — কাজের সময় replaced with গ্রুপ চ্যাট -->
     <div id="mobileMenu" class="hidden border-t border-slate-200 bg-white md:hidden">
       <div class="mx-auto max-w-7xl space-y-1 px-4 py-3 sm:px-6">
         <a href="#home" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">
           <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18m-9-9v18"/></svg>
           হোম
         </a>
-        <a href="#worktime" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-          <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-          কাজের সময়
+        <a href="group-chat.html" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-purple-700 hover:bg-purple-50">
+          <svg class="h-4 w-4 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          গ্রুপ চ্যাট
         </a>
         <a href="#how" class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">
           <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
@@ -351,10 +359,13 @@
             আবেদন ফর্মে যান
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
           </a>
-          <button type="button" data-open-chat class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand-200 bg-white/95 px-8 py-3.5 text-sm font-bold text-brand-700 shadow-md backdrop-blur transition hover:border-brand-300 hover:bg-white active:scale-[.98] sm:w-auto">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.8L3 21l1.2-3.6A7.9 7.9 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/></svg>
-            চ্যাট শুরু করুন
-          </button>
+          <!-- REPLACED: চ্যাট শুরু করুন → Open Group Chat -->
+          <a href="group-chat.html" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-purple-300 bg-white/95 px-8 py-3.5 text-sm font-extrabold text-purple-700 shadow-md backdrop-blur transition hover:border-purple-400 hover:bg-purple-50 active:scale-[.98] sm:w-auto">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Open Group Chat
+          </a>
         </div>
 
         <div class="trust-badge anim-in mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[11px] font-bold text-slate-800 sm:text-xs">
@@ -599,6 +610,110 @@
           সম্পূর্ণ গাইডে কাগজপত্র ও ফি সম্পর্কে জানুন
           <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       🆕 GROUP CHAT SECTION — সম্পূর্ণ নতুন
+  ═══════════════════════════════════════════════════════════ -->
+  <section id="group-chat" class="scroll-mt-24 border-b border-slate-200 bg-gradient-to-b from-purple-50/60 via-white to-brand-50/30 py-14 sm:py-20" aria-labelledby="gc-heading">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="mx-auto max-w-3xl text-center">
+        <span class="inline-flex items-center gap-2 rounded-full bg-purple-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-purple-700 ring-1 ring-purple-100">
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          কমিউনিটি গ্রুপ চ্যাট
+        </span>
+        <h2 id="gc-heading" class="section-title">আমাদের লাইভ কমিউনিটি গ্রুপ চ্যাটে যোগ দিন</h2>
+        <p class="section-sub">
+          এজেন্ট, দলিল লেখক ও স্টেকহোল্ডারদের জন্য লাইভ গ্রুপ চ্যাট। প্রশ্ন করুন, অভিজ্ঞতা শেয়ার করুন, একসাথে সমাধান খুঁজুন — কোনো signup নেই, শুধু নাম দিন।
+        </p>
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 sm:gap-4">
+        <div class="card p-4 text-center">
+          <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-purple-100 text-purple-700" aria-hidden="true">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </span>
+          <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">রিয়েল-টাইম</p>
+          <p class="mt-0.5 text-sm font-extrabold text-slate-900">তাৎক্ষণিক মেসেজ</p>
+        </div>
+        <div class="card p-4 text-center">
+          <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-emerald-100 text-emerald-700" aria-hidden="true">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.6 2A9.6 9.6 0 0 1 12 21a9.6 9.6 0 0 1-8.6-9A9.6 9.6 0 0 1 12 3a9.6 9.6 0 0 1 8.6 9Z"/></svg>
+          </span>
+          <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">নিরাপদ</p>
+          <p class="mt-0.5 text-sm font-extrabold text-slate-900">গোপনীয় চ্যাট</p>
+        </div>
+        <div class="card p-4 text-center">
+          <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-amber-100 text-amber-700" aria-hidden="true">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+          </span>
+          <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">মিডিয়া</p>
+          <p class="mt-0.5 text-sm font-extrabold text-slate-900">ছবি শেয়ার</p>
+        </div>
+        <div class="card p-4 text-center">
+          <span class="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-brand-100 text-brand-700" aria-hidden="true">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </span>
+          <p class="mt-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">কমিউনিটি</p>
+          <p class="mt-0.5 text-sm font-extrabold text-slate-900">সবাই একসাথে</p>
+        </div>
+      </div>
+
+      <!-- Benefits List -->
+      <div class="mx-auto mt-8 max-w-3xl rounded-2xl border border-purple-200 bg-white p-6 shadow-soft">
+        <h3 class="text-base font-extrabold text-slate-900">গ্রুপ চ্যাটে কী পাবেন?</h3>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          <div class="flex items-start gap-2.5">
+            <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+            </span>
+            <p class="text-sm text-slate-700"><b class="text-slate-900">দ্রুত উত্তর</b> — অভিজ্ঞ এজেন্টদের কাছ থেকে সাথে সাথে সলিউশন</p>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+            </span>
+            <p class="text-sm text-slate-700"><b class="text-slate-900">অভিজ্ঞতা শেয়ার</b> — সফল ও ব্যর্থ কেস নিয়ে আলোচনা</p>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+            </span>
+            <p class="text-sm text-slate-700"><b class="text-slate-900">অফিসিয়াল আপডেট</b> — নতুন ফিচার ও নোটিশ সবার আগে</p>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7"/></svg>
+            </span>
+            <p class="text-sm text-slate-700"><b class="text-slate-900">একসাথে সমাধান</b> — সমস্যা থাকলে সবাই মিলে খুঁজে বের করা</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main CTA -->
+      <div class="mx-auto mt-10 max-w-3xl">
+        <div class="gc-bubble-pop relative overflow-hidden rounded-3xl border-2 border-purple-300 bg-gradient-to-br from-purple-600 via-brand-600 to-brand-700 p-8 shadow-xl sm:p-10">
+          <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" aria-hidden="true"></div>
+          <div class="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-purple-400/20 blur-3xl" aria-hidden="true"></div>
+          <div class="gc-float pointer-events-none absolute right-8 top-8 hidden h-12 w-12 place-items-center rounded-full bg-white/20 backdrop-blur sm:grid" aria-hidden="true">
+            <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <div class="relative z-10 text-center">
+            <h3 class="text-2xl font-extrabold text-white sm:text-3xl">কমিউনিটিতে যোগ দিন</h3>
+            <p class="mx-auto mt-3 max-w-md text-sm text-purple-100 sm:text-base">কোনো signup নেই, শুধু আপনার নাম দিয়ে প্রবেশ করুন। বাকিরা এই নামেই আপনাকে চিনবে।</p>
+            <a href="group-chat.html" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-extrabold text-purple-700 shadow-xl transition hover:bg-purple-50 hover:scale-105 active:scale-95">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 01-4-.8L3 21l1.2-3.6A7.9 7.9 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              Open Group Chat
+            </a>
+            <p class="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold text-purple-100">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              নিরাপদ · সম্পূর্ণ বিনামূল্যে · কোনো রেজিস্ট্রেশন নেই
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
