@@ -66,10 +66,24 @@ tailwind.config = {
   .emoji-btn { transition: transform 0.15s ease, background-color 0.15s ease; }
   .emoji-btn:hover { transform: scale(1.2); background: rgba(99, 102, 241, 0.1); }
 
-  .msg-container:hover .msg-actions { opacity: 1; pointer-events: auto; }
-  .msg-actions { opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
-  .reaction-bar { opacity: 0; pointer-events: none; transition: all 0.2s ease; transform: translateY(4px); }
-  .msg-container:hover .reaction-bar { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  /* ═══ MESSAGE ACTIONS — DESKTOP HOVER, MOBILE ALWAYS VISIBLE ═══ */
+  .msg-actions {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+  }
+  @media (hover: hover) {
+    .msg-container:hover .msg-actions {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  @media (hover: none) {
+    .msg-actions {
+      opacity: 0.85;
+      pointer-events: auto;
+    }
+  }
 
   body, body * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease; }
   body.no-transition *, body.no-transition { transition: none !important; }
@@ -108,6 +122,37 @@ tailwind.config = {
     50% { background-color: rgba(251, 191, 36, 0.3); }
   }
   .locked-chat-pulse { animation: pulseWarning 2s ease-in-out infinite; }
+
+  /* ═══ REACTION PICKER POPUP ═══ */
+  @keyframes reactIn { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+  .reaction-picker-pop { animation: reactIn 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+
+  /* ═══ IMAGE VIEWER ═══ */
+  @keyframes viewerIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+  .viewer-in { animation: viewerIn 0.2s ease-out; }
+
+  /* ═══ EDIT MODE ═══ */
+  .edit-textarea {
+    width: 100%;
+    background: transparent;
+    outline: none;
+    resize: none;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+  }
+  .edit-textarea.own { color: white; }
+  .edit-textarea.other { color: inherit; }
+
+  /* Edited badge */
+  .edited-badge {
+    font-size: 9px;
+    opacity: 0.7;
+    font-weight: 600;
+    margin-left: 4px;
+  }
 </style>
 </head>
 
@@ -137,8 +182,7 @@ tailwind.config = {
       <div class="mt-7">
         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider">আপনার নাম / Nickname</label>
         <div class="relative">
-          <input type="text" id="nicknameInput" maxlength="20" placeholder="যেমন: রহিম, Karim, Emon..." 
-            class="w-full rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3.5 pr-16 text-base font-semibold outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900/40 transition" autocomplete="off" autofocus />
+          <input type="text" id="nicknameInput" maxlength="20" placeholder="যেমন: রহিম, Karim, Emon..." class="w-full rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3.5 pr-16 text-base font-semibold outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900/40 transition" autocomplete="off" autofocus />
           <span id="nicknameCount" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">0/20</span>
         </div>
         <p id="nicknameError" class="hidden mt-2 text-xs font-semibold text-rose-600"></p>
@@ -267,7 +311,7 @@ tailwind.config = {
     <!-- CHAT AREA -->
     <main class="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-950 relative">
 
-      <!-- ANNOUNCEMENT BANNER -->
+      <!-- ANNOUNCEMENT -->
       <div id="announcementBanner" class="hidden shrink-0 pin-slide px-4 py-2.5 bg-gradient-to-r from-brand-50 to-purple-50 dark:from-brand-950/40 dark:to-purple-950/40 border-b border-brand-200 dark:border-brand-800 flex items-start gap-3">
         <svg class="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
         <div class="min-w-0 flex-1">
@@ -279,13 +323,13 @@ tailwind.config = {
         </button>
       </div>
 
-      <!-- LOCKED CHAT BANNER -->
+      <!-- LOCKED -->
       <div id="lockedBanner" class="hidden shrink-0 locked-chat-pulse px-4 py-2.5 bg-amber-100 dark:bg-amber-950/40 border-b border-amber-300 dark:border-amber-800 flex items-center gap-3">
         <svg class="w-5 h-5 text-amber-700 dark:text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         <p class="text-xs font-extrabold text-amber-800 dark:text-amber-200">চ্যাট লক করা আছে — শুধু Admin পাঠাতে পারবেন</p>
       </div>
 
-      <!-- PINNED BANNER -->
+      <!-- PINNED -->
       <div id="pinnedBanner" class="hidden shrink-0 pin-slide px-4 py-2 bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-950/40 dark:to-amber-900/40 border-b border-amber-200 dark:border-amber-800 flex items-center gap-3">
         <svg class="w-4 h-4 text-amber-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
         <button type="button" id="pinnedBannerClick" class="min-w-0 flex-1 text-left">
@@ -300,7 +344,7 @@ tailwind.config = {
       <!-- MESSAGES -->
       <div id="messagesArea" class="flex-1 overflow-y-auto scroll-slim px-2 sm:px-6 py-4 space-y-1" style="scroll-behavior: smooth;"></div>
 
-      <!-- NEW MSG INDICATOR -->
+      <!-- NEW MSG -->
       <button type="button" id="newMsgIndicator" class="hidden absolute bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 bg-brand-600 text-white text-xs font-bold rounded-full shadow-lg z-10 new-msg-bounce">
         <span class="inline-flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
@@ -318,14 +362,11 @@ tailwind.config = {
 
       <!-- INPUT -->
       <div class="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-2 sm:px-5 py-2 sm:py-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] relative">
-
-        <!-- Mention autocomplete -->
         <div id="mentionDropdown" class="hidden mention-dropdown absolute bottom-full left-4 mb-2 w-64 max-w-[calc(100%-2rem)] bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-30">
           <div class="px-3 py-2 border-b border-slate-100 dark:border-slate-700"><p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Mention</p></div>
           <div id="mentionList" class="max-h-48 overflow-y-auto scroll-slim py-1"></div>
         </div>
 
-        <!-- Reply preview -->
         <div id="replyPreview" class="hidden mb-2 flex items-center gap-2 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-2 border-l-4 border-brand-500">
           <svg class="w-4 h-4 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
           <div class="min-w-0 flex-1">
@@ -337,7 +378,6 @@ tailwind.config = {
           </button>
         </div>
 
-        <!-- Admin bar -->
         <div id="adminModeBar" class="hidden mb-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-950/40 dark:to-amber-900/40 px-3 py-2 border border-amber-300 dark:border-amber-700">
           <svg class="w-4 h-4 text-amber-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
           <p class="text-xs font-bold text-amber-800 dark:text-amber-200 flex-1">Admin mode ON</p>
@@ -345,7 +385,6 @@ tailwind.config = {
           <button type="button" id="exitAdminBtn" class="text-xs font-bold text-amber-700 dark:text-amber-300 underline">Exit</button>
         </div>
 
-        <!-- Image preview -->
         <div id="imagePreview" class="hidden mb-2 relative inline-block">
           <img id="imagePreviewImg" class="h-20 rounded-lg border border-slate-200 dark:border-slate-700" />
           <button type="button" id="cancelImage" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-500 hover:bg-rose-600 rounded-full text-white grid place-items-center shadow-md transition">
@@ -360,9 +399,7 @@ tailwind.config = {
           </button>
 
           <div class="flex-1 min-w-0 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-end">
-            <textarea id="messageInput" rows="1" maxlength="1000" placeholder="মেসেজ লিখুন…" 
-              class="flex-1 bg-transparent px-3 sm:px-4 py-3 text-sm outline-none resize-none max-h-32 leading-5 disabled:opacity-50"
-              style="min-height: 40px;"></textarea>
+            <textarea id="messageInput" rows="1" maxlength="1000" placeholder="মেসেজ লিখুন…" class="flex-1 bg-transparent px-3 sm:px-4 py-3 text-sm outline-none resize-none max-h-32 leading-5 disabled:opacity-50" style="min-height: 40px;"></textarea>
             <button type="button" id="emojiBtn" class="shrink-0 w-10 h-10 grid place-items-center hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Emoji">
               <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </button>
@@ -389,6 +426,38 @@ tailwind.config = {
     </div>
   </div>
   <div id="emojiGrid" class="p-2 grid grid-cols-8 gap-1 max-h-64 overflow-y-auto scroll-slim"></div>
+</div>
+
+<!-- ═══ REACTION PICKER (floating) ═══ -->
+<div id="reactionPicker" class="hidden fixed z-[65] bg-white dark:bg-slate-800 rounded-full shadow-2xl border-2 border-slate-200 dark:border-slate-700 px-2 py-1.5 flex gap-0.5 reaction-picker-pop">
+  <button type="button" data-react-pick="👍" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">👍</button>
+  <button type="button" data-react-pick="❤️" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">❤️</button>
+  <button type="button" data-react-pick="😂" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">😂</button>
+  <button type="button" data-react-pick="😮" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">😮</button>
+  <button type="button" data-react-pick="😢" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">😢</button>
+  <button type="button" data-react-pick="🔥" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-2xl flex items-center justify-center active:scale-95">🔥</button>
+</div>
+
+<!-- ═══ CUSTOM IMAGE VIEWER ═══ -->
+<div id="imageViewer" class="hidden fixed inset-0 z-[75] bg-black/95 flex flex-col viewer-in">
+  <div class="shrink-0 flex items-center justify-between gap-2 p-3 bg-gradient-to-b from-black/60 to-transparent">
+    <button type="button" id="viewerClose" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition active:scale-95">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <div class="flex items-center gap-2">
+      <button type="button" id="viewerDownload" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition active:scale-95">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        <span class="hidden sm:inline">Download</span>
+      </button>
+      <button type="button" id="viewerShare" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition active:scale-95">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+        <span class="hidden sm:inline">Share</span>
+      </button>
+    </div>
+  </div>
+  <div class="flex-1 flex items-center justify-center p-2 min-h-0" id="viewerImageWrap">
+    <img id="viewerImage" class="max-w-full max-h-full object-contain select-none" draggable="false" />
+  </div>
 </div>
 
 <!-- ═══ SEARCH OVERLAY ═══ -->
@@ -433,9 +502,7 @@ tailwind.config = {
           <span id="profileModalAdmin" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">
             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>ADMIN
           </span>
-          <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>Online
-          </span>
+          <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>Online</span>
         </div>
       </div>
       <div class="mt-5 flex gap-2">
@@ -447,100 +514,67 @@ tailwind.config = {
 </div>
 
 <!-- ═══ ACTION MENU ═══ -->
-<div id="actionMenu" class="hidden fixed z-[60] bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 py-1 min-w-[160px]">
-  <button type="button" data-action="copy" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
+<div id="actionMenu" class="hidden fixed z-[60] bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 py-1 min-w-[170px]">
+  <button type="button" data-action="copy" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 012-2h9a2 2 0 012 2v9a2 2 0 01-2 2h-2M5 8h9a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2z"/></svg>Copy text
   </button>
-  <button type="button" data-action="reply" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
+  <button type="button" data-action="reply" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>Reply
   </button>
-  <button type="button" data-action="forward" class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
+  <button type="button" data-action="forward" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6-6m6 6l-6 6"/></svg>Forward
   </button>
-  <button type="button" data-action="pin" class="hidden w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
+  <button type="button" data-action="edit" class="hidden w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left border-t border-slate-100 dark:border-slate-700">
+    <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Edit
+  </button>
+  <button type="button" data-action="pin" class="hidden w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
     <svg class="w-3.5 h-3.5 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Pin
   </button>
-  <button type="button" data-action="delete" class="hidden w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition text-left border-t border-slate-100 dark:border-slate-700">
+  <button type="button" data-action="delete" class="hidden w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition text-left border-t border-slate-100 dark:border-slate-700">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Delete
   </button>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     ADMIN CONTROL PANEL — Full Control
-═══════════════════════════════════════════════ -->
+<!-- ═══ ADMIN PANEL ═══ -->
 <div id="adminPanel" class="hidden fixed inset-0 z-[70] bg-slate-900/70 backdrop-blur-sm items-center justify-center p-2 sm:p-4">
   <div class="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]">
-    
-    <!-- Panel Header -->
     <div class="shrink-0 flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white">
       <div class="flex items-center gap-2 min-w-0">
         <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-        <div class="min-w-0">
-          <h2 class="text-base font-extrabold truncate">Admin Control Panel</h2>
-          <p class="text-[10px] text-amber-100">Full group management</p>
-        </div>
+        <div class="min-w-0"><h2 class="text-base font-extrabold truncate">Admin Control Panel</h2><p class="text-[10px] text-amber-100">Full group management</p></div>
       </div>
       <button type="button" id="closeAdminPanelBtn" class="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition shrink-0">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
 
-    <!-- Tabs -->
-    <div class="shrink-0 flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-      <button type="button" data-tab="overview" class="admin-tab flex-1 px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition">📊 Overview</button>
-      <button type="button" data-tab="moderation" class="admin-tab flex-1 px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition">🛡️ Moderation</button>
-      <button type="button" data-tab="danger" class="admin-tab flex-1 px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition">⚠️ Danger</button>
+    <div class="shrink-0 flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 overflow-x-auto no-scrollbar">
+      <button type="button" data-tab="overview" class="admin-tab flex-1 min-w-fit px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition whitespace-nowrap">📊 Overview</button>
+      <button type="button" data-tab="moderation" class="admin-tab flex-1 min-w-fit px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition whitespace-nowrap">🛡️ Moderation</button>
+      <button type="button" data-tab="danger" class="admin-tab flex-1 min-w-fit px-3 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition whitespace-nowrap">⚠️ Danger</button>
     </div>
 
-    <!-- Body -->
     <div class="flex-1 overflow-y-auto scroll-slim p-4">
-
-      <!-- OVERVIEW TAB -->
       <div data-tab-content="overview" class="space-y-4">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <div class="rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 text-white p-3">
-            <p class="text-[10px] uppercase tracking-wider opacity-80">Messages</p>
-            <p id="adminStatMessages" class="text-2xl font-extrabold mt-0.5">0</p>
-          </div>
-          <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-3">
-            <p class="text-[10px] uppercase tracking-wider opacity-80">Online</p>
-            <p id="adminStatOnline" class="text-2xl font-extrabold mt-0.5">0</p>
-          </div>
-          <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-white p-3">
-            <p class="text-[10px] uppercase tracking-wider opacity-80">Pins</p>
-            <p id="adminStatPins" class="text-2xl font-extrabold mt-0.5">0</p>
-          </div>
-          <div class="rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 text-white p-3">
-            <p class="text-[10px] uppercase tracking-wider opacity-80">Banned</p>
-            <p id="adminStatBanned" class="text-2xl font-extrabold mt-0.5">0</p>
-          </div>
+          <div class="rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Messages</p><p id="adminStatMessages" class="text-2xl font-extrabold mt-0.5">0</p></div>
+          <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Online</p><p id="adminStatOnline" class="text-2xl font-extrabold mt-0.5">0</p></div>
+          <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Pins</p><p id="adminStatPins" class="text-2xl font-extrabold mt-0.5">0</p></div>
+          <div class="rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 text-white p-3"><p class="text-[10px] uppercase tracking-wider opacity-80">Banned</p><p id="adminStatBanned" class="text-2xl font-extrabold mt-0.5">0</p></div>
         </div>
 
-        <!-- Chat Settings -->
         <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
           <h3 class="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3">Chat Settings</h3>
-          
           <div class="space-y-2">
-            <!-- Lock Chat -->
             <div class="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-              <div class="min-w-0 flex-1">
-                <p class="text-xs font-bold">Chat Lock</p>
-                <p class="text-[10px] text-slate-500">শুধু admin message পাঠাতে পারবে</p>
-              </div>
+              <div class="min-w-0 flex-1"><p class="text-xs font-bold">Chat Lock</p><p class="text-[10px] text-slate-500">শুধু admin message পাঠাতে পারবে</p></div>
               <label class="relative inline-flex items-center cursor-pointer shrink-0">
                 <input type="checkbox" id="toggleLockChat" class="sr-only peer" />
                 <div class="w-11 h-6 bg-slate-300 dark:bg-slate-600 peer-checked:bg-amber-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
               </label>
             </div>
-
-            <!-- Slow Mode -->
             <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-              <div class="flex items-center justify-between gap-3 mb-2">
-                <div class="min-w-0 flex-1">
-                  <p class="text-xs font-bold">Slow Mode</p>
-                  <p class="text-[10px] text-slate-500">ইউজারদের মেসেজ পাঠানোর মাঝে বিরতি</p>
-                </div>
-              </div>
+              <div class="flex items-center justify-between gap-3 mb-2"><div class="min-w-0 flex-1"><p class="text-xs font-bold">Slow Mode</p><p class="text-[10px] text-slate-500">মেসেজ পাঠানোর মাঝে বিরতি</p></div></div>
               <select id="slowModeSelect" class="w-full text-xs font-bold rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2">
                 <option value="0">Off — কোনো সীমা নেই</option>
                 <option value="5">৫ সেকেন্ড</option>
@@ -549,11 +583,9 @@ tailwind.config = {
                 <option value="60">১ মিনিট</option>
               </select>
             </div>
-
-            <!-- Announcement -->
             <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
               <label class="block text-xs font-bold mb-2">📢 Announcement (সবাই দেখবে)</label>
-              <textarea id="announcementInput" rows="2" maxlength="200" placeholder="গ্রুপের সবাইকে কিছু জানাতে চান? এখানে লিখুন…" class="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 outline-none focus:border-brand-500 resize-none"></textarea>
+              <textarea id="announcementInput" rows="2" maxlength="200" placeholder="গ্রুপের সবাইকে কিছু জানাতে চান?" class="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 outline-none focus:border-brand-500 resize-none"></textarea>
               <div class="flex gap-2 mt-2">
                 <button type="button" id="saveAnnouncementBtn" class="flex-1 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold py-2 transition">Save</button>
                 <button type="button" id="clearAnnouncementBtn" class="rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 text-xs font-bold px-3 py-2 transition">Clear</button>
@@ -563,66 +595,36 @@ tailwind.config = {
         </div>
       </div>
 
-      <!-- MODERATION TAB -->
       <div data-tab-content="moderation" class="hidden space-y-4">
-        <!-- Banned users -->
         <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">🚫 Banned Users</h3>
             <span id="bannedCount" class="text-[10px] font-bold bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 px-2 py-0.5 rounded-full">0</span>
           </div>
-          <div id="bannedList" class="space-y-1.5 max-h-64 overflow-y-auto scroll-slim">
-            <p class="text-xs text-slate-500 text-center py-4">কোনো banned user নেই</p>
-          </div>
+          <div id="bannedList" class="space-y-1.5 max-h-64 overflow-y-auto scroll-slim"><p class="text-xs text-slate-500 text-center py-4">কোনো banned user নেই</p></div>
         </div>
-
-        <!-- Online users (with ban option) -->
         <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3">
           <h3 class="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">🟢 Online Users</h3>
-          <div id="adminOnlineList" class="space-y-1.5 max-h-64 overflow-y-auto scroll-slim">
-            <p class="text-xs text-slate-500 text-center py-4">কেউ online নেই</p>
-          </div>
+          <div id="adminOnlineList" class="space-y-1.5 max-h-64 overflow-y-auto scroll-slim"><p class="text-xs text-slate-500 text-center py-4">কেউ online নেই</p></div>
         </div>
       </div>
 
-      <!-- DANGER TAB -->
       <div data-tab-content="danger" class="hidden space-y-3">
-        <div class="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-3">
-          <p class="text-xs font-bold text-rose-700 dark:text-rose-400 mb-2">⚠️ এই অপশনগুলো ব্যবহারে সতর্ক থাকুন</p>
-        </div>
-
-        <button type="button" id="clearPinsBtn" class="w-full rounded-xl bg-amber-100 dark:bg-amber-950/40 hover:bg-amber-200 dark:hover:bg-amber-900/60 border border-amber-300 dark:border-amber-800 p-3 text-left transition">
-          <p class="text-sm font-extrabold text-amber-800 dark:text-amber-300">📌 Clear all pins</p>
-          <p class="text-[11px] text-amber-700 dark:text-amber-400">সব pinned message সরানো হবে</p>
-        </button>
-
-        <button type="button" id="clearTypingBtn" class="w-full rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 p-3 text-left transition">
-          <p class="text-sm font-extrabold text-slate-800 dark:text-slate-200">⌨️ Clear typing indicators</p>
-          <p class="text-[11px] text-slate-600 dark:text-slate-400">সব "typing..." স্ট্যাটাস রিসেট</p>
-        </button>
-
-        <button type="button" id="clearAllMessagesBtn" class="w-full rounded-xl bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 border border-rose-300 dark:border-rose-800 p-3 text-left transition">
-          <p class="text-sm font-extrabold text-rose-800 dark:text-rose-300">🗑️ Clear all messages</p>
-          <p class="text-[11px] text-rose-700 dark:text-rose-400">সব মেসেজ স্থায়ীভাবে মুছে যাবে — ফেরানো যাবে না</p>
-        </button>
-
-        <button type="button" id="deleteChatBtn" class="w-full rounded-xl bg-rose-600 hover:bg-rose-700 border border-rose-700 p-3 text-left transition">
-          <p class="text-sm font-extrabold text-white">💥 Delete entire chat</p>
-          <p class="text-[11px] text-rose-100">মেসেজ, pins, presence — সব ডিলিট। নতুন করে শুরু হবে।</p>
-        </button>
+        <div class="rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-3"><p class="text-xs font-bold text-rose-700 dark:text-rose-400 mb-2">⚠️ এই অপশনগুলো ব্যবহারে সতর্ক থাকুন</p></div>
+        <button type="button" id="clearPinsBtn" class="w-full rounded-xl bg-amber-100 dark:bg-amber-950/40 hover:bg-amber-200 dark:hover:bg-amber-900/60 border border-amber-300 dark:border-amber-800 p-3 text-left transition"><p class="text-sm font-extrabold text-amber-800 dark:text-amber-300">📌 Clear all pins</p><p class="text-[11px] text-amber-700 dark:text-amber-400">সব pinned message সরানো হবে</p></button>
+        <button type="button" id="clearTypingBtn" class="w-full rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 p-3 text-left transition"><p class="text-sm font-extrabold text-slate-800 dark:text-slate-200">⌨️ Clear typing indicators</p><p class="text-[11px] text-slate-600 dark:text-slate-400">সব "typing..." স্ট্যাটাস রিসেট</p></button>
+        <button type="button" id="clearAllMessagesBtn" class="w-full rounded-xl bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 border border-rose-300 dark:border-rose-800 p-3 text-left transition"><p class="text-sm font-extrabold text-rose-800 dark:text-rose-300">🗑️ Clear all messages</p><p class="text-[11px] text-rose-700 dark:text-rose-400">সব মেসেজ স্থায়ীভাবে মুছে যাবে</p></button>
+        <button type="button" id="deleteChatBtn" class="w-full rounded-xl bg-rose-600 hover:bg-rose-700 border border-rose-700 p-3 text-left transition"><p class="text-sm font-extrabold text-white">💥 Delete entire chat</p><p class="text-[11px] text-rose-100">সব ডিলিট। নতুন করে শুরু হবে।</p></button>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<!-- ═══ ADMIN LOGIN ═══ -->
 <div id="adminModal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
   <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-700 p-6">
     <div class="text-center">
-      <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg mb-3">
-        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-      </div>
+      <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg mb-3"><svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></div>
       <h3 class="text-lg font-extrabold">Admin Login</h3>
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">শুধুমাত্র অনুমোদিত অ্যাডমিন</p>
     </div>
@@ -634,17 +636,12 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ═══ CONFIRMATION MODAL ═══ -->
+<!-- ═══ CONFIRM MODAL ═══ -->
 <div id="confirmModal" class="hidden fixed inset-0 z-[80] bg-slate-900/70 backdrop-blur-sm items-center justify-center p-4">
   <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-700 p-6">
     <div class="flex items-start gap-3 mb-4">
-      <div class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/40 grid place-items-center shrink-0">
-        <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
-      </div>
-      <div class="min-w-0 flex-1">
-        <h3 id="confirmTitle" class="text-sm font-extrabold">Are you sure?</h3>
-        <p id="confirmMessage" class="text-xs text-slate-600 dark:text-slate-400 mt-1">This action cannot be undone.</p>
-      </div>
+      <div class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/40 grid place-items-center shrink-0"><svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></div>
+      <div class="min-w-0 flex-1"><h3 id="confirmTitle" class="text-sm font-extrabold">Are you sure?</h3><p id="confirmMessage" class="text-xs text-slate-600 dark:text-slate-400 mt-1">This action cannot be undone.</p></div>
     </div>
     <div class="flex gap-2">
       <button type="button" id="confirmCancel" class="flex-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2.5 text-sm font-bold transition">Cancel</button>
@@ -695,15 +692,8 @@ const toBn = n => String(n ?? 0).replace(/\d/g, d => BN[+d]);
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 
-const KEYS = {
-  nickname: 'em_group_nickname',
-  userId: 'em_group_userid',
-  sound: 'em_group_sound',
-  theme: 'em_group_theme',
-  lastSeenMsg: 'em_group_lastseen',
-};
+const KEYS = { nickname: 'em_group_nickname', userId: 'em_group_userid', sound: 'em_group_sound', theme: 'em_group_theme', lastSeenMsg: 'em_group_lastseen' };
 
-// STATE
 const state = {
   userId: null, nickname: null, isAdmin: false, adminUser: null,
   messages: [], members: {}, typingUsers: {}, pins: [], banned: {},
@@ -716,33 +706,21 @@ const state = {
   baseTitle: 'Group Chat — eMutation Community',
   unreadCount: 0, mentionMatches: [], mentionDropdownIndex: 0,
   lastMessageTime: 0, profileModalUserId: null,
+  viewerImageUrl: null, reactionPickerMsgId: null,
+  editingMsgId: null,
 };
 
-// HELPERS
-function escapeHtml(str='') {
-  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+function escapeHtml(str='') { return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function avatarColor(seed) {
-  const colors = [
-    ['#6366f1','#8b5cf6'], ['#ec4899','#f43f5e'], ['#06b6d4','#3b82f6'],
-    ['#10b981','#059669'], ['#f59e0b','#d97706'], ['#8b5cf6','#6366f1'],
-    ['#ef4444','#dc2626'], ['#14b8a6','#0d9488'], ['#f97316','#ea580c'],
-    ['#a855f7','#9333ea']
-  ];
+  const colors = [['#6366f1','#8b5cf6'],['#ec4899','#f43f5e'],['#06b6d4','#3b82f6'],['#10b981','#059669'],['#f59e0b','#d97706'],['#8b5cf6','#6366f1'],['#ef4444','#dc2626'],['#14b8a6','#0d9488'],['#f97316','#ea580c'],['#a855f7','#9333ea']];
   let hash = 0;
   for (let i = 0; i < (seed || '').length; i++) { hash = ((hash << 5) - hash) + seed.charCodeAt(i); hash |= 0; }
   return colors[Math.abs(hash) % colors.length];
 }
-function getInitials(name) {
-  if (!name) return '?';
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
-}
+function getInitials(name) { if (!name) return '?'; const p = name.trim().split(/\s+/); if (p.length === 1) return p[0].slice(0, 2).toUpperCase(); return (p[0][0] + p[p.length-1][0]).toUpperCase(); }
 function fmtTime(ts) { if (!ts) return ''; const d = ts.toDate ? ts.toDate() : new Date(ts); return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }); }
 function fmtDateSeparator(date) {
-  const now = new Date();
-  const d = date instanceof Date ? date : new Date(date);
+  const now = new Date(), d = date instanceof Date ? date : new Date(date);
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const diffDays = Math.floor((today - target) / (24 * 60 * 60 * 1000));
@@ -757,12 +735,10 @@ function showToast(msg, type='info') {
   box.textContent = msg;
   const colors = { success: 'bg-emerald-600', error: 'bg-rose-600', info: 'bg-slate-800' };
   box.className = `px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow-2xl ${colors[type] || colors.info}`;
-  const t = $('#toast');
-  t.style.opacity = '1';
+  const t = $('#toast'); t.style.opacity = '1';
   setTimeout(() => { t.style.opacity = '0'; }, 2400);
 }
 
-// CONFIRM MODAL
 let confirmCallback = null;
 function showConfirm(title, message, onOk) {
   $('#confirmTitle').textContent = title;
@@ -771,46 +747,35 @@ function showConfirm(title, message, onOk) {
   $('#confirmModal').classList.remove('hidden');
   $('#confirmModal').classList.add('flex');
 }
-$('#confirmCancel').addEventListener('click', () => {
-  $('#confirmModal').classList.add('hidden');
-  $('#confirmModal').classList.remove('flex');
-  confirmCallback = null;
-});
-$('#confirmOk').addEventListener('click', async () => {
-  $('#confirmModal').classList.add('hidden');
-  $('#confirmModal').classList.remove('flex');
-  if (confirmCallback) await confirmCallback();
-  confirmCallback = null;
-});
+$('#confirmCancel').addEventListener('click', () => { $('#confirmModal').classList.add('hidden'); $('#confirmModal').classList.remove('flex'); confirmCallback = null; });
+$('#confirmOk').addEventListener('click', async () => { $('#confirmModal').classList.add('hidden'); $('#confirmModal').classList.remove('flex'); if (confirmCallback) await confirmCallback(); confirmCallback = null; });
 
-// MARKDOWN RENDERER
+// MARKDOWN
 function renderMarkdown(text, isOwn = false) {
   if (!text) return '';
   let html = escapeHtml(text);
   const codeBlocks = [];
-  html = html.replace(/```([\s\S]*?)```/g, (_, code) => { const idx = codeBlocks.length; codeBlocks.push(code.trim()); return `%%CODEBLOCK_${idx}%%`; });
+  html = html.replace(/```([\s\S]*?)```/g, (_, c) => { const i = codeBlocks.length; codeBlocks.push(c.trim()); return `%%CB_${i}%%`; });
   const urls = [];
-  const urlRegex = /(https?:\/\/[^\s<]+[^\s<.,;:!?)"'])/g;
-  html = html.replace(urlRegex, (url) => { const idx = urls.length; urls.push(url); return `%%URL_${idx}%%`; });
+  html = html.replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)"'])/g, (u) => { const i = urls.length; urls.push(u); return `%%U_${i}%%`; });
   const inlineCodes = [];
-  html = html.replace(/`([^`\n]+)`/g, (_, code) => { const idx = inlineCodes.length; inlineCodes.push(code); return `%%INLINECODE_${idx}%%`; });
+  html = html.replace(/`([^`\n]+)`/g, (_, c) => { const i = inlineCodes.length; inlineCodes.push(c); return `%%IC_${i}%%`; });
   const mentions = [];
-  html = html.replace(/@([\w\u0980-\u09FF]{2,20})/g, (full, name) => { const idx = mentions.length; mentions.push(name); return `%%MENTION_${idx}%%`; });
+  html = html.replace(/@([\w\u0980-\u09FF]{2,20})/g, (_, n) => { const i = mentions.length; mentions.push(n); return `%%M_${i}%%`; });
   html = html.replace(/\*\*([^*\n]+)\*\*/g, '<span class="md-bold">$1</span>');
   html = html.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<span class="md-bold">$1</span>');
   html = html.replace(/(?:^|[^\w])_([^_\n]+)_(?:[^\w]|$)/g, (m, t) => m.replace(`_${t}_`, `<span class="md-italic">${t}</span>`));
   html = html.replace(/~([^~\n]+)~/g, '<span class="md-strike">$1</span>');
-  codeBlocks.forEach((code, i) => { html = html.replace(`%%CODEBLOCK_${i}%%`, `<pre class="md-code-block">${escapeHtml(code)}</pre>`); });
-  inlineCodes.forEach((code, i) => { html = html.replace(`%%INLINECODE_${i}%%`, `<code class="md-inline-code">${escapeHtml(code)}</code>`); });
-  mentions.forEach((name, i) => { html = html.replace(`%%MENTION_${i}%%`, `<span class="md-mention">@${escapeHtml(name)}</span>`); });
-  urls.forEach((url, i) => {
-    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-    if (ytMatch) {
-      const thumbUrl = `https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg`;
-      html = html.replace(`%%URL_${i}%%`, `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="block my-2 group" onclick="event.stopPropagation()"><div class="relative rounded-lg overflow-hidden border border-black/10 dark:border-white/10"><img src="${thumbUrl}" alt="YouTube" class="w-full max-w-sm" loading="lazy" /><div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition"><div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center shadow-lg"><svg class="w-6 h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div></a>`);
+  codeBlocks.forEach((c, i) => html = html.replace(`%%CB_${i}%%`, `<pre class="md-code-block">${escapeHtml(c)}</pre>`));
+  inlineCodes.forEach((c, i) => html = html.replace(`%%IC_${i}%%`, `<code class="md-inline-code">${escapeHtml(c)}</code>`));
+  mentions.forEach((n, i) => html = html.replace(`%%M_${i}%%`, `<span class="md-mention">@${escapeHtml(n)}</span>`));
+  urls.forEach((u, i) => {
+    const yt = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+    if (yt) {
+      html = html.replace(`%%U_${i}%%`, `<a href="${escapeHtml(u)}" target="_blank" rel="noopener" class="block my-2 group" onclick="event.stopPropagation()"><div class="relative rounded-lg overflow-hidden border border-black/10 dark:border-white/10"><img src="https://img.youtube.com/vi/${yt[1]}/mqdefault.jpg" alt="YouTube" class="w-full max-w-sm" loading="lazy" /><div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition"><div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center shadow-lg"><svg class="w-6 h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div></a>`);
     } else {
-      const displayUrl = url.length > 50 ? url.slice(0, 50) + '…' : url;
-      html = html.replace(`%%URL_${i}%%`, `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="md-link" onclick="event.stopPropagation()">${escapeHtml(displayUrl)}</a>`);
+      const dn = u.length > 50 ? u.slice(0, 50) + '…' : u;
+      html = html.replace(`%%U_${i}%%`, `<a href="${escapeHtml(u)}" target="_blank" rel="noopener" class="md-link" onclick="event.stopPropagation()">${escapeHtml(dn)}</a>`);
     }
   });
   return html;
@@ -824,36 +789,29 @@ function playSound(type = 'receive') {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     if (type === 'send') {
-      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.frequency.value = 660; o.type = 'sine';
-      g.gain.setValueAtTime(0.08, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination); o.frequency.value = 660; o.type = 'sine';
+      g.gain.setValueAtTime(0.08, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
       o.start(); o.stop(audioCtx.currentTime + 0.15);
     } else if (type === 'receive') {
-      const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.frequency.value = 880; o.type = 'sine';
-      g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination); o.frequency.value = 880; o.type = 'sine';
+      g.gain.setValueAtTime(0.1, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
       o.start(); o.stop(audioCtx.currentTime + 0.25);
     } else if (type === 'mention') {
       [880, 1100, 1320].forEach((f, i) => {
-        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.frequency.value = f; osc.type = 'triangle';
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime + i * 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.1 + 0.2);
+        const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination); osc.frequency.value = f; osc.type = 'triangle';
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime + i * 0.1); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.1 + 0.2);
         osc.start(audioCtx.currentTime + i * 0.1); osc.stop(audioCtx.currentTime + i * 0.1 + 0.2);
       });
     }
   } catch (e) {}
 }
 
-// THEME — LIGHT BY DEFAULT
+// THEME — LIGHT DEFAULT
 function initTheme() {
-  const saved = localStorage.getItem(KEYS.theme);
-  if (saved === 'dark') document.documentElement.classList.add('dark');
+  if (localStorage.getItem(KEYS.theme) === 'dark') document.documentElement.classList.add('dark');
   $('#themeToggle')?.addEventListener('click', () => {
     document.documentElement.classList.add('no-transition');
     const isDark = document.documentElement.classList.toggle('dark');
@@ -861,33 +819,18 @@ function initTheme() {
     setTimeout(() => document.documentElement.classList.remove('no-transition'), 100);
   });
 }
-
-// SOUND TOGGLE
 function initSoundToggle() {
   state.soundEnabled = localStorage.getItem(KEYS.sound) !== 'off';
   updateSoundIcon();
-  $('#soundToggle')?.addEventListener('click', () => {
-    state.soundEnabled = !state.soundEnabled;
-    localStorage.setItem(KEYS.sound, state.soundEnabled ? 'on' : 'off');
-    updateSoundIcon();
-  });
+  $('#soundToggle')?.addEventListener('click', () => { state.soundEnabled = !state.soundEnabled; localStorage.setItem(KEYS.sound, state.soundEnabled ? 'on' : 'off'); updateSoundIcon(); });
 }
-function updateSoundIcon() {
-  $('#soundOnIcon')?.classList.toggle('hidden', !state.soundEnabled);
-  $('#soundOffIcon')?.classList.toggle('hidden', state.soundEnabled);
-}
+function updateSoundIcon() { $('#soundOnIcon')?.classList.toggle('hidden', !state.soundEnabled); $('#soundOffIcon')?.classList.toggle('hidden', state.soundEnabled); }
 
-// NICKNAME SETUP
+// NICKNAME
 function initNicknameSetup() {
-  const savedNickname = localStorage.getItem(KEYS.nickname);
-  const savedUserId = localStorage.getItem(KEYS.userId);
-  if (savedNickname && savedUserId) {
-    state.nickname = savedNickname;
-    state.userId = savedUserId;
-    enterChat();
-    return;
-  }
-  state.userId = savedUserId || generateId();
+  const savedNick = localStorage.getItem(KEYS.nickname), savedId = localStorage.getItem(KEYS.userId);
+  if (savedNick && savedId) { state.nickname = savedNick; state.userId = savedId; enterChat(); return; }
+  state.userId = savedId || generateId();
   localStorage.setItem(KEYS.userId, state.userId);
   $('#setupScreen').style.display = 'flex';
   $('#chatScreen').classList.add('hidden');
@@ -896,263 +839,136 @@ function initNicknameSetup() {
     const val = input.value.trim();
     $('#nicknameCount').textContent = `${val.length}/20`;
     $('#previewName').textContent = val || 'অনুগ্রহ করে নাম দিন';
-    const preview = $('#avatarPreview');
-    if (val) {
-      const [c1, c2] = avatarColor(state.userId);
-      preview.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
-      preview.textContent = getInitials(val);
-    } else {
-      preview.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)';
-      preview.textContent = '?';
-    }
+    const prev = $('#avatarPreview');
+    if (val) { const [c1, c2] = avatarColor(state.userId); prev.style.background = `linear-gradient(135deg, ${c1}, ${c2})`; prev.textContent = getInitials(val); }
+    else { prev.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)'; prev.textContent = '?'; }
     $('#nicknameError').classList.add('hidden');
   });
   $('#enterChatBtn').addEventListener('click', submitNickname);
   input.addEventListener('keypress', e => { if (e.key === 'Enter') submitNickname(); });
 }
 function submitNickname() {
-  const val = $('#nicknameInput').value.trim();
-  const err = $('#nicknameError');
+  const val = $('#nicknameInput').value.trim(), err = $('#nicknameError');
   if (!val || val.length < 2) { err.textContent = 'কমপক্ষে ২ অক্ষরের নাম দিন'; err.classList.remove('hidden'); return; }
   if (val.length > 20) { err.textContent = 'সর্বোচ্চ ২০ অক্ষর'; err.classList.remove('hidden'); return; }
-  state.nickname = val;
-  localStorage.setItem(KEYS.nickname, val);
-  enterChat();
+  state.nickname = val; localStorage.setItem(KEYS.nickname, val); enterChat();
 }
 function enterChat() {
   $('#setupScreen').style.display = 'none';
   $('#chatScreen').classList.remove('hidden');
   const [c1, c2] = avatarColor(state.userId);
   const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
-  const initials = getInitials(state.nickname);
-  ['myAvatar', 'menuAvatar'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.style.background = grad; el.textContent = initials; }
-  });
+  ['myAvatar', 'menuAvatar'].forEach(id => { const el = document.getElementById(id); if (el) { el.style.background = grad; el.textContent = getInitials(state.nickname); } });
   $('#menuNickname').textContent = state.nickname;
   initChat();
 }
 
-// CHAT INIT
 async function initChat() {
-  setupMessageForm();
-  setupEmojiPicker();
-  setupImageUpload();
-  setupReply();
-  setupProfileMenu();
-  setupMobileDrawer();
-  setupAutoResize();
-  setupScrollBehavior();
-  setupAdminAuth();
-  setupMentions();
-  setupSearch();
-  setupPinned();
-  setupActionMenu();
-  setupExport();
-  setupAdminPanel();
+  setupMessageForm(); setupEmojiPicker(); setupImageUpload(); setupReply();
+  setupProfileMenu(); setupMobileDrawer(); setupAutoResize(); setupScrollBehavior();
+  setupAdminAuth(); setupMentions(); setupSearch(); setupPinned(); setupActionMenu();
+  setupExport(); setupAdminPanel(); setupReactionPicker(); setupImageViewer();
   await updatePresence();
-  listenMessages();
-  listenPresence();
-  listenTyping();
-  listenPins();
-  listenBanned();
-  listenSettings();
+  listenMessages(); listenPresence(); listenTyping(); listenPins(); listenBanned(); listenSettings();
   setInterval(updatePresence, 25000);
 }
 
 // PRESENCE
 async function updatePresence() {
   if (!state.userId) return;
-  try {
-    await setDoc(doc(PRESENCE_REF, state.userId), {
-      userId: state.userId, nickname: state.nickname, isAdmin: state.isAdmin, lastSeen: serverTimestamp()
-    }, { merge: true });
-  } catch (e) { console.warn(e); }
+  try { await setDoc(doc(PRESENCE_REF, state.userId), { userId: state.userId, nickname: state.nickname, isAdmin: state.isAdmin, lastSeen: serverTimestamp() }, { merge: true }); } catch {}
 }
 function listenPresence() {
   onSnapshot(PRESENCE_REF, snap => {
-    const now = Date.now();
-    const members = {};
-    snap.forEach(d => {
-      const data = d.data();
-      const lastSeen = data.lastSeen?.toDate ? data.lastSeen.toDate().getTime() : 0;
-      if (now - lastSeen < 60000) members[d.id] = { ...data, isOnline: true };
-    });
+    const now = Date.now(), members = {};
+    snap.forEach(d => { const data = d.data(); const ls = data.lastSeen?.toDate ? data.lastSeen.toDate().getTime() : 0; if (now - ls < 60000) members[d.id] = { ...data, isOnline: true }; });
     state.members = members;
-    renderMembers();
-    renderAdminOnline();
+    renderMembers(); renderAdminOnline();
   });
 }
 function renderMembers() {
-  const members = Object.values(state.members).sort((a, b) => {
-    if (a.isAdmin && !b.isAdmin) return -1;
-    if (!a.isAdmin && b.isAdmin) return 1;
-    return (a.nickname || '').localeCompare(b.nickname || '');
-  });
-  const onlineCount = members.length;
-  $('#onlineCount').textContent = toBn(onlineCount);
-  $('#memberCountBadge').textContent = toBn(onlineCount);
-  $('#mobileMemberCount').textContent = `${toBn(onlineCount)} online`;
+  const members = Object.values(state.members).sort((a, b) => { if (a.isAdmin && !b.isAdmin) return -1; if (!a.isAdmin && b.isAdmin) return 1; return (a.nickname || '').localeCompare(b.nickname || ''); });
+  const cnt = members.length;
+  $('#onlineCount').textContent = toBn(cnt); $('#memberCountBadge').textContent = toBn(cnt); $('#mobileMemberCount').textContent = `${toBn(cnt)} online`;
   const html = members.map(m => {
     const [c1, c2] = avatarColor(m.userId);
-    const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
-    const initials = getInitials(m.nickname);
     const isMe = m.userId === state.userId;
     const crown = m.isAdmin ? '<svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>' : '';
-    return `<button type="button" data-member-profile="${m.userId}" class="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-left">
-      <div class="relative shrink-0">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-extrabold" style="background: ${grad};">${escapeHtml(initials)}</div>
-        <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900"></span>
-      </div>
-      <div class="min-w-0 flex-1"><div class="flex items-center gap-1">${crown}<p class="text-xs font-bold truncate ${m.isAdmin ? 'text-amber-700 dark:text-amber-400' : ''}">${escapeHtml(m.nickname)}${isMe ? ' <span class="text-[9px] text-slate-400">(you)</span>' : ''}</p></div></div>
-    </button>`;
+    return `<button type="button" data-member-profile="${m.userId}" class="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-left"><div class="relative shrink-0"><div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-extrabold" style="background: linear-gradient(135deg, ${c1}, ${c2});">${escapeHtml(getInitials(m.nickname))}</div><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900"></span></div><div class="min-w-0 flex-1"><div class="flex items-center gap-1">${crown}<p class="text-xs font-bold truncate ${m.isAdmin ? 'text-amber-700 dark:text-amber-400' : ''}">${escapeHtml(m.nickname)}${isMe ? ' <span class="text-[9px] text-slate-400">(you)</span>' : ''}</p></div></div></button>`;
   }).join('');
   $('#membersList').innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">No one online</p>';
   $('#mobileMembersList').innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">No one online</p>';
   $$('[data-member-profile]').forEach(b => b.addEventListener('click', () => openProfileModal(b.dataset.memberProfile)));
 }
 
-// PROFILE MODAL
 function openProfileModal(userId) {
-  const member = state.members[userId];
-  if (!member) return;
+  const m = state.members[userId]; if (!m) return;
   state.profileModalUserId = userId;
-  const [c1, c2] = avatarColor(member.userId);
+  const [c1, c2] = avatarColor(m.userId);
   $('#profileModalAvatar').style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
-  $('#profileModalAvatar').textContent = getInitials(member.nickname);
-  $('#profileModalName').textContent = member.nickname;
-  $('#profileModalAdmin').classList.toggle('hidden', !member.isAdmin);
-  $('#profileModalAdmin').classList.toggle('flex', !!member.isAdmin);
+  $('#profileModalAvatar').textContent = getInitials(m.nickname);
+  $('#profileModalName').textContent = m.nickname;
+  $('#profileModalAdmin').classList.toggle('hidden', !m.isAdmin);
+  $('#profileModalAdmin').classList.toggle('flex', !!m.isAdmin);
   const banBtn = $('#profileModalBanBtn');
   const isBanned = !!state.banned[userId];
   const isMe = userId === state.userId;
-  if (state.isAdmin && !isMe && !member.isAdmin) {
+  if (state.isAdmin && !isMe && !m.isAdmin) {
     banBtn.classList.remove('hidden');
     banBtn.textContent = isBanned ? 'Unban User' : 'Ban User';
-    banBtn.className = isBanned 
-      ? 'flex-1 rounded-xl bg-emerald-100 dark:bg-emerald-950/40 hover:bg-emerald-200 dark:hover:bg-emerald-900/60 py-2.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 transition'
-      : 'flex-1 rounded-xl bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 py-2.5 text-sm font-bold text-rose-700 dark:text-rose-400 transition';
-  } else {
-    banBtn.classList.add('hidden');
-  }
-  $('#profileModal').classList.remove('hidden');
-  $('#profileModal').classList.add('flex');
+    banBtn.className = isBanned ? 'flex-1 rounded-xl bg-emerald-100 dark:bg-emerald-950/40 hover:bg-emerald-200 dark:hover:bg-emerald-900/60 py-2.5 text-sm font-bold text-emerald-700 dark:text-emerald-400 transition' : 'flex-1 rounded-xl bg-rose-100 dark:bg-rose-950/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 py-2.5 text-sm font-bold text-rose-700 dark:text-rose-400 transition';
+  } else banBtn.classList.add('hidden');
+  $('#profileModal').classList.remove('hidden'); $('#profileModal').classList.add('flex');
 }
-$('#closeProfileBtn')?.addEventListener('click', () => {
-  $('#profileModal').classList.add('hidden');
-  $('#profileModal').classList.remove('flex');
-});
+$('#closeProfileBtn')?.addEventListener('click', () => { $('#profileModal').classList.add('hidden'); $('#profileModal').classList.remove('flex'); });
 $('#profileModalBanBtn')?.addEventListener('click', async () => {
-  const uid = state.profileModalUserId;
-  if (!uid || !state.isAdmin) return;
+  const uid = state.profileModalUserId; if (!uid || !state.isAdmin) return;
   const isBanned = !!state.banned[uid];
-  if (isBanned) {
-    await deleteDoc(doc(BANNED_REF, uid)).catch(() => {});
-    showToast('Unbanned', 'success');
-  } else {
-    const member = state.members[uid];
-    await setDoc(doc(BANNED_REF, uid), {
-      userId: uid, nickname: member?.nickname || 'Unknown',
-      bannedBy: state.nickname, bannedAt: serverTimestamp()
-    }).catch(() => {});
-    showToast('User banned', 'success');
-  }
-  $('#profileModal').classList.add('hidden');
-  $('#profileModal').classList.remove('flex');
+  if (isBanned) { await deleteDoc(doc(BANNED_REF, uid)).catch(() => {}); showToast('Unbanned', 'success'); }
+  else { const m = state.members[uid]; await setDoc(doc(BANNED_REF, uid), { userId: uid, nickname: m?.nickname || 'Unknown', bannedBy: state.nickname, bannedAt: serverTimestamp() }).catch(() => {}); showToast('User banned', 'success'); }
+  $('#profileModal').classList.add('hidden'); $('#profileModal').classList.remove('flex');
 });
 
-// BANNED LISTENER
 function listenBanned() {
   onSnapshot(BANNED_REF, snap => {
-    const banned = {};
-    snap.forEach(d => banned[d.id] = d.data());
+    const banned = {}; snap.forEach(d => banned[d.id] = d.data());
     state.banned = banned;
-    renderBannedList();
-    renderAdminStats();
-    if (banned[state.userId] && !state.isAdmin) {
-      showToast('আপনি ban হয়েছেন', 'error');
-      $('#messageInput').disabled = true;
-      $('#sendBtn').disabled = true;
-      $('#imageBtn').disabled = true;
-    }
+    renderBannedList(); renderAdminStats();
+    if (banned[state.userId] && !state.isAdmin) { showToast('আপনি ban হয়েছেন', 'error'); $('#messageInput').disabled = true; $('#sendBtn').disabled = true; $('#imageBtn').disabled = true; }
   });
 }
 function renderBannedList() {
-  const list = $('#bannedList');
-  const banned = Object.values(state.banned);
+  const list = $('#bannedList'), banned = Object.values(state.banned);
   $('#bannedCount').textContent = toBn(banned.length);
-  if (banned.length === 0) {
-    list.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">কোনো banned user নেই</p>';
-    return;
-  }
-  list.innerHTML = banned.map(b => `
-    <div class="flex items-center gap-2 p-2 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800">
-      <div class="min-w-0 flex-1">
-        <p class="text-xs font-bold text-rose-800 dark:text-rose-300 truncate">${escapeHtml(b.nickname || 'Unknown')}</p>
-        <p class="text-[10px] text-rose-600 dark:text-rose-400">Banned by ${escapeHtml(b.bannedBy || 'Admin')}</p>
-      </div>
-      <button type="button" data-unban="${b.userId}" class="px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold shrink-0">Unban</button>
-    </div>
-  `).join('');
-  list.querySelectorAll('[data-unban]').forEach(b => {
-    b.addEventListener('click', async () => {
-      await deleteDoc(doc(BANNED_REF, b.dataset.unban)).catch(() => {});
-      showToast('Unbanned', 'success');
-    });
-  });
+  if (banned.length === 0) { list.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">কোনো banned user নেই</p>'; return; }
+  list.innerHTML = banned.map(b => `<div class="flex items-center gap-2 p-2 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800"><div class="min-w-0 flex-1"><p class="text-xs font-bold text-rose-800 dark:text-rose-300 truncate">${escapeHtml(b.nickname || 'Unknown')}</p><p class="text-[10px] text-rose-600 dark:text-rose-400">Banned by ${escapeHtml(b.bannedBy || 'Admin')}</p></div><button type="button" data-unban="${b.userId}" class="px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold shrink-0">Unban</button></div>`).join('');
+  list.querySelectorAll('[data-unban]').forEach(b => b.addEventListener('click', async () => { await deleteDoc(doc(BANNED_REF, b.dataset.unban)).catch(() => {}); showToast('Unbanned', 'success'); }));
 }
 
-// SETTINGS LISTENER
 function listenSettings() {
   onSnapshot(SETTINGS_REF, snap => {
-    if (snap.exists()) {
-      state.settings = snap.data();
-    } else {
-      state.settings = { locked: false, slowMode: 0, announcement: '' };
-    }
+    state.settings = snap.exists() ? snap.data() : { locked: false, slowMode: 0, announcement: '' };
     applySettingsUI();
   });
 }
 function applySettingsUI() {
-  const locked = !!state.settings.locked;
-  const slowMode = state.settings.slowMode || 0;
-  const announcement = state.settings.announcement || '';
+  const locked = !!state.settings.locked, slowMode = state.settings.slowMode || 0, ann = state.settings.announcement || '';
   $('#lockedBanner').classList.toggle('hidden', !locked || state.isAdmin);
-  if (locked && !state.isAdmin) {
-    $('#messageInput').disabled = true;
-    $('#sendBtn').disabled = true;
-    $('#imageBtn').disabled = true;
-    $('#messageInput').placeholder = 'চ্যাট লক করা আছে';
-  } else if (!state.banned[state.userId] || state.isAdmin) {
-    $('#messageInput').disabled = false;
-    $('#imageBtn').disabled = false;
-    $('#messageInput').placeholder = 'মেসেজ লিখুন…';
-    $('#sendBtn').disabled = !$('#messageInput').value.trim() && !state.pendingImage;
-  }
+  if (locked && !state.isAdmin) { $('#messageInput').disabled = true; $('#sendBtn').disabled = true; $('#imageBtn').disabled = true; $('#messageInput').placeholder = 'চ্যাট লক করা আছে'; }
+  else if (!state.banned[state.userId] || state.isAdmin) { $('#messageInput').disabled = false; $('#imageBtn').disabled = false; $('#messageInput').placeholder = 'মেসেজ লিখুন…'; $('#sendBtn').disabled = !$('#messageInput').value.trim() && !state.pendingImage; }
   const banner = $('#announcementBanner');
-  if (announcement) {
-    $('#announcementText').textContent = announcement;
-    banner.classList.remove('hidden');
-    if (state.isAdmin) $('#dismissAnnouncement').classList.remove('hidden');
-  } else {
-    banner.classList.add('hidden');
-  }
-  // Sync admin controls
-  const toggle = $('#toggleLockChat');
-  if (toggle) toggle.checked = locked;
-  const slowSel = $('#slowModeSelect');
-  if (slowSel) slowSel.value = String(slowMode);
-  const ann = $('#announcementInput');
-  if (ann) ann.value = announcement;
+  if (ann) { $('#announcementText').textContent = ann; banner.classList.remove('hidden'); if (state.isAdmin) $('#dismissAnnouncement').classList.remove('hidden'); }
+  else banner.classList.add('hidden');
+  const toggle = $('#toggleLockChat'); if (toggle) toggle.checked = locked;
+  const ss = $('#slowModeSelect'); if (ss) ss.value = String(slowMode);
+  const ai = $('#announcementInput'); if (ai && ai !== document.activeElement) ai.value = ann;
 }
 
-// TYPING
 let typingTimeout = null, lastTypingWrite = 0;
 function handleTyping() {
   if (state.settings.locked && !state.isAdmin) return;
   if (state.banned[state.userId] && !state.isAdmin) return;
-  const now = Date.now();
-  if (now - lastTypingWrite < 2500) return;
+  const now = Date.now(); if (now - lastTypingWrite < 2500) return;
   lastTypingWrite = now;
   setDoc(doc(TYPING_REF, state.userId), { userId: state.userId, nickname: state.nickname, updatedAt: serverTimestamp() }, { merge: true }).catch(() => {});
   clearTimeout(typingTimeout);
@@ -1160,21 +976,14 @@ function handleTyping() {
 }
 function listenTyping() {
   onSnapshot(TYPING_REF, snap => {
-    const now = Date.now();
-    const typing = {};
-    snap.forEach(d => {
-      if (d.id === state.userId) return;
-      const data = d.data();
-      const ts = data.updatedAt?.toDate ? data.updatedAt.toDate().getTime() : 0;
-      if (now - ts < 5000) typing[d.id] = data.nickname;
-    });
+    const now = Date.now(), typing = {};
+    snap.forEach(d => { if (d.id === state.userId) return; const data = d.data(); const ts = data.updatedAt?.toDate ? data.updatedAt.toDate().getTime() : 0; if (now - ts < 5000) typing[d.id] = data.nickname; });
     state.typingUsers = typing;
     renderTyping();
   });
 }
 function renderTyping() {
-  const names = Object.values(state.typingUsers);
-  const ind = $('#typingIndicator');
+  const names = Object.values(state.typingUsers), ind = $('#typingIndicator');
   if (!names.length) { ind.classList.add('hidden'); return; }
   ind.classList.remove('hidden');
   if (names.length === 1) $('#typingText').textContent = `${names[0]} typing...`;
@@ -1184,31 +993,22 @@ function renderTyping() {
 
 // MESSAGES
 function listenMessages() {
-  const q = query(MESSAGES_REF, orderBy('createdAt', 'asc'), limit(200));
-  onSnapshot(q, snap => {
-    const messages = [];
-    snap.forEach(d => messages.push({ id: d.id, ...d.data() }));
+  onSnapshot(query(MESSAGES_REF, orderBy('createdAt', 'asc'), limit(200)), snap => {
+    const messages = []; snap.forEach(d => messages.push({ id: d.id, ...d.data() }));
     const newOnes = messages.filter(m => !state.seenMessageIds.has(m.id));
     const otherNew = newOnes.filter(m => m.userId !== state.userId);
     messages.forEach(m => state.seenMessageIds.add(m.id));
     state.messages = messages;
     $('#msgCount').textContent = toBn(messages.length);
-    renderMessages();
-    renderAdminStats();
+    renderMessages(); renderAdminStats();
     if (otherNew.length > 0) {
       const mentionsMe = otherNew.some(m => m.text && m.text.toLowerCase().includes('@' + (state.nickname || '').toLowerCase()));
       playSound(mentionsMe ? 'mention' : 'receive');
       if (document.hidden && Notification.permission === 'granted') {
         const last = otherNew[otherNew.length - 1];
-        new Notification(last.nickname + (mentionsMe ? ' mentioned you!' : ''), {
-          body: last.text || (last.imageUrl ? '📷 Image' : ''),
-          icon: 'logo.png', tag: 'group-chat'
-        });
+        new Notification(last.nickname + (mentionsMe ? ' mentioned you!' : ''), { body: last.text || (last.imageUrl ? '📷 Image' : ''), icon: 'logo.png', tag: 'group-chat' });
       }
-      if (document.hidden) {
-        state.unreadCount += otherNew.length;
-        document.title = `(${state.unreadCount}) ${state.baseTitle}`;
-      }
+      if (document.hidden) { state.unreadCount += otherNew.length; document.title = `(${state.unreadCount}) ${state.baseTitle}`; }
     }
   });
 }
@@ -1217,15 +1017,10 @@ function renderMessages() {
   const area = $('#messagesArea');
   const wasAtBottom = isScrolledToBottom();
   if (state.messages.length === 0) {
-    area.innerHTML = `<div class="max-w-md mx-auto my-8 text-center px-4">
-      <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-xl mb-4"><svg class="w-11 h-11 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
-      <h2 class="text-lg font-extrabold">স্বাগতম গ্রুপ চ্যাটে!</h2>
-      <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">প্রথম মেসেজটা আপনিই শুরু করুন!</p>
-    </div>`;
+    area.innerHTML = `<div class="max-w-md mx-auto my-8 text-center px-4"><div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-xl mb-4"><svg class="w-11 h-11 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div><h2 class="text-lg font-extrabold">স্বাগতম গ্রুপ চ্যাটে!</h2><p class="text-sm text-slate-600 dark:text-slate-400 mt-2">প্রথম মেসেজটা আপনিই শুরু করুন!</p></div>`;
     return;
   }
-  let html = '';
-  let lastUserId = null, lastTime = 0, lastDateKey = null, showedNewDivider = false;
+  let html = '', lastUserId = null, lastTime = 0, lastDateKey = null, showedNewDivider = false;
   state.messages.forEach((m, idx) => {
     const dateKey = getDateKey(m.createdAt);
     if (dateKey !== lastDateKey) {
@@ -1234,8 +1029,7 @@ function renderMessages() {
       lastDateKey = dateKey; lastUserId = null;
     }
     if (!showedNewDivider && state.lastSeenMessageId && m.id === state.lastSeenMessageId && idx < state.messages.length - 1) {
-      html += `<div class="new-messages-divider my-4">New messages</div>`;
-      showedNewDivider = true;
+      html += `<div class="new-messages-divider my-4">New messages</div>`; showedNewDivider = true;
     }
     const time = m.createdAt?.toDate ? m.createdAt.toDate().getTime() : Date.now();
     const isConsecutive = m.userId === lastUserId && (time - lastTime) < 5 * 60 * 1000;
@@ -1246,17 +1040,10 @@ function renderMessages() {
   attachMessageHandlers();
   if (state.messages.length > 0) {
     const lastId = state.messages[state.messages.length - 1].id;
-    state.lastSeenMessageId = lastId;
-    localStorage.setItem(KEYS.lastSeenMsg, lastId);
+    state.lastSeenMessageId = lastId; localStorage.setItem(KEYS.lastSeenMsg, lastId);
   }
   if (wasAtBottom) { scrollToBottom(); $('#newMsgIndicator').classList.add('hidden'); }
-  else {
-    const newCount = state.messages.length - state.lastMessageCount;
-    if (newCount > 0) {
-      $('#newMsgIndicator').classList.remove('hidden');
-      $('#newMsgCount').textContent = `${toBn(newCount)}টি নতুন`;
-    }
-  }
+  else { const newCount = state.messages.length - state.lastMessageCount; if (newCount > 0) { $('#newMsgIndicator').classList.remove('hidden'); $('#newMsgCount').textContent = `${toBn(newCount)}টি নতুন`; } }
   state.lastMessageCount = state.messages.length;
 }
 
@@ -1264,10 +1051,13 @@ function renderMessage(m, isConsecutive) {
   const isOwn = m.userId === state.userId;
   const isAdmin = !!m.isAdmin;
   const isPinned = state.pins.some(p => p.msgId === m.id);
+  const isEditing = state.editingMsgId === m.id;
+  const isEdited = !!m.editedAt;
   const [c1, c2] = avatarColor(m.userId);
   const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
   const initials = getInitials(m.nickname);
   const time = fmtTime(m.createdAt);
+  
   let reactionsHtml = '';
   if (m.reactions && Object.keys(m.reactions).length > 0) {
     const reactionList = Object.entries(m.reactions).filter(([_, users]) => users.length > 0);
@@ -1278,68 +1068,231 @@ function renderMessage(m, isConsecutive) {
       }).join('')}</div>`;
     }
   }
-  const imageHtml = m.imageUrl ? `<a href="${escapeHtml(m.imageUrl)}" target="_blank" rel="noopener" class="block mt-1.5" onclick="event.stopPropagation()"><img src="${escapeHtml(m.imageUrl)}" alt="attachment" loading="lazy" class="max-w-full max-h-72 rounded-lg border border-black/10 dark:border-white/10" /></a>` : '';
+  
+  // Image with click-to-view (custom viewer)
+  const imageHtml = m.imageUrl ? `<div class="mt-1.5"><img src="${escapeHtml(m.imageUrl)}" data-view-image="${escapeHtml(m.imageUrl)}" alt="attachment" loading="lazy" class="max-w-full max-h-72 rounded-lg border border-black/10 dark:border-white/10 cursor-pointer active:opacity-80 transition" /></div>` : '';
+  
+  // Reply quote (clickable to jump)
   const replyHtml = m.replyTo ? `<button type="button" data-jump-to="${m.replyTo.msgId}" class="block w-full text-left mb-1.5 px-2.5 py-1.5 rounded-lg bg-black/10 dark:bg-white/10 border-l-2 ${isOwn ? 'border-white/60' : 'border-brand-500'} hover:bg-black/20 dark:hover:bg-white/20 transition"><p class="text-[10px] font-bold ${isOwn ? 'text-white/90' : 'text-brand-600 dark:text-brand-400'}">${escapeHtml(m.replyTo.nickname)}</p><p class="text-[11px] truncate ${isOwn ? 'text-white/80' : 'text-slate-600 dark:text-slate-400'}">${escapeHtml(m.replyTo.text || '📷')}</p></button>` : '';
-  const textHtml = m.text ? `<div class="text-sm leading-relaxed break-words whitespace-pre-wrap">${renderMarkdown(m.text, isOwn)}</div>` : '';
+  
+  // Text — editing mode replaces with textarea
+  let textHtml = '';
+  if (isEditing) {
+    textHtml = `<div class="edit-wrap">
+      <textarea class="edit-textarea ${isOwn ? 'own' : 'other'}" rows="2" maxlength="1000">${escapeHtml(m.text || '')}</textarea>
+      <div class="flex gap-2 mt-2">
+        <button type="button" data-save-edit="${m.id}" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold">Save</button>
+        <button type="button" data-cancel-edit="${m.id}" class="px-3 py-1 bg-slate-500 hover:bg-slate-600 text-white rounded text-xs font-bold">Cancel</button>
+      </div>
+    </div>`;
+  } else if (m.text) {
+    textHtml = `<div class="text-sm leading-relaxed break-words whitespace-pre-wrap">${renderMarkdown(m.text, isOwn)}${isEdited ? '<span class="edited-badge opacity-70">(edited)</span>' : ''}</div>`;
+  }
+  
   const adminBadge = isAdmin ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-amber-400 text-amber-950 ml-1"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>ADMIN</span>` : '';
   const pinIndicator = isPinned ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 ml-1"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>PINNED</span>` : '';
+  
   let bubbleClass = '';
   if (isAdmin) bubbleClass = 'bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/50 dark:to-amber-900/40 border border-amber-300 dark:border-amber-700/60 text-slate-800 dark:text-amber-50 admin-bubble';
   else if (isOwn) bubbleClass = 'bg-gradient-to-br from-brand-600 to-purple-600 text-white shadow-md shadow-brand-500/20 own-bubble';
   else bubbleClass = 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 shadow-sm';
+  
   const nameColor = isAdmin ? 'text-amber-700 dark:text-amber-400' : isOwn ? 'text-brand-600 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300';
-  const quickReactions = ['👍','❤️','😂','😮','😢','🔥'];
-  const reactionBar = `<div class="reaction-bar absolute ${isOwn ? 'right-full mr-2' : 'left-full ml-2'} top-0 flex items-center gap-0.5 bg-white dark:bg-slate-800 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 px-1.5 py-1 z-20">${quickReactions.map(r => `<button type="button" data-quick-react="${r}" data-msg="${m.id}" class="w-7 h-7 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-base emoji-btn">${r}</button>`).join('')}</div>`;
-  const actionsBtn = `<div class="msg-actions absolute ${isOwn ? 'right-full mr-2' : 'left-full ml-2'} top-0 flex items-center gap-1"><button type="button" data-action-menu="${m.id}" class="w-7 h-7 rounded-full bg-white dark:bg-slate-800 shadow border border-slate-200 dark:border-slate-700 grid place-items-center hover:bg-slate-50 dark:hover:bg-slate-700 transition"><svg class="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button></div>`;
+  
+  // ═══ ACTION BUTTONS — react + more (no hover bar) ═══
+  const actionsBtn = `<div class="msg-actions absolute ${isOwn ? 'right-full mr-1.5' : 'left-full ml-1.5'} top-1 flex flex-col gap-1 z-20">
+    <button type="button" data-show-react="${m.id}" class="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-white dark:bg-slate-800 shadow border border-slate-200 dark:border-slate-700 grid place-items-center hover:bg-slate-50 dark:hover:bg-slate-700 transition" title="React">
+      <svg class="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-600 dark:text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.5-9c.83 0 1.5-.67 1.5-1.5S17.33 8 16.5 8 15 8.67 15 9.5s.67 1.5 1.5 1.5zm-9 0c.83 0 1.5-.67 1.5-1.5S8.33 8 7.5 8 6 8.67 6 9.5 6.67 11 7.5 11zm4.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+    </button>
+    <button type="button" data-action-menu="${m.id}" class="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-white dark:bg-slate-800 shadow border border-slate-200 dark:border-slate-700 grid place-items-center hover:bg-slate-50 dark:hover:bg-slate-700 transition" title="More">
+      <svg class="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-600 dark:text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+    </button>
+  </div>`;
+  
   if (isOwn) {
-    return `<div class="msg-container msg-animate flex items-end justify-end gap-2 ${isConsecutive ? 'mt-0.5' : 'mt-3'}" data-msg-id="${m.id}"><div class="relative max-w-[85%] sm:max-w-[70%]">${reactionBar}${actionsBtn}${!isConsecutive ? `<div class="flex items-center justify-end gap-2 mb-1 mr-1">${pinIndicator}${adminBadge}<span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${escapeHtml(m.nickname)}</span><span class="text-[10px] text-slate-400">${time}</span></div>` : ''}<div class="rounded-2xl rounded-tr-md px-3.5 py-2 ${bubbleClass}">${replyHtml}${textHtml}${imageHtml}</div>${reactionsHtml}</div></div>`;
+    return `<div class="msg-container msg-animate flex items-end justify-end gap-2 ${isConsecutive ? 'mt-0.5' : 'mt-3'}" data-msg-id="${m.id}"><div class="relative max-w-[85%] sm:max-w-[70%]">${actionsBtn}${!isConsecutive ? `<div class="flex items-center justify-end gap-2 mb-1 mr-1">${pinIndicator}${adminBadge}<span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${escapeHtml(m.nickname)}</span><span class="text-[10px] text-slate-400">${time}</span></div>` : ''}<div class="rounded-2xl rounded-tr-md px-3.5 py-2 ${bubbleClass}">${replyHtml}${textHtml}${imageHtml}</div>${reactionsHtml}</div></div>`;
   }
-  return `<div class="msg-container msg-animate flex items-end gap-2 ${isConsecutive ? 'mt-0.5' : 'mt-3'}" data-msg-id="${m.id}">${!isConsecutive ? `<div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-extrabold shrink-0 shadow-md cursor-pointer hover:scale-105 transition" style="background: ${grad};" data-member-profile="${m.userId}">${escapeHtml(initials)}</div>` : `<div class="w-9 shrink-0"></div>`}<div class="relative max-w-[85%] sm:max-w-[70%]">${reactionBar}${actionsBtn}${!isConsecutive ? `<div class="flex items-center gap-2 mb-1 ml-1"><span class="text-[10px] font-bold ${nameColor}">${escapeHtml(m.nickname)}</span>${pinIndicator}${adminBadge}<span class="text-[10px] text-slate-400">${time}</span></div>` : ''}<div class="rounded-2xl rounded-tl-md px-3.5 py-2 ${bubbleClass}">${replyHtml}${textHtml}${imageHtml}</div>${reactionsHtml}</div></div>`;
+  return `<div class="msg-container msg-animate flex items-end gap-2 ${isConsecutive ? 'mt-0.5' : 'mt-3'}" data-msg-id="${m.id}">${!isConsecutive ? `<div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-extrabold shrink-0 shadow-md cursor-pointer hover:scale-105 transition" style="background: ${grad};" data-member-profile="${m.userId}">${escapeHtml(initials)}</div>` : `<div class="w-9 shrink-0"></div>`}<div class="relative max-w-[85%] sm:max-w-[70%]">${actionsBtn}${!isConsecutive ? `<div class="flex items-center gap-2 mb-1 ml-1"><span class="text-[10px] font-bold ${nameColor}">${escapeHtml(m.nickname)}</span>${pinIndicator}${adminBadge}<span class="text-[10px] text-slate-400">${time}</span></div>` : ''}<div class="rounded-2xl rounded-tl-md px-3.5 py-2 ${bubbleClass}">${replyHtml}${textHtml}${imageHtml}</div>${reactionsHtml}</div></div>`;
 }
 
 function attachMessageHandlers() {
-  $$('[data-quick-react]').forEach(btn => btn.addEventListener('click', () => toggleReaction(btn.dataset.msg, btn.dataset.quickReact)));
-  $$('[data-react]').forEach(btn => btn.addEventListener('click', () => toggleReaction(btn.dataset.msg, btn.dataset.react)));
-  $$('[data-jump-to]').forEach(btn => btn.addEventListener('click', () => jumpToMessage(btn.dataset.jumpTo)));
-  $$('[data-action-menu]').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); openActionMenu(btn.dataset.actionMenu, e.currentTarget); }));
+  $$('[data-react]').forEach(b => b.addEventListener('click', () => toggleReaction(b.dataset.msg, b.dataset.react)));
+  $$('[data-jump-to]').forEach(b => b.addEventListener('click', () => jumpToMessage(b.dataset.jumpTo)));
+  $$('[data-action-menu]').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); openActionMenu(b.dataset.actionMenu, e.currentTarget); }));
+  $$('[data-show-react]').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); showReactionPicker(b.dataset.showReact, e.currentTarget); }));
   $$('[data-member-profile]').forEach(b => b.addEventListener('click', () => openProfileModal(b.dataset.memberProfile)));
+  $$('[data-view-image]').forEach(img => img.addEventListener('click', () => openImageViewer(img.dataset.viewImage)));
+  $$('[data-save-edit]').forEach(b => b.addEventListener('click', () => saveEditMessage(b.dataset.saveEdit)));
+  $$('[data-cancel-edit]').forEach(b => b.addEventListener('click', () => { state.editingMsgId = null; renderMessages(); }));
 }
 
 async function toggleReaction(msgId, emoji) {
-  const msg = state.messages.find(m => m.id === msgId);
-  if (!msg) return;
+  const msg = state.messages.find(m => m.id === msgId); if (!msg) return;
   try {
     const msgRef = doc(db, 'groupChats', CHAT_ID, 'messages', msgId);
-    const snap = await getDoc(msgRef);
-    if (!snap.exists()) return;
-    const currentReactions = snap.data().reactions || {};
-    const usersForEmoji = currentReactions[emoji] || [];
-    const hasReacted = usersForEmoji.includes(state.userId);
-    const newReactions = { ...currentReactions };
-    if (hasReacted) {
-      newReactions[emoji] = usersForEmoji.filter(u => u !== state.userId);
-      if (newReactions[emoji].length === 0) delete newReactions[emoji];
-    } else newReactions[emoji] = [...usersForEmoji, state.userId];
-    await updateDoc(msgRef, { reactions: newReactions });
+    const snap = await getDoc(msgRef); if (!snap.exists()) return;
+    const cur = snap.data().reactions || {};
+    const users = cur[emoji] || [];
+    const hasReacted = users.includes(state.userId);
+    const next = { ...cur };
+    if (hasReacted) { next[emoji] = users.filter(u => u !== state.userId); if (next[emoji].length === 0) delete next[emoji]; }
+    else next[emoji] = [...users, state.userId];
+    await updateDoc(msgRef, { reactions: next });
   } catch (e) { showToast('Reaction failed', 'error'); }
+}
+
+// ═══ REACTION PICKER ═══
+function setupReactionPicker() {
+  $('#reactionPicker').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-react-pick]');
+    if (!btn) return;
+    const emoji = btn.dataset.reactPick;
+    const msgId = state.reactionPickerMsgId;
+    hideReactionPicker();
+    if (msgId) toggleReaction(msgId, emoji);
+  });
+  document.addEventListener('click', (e) => {
+    const picker = $('#reactionPicker');
+    if (picker.classList.contains('hidden')) return;
+    if (picker.contains(e.target) || e.target.closest('[data-show-react]')) return;
+    hideReactionPicker();
+  });
+}
+function showReactionPicker(msgId, anchor) {
+  state.reactionPickerMsgId = msgId;
+  const picker = $('#reactionPicker');
+  const rect = anchor.getBoundingClientRect();
+  picker.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    const pw = picker.offsetWidth, ph = picker.offsetHeight;
+    let left = rect.left + rect.width / 2 - pw / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
+    let top = rect.top - ph - 8;
+    if (top < 60) top = rect.bottom + 8;
+    if (top + ph > window.innerHeight - 8) top = rect.top - ph - 8;
+    picker.style.left = left + 'px';
+    picker.style.top = top + 'px';
+  });
+}
+function hideReactionPicker() {
+  $('#reactionPicker').classList.add('hidden');
+  state.reactionPickerMsgId = null;
+}
+
+// ═══ CUSTOM IMAGE VIEWER ═══
+function setupImageViewer() {
+  $('#viewerClose').addEventListener('click', closeImageViewer);
+  $('#imageViewer').addEventListener('click', (e) => {
+    if (e.target.id === 'imageViewer' || e.target.id === 'viewerImageWrap') closeImageViewer();
+  });
+  $('#viewerDownload').addEventListener('click', async () => {
+    if (!state.viewerImageUrl) return;
+    try {
+      const response = await fetch(state.viewerImageUrl, { mode: 'cors' });
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const ext = blob.type.split('/')[1] || 'jpg';
+      a.download = `chat-image-${Date.now()}.${ext}`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Download started', 'success');
+    } catch (e) {
+      window.open(state.viewerImageUrl, '_blank');
+      showToast('Opened in new tab', 'info');
+    }
+  });
+  $('#viewerShare').addEventListener('click', async () => {
+    if (!state.viewerImageUrl) return;
+    try {
+      if (navigator.share) {
+        try {
+          const response = await fetch(state.viewerImageUrl, { mode: 'cors' });
+          const blob = await response.blob();
+          const ext = blob.type.split('/')[1] || 'jpg';
+          const file = new File([blob], `image.${ext}`, { type: blob.type });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: 'Shared image' });
+            return;
+          }
+        } catch {}
+        await navigator.share({ title: 'Shared image', url: state.viewerImageUrl });
+      } else {
+        await navigator.clipboard.writeText(state.viewerImageUrl);
+        showToast('Link copied to clipboard', 'success');
+      }
+    } catch (e) {
+      if (e.name !== 'AbortError') {
+        try { await navigator.clipboard.writeText(state.viewerImageUrl); showToast('Link copied', 'success'); }
+        catch { showToast('Share failed', 'error'); }
+      }
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !$('#imageViewer').classList.contains('hidden')) closeImageViewer();
+  });
+}
+function openImageViewer(url) {
+  state.viewerImageUrl = url;
+  const viewer = $('#imageViewer');
+  $('#viewerImage').src = url;
+  viewer.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeImageViewer() {
+  $('#imageViewer').classList.add('hidden');
+  $('#viewerImage').src = '';
+  state.viewerImageUrl = null;
+  document.body.style.overflow = '';
+}
+
+// ═══ EDIT MESSAGE ═══
+function startEditMessage(msgId) {
+  const msg = state.messages.find(m => m.id === msgId);
+  if (!msg || !state.isAdmin) return;
+  state.editingMsgId = msgId;
+  renderMessages();
+  setTimeout(() => {
+    const el = document.querySelector(`[data-msg-id="${msgId}"] .edit-textarea`);
+    if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+  }, 50);
+}
+async function saveEditMessage(msgId) {
+  const msg = state.messages.find(m => m.id === msgId);
+  if (!msg || !state.isAdmin) return;
+  const el = document.querySelector(`[data-msg-id="${msgId}"] .edit-textarea`);
+  if (!el) return;
+  const newText = el.value.trim();
+  if (!newText) { showToast('মেসেজ খালি রাখা যাবে না', 'error'); return; }
+  if (newText === msg.text) { state.editingMsgId = null; renderMessages(); return; }
+  try {
+    await updateDoc(doc(db, 'groupChats', CHAT_ID, 'messages', msgId), { text: newText, editedAt: serverTimestamp() });
+    state.editingMsgId = null;
+    showToast('Message edited', 'success');
+  } catch (e) {
+    console.error(e);
+    showToast('Edit failed (check rules)', 'error');
+  }
 }
 
 // ACTION MENU
 function openActionMenu(msgId, anchorBtn) {
   state.activeActionMsgId = msgId;
-  const msg = state.messages.find(m => m.id === msgId);
-  if (!msg) return;
+  const msg = state.messages.find(m => m.id === msgId); if (!msg) return;
   const menu = $('#actionMenu');
   const rect = anchorBtn.getBoundingClientRect();
   menu.querySelector('[data-action="delete"]').classList.toggle('hidden', !state.isAdmin);
   menu.querySelector('[data-action="pin"]').classList.toggle('hidden', !state.isAdmin);
+  menu.querySelector('[data-action="edit"]').classList.toggle('hidden', !state.isAdmin || !msg.text);
   menu.classList.remove('hidden');
   const mw = menu.offsetWidth;
   let left = rect.left;
   if (left + mw > window.innerWidth - 8) left = window.innerWidth - mw - 8;
+  if (left < 8) left = 8;
   let top = rect.bottom + 4;
-  if (top + 200 > window.innerHeight) top = rect.top - 200;
-  menu.style.left = Math.max(8, left) + 'px';
+  if (top + 220 > window.innerHeight) top = rect.top - 220;
+  menu.style.left = left + 'px';
   menu.style.top = top + 'px';
 }
 function closeActionMenu() { $('#actionMenu').classList.add('hidden'); state.activeActionMsgId = null; }
@@ -1347,8 +1300,7 @@ document.addEventListener('click', (e) => { if (!e.target.closest('#actionMenu')
 
 function setupActionMenu() {
   $('#actionMenu').addEventListener('click', async (e) => {
-    const btn = e.target.closest('[data-action]');
-    if (!btn) return;
+    const btn = e.target.closest('[data-action]'); if (!btn) return;
     const action = btn.dataset.action;
     const msgId = state.activeActionMsgId;
     const msg = state.messages.find(m => m.id === msgId);
@@ -1360,16 +1312,14 @@ function setupActionMenu() {
     } else if (action === 'reply') setupReplyTo(msg);
     else if (action === 'forward') {
       $('#messageInput').value = `"${msg.text || ''}" — ${msg.nickname}\n\n`;
-      $('#messageInput').focus();
-      $('#messageInput').dispatchEvent(new Event('input'));
+      $('#messageInput').focus(); $('#messageInput').dispatchEvent(new Event('input'));
       showToast('Forwarded text in input', 'info');
-    } else if (action === 'pin') await togglePin(msg);
+    } else if (action === 'edit') startEditMessage(msgId);
+    else if (action === 'pin') await togglePin(msg);
     else if (action === 'delete') {
       showConfirm('Delete message?', 'এই মেসেজটি স্থায়ীভাবে মুছে যাবে।', async () => {
-        try {
-          await deleteDoc(doc(MESSAGES_REF, msgId));
-          showToast('Message deleted', 'success');
-        } catch { showToast('Delete failed', 'error'); }
+        try { await deleteDoc(doc(MESSAGES_REF, msgId)); showToast('Message deleted', 'success'); }
+        catch { showToast('Delete failed', 'error'); }
       });
     }
   });
@@ -1378,12 +1328,9 @@ function setupActionMenu() {
 // PINS
 function listenPins() {
   onSnapshot(PINS_REF, snap => {
-    const pins = [];
-    snap.forEach(d => pins.push({ msgId: d.id, ...d.data() }));
+    const pins = []; snap.forEach(d => pins.push({ msgId: d.id, ...d.data() }));
     state.pins = pins;
-    renderPins();
-    renderMessages();
-    renderAdminStats();
+    renderPins(); renderMessages(); renderAdminStats();
   });
 }
 async function togglePin(msg) {
@@ -1391,16 +1338,12 @@ async function togglePin(msg) {
     const pinDoc = doc(PINS_REF, msg.id);
     const existing = await getDoc(pinDoc);
     if (existing.exists()) { await deleteDoc(pinDoc); showToast('Unpinned', 'success'); }
-    else {
-      await setDoc(pinDoc, { msgId: msg.id, nickname: msg.nickname, text: (msg.text || '').slice(0, 100), pinnedBy: state.nickname, pinnedAt: serverTimestamp() });
-      showToast('Pinned ✓', 'success');
-    }
-  } catch (e) { showToast('Pin failed', 'error'); }
+    else { await setDoc(pinDoc, { msgId: msg.id, nickname: msg.nickname, text: (msg.text || '').slice(0, 100), pinnedBy: state.nickname, pinnedAt: serverTimestamp() }); showToast('Pinned ✓', 'success'); }
+  } catch { showToast('Pin failed', 'error'); }
 }
 function renderPins() {
   const badge = $('#pinBadge');
-  if (state.pins.length > 0) { badge.textContent = toBn(state.pins.length); badge.classList.remove('hidden'); }
-  else badge.classList.add('hidden');
+  if (state.pins.length > 0) { badge.textContent = toBn(state.pins.length); badge.classList.remove('hidden'); } else badge.classList.add('hidden');
   const banner = $('#pinnedBanner');
   if (state.pins.length > 0) {
     const latest = state.pins[state.pins.length - 1];
@@ -1410,38 +1353,18 @@ function renderPins() {
   } else banner.classList.add('hidden');
 }
 function setupPinned() {
-  $('#pinnedBtn').addEventListener('click', () => {
-    const overlay = $('#pinnedOverlay');
-    overlay.classList.remove('hidden'); overlay.classList.add('flex');
-    renderPinnedList();
-  });
-  $('#closePinnedBtn').addEventListener('click', () => {
-    $('#pinnedOverlay').classList.add('hidden');
-    $('#pinnedOverlay').classList.remove('flex');
-  });
-  $('#pinnedBannerClick').addEventListener('click', () => {
-    if (state.pins.length > 0) jumpToMessage(state.pins[state.pins.length - 1].msgId);
-  });
-  $('#unpinBtn').addEventListener('click', async () => {
-    if (state.pins.length === 0) return;
-    await deleteDoc(doc(PINS_REF, state.pins[state.pins.length - 1].msgId)).catch(() => {});
-    showToast('Unpinned', 'success');
-  });
+  $('#pinnedBtn').addEventListener('click', () => { $('#pinnedOverlay').classList.remove('hidden'); $('#pinnedOverlay').classList.add('flex'); renderPinnedList(); });
+  $('#closePinnedBtn').addEventListener('click', () => { $('#pinnedOverlay').classList.add('hidden'); $('#pinnedOverlay').classList.remove('flex'); });
+  $('#pinnedBannerClick').addEventListener('click', () => { if (state.pins.length > 0) jumpToMessage(state.pins[state.pins.length - 1].msgId); });
+  $('#unpinBtn').addEventListener('click', async () => { if (state.pins.length === 0) return; await deleteDoc(doc(PINS_REF, state.pins[state.pins.length - 1].msgId)).catch(() => {}); showToast('Unpinned', 'success'); });
 }
 function renderPinnedList() {
   const list = $('#pinnedList');
   if (state.pins.length === 0) { list.innerHTML = '<p class="text-center text-sm text-slate-500 py-8">কোনো pinned message নেই</p>'; return; }
   list.innerHTML = state.pins.slice().reverse().map(p => `<button type="button" data-jump-pin="${p.msgId}" class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition mb-1"><div class="flex items-start gap-2"><svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><div class="min-w-0 flex-1"><p class="text-xs font-bold text-slate-700 dark:text-slate-300">${escapeHtml(p.nickname)}</p><p class="text-xs text-slate-600 dark:text-slate-400 truncate">${escapeHtml(p.text || '(media)')}</p><p class="text-[10px] text-slate-400 mt-1">Pinned by ${escapeHtml(p.pinnedBy)}</p></div></div></button>`).join('');
-  list.querySelectorAll('[data-jump-pin]').forEach(b => {
-    b.addEventListener('click', () => {
-      $('#pinnedOverlay').classList.add('hidden');
-      $('#pinnedOverlay').classList.remove('flex');
-      jumpToMessage(b.dataset.jumpPin);
-    });
-  });
+  list.querySelectorAll('[data-jump-pin]').forEach(b => b.addEventListener('click', () => { $('#pinnedOverlay').classList.add('hidden'); $('#pinnedOverlay').classList.remove('flex'); jumpToMessage(b.dataset.jumpPin); }));
 }
 
-// JUMP TO MESSAGE
 function jumpToMessage(msgId) {
   const el = document.querySelector(`[data-msg-id="${msgId}"]`);
   if (!el) { showToast('মেসেজ পাওয়া যায়নি', 'info'); return; }
@@ -1452,14 +1375,8 @@ function jumpToMessage(msgId) {
 
 // MESSAGE FORM
 function setupMessageForm() {
-  const form = $('#messageForm');
-  const input = $('#messageInput');
-  const sendBtn = $('#sendBtn');
-  input.addEventListener('input', () => {
-    sendBtn.disabled = !input.value.trim() && !state.pendingImage;
-    handleTyping();
-    updateMentions();
-  });
+  const form = $('#messageForm'), input = $('#messageInput'), sendBtn = $('#sendBtn');
+  input.addEventListener('input', () => { sendBtn.disabled = !input.value.trim() && !state.pendingImage; handleTyping(); updateMentions(); });
   input.addEventListener('keydown', e => {
     if (state.mentionMatches.length > 0) {
       if (e.key === 'ArrowDown') { e.preventDefault(); state.mentionDropdownIndex = (state.mentionDropdownIndex + 1) % state.mentionMatches.length; updateMentionHighlight(); return; }
@@ -1471,34 +1388,20 @@ function setupMessageForm() {
   });
   form.addEventListener('submit', async e => { e.preventDefault(); await sendMessage(); });
 }
-
 async function sendMessage() {
-  const input = $('#messageInput');
-  const text = input.value.trim();
+  const input = $('#messageInput'), text = input.value.trim();
   if (!text && !state.pendingImage) return;
-  // Slow mode check
   if (!state.isAdmin && state.settings.slowMode > 0) {
     const elapsed = (Date.now() - state.lastMessageTime) / 1000;
-    if (elapsed < state.settings.slowMode) {
-      showToast(`Slow mode: ${Math.ceil(state.settings.slowMode - elapsed)}s অপেক্ষা করুন`, 'error');
-      return;
-    }
+    if (elapsed < state.settings.slowMode) { showToast(`Slow mode: ${Math.ceil(state.settings.slowMode - elapsed)}s অপেক্ষা করুন`, 'error'); return; }
   }
-  // Locked check
   if (state.settings.locked && !state.isAdmin) { showToast('চ্যাট লক করা আছে', 'error'); return; }
-  // Banned check
   if (state.banned[state.userId] && !state.isAdmin) { showToast('আপনি ban হয়েছেন', 'error'); return; }
-  const sendBtn = $('#sendBtn');
-  sendBtn.disabled = true;
+  const sendBtn = $('#sendBtn'); sendBtn.disabled = true;
   try {
     let imageUrl = null;
     if (state.pendingImage) imageUrl = await uploadToCloudinary(state.pendingImage);
-    const payload = {
-      userId: state.userId, nickname: state.nickname, text: text || '',
-      imageUrl: imageUrl || null,
-      replyTo: state.replyTo ? { msgId: state.replyTo.msgId, nickname: state.replyTo.nickname, text: (state.replyTo.text || '').slice(0, 80) } : null,
-      reactions: {}, createdAt: serverTimestamp()
-    };
+    const payload = { userId: state.userId, nickname: state.nickname, text: text || '', imageUrl: imageUrl || null, replyTo: state.replyTo ? { msgId: state.replyTo.msgId, nickname: state.replyTo.nickname, text: (state.replyTo.text || '').slice(0, 80) } : null, reactions: {}, createdAt: serverTimestamp() };
     if (state.isAdmin) payload.isAdmin = true;
     await addDoc(MESSAGES_REF, payload);
     input.value = ''; input.style.height = 'auto';
@@ -1507,31 +1410,21 @@ async function sendMessage() {
     updateReplyPreview(); updateImagePreview();
     playSound('send');
     try { await deleteDoc(doc(TYPING_REF, state.userId)); } catch {}
-  } catch (e) {
-    console.error(e);
-    showToast('মেসেজ পাঠানো যায়নি', 'error');
-  } finally { sendBtn.disabled = false; }
+  } catch (e) { showToast('মেসেজ পাঠানো যায়নি', 'error'); }
+  finally { sendBtn.disabled = false; }
 }
-
-function setupAutoResize() {
-  const input = $('#messageInput');
-  input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 128) + 'px'; });
-}
+function setupAutoResize() { const input = $('#messageInput'); input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 128) + 'px'; }); }
 
 // MENTIONS
 function setupMentions() {}
 function updateMentions() {
-  const input = $('#messageInput');
-  const text = input.value;
-  const cursorPos = input.selectionStart;
-  const beforeCursor = text.slice(0, cursorPos);
-  const match = beforeCursor.match(/@([\w\u0980-\u09FF]*)$/);
+  const input = $('#messageInput'), text = input.value, pos = input.selectionStart;
+  const match = text.slice(0, pos).match(/@([\w\u0980-\u09FF]*)$/);
   if (!match) { $('#mentionDropdown').classList.add('hidden'); state.mentionMatches = []; return; }
-  const query = match[1].toLowerCase();
-  const matches = Object.values(state.members).filter(m => m.userId !== state.userId && m.nickname.toLowerCase().includes(query));
+  const q = match[1].toLowerCase();
+  const matches = Object.values(state.members).filter(m => m.userId !== state.userId && m.nickname.toLowerCase().includes(q));
   if (matches.length === 0) { $('#mentionDropdown').classList.add('hidden'); state.mentionMatches = []; return; }
-  state.mentionMatches = matches;
-  state.mentionDropdownIndex = 0;
+  state.mentionMatches = matches; state.mentionDropdownIndex = 0;
   const list = $('#mentionList');
   list.innerHTML = matches.map((m, i) => {
     const [c1, c2] = avatarColor(m.userId);
@@ -1542,34 +1435,24 @@ function updateMentions() {
 }
 function updateMentionHighlight() {
   const buttons = $('#mentionList').querySelectorAll('[data-mention-index]');
-  buttons.forEach((b, i) => {
-    b.classList.toggle('bg-slate-50', i === state.mentionDropdownIndex);
-    b.classList.toggle('dark:bg-slate-700', i === state.mentionDropdownIndex);
-  });
+  buttons.forEach((b, i) => { b.classList.toggle('bg-slate-50', i === state.mentionDropdownIndex); b.classList.toggle('dark:bg-slate-700', i === state.mentionDropdownIndex); });
 }
 function insertMention(member) {
-  const input = $('#messageInput');
-  const text = input.value;
-  const cursorPos = input.selectionStart;
-  const newBefore = text.slice(0, cursorPos).replace(/@([\w\u0980-\u09FF]*)$/, `@${member.nickname} `);
-  input.value = newBefore + text.slice(cursorPos);
-  input.focus();
-  input.setSelectionRange(newBefore.length, newBefore.length);
+  const input = $('#messageInput'), text = input.value, pos = input.selectionStart;
+  const newBefore = text.slice(0, pos).replace(/@([\w\u0980-\u09FF]*)$/, `@${member.nickname} `);
+  input.value = newBefore + text.slice(pos);
+  input.focus(); input.setSelectionRange(newBefore.length, newBefore.length);
   input.dispatchEvent(new Event('input'));
-  $('#mentionDropdown').classList.add('hidden');
-  state.mentionMatches = [];
+  $('#mentionDropdown').classList.add('hidden'); state.mentionMatches = [];
 }
 
 // REPLY
 function setupReply() { $('#cancelReply').addEventListener('click', () => { state.replyTo = null; updateReplyPreview(); }); }
 function setupReplyTo(msg) { state.replyTo = { msgId: msg.id, nickname: msg.nickname, text: msg.text || '📷' }; updateReplyPreview(); $('#messageInput').focus(); }
 function updateReplyPreview() {
-  const preview = $('#replyPreview');
-  if (state.replyTo) {
-    $('#replyToName').textContent = state.replyTo.nickname;
-    $('#replyToText').textContent = state.replyTo.text;
-    preview.classList.remove('hidden');
-  } else preview.classList.add('hidden');
+  const p = $('#replyPreview');
+  if (state.replyTo) { $('#replyToName').textContent = state.replyTo.nickname; $('#replyToText').textContent = state.replyTo.text; p.classList.remove('hidden'); }
+  else p.classList.add('hidden');
 }
 
 // EMOJI
@@ -1580,15 +1463,12 @@ const EMOJIS = {
   objects: ['🔥','⭐','✨','💫','🎉','🎊','🎈','🎁','🏆','🥇','🥈','🥉','⚡','💥','💯','✅','❌','⚠️','🚀','💡','📌','📎','🎯','🎨','🎵','🎶','☕','🍕','🍔','🍟','🍰','🎂','🌹','🌸','🌺','🌻','🌈','☀️','🌙','⭐'],
   symbols: ['✓','✔️','✖️','➕','➖','➗','✳️','✴️','❇️','💠','🔸','🔹','🔶','🔷','🔴','🟠','🟡','🟢','🔵','🟣','⚫','⚪','🟤','🔺','🔻','🔗','🔒','🔓','🔐','🔑','💬','💭','🗯️','♻️','🔔','🔕','📢','📣','📯']
 };
-
 function setupEmojiPicker() {
-  const btn = $('#emojiBtn');
-  const picker = $('#emojiPicker');
+  const btn = $('#emojiBtn'), picker = $('#emojiPicker');
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (picker.classList.contains('hidden')) {
-      renderEmojis('smileys');
-      picker.classList.remove('hidden');
+      renderEmojis('smileys'); picker.classList.remove('hidden');
       const rect = btn.getBoundingClientRect();
       picker.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
       picker.style.left = Math.max(8, Math.min(rect.left - 150, window.innerWidth - 350)) + 'px';
@@ -1598,32 +1478,22 @@ function setupEmojiPicker() {
   document.addEventListener('click', (e) => { if (!picker.contains(e.target) && !btn.contains(e.target)) picker.classList.add('hidden'); });
 }
 function renderEmojis(cat) {
-  const grid = $('#emojiGrid');
-  const list = EMOJIS[cat] || [];
+  const grid = $('#emojiGrid'), list = EMOJIS[cat] || [];
   grid.innerHTML = list.map(e => `<button type="button" class="emoji-btn p-1.5 text-xl rounded-lg" data-emoji="${e}">${e}</button>`).join('');
-  grid.querySelectorAll('[data-emoji]').forEach(b => b.addEventListener('click', () => {
-    const input = $('#messageInput');
-    input.value += b.dataset.emoji;
-    input.dispatchEvent(new Event('input'));
-    input.focus();
-  }));
+  grid.querySelectorAll('[data-emoji]').forEach(b => b.addEventListener('click', () => { const input = $('#messageInput'); input.value += b.dataset.emoji; input.dispatchEvent(new Event('input')); input.focus(); }));
 }
 
-// IMAGE UPLOAD
+// IMAGE
 function setupImageUpload() {
   $('#imageBtn').addEventListener('click', () => $('#imageInput').click());
   $('#imageInput').addEventListener('change', async e => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const file = e.target.files?.[0]; if (!file) return;
     if (!file.type.startsWith('image/')) { showToast('শুধু ছবি', 'error'); e.target.value = ''; return; }
     if (file.size > 10 * 1024 * 1024) { showToast('সর্বোচ্চ ১০ MB', 'error'); e.target.value = ''; return; }
     const compressed = await compressImage(file);
     state.pendingImage = compressed;
     const reader = new FileReader();
-    reader.onload = ev => {
-      $('#imagePreviewImg').src = ev.target.result;
-      $('#imagePreview').classList.remove('hidden');
-    };
+    reader.onload = ev => { $('#imagePreviewImg').src = ev.target.result; $('#imagePreview').classList.remove('hidden'); };
     reader.readAsDataURL(compressed);
     $('#sendBtn').disabled = false;
     e.target.value = '';
@@ -1637,10 +1507,7 @@ async function compressImage(file, maxDim = 1600, quality = 0.85) {
       const img = new Image();
       img.onload = () => {
         let w = img.width, h = img.height;
-        if (w > maxDim || h > maxDim) {
-          if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
-          else { w = Math.round(w * maxDim / h); h = maxDim; }
-        }
+        if (w > maxDim || h > maxDim) { if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; } else { w = Math.round(w * maxDim / h); h = maxDim; } }
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
@@ -1651,27 +1518,17 @@ async function compressImage(file, maxDim = 1600, quality = 0.85) {
     reader.readAsDataURL(file);
   });
 }
-function updateImagePreview() {
-  if (!state.pendingImage) {
-    $('#imagePreview').classList.add('hidden');
-    $('#sendBtn').disabled = !$('#messageInput').value.trim();
-  }
-}
+function updateImagePreview() { if (!state.pendingImage) { $('#imagePreview').classList.add('hidden'); $('#sendBtn').disabled = !$('#messageInput').value.trim(); } }
 
-// CLOUDINARY
 function uploadToCloudinary(file, onProgress) {
   return new Promise((resolve, reject) => {
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
     xhr.upload.onprogress = e => { if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100)); };
     xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try { const data = JSON.parse(xhr.responseText); if (!data.secure_url) return reject(new Error('URL missing')); resolve(data.secure_url); }
-        catch { reject(new Error('Parse failed')); }
-      } else reject(new Error('Upload failed'));
+      if (xhr.status >= 200 && xhr.status < 300) { try { const data = JSON.parse(xhr.responseText); if (!data.secure_url) return reject(new Error('URL missing')); resolve(data.secure_url); } catch { reject(new Error('Parse failed')); } }
+      else reject(new Error('Upload failed'));
     };
     xhr.onerror = () => reject(new Error('Network error'));
     xhr.send(fd);
@@ -1680,24 +1537,18 @@ function uploadToCloudinary(file, onProgress) {
 
 // SEARCH
 function setupSearch() {
-  const overlay = $('#searchOverlay');
-  const input = $('#searchInput');
-  $('#searchBtn').addEventListener('click', () => {
-    overlay.classList.remove('hidden'); overlay.classList.add('flex');
-    input.value = ''; $('#searchResults').innerHTML = '';
-    setTimeout(() => input.focus(), 50);
-  });
+  const overlay = $('#searchOverlay'), input = $('#searchInput');
+  $('#searchBtn').addEventListener('click', () => { overlay.classList.remove('hidden'); overlay.classList.add('flex'); input.value = ''; $('#searchResults').innerHTML = ''; setTimeout(() => input.focus(), 50); });
   $('#closeSearchBtn').addEventListener('click', () => { overlay.classList.add('hidden'); overlay.classList.remove('flex'); });
-  let searchTimeout = null;
-  input.addEventListener('input', () => { clearTimeout(searchTimeout); searchTimeout = setTimeout(() => doSearch(input.value), 250); });
+  let t = null;
+  input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => doSearch(input.value), 250); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !overlay.classList.contains('hidden')) { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }
     if (e.key === '/' && !e.target.matches('input, textarea')) { e.preventDefault(); $('#searchBtn').click(); }
   });
 }
 function doSearch(query) {
-  const results = $('#searchResults');
-  const q = query.trim().toLowerCase();
+  const results = $('#searchResults'), q = query.trim().toLowerCase();
   if (!q) { results.innerHTML = ''; return; }
   const matches = state.messages.filter(m => (m.text && m.text.toLowerCase().includes(q)) || (m.nickname && m.nickname.toLowerCase().includes(q))).slice(-50);
   if (matches.length === 0) { results.innerHTML = '<p class="text-center text-sm text-slate-500 py-8">কোনো মেসেজ পাওয়া যায়নি</p>'; return; }
@@ -1706,29 +1557,21 @@ function doSearch(query) {
     const [c1, c2] = avatarColor(m.userId);
     return `<button type="button" data-jump-search="${m.id}" class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition mb-1"><div class="flex items-start gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-extrabold shrink-0" style="background: linear-gradient(135deg, ${c1}, ${c2});">${escapeHtml(getInitials(m.nickname))}</div><div class="min-w-0 flex-1"><div class="flex items-center gap-2"><p class="text-xs font-bold">${escapeHtml(m.nickname)}</p><span class="text-[10px] text-slate-400">${fmtTime(m.createdAt)}</span></div><p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">${highlighted}</p></div></div></button>`;
   }).join('');
-  results.querySelectorAll('[data-jump-search]').forEach(b => b.addEventListener('click', () => {
-    overlay.classList.add('hidden'); overlay.classList.remove('flex');
-    jumpToMessage(b.dataset.jumpSearch);
-  }));
+  results.querySelectorAll('[data-jump-search]').forEach(b => b.addEventListener('click', () => { $('#searchOverlay').classList.add('hidden'); $('#searchOverlay').classList.remove('flex'); jumpToMessage(b.dataset.jumpSearch); }));
 }
 
 // PROFILE MENU
 function setupProfileMenu() {
-  const btn = $('#profileBtn');
-  const menu = $('#profileMenu');
+  const btn = $('#profileBtn'), menu = $('#profileMenu');
   btn.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('hidden'); });
   document.addEventListener('click', e => { if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add('hidden'); });
   $('#changeNicknameBtn').addEventListener('click', () => {
     menu.classList.add('hidden');
     const newName = prompt('নতুন নাম:', state.nickname);
     if (newName && newName.trim().length >= 2 && newName.trim().length <= 20) {
-      state.nickname = newName.trim();
-      localStorage.setItem(KEYS.nickname, state.nickname);
+      state.nickname = newName.trim(); localStorage.setItem(KEYS.nickname, state.nickname);
       const [c1, c2] = avatarColor(state.userId);
-      ['myAvatar', 'menuAvatar'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) { el.style.background = `linear-gradient(135deg, ${c1}, ${c2})`; el.textContent = getInitials(state.nickname); }
-      });
+      ['myAvatar', 'menuAvatar'].forEach(id => { const el = document.getElementById(id); if (el) { el.style.background = `linear-gradient(135deg, ${c1}, ${c2})`; el.textContent = getInitials(state.nickname); } });
       $('#menuNickname').textContent = state.nickname;
       updatePresence();
       showToast('নাম পরিবর্তন হয়েছে', 'success');
@@ -1757,8 +1600,7 @@ function setupExport() {
     });
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `group-chat-${Date.now()}.txt`; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = `group-chat-${Date.now()}.txt`; a.click();
     URL.revokeObjectURL(url);
     showToast('Export সফল', 'success');
   });
@@ -1766,12 +1608,8 @@ function setupExport() {
 
 // MOBILE DRAWER
 function setupMobileDrawer() {
-  const drawer = $('#mobileDrawer');
-  const aside = drawer.querySelector('aside');
-  $('#mobileMembersBtn').addEventListener('click', () => {
-    drawer.classList.remove('hidden');
-    requestAnimationFrame(() => aside.classList.remove('-translate-x-full'));
-  });
+  const drawer = $('#mobileDrawer'), aside = drawer.querySelector('aside');
+  $('#mobileMembersBtn').addEventListener('click', () => { drawer.classList.remove('hidden'); requestAnimationFrame(() => aside.classList.remove('-translate-x-full')); });
   function close() { aside.classList.add('-translate-x-full'); setTimeout(() => drawer.classList.add('hidden'), 300); }
   $('#drawerBackdrop').addEventListener('click', close);
   $('#closeDrawerBtn').addEventListener('click', close);
@@ -1780,238 +1618,95 @@ function setupMobileDrawer() {
 // SCROLL
 function setupScrollBehavior() {
   const area = $('#messagesArea');
-  area.addEventListener('scroll', () => {
-    state.userScrolledUp = !isScrolledToBottom();
-    if (!state.userScrolledUp) $('#newMsgIndicator').classList.add('hidden');
-  });
+  area.addEventListener('scroll', () => { state.userScrolledUp = !isScrolledToBottom(); if (!state.userScrolledUp) $('#newMsgIndicator').classList.add('hidden'); });
   $('#newMsgIndicator').addEventListener('click', () => { scrollToBottom(); $('#newMsgIndicator').classList.add('hidden'); });
 }
-function isScrolledToBottom() { const area = $('#messagesArea'); return area.scrollHeight - area.scrollTop - area.clientHeight < 100; }
-function scrollToBottom() { const area = $('#messagesArea'); area.scrollTop = area.scrollHeight; }
+function isScrolledToBottom() { const a = $('#messagesArea'); return a.scrollHeight - a.scrollTop - a.clientHeight < 100; }
+function scrollToBottom() { const a = $('#messagesArea'); a.scrollTop = a.scrollHeight; }
 
-// ADMIN AUTH
+// ADMIN
 function setupAdminAuth() {
   $('#adminBtn').addEventListener('click', () => {
     if (state.isAdmin) {
       showConfirm('Exit admin mode?', 'Admin mode থেকে বের হবেন?', () => {
         state.isAdmin = false;
         $('#adminModeBar').classList.add('hidden');
-        $('#adminPanel').classList.add('hidden');
-        $('#adminPanel').classList.remove('flex');
-        updatePresence();
-        applySettingsUI();
+        $('#adminPanel').classList.add('hidden'); $('#adminPanel').classList.remove('flex');
+        updatePresence(); applySettingsUI();
         showToast('Admin mode off', 'info');
       });
-    } else {
-      $('#adminModal').classList.remove('hidden');
-      $('#adminModal').classList.add('flex');
-    }
+    } else { $('#adminModal').classList.remove('hidden'); $('#adminModal').classList.add('flex'); }
   });
   $('#closeAdminModal').addEventListener('click', () => { $('#adminModal').classList.add('hidden'); $('#adminModal').classList.remove('flex'); });
   $('#googleAdminLogin').addEventListener('click', async () => {
     const btn = $('#googleAdminLogin'); btn.disabled = true;
-    try { const provider = new GoogleAuthProvider(); await signInWithPopup(auth, provider); }
-    catch (e) { showToast('লগইন ব্যর্থ', 'error'); }
+    try { const p = new GoogleAuthProvider(); await signInWithPopup(auth, p); }
+    catch { showToast('লগইন ব্যর্থ', 'error'); }
     finally { btn.disabled = false; }
   });
-  $('#exitAdminBtn').addEventListener('click', () => {
-    state.isAdmin = false;
-    $('#adminModeBar').classList.add('hidden');
-    updatePresence();
-    applySettingsUI();
-  });
-  $('#adminPanelBtn').addEventListener('click', () => {
-    $('#adminPanel').classList.remove('hidden');
-    $('#adminPanel').classList.add('flex');
-    renderAdminStats();
-    renderAdminOnline();
-  });
+  $('#exitAdminBtn').addEventListener('click', () => { state.isAdmin = false; $('#adminModeBar').classList.add('hidden'); updatePresence(); applySettingsUI(); });
+  $('#adminPanelBtn').addEventListener('click', () => { $('#adminPanel').classList.remove('hidden'); $('#adminPanel').classList.add('flex'); renderAdminStats(); renderAdminOnline(); });
   onAuthStateChanged(auth, user => {
     if (user && user.email?.toLowerCase() === ALLOWED_ADMIN) {
-      state.isAdmin = true;
-      state.adminUser = user;
-      $('#adminModal').classList.add('hidden');
-      $('#adminModal').classList.remove('flex');
+      state.isAdmin = true; state.adminUser = user;
+      $('#adminModal').classList.add('hidden'); $('#adminModal').classList.remove('flex');
       $('#adminModeBar').classList.remove('hidden');
-      updatePresence();
-      applySettingsUI();
+      updatePresence(); applySettingsUI();
       showToast('Admin mode ON', 'success');
-    } else if (user) {
-      showToast('এই email অনুমোদিত নয়', 'error');
-      signOut(auth);
-    }
+    } else if (user) { showToast('এই email অনুমোদিত নয়', 'error'); signOut(auth); }
   });
 }
 
-// ADMIN PANEL
 function setupAdminPanel() {
-  $('#closeAdminPanelBtn').addEventListener('click', () => {
-    $('#adminPanel').classList.add('hidden');
-    $('#adminPanel').classList.remove('flex');
-  });
-  // Tabs
+  $('#closeAdminPanelBtn').addEventListener('click', () => { $('#adminPanel').classList.add('hidden'); $('#adminPanel').classList.remove('flex'); });
   $$('.admin-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const name = tab.dataset.tab;
-      $$('.admin-tab').forEach(t => {
-        t.classList.remove('border-amber-500', 'text-amber-600', 'dark:text-amber-400');
-        t.classList.add('border-transparent', 'text-slate-500');
-      });
-      tab.classList.remove('border-transparent', 'text-slate-500');
-      tab.classList.add('border-amber-500', 'text-amber-600', 'dark:text-amber-400');
+      $$('.admin-tab').forEach(t => { t.classList.remove('border-amber-500', 'text-amber-600', 'dark:text-amber-400'); t.classList.add('border-transparent', 'text-slate-500'); });
+      tab.classList.remove('border-transparent', 'text-slate-500'); tab.classList.add('border-amber-500', 'text-amber-600', 'dark:text-amber-400');
       $$('[data-tab-content]').forEach(c => c.classList.add('hidden'));
       $(`[data-tab-content="${name}"]`).classList.remove('hidden');
     });
   });
-  // Set default tab
   $('.admin-tab[data-tab="overview"]').click();
-
-  // Lock toggle
-  $('#toggleLockChat').addEventListener('change', async (e) => {
-    try {
-      await setDoc(SETTINGS_REF, { locked: e.target.checked }, { merge: true });
-      showToast(e.target.checked ? 'চ্যাট লক করা হয়েছে' : 'চ্যাট আনলক', 'success');
-    } catch { showToast('Failed', 'error'); }
-  });
-
-  // Slow mode
-  $('#slowModeSelect').addEventListener('change', async (e) => {
-    try {
-      await setDoc(SETTINGS_REF, { slowMode: Number(e.target.value) }, { merge: true });
-      showToast('Slow mode updated', 'success');
-    } catch { showToast('Failed', 'error'); }
-  });
-
-  // Announcement
-  $('#saveAnnouncementBtn').addEventListener('click', async () => {
-    const text = $('#announcementInput').value.trim();
-    try {
-      await setDoc(SETTINGS_REF, { announcement: text }, { merge: true });
-      showToast(text ? 'Announcement saved' : 'Announcement cleared', 'success');
-    } catch { showToast('Failed', 'error'); }
-  });
-  $('#clearAnnouncementBtn').addEventListener('click', async () => {
-    $('#announcementInput').value = '';
-    try { await setDoc(SETTINGS_REF, { announcement: '' }, { merge: true }); showToast('Cleared', 'success'); }
-    catch { showToast('Failed', 'error'); }
-  });
+  $('#toggleLockChat').addEventListener('change', async (e) => { try { await setDoc(SETTINGS_REF, { locked: e.target.checked }, { merge: true }); showToast(e.target.checked ? 'চ্যাট লক' : 'চ্যাট আনলক', 'success'); } catch { showToast('Failed', 'error'); } });
+  $('#slowModeSelect').addEventListener('change', async (e) => { try { await setDoc(SETTINGS_REF, { slowMode: Number(e.target.value) }, { merge: true }); showToast('Slow mode updated', 'success'); } catch { showToast('Failed', 'error'); } });
+  $('#saveAnnouncementBtn').addEventListener('click', async () => { const text = $('#announcementInput').value.trim(); try { await setDoc(SETTINGS_REF, { announcement: text }, { merge: true }); showToast(text ? 'Saved' : 'Cleared', 'success'); } catch { showToast('Failed', 'error'); } });
+  $('#clearAnnouncementBtn').addEventListener('click', async () => { $('#announcementInput').value = ''; try { await setDoc(SETTINGS_REF, { announcement: '' }, { merge: true }); showToast('Cleared', 'success'); } catch { showToast('Failed', 'error'); } });
   $('#dismissAnnouncement')?.addEventListener('click', () => $('#announcementBanner').classList.add('hidden'));
-
-  // Clear pins
-  $('#clearPinsBtn').addEventListener('click', () => {
-    showConfirm('Clear all pins?', 'সব pinned message সরানো হবে।', async () => {
-      try {
-        const snap = await getDocs(PINS_REF);
-        const batch = writeBatch(db);
-        snap.forEach(d => batch.delete(d.ref));
-        await batch.commit();
-        showToast('Pins cleared', 'success');
-      } catch { showToast('Failed', 'error'); }
-    });
-  });
-
-  // Clear typing
-  $('#clearTypingBtn').addEventListener('click', () => {
-    showConfirm('Clear typing?', 'সব typing indicator রিসেট হবে।', async () => {
-      try {
-        const snap = await getDocs(TYPING_REF);
-        const batch = writeBatch(db);
-        snap.forEach(d => batch.delete(d.ref));
-        await batch.commit();
-        showToast('Typing cleared', 'success');
-      } catch { showToast('Failed', 'error'); }
-    });
-  });
-
-  // Clear all messages
-  $('#clearAllMessagesBtn').addEventListener('click', () => {
-    showConfirm('Clear ALL messages?', `সব ${state.messages.length}টি মেসেজ স্থায়ীভাবে মুছে যাবে। এটা ফেরানো যাবে না।`, async () => {
-      try {
-        const snap = await getDocs(MESSAGES_REF);
-        const batch = writeBatch(db);
-        snap.forEach(d => batch.delete(d.ref));
-        await batch.commit();
-        showToast('All messages deleted', 'success');
-      } catch { showToast('Failed', 'error'); }
-    });
-  });
-
-  // Delete entire chat
-  $('#deleteChatBtn').addEventListener('click', () => {
-    showConfirm('DELETE ENTIRE CHAT?', 'মেসেজ, pins, typing — সব ডিলিট। এটি ফেরানো যাবে না।', async () => {
-      try {
-        const [msgSnap, pinSnap, typSnap] = await Promise.all([
-          getDocs(MESSAGES_REF), getDocs(PINS_REF), getDocs(TYPING_REF)
-        ]);
-        const batch = writeBatch(db);
-        msgSnap.forEach(d => batch.delete(d.ref));
-        pinSnap.forEach(d => batch.delete(d.ref));
-        typSnap.forEach(d => batch.delete(d.ref));
-        await batch.commit();
-        showToast('Chat completely deleted', 'success');
-      } catch { showToast('Failed', 'error'); }
-    });
-  });
+  $('#clearPinsBtn').addEventListener('click', () => { showConfirm('Clear all pins?', 'সব pinned message সরানো হবে।', async () => { try { const snap = await getDocs(PINS_REF); const b = writeBatch(db); snap.forEach(d => b.delete(d.ref)); await b.commit(); showToast('Pins cleared', 'success'); } catch { showToast('Failed', 'error'); } }); });
+  $('#clearTypingBtn').addEventListener('click', () => { showConfirm('Clear typing?', 'সব typing indicator রিসেট হবে।', async () => { try { const snap = await getDocs(TYPING_REF); const b = writeBatch(db); snap.forEach(d => b.delete(d.ref)); await b.commit(); showToast('Cleared', 'success'); } catch { showToast('Failed', 'error'); } }); });
+  $('#clearAllMessagesBtn').addEventListener('click', () => { showConfirm('Clear ALL messages?', `সব ${state.messages.length}টি মেসেজ স্থায়ীভাবে মুছে যাবে।`, async () => { try { const snap = await getDocs(MESSAGES_REF); const b = writeBatch(db); snap.forEach(d => b.delete(d.ref)); await b.commit(); showToast('All deleted', 'success'); } catch { showToast('Failed', 'error'); } }); });
+  $('#deleteChatBtn').addEventListener('click', () => { showConfirm('DELETE ENTIRE CHAT?', 'সব ডিলিট হবে। ফেরানো যাবে না।', async () => { try { const [m, p, t] = await Promise.all([getDocs(MESSAGES_REF), getDocs(PINS_REF), getDocs(TYPING_REF)]); const b = writeBatch(db); m.forEach(d => b.delete(d.ref)); p.forEach(d => b.delete(d.ref)); t.forEach(d => b.delete(d.ref)); await b.commit(); showToast('Chat deleted', 'success'); } catch { showToast('Failed', 'error'); } }); });
 }
-
 function renderAdminStats() {
   $('#adminStatMessages').textContent = toBn(state.messages.length);
   $('#adminStatOnline').textContent = toBn(Object.keys(state.members).length);
   $('#adminStatPins').textContent = toBn(state.pins.length);
   $('#adminStatBanned').textContent = toBn(Object.keys(state.banned).length);
 }
-
 function renderAdminOnline() {
   const list = $('#adminOnlineList');
   const members = Object.values(state.members).filter(m => !m.isAdmin);
-  if (members.length === 0) {
-    list.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">কেউ online নেই</p>';
-    return;
-  }
+  if (members.length === 0) { list.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">কেউ online নেই</p>'; return; }
   list.innerHTML = members.map(m => {
     const isBanned = !!state.banned[m.userId];
     const [c1, c2] = avatarColor(m.userId);
-    return `<div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-      <div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-extrabold shrink-0" style="background: linear-gradient(135deg, ${c1}, ${c2});">${escapeHtml(getInitials(m.nickname))}</div>
-      <p class="text-xs font-bold truncate flex-1">${escapeHtml(m.nickname)}</p>
-      <button type="button" data-admin-ban="${m.userId}" data-banned="${isBanned}" class="px-2 py-1 rounded-md text-[10px] font-bold shrink-0 ${isBanned ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-rose-500 hover:bg-rose-600 text-white'}">${isBanned ? 'Unban' : 'Ban'}</button>
-    </div>`;
+    return `<div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50"><div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-extrabold shrink-0" style="background: linear-gradient(135deg, ${c1}, ${c2});">${escapeHtml(getInitials(m.nickname))}</div><p class="text-xs font-bold truncate flex-1">${escapeHtml(m.nickname)}</p><button type="button" data-admin-ban="${m.userId}" data-banned="${isBanned}" class="px-2 py-1 rounded-md text-[10px] font-bold shrink-0 ${isBanned ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-rose-500 hover:bg-rose-600 text-white'}">${isBanned ? 'Unban' : 'Ban'}</button></div>`;
   }).join('');
-  list.querySelectorAll('[data-admin-ban]').forEach(b => {
-    b.addEventListener('click', async () => {
-      const uid = b.dataset.adminBan;
-      const isBanned = b.dataset.banned === 'true';
-      if (isBanned) {
-        await deleteDoc(doc(BANNED_REF, uid)).catch(() => {});
-        showToast('Unbanned', 'success');
-      } else {
-        const m = state.members[uid];
-        await setDoc(doc(BANNED_REF, uid), { userId: uid, nickname: m?.nickname || 'Unknown', bannedBy: state.nickname, bannedAt: serverTimestamp() }).catch(() => {});
-        showToast('Banned', 'success');
-      }
-    });
-  });
+  list.querySelectorAll('[data-admin-ban]').forEach(b => b.addEventListener('click', async () => {
+    const uid = b.dataset.adminBan, isBanned = b.dataset.banned === 'true';
+    if (isBanned) { await deleteDoc(doc(BANNED_REF, uid)).catch(() => {}); showToast('Unbanned', 'success'); }
+    else { const m = state.members[uid]; await setDoc(doc(BANNED_REF, uid), { userId: uid, nickname: m?.nickname || 'Unknown', bannedBy: state.nickname, bannedAt: serverTimestamp() }).catch(() => {}); showToast('Banned', 'success'); }
+  }));
 }
 
-// TAB TITLE RESET
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) {
-    state.unreadCount = 0;
-    document.title = state.baseTitle;
-  }
-});
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { state.unreadCount = 0; document.title = state.baseTitle; } });
 
-// INIT
-initTheme();
-initSoundToggle();
-initNicknameSetup();
-
+initTheme(); initSoundToggle(); initNicknameSetup();
 setTimeout(() => {
   if ('Notification' in window && Notification.permission === 'default') {
-    document.addEventListener('click', function askOnce() {
-      Notification.requestPermission().catch(() => {});
-      document.removeEventListener('click', askOnce);
-    }, { once: true });
+    document.addEventListener('click', function once() { Notification.requestPermission().catch(() => {}); document.removeEventListener('click', once); }, { once: true });
   }
 }, 5000);
 
