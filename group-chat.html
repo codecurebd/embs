@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Group Chat — eMutation Community</title>
+<meta name="description" content="eMutation কমিউনিটির গ্রুপ চ্যাট — এজেন্টদের জন্য লাইভ আলোচনা।" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#1d51f5" />
+<link rel="icon" type="image/png" href="logo.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+<link rel="dns-prefetch" href="https://api.cloudinary.com" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: { sans: ['"Noto Sans Bengali"', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+      colors: {
+        brand: {
+          50:'#eef5ff',100:'#d9e8ff',200:'#bcd7ff',300:'#8ebdff',400:'#5996ff',
+          500:'#3372ff',600:'#1d51f5',700:'#163ee1',800:'#1935b6',900:'#1a328f'
+        }
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.3s ease both',
+        'slide-up': 'slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'pop-in': 'popIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'typing': 'typing 1.4s infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+      },
+      keyframes: {
+        fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
+        slideUp: { '0%': { opacity: 0, transform: 'translateY(12px)' }, '100%': { opacity: 1, transform: 'none' } },
+        popIn: { '0%': { opacity: 0, transform: 'scale(0.85)' }, '100%': { opacity: 1, transform: 'scale(1)' } },
+        typing: { '0%, 60%, 100%': { transform: 'translateY(0)', opacity: 0.5 }, '30%': { transform: 'translateY(-6px)', opacity: 1 } },
+        float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-20px)' } },
+        pulseGlow: { '0%, 100%': { boxShadow: '0 0 0 0 rgba(29,81,245,0.4)' }, '50%': { boxShadow: '0 0 0 12px rgba(29,81,245,0)' } }
+      }
+    }
+  }
+}
+</script>
+
+<style>
+  * { -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; }
+  body { font-family: 'Noto Sans Bengali', sans-serif; }
+  
+  /* Scrollbars */
+  .scroll-slim::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scroll-slim::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 99px; }
+  .dark .scroll-slim::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.6); }
+
+  /* Setup screen background */
+  .setup-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .dark .setup-bg {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  }
+  .setup-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Message bubble animation */
+  @keyframes bubbleIn {
+    0% { opacity: 0; transform: scale(0.85) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .msg-animate { animation: bubbleIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  /* Reaction pop */
+  @keyframes reactionPop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.3); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .reaction-pop { animation: reactionPop 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  /* Typing dots */
+  .typing-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: typingBounce 1.4s infinite;
+  }
+  .typing-dot:nth-child(1) { animation-delay: 0s; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* Online pulse */
+  @keyframes onlinePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    50% { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); }
+  }
+  .online-dot { animation: onlinePulse 2s infinite; }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .dark .gradient-text {
+    background: linear-gradient(135deg, #8b9dff 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  /* Admin message glow */
+  @keyframes adminGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.15); }
+    50% { box-shadow: 0 0 25px rgba(251, 191, 36, 0.35); }
+  }
+  .admin-bubble { animation: adminGlow 3s ease-in-out infinite; }
+
+  /* New message indicator */
+  @keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .new-msg-bounce { animation: bounceDown 1s ease-in-out infinite; }
+
+  /* Emoji picker */
+  .emoji-btn {
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+  .emoji-btn:hover {
+    transform: scale(1.2);
+    background: rgba(99, 102, 241, 0.1);
+  }
+
+  /* Message hover actions */
+  .msg-container:hover .msg-actions { opacity: 1; pointer-events: auto; }
+  .msg-actions { opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+
+  /* Reaction bar hover */
+  .reaction-bar { opacity: 0; pointer-events: none; transition: all 0.2s ease; transform: translateY(4px); }
+  .msg-container:hover .reaction-bar { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  /* Modal backdrop */
+  .modal-backdrop { backdrop-filter: blur(8px); }
+
+  /* Smooth theme transition */
+  body, body * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease; }
+  body.no-transition *, body.no-transition { transition: none !important; }
+
+  /* Prevent zoom on input focus in iOS */
+  @media (max-width: 640px) { input, textarea { font-size: 16px !important; } }
+
+  /* Mobile drawer */
+  .drawer-transition { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+
+  /* Hide scrollbar on reactions */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased">
+
+<!-- ═══════════════════════════════════════════════
+     SETUP SCREEN — Nickname Selection
+═══════════════════════════════════════════════ -->
+<div id="setupScreen" class="setup-bg fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+  <!-- Animated blobs -->
+  <div class="setup-blob w-72 h-72 bg-pink-400 -top-20 -left-20 animate-float" style="animation-delay: 0s"></div>
+  <div class="setup-blob w-80 h-80 bg-blue-400 -bottom-32 -right-20 animate-float" style="animation-delay: 2s"></div>
+  <div class="setup-blob w-64 h-64 bg-purple-400 top-1/3 right-1/4 animate-float" style="animation-delay: 4s"></div>
+
+  <div class="relative w-full max-w-md anim-in">
+    <div class="rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-white/40 dark:border-slate-700/60 p-7 sm:p-9">
+      <!-- Logo + title -->
+      <div class="text-center">
+        <div class="relative inline-block mb-4">
+          <div class="absolute inset-0 bg-gradient-to-br from-brand-400 to-purple-500 rounded-2xl blur-xl opacity-50"></div>
+          <div class="relative w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+            <svg class="w-9 h-9 sm:w-11 sm:h-11 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold gradient-text">Welcome to Group Chat</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">আপনার একটা নাম দিন — বাকিরা এই নামেই আপনাকে চিনবে</p>
+      </div>
+
+      <!-- Nickname input -->
+      <div class="mt-7">
+        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider">আপনার নাম / Nickname</label>
+        <div class="relative">
+          <input type="text" id="nicknameInput" maxlength="20" placeholder="যেমন: রহিম, Karim, Emon..." 
+            class="w-full rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3.5 pr-16 text-base font-semibold outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900/40 transition" 
+            autocomplete="off" autofocus />
+          <span id="nicknameCount" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">0/20</span>
+        </div>
+        <p id="nicknameError" class="hidden mt-2 text-xs font-semibold text-rose-600"></p>
+      </div>
+
+      <!-- Avatar preview -->
+      <div class="mt-5 flex items-center gap-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 p-4">
+        <div id="avatarPreview" class="w-14 h-14 rounded-full flex items-center justify-center text-white font-extrabold text-lg shadow-lg shrink-0" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">?</div>
+        <div class="min-w-0 flex-1">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">আপনার avatar</p>
+          <p id="previewName" class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">অনুগ্রহ করে নাম দিন</p>
+        </div>
+      </div>
+
+      <!-- Enter button -->
+      <button type="button" id="enterChatBtn" class="mt-6 w-full rounded-xl bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-700 hover:to-purple-700 text-white font-extrabold py-4 text-base shadow-xl shadow-brand-500/30 transition active:scale-[.98] disabled:opacity-50 disabled:cursor-not-allowed">
+        <span class="inline-flex items-center justify-center gap-2">
+          চ্যাটে প্রবেশ করুন
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </span>
+      </button>
+
+      <p class="mt-4 text-center text-[11px] text-slate-500 dark:text-slate-400">
+        🔒 কোনো signup নেই — নাম সেভ থাকে আপনার ব্রাউজারে
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN CHAT SCREEN
+═══════════════════════════════════════════════ -->
+<div id="chatScreen" class="hidden h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="shrink-0 flex items-center gap-3 px-3 sm:px-5 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-20">
+    <!-- Mobile members btn -->
+    <button type="button" id="mobileMembersBtn" class="md:hidden p-2 -ml-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+      <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+
+    <!-- Group info -->
+    <div class="flex items-center gap-3 min-w-0 flex-1">
+      <div class="relative shrink-0">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-md">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 online-dot"></span>
+      </div>
+      <div class="min-w-0">
+        <h1 class="text-sm sm:text-base font-extrabold truncate">eMutation Group</h1>
+        <p class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+          <span id="onlineCount" class="font-semibold text-emerald-600 dark:text-emerald-400">0</span>
+          <span>online</span>
+          <span class="opacity-40">•</span>
+          <span id="totalCount">0</span>
+          <span>members</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-1 shrink-0">
+      <!-- Sound toggle -->
+      <button type="button" id="soundToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Sound on/off">
+        <svg id="soundOnIcon" class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M6 15l4.5-3L6 9V15z"/></svg>
+        <svg id="soundOffIcon" class="w-5 h-5 text-slate-400 dark:text-slate-500 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+      </button>
+
+      <!-- Theme toggle -->
+      <button type="button" id="themeToggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Theme toggle">
+        <svg class="sun-icon w-5 h-5 text-slate-600 dark:text-slate-300 dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2M5.6 5.6l1.4 1.4m10 10l1.4 1.4M3 12h2m14 0h2M5.6 18.4l1.4-1.4m10-10l1.4-1.4M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        <svg class="moon-icon hidden dark:block w-5 h-5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+
+      <!-- Admin login / badge -->
+      <button type="button" id="adminBtn" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition hidden sm:block" title="Admin">
+        <svg class="w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </button>
+
+      <!-- Profile menu (mobile + desktop) -->
+      <div class="relative">
+        <button type="button" id="profileBtn" class="ml-1 w-9 h-9 rounded-full overflow-hidden shadow-md ring-2 ring-white dark:ring-slate-800 transition hover:scale-105" title="Profile">
+          <div id="myAvatar" class="w-full h-full flex items-center justify-center text-white font-extrabold text-sm" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">?</div>
+        </button>
+        <div id="profileMenu" class="hidden absolute right-0 top-full mt-2 w-64 rounded-2xl bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden anim-in z-50">
+          <div class="p-4 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+            <div id="menuAvatar" class="w-12 h-12 rounded-full flex items-center justify-center text-white font-extrabold text-lg shrink-0" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">?</div>
+            <div class="min-w-0 flex-1">
+              <p id="menuNickname" class="text-sm font-extrabold truncate">—</p>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">You</p>
+            </div>
+          </div>
+          <button type="button" id="changeNicknameBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition text-left">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            নাম পরিবর্তন করুন
+          </button>
+          <button type="button" id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition text-left border-t border-slate-200 dark:border-slate-700">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            লগ আউট
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ MAIN LAYOUT ═══ -->
+  <div class="flex-1 flex min-h-0 relative">
+
+    <!-- ═══ MEMBERS SIDEBAR (Desktop) ═══ -->
+    <aside class="hidden md:flex w-64 shrink-0 flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800">
+      <div class="p-4 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Members</h3>
+          <span id="memberCountBadge" class="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full">0</span>
+        </div>
+      </div>
+      <div id="membersList" class="flex-1 overflow-y-auto scroll-slim p-2 space-y-0.5"></div>
+    </aside>
+
+    <!-- ═══ MOBILE MEMBERS DRAWER ═══ -->
+    <div id="mobileDrawer" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="drawerBackdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+      <aside class="absolute left-0 top-0 bottom-0 w-72 max-w-[85vw] bg-white dark:bg-slate-900 shadow-2xl drawer-transition -translate-x-full flex flex-col">
+        <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <div>
+            <h3 class="text-sm font-extrabold">Members</h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400" id="mobileMemberCount">0 online</p>
+          </div>
+          <button type="button" id="closeDrawerBtn" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="mobileMembersList" class="flex-1 overflow-y-auto scroll-slim p-2"></div>
+      </aside>
+    </div>
+
+    <!-- ═══ CHAT AREA ═══ -->
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-slate-950 relative">
+
+      <!-- ═══ MESSAGES ═══ -->
+      <div id="messagesArea" class="flex-1 overflow-y-auto scroll-slim px-3 sm:px-6 py-4 space-y-3" style="scroll-behavior: smooth;">
+        <!-- Welcome message -->
+        <div id="welcomeCard" class="max-w-md mx-auto my-8 text-center px-4">
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-xl mb-4">
+            <svg class="w-11 h-11 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          <h2 class="text-lg font-extrabold">স্বাগতম গ্রুপ চ্যাটে!</h2>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">এখানে সবাই একসাথে কথা বলতে পারে। প্রথম মেসেজটা আপনিই শুরু করুন!</p>
+        </div>
+      </div>
+
+      <!-- ═══ NEW MESSAGE INDICATOR ═══ -->
+      <button type="button" id="newMsgIndicator" class="hidden absolute bottom-24 left-1/2 -translate-x-1/2 px-4 py-2 bg-brand-600 text-white text-xs font-bold rounded-full shadow-lg z-10 new-msg-bounce">
+        <span class="inline-flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+          নতুন মেসেজ
+        </span>
+      </button>
+
+      <!-- ═══ TYPING INDICATOR ═══ -->
+      <div id="typingIndicator" class="hidden px-4 sm:px-6 py-2 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+        <div class="flex gap-0.5">
+          <span class="typing-dot" style="color: #94a3b8"></span>
+          <span class="typing-dot" style="color: #94a3b8"></span>
+          <span class="typing-dot" style="color: #94a3b8"></span>
+        </div>
+        <span id="typingText">Someone is typing...</span>
+      </div>
+
+      <!-- ═══ INPUT AREA ═══ -->
+      <div class="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-3 sm:px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        
+        <!-- Reply preview -->
+        <div id="replyPreview" class="hidden mb-2 flex items-center gap-2 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-2 border-l-4 border-brand-500">
+          <svg class="w-4 h-4 text-brand-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+          <div class="min-w-0 flex-1">
+            <p class="text-[10px] font-bold text-brand-700 dark:text-brand-400">Replying to <span id="replyToName">—</span></p>
+            <p id="replyToText" class="text-xs text-slate-600 dark:text-slate-400 truncate">—</p>
+          </div>
+          <button type="button" id="cancelReply" class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Admin mode indicator -->
+        <div id="adminModeBar" class="hidden mb-2 flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-950/40 dark:to-amber-900/40 px-3 py-2 border border-amber-300 dark:border-amber-700">
+          <svg class="w-4 h-4 text-amber-600 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+          <p class="text-xs font-bold text-amber-800 dark:text-amber-200 flex-1">Admin mode ON — আপনার মেসেজ crown badge সহ যাবে</p>
+          <button type="button" id="exitAdminBtn" class="text-xs font-bold text-amber-700 dark:text-amber-300 underline">Exit</button>
+        </div>
+
+        <!-- Image preview -->
+        <div id="imagePreview" class="hidden mb-2 relative inline-block">
+          <img id="imagePreviewImg" class="h-20 rounded-lg border border-slate-200 dark:border-slate-700" />
+          <button type="button" id="cancelImage" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-500 hover:bg-rose-600 rounded-full text-white grid place-items-center shadow-md transition">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <form id="messageForm" class="flex items-end gap-2">
+          <!-- Image upload -->
+          <input type="file" id="imageInput" accept="image/*" class="hidden" />
+          <button type="button" id="imageBtn" class="shrink-0 w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 grid place-items-center transition" title="Attach image">
+            <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.5-5 3 3.5L15 10l5 6M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </button>
+
+          <!-- Text input -->
+          <div class="flex-1 min-w-0 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-end">
+            <textarea id="messageInput" rows="1" maxlength="1000" placeholder="মেসেজ লিখুন…" 
+              class="flex-1 bg-transparent px-4 py-3 text-sm outline-none resize-none max-h-32 leading-5"
+              style="min-height: 44px;"></textarea>
+            <button type="button" id="emojiBtn" class="shrink-0 w-11 h-11 grid place-items-center hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Emoji">
+              <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </button>
+          </div>
+
+          <!-- Send button -->
+          <button type="submit" id="sendBtn" disabled class="shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-brand-600 to-purple-600 hover:from-brand-700 hover:to-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white grid place-items-center transition shadow-md shadow-brand-500/30 active:scale-95">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6"/></svg>
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══ EMOJI PICKER ═══ -->
+<div id="emojiPicker" class="hidden fixed z-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden anim-in" style="width: 340px; max-width: calc(100vw - 2rem);">
+  <div class="px-3 py-2 border-b border-slate-200 dark:border-slate-700">
+    <div class="flex gap-1 overflow-x-auto no-scrollbar">
+      <button class="emoji-cat-btn px-2.5 py-1 text-lg rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition" data-cat="smileys">😀</button>
+      <button class="emoji-cat-btn px-2.5 py-1 text-lg rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition" data-cat="gestures">👍</button>
+      <button class="emoji-cat-btn px-2.5 py-1 text-lg rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition" data-cat="hearts">❤️</button>
+      <button class="emoji-cat-btn px-2.5 py-1 text-lg rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition" data-cat="objects">🎉</button>
+    </div>
+  </div>
+  <div id="emojiGrid" class="p-2 grid grid-cols-8 gap-1 max-h-64 overflow-y-auto scroll-slim"></div>
+</div>
+
+<!-- ═══ ADMIN MODAL ═══ -->
+<div id="adminModal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+  <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-700 p-6 anim-in">
+    <div class="text-center">
+      <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg mb-3">
+        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+      </div>
+      <h3 class="text-lg font-extrabold">Admin Login</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">শুধুমাত্র অনুমোদিত অ্যাডমিন</p>
+    </div>
+    <button type="button" id="googleAdminLogin" class="mt-5 w-full flex items-center justify-center gap-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 px-4 py-3 text-sm font-bold transition">
+      <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.2-.1-2.3-.1-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.4C29.4 34.7 26.9 36 24 36c-5.2 0-9.6-3.1-11.3-7.5l-6.5 5C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.3 5.4c-.4.4 6.6-4.8 6.6-15.1 0-1.2-.1-2.3-.4-3.5z"/></svg>
+      Google দিয়ে লগইন করুন
+    </button>
+    <button type="button" id="closeAdminModal" class="mt-3 w-full text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 py-2">বাতিল</button>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] opacity-0 pointer-events-none transition-all duration-300">
+  <div id="toastBox" class="px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow-2xl"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, doc, setDoc, updateDoc, deleteDoc, onSnapshot,
+  query, orderBy, limit, serverTimestamp, getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDbNC1ZD67zcwpLHZL3WB41dE_z8WmjbK8",
+  authDomain: "emutationbirth.firebaseapp.com",
+  projectId: "emutationbirth",
+  storageBucket: "emutationbirth.firebasestorage.app",
+  messagingSenderId: "200454817186",
+  appId: "1:200454817186:web:b28e3cbe6f72a1f4cfdefb"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const auth = getAuth(app);
+
+const ALLOWED_ADMIN = 'nopqrshov337@gmail.com';
+const CHAT_ID = 'main';
+const CLOUDINARY_CLOUD_NAME = 'zmoyykj7';
+const CLOUDINARY_UPLOAD_PRESET = 'codecurebd';
+
+const MESSAGES_REF = collection(db, 'groupChats', CHAT_ID, 'messages');
+const PRESENCE_REF = collection(db, 'groupChats', CHAT_ID, 'presence');
+const TYPING_REF = collection(db, 'groupChats', CHAT_ID, 'typing');
+
+const BN = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+const toBn = n => String(n ?? 0).replace(/\d/g, d => BN[+d]);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const STORAGE_KEYS = {
+  nickname: 'em_group_nickname',
+  userId: 'em_group_userid',
+  sound: 'em_group_sound',
+  theme: 'em_group_theme',
+};
+
+// ═══ STATE ═══
+const state = {
+  userId: null,
+  nickname: null,
+  isAdmin: false,
+  adminUser: null,
+  messages: [],
+  members: {},
+  typingUsers: {},
+  replyTo: null,
+  pendingImage: null,
+  soundEnabled: true,
+  lastMessageCount: 0,
+  userScrolledUp: false,
+  seenMessageIds: new Set(),
+};
+
+// ═══ HELPERS ═══
+function escapeHtml(str='') {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function avatarColor(seed) {
+  const colors = [
+    ['#6366f1','#8b5cf6'], ['#ec4899','#f43f5e'], ['#06b6d4','#3b82f6'],
+    ['#10b981','#059669'], ['#f59e0b','#d97706'], ['#8b5cf6','#6366f1'],
+    ['#ef4444','#dc2626'], ['#14b8a6','#0d9488'], ['#f97316','#ea580c'],
+    ['#a855f7','#9333ea']
+  ];
+  let hash = 0;
+  for (let i = 0; i < (seed || '').length; i++) {
+    hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+    hash |= 0;
+  }
+  return colors[Math.abs(hash) % colors.length];
+}
+function getInitials(name) {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+}
+function fmtTime(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+function fmtDateSeparator(date) {
+  const now = new Date();
+  const d = date instanceof Date ? date : new Date(date);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diffDays = Math.floor((today - target) / (24 * 60 * 60 * 1000));
+  if (diffDays === 0) return 'আজ';
+  if (diffDays === 1) return 'গতকাল';
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function getDateKey(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function generateId() {
+  return 'u_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+}
+
+function showToast(msg, type='info') {
+  const box = $('#toastBox');
+  box.textContent = msg;
+  const colors = { success: 'bg-emerald-600', error: 'bg-rose-600', info: 'bg-slate-800' };
+  box.className = `px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow-2xl ${colors[type] || colors.info}`;
+  const t = $('#toast');
+  t.classList.remove('opacity-0');
+  t.style.opacity = '1';
+  setTimeout(() => { t.classList.add('opacity-0'); t.style.opacity = '0'; }, 2400);
+}
+
+// ═══ SOUND (Web Audio API) ═══
+let audioCtx = null;
+function playSound(type = 'receive') {
+  if (!state.soundEnabled) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    
+    if (type === 'send') {
+      o.frequency.value = 660;
+      o.type = 'sine';
+      g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+      o.start(); o.stop(audioCtx.currentTime + 0.15);
+    } else if (type === 'receive') {
+      o.frequency.value = 880;
+      o.type = 'sine';
+      g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+      o.start(); o.stop(audioCtx.currentTime + 0.25);
+      
+      const o2 = audioCtx.createOscillator();
+      const g2 = audioCtx.createGain();
+      o2.connect(g2); g2.connect(audioCtx.destination);
+      o2.frequency.value = 1320;
+      o2.type = 'sine';
+      g2.gain.setValueAtTime(0.06, audioCtx.currentTime + 0.08);
+      g2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+      o2.start(audioCtx.currentTime + 0.08); o2.stop(audioCtx.currentTime + 0.3);
+    } else if (type === 'join') {
+      [523, 659, 784].forEach((f, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.value = f;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.08 + 0.2);
+        osc.start(audioCtx.currentTime + i * 0.08);
+        osc.stop(audioCtx.currentTime + i * 0.08 + 0.2);
+      });
+    }
+  } catch (e) { /* Audio may not be allowed yet */ }
+}
+
+// ═══ THEME ═══
+function initTheme() {
+  const saved = localStorage.getItem(STORAGE_KEYS.theme);
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+  $('#themeToggle')?.addEventListener('click', () => {
+    document.documentElement.classList.add('no-transition');
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem(STORAGE_KEYS.theme, isDark ? 'dark' : 'light');
+    setTimeout(() => document.documentElement.classList.remove('no-transition'), 100);
+  });
+}
+
+// ═══ SOUND TOGGLE ═══
+function initSoundToggle() {
+  state.soundEnabled = localStorage.getItem(STORAGE_KEYS.sound) !== 'off';
+  updateSoundIcon();
+  $('#soundToggle')?.addEventListener('click', () => {
+    state.soundEnabled = !state.soundEnabled;
+    localStorage.setItem(STORAGE_KEYS.sound, state.soundEnabled ? 'on' : 'off');
+    updateSoundIcon();
+  });
+}
+function updateSoundIcon() {
+  $('#soundOnIcon')?.classList.toggle('hidden', !state.soundEnabled);
+  $('#soundOffIcon')?.classList.toggle('hidden', state.soundEnabled);
+}
+
+// ═══ NICKNAME SETUP ═══
+function initNicknameSetup() {
+  const savedNickname = localStorage.getItem(STORAGE_KEYS.nickname);
+  const savedUserId = localStorage.getItem(STORAGE_KEYS.userId);
+  if (savedNickname && savedUserId) {
+    state.nickname = savedNickname;
+    state.userId = savedUserId;
+    enterChat();
+    return;
+  }
+  
+  state.userId = savedUserId || generateId();
+  localStorage.setItem(STORAGE_KEYS.userId, state.userId);
+  
+  $('#setupScreen').style.display = 'flex';
+  $('#chatScreen').classList.add('hidden');
+  
+  const input = $('#nicknameInput');
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    $('#nicknameCount').textContent = `${val.length}/20`;
+    $('#previewName').textContent = val || 'অনুগ্রহ করে নাম দিন';
+    const preview = $('#avatarPreview');
+    if (val) {
+      const [c1, c2] = avatarColor(state.userId);
+      preview.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+      preview.textContent = getInitials(val);
+    } else {
+      preview.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)';
+      preview.textContent = '?';
+    }
+    $('#nicknameError').classList.add('hidden');
+  });
+  
+  $('#enterChatBtn').addEventListener('click', submitNickname);
+  input.addEventListener('keypress', e => { if (e.key === 'Enter') submitNickname(); });
+}
+
+function submitNickname() {
+  const val = $('#nicknameInput').value.trim();
+  if (!val || val.length < 2) {
+    const err = $('#nicknameError');
+    err.textContent = 'কমপক্ষে ২ অক্ষরের নাম দিন';
+    err.classList.remove('hidden');
+    return;
+  }
+  if (val.length > 20) {
+    const err = $('#nicknameError');
+    err.textContent = 'সর্বোচ্চ ২০ অক্ষর';
+    err.classList.remove('hidden');
+    return;
+  }
+  state.nickname = val;
+  localStorage.setItem(STORAGE_KEYS.nickname, val);
+  enterChat();
+  playSound('join');
+}
+
+function enterChat() {
+  $('#setupScreen').style.display = 'none';
+  $('#chatScreen').classList.remove('hidden');
+  
+  const [c1, c2] = avatarColor(state.userId);
+  const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
+  const initials = getInitials(state.nickname);
+  
+  ['myAvatar', 'menuAvatar'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.style.background = grad; el.textContent = initials; }
+  });
+  $('#menuNickname').textContent = state.nickname;
+  
+  initChat();
+}
+
+// ═══ CHAT INIT ═══
+async function initChat() {
+  setupMessageForm();
+  setupEmojiPicker();
+  setupImageUpload();
+  setupReply();
+  setupProfileMenu();
+  setupMobileDrawer();
+  setupAutoResize();
+  setupScrollBehavior();
+  setupAdminAuth();
+  await updatePresence();
+  listenMessages();
+  listenPresence();
+  listenTyping();
+  
+  // Update presence every 25 seconds
+  setInterval(updatePresence, 25000);
+  // Clear stale typing
+  setInterval(cleanStaleTyping, 3000);
+  // Clean stale presence every 60s (also does the cleanup on read)
+  setInterval(() => { /* presence read interval handles it */ }, 60000);
+}
+
+// ═══ PRESENCE ═══
+async function updatePresence() {
+  if (!state.userId) return;
+  try {
+    await setDoc(doc(PRESENCE_REF, state.userId), {
+      userId: state.userId,
+      nickname: state.nickname,
+      isAdmin: state.isAdmin,
+      lastSeen: serverTimestamp()
+    }, { merge: true });
+  } catch (e) { console.warn('presence err', e); }
+}
+
+function listenPresence() {
+  onSnapshot(PRESENCE_REF, snap => {
+    const now = Date.now();
+    const members = {};
+    snap.forEach(d => {
+      const data = d.data();
+      const lastSeen = data.lastSeen?.toDate ? data.lastSeen.toDate().getTime() : 0;
+      // Online if seen in last 60 seconds
+      if (now - lastSeen < 60000) {
+        members[d.id] = { ...data, isOnline: true };
+      }
+    });
+    state.members = members;
+    renderMembers();
+  });
+}
+
+function renderMembers() {
+  const members = Object.values(state.members).sort((a, b) => {
+    // Admin first, then by nickname
+    if (a.isAdmin && !b.isAdmin) return -1;
+    if (!a.isAdmin && b.isAdmin) return 1;
+    return (a.nickname || '').localeCompare(b.nickname || '');
+  });
+  
+  const onlineCount = members.length;
+  $('#onlineCount').textContent = toBn(onlineCount);
+  $('#totalCount').textContent = toBn(onlineCount);
+  $('#memberCountBadge').textContent = toBn(onlineCount);
+  $('#mobileMemberCount').textContent = `${toBn(onlineCount)} online`;
+  
+  const html = members.map(m => {
+    const [c1, c2] = avatarColor(m.userId);
+    const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
+    const initials = getInitials(m.nickname);
+    const isMe = m.userId === state.userId;
+    const crown = m.isAdmin ? '<svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>' : '';
+    return `
+      <div class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+        <div class="relative shrink-0">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-extrabold" style="background: ${grad};">${escapeHtml(initials)}</div>
+          <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-1">
+            ${crown}
+            <p class="text-xs font-bold truncate ${m.isAdmin ? 'text-amber-700 dark:text-amber-400' : ''}">${escapeHtml(m.nickname)}${isMe ? ' <span class="text-[9px] text-slate-400">(you)</span>' : ''}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  $('#membersList').innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">No one online</p>';
+  $('#mobileMembersList').innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">No one online</p>';
+}
+
+// ═══ TYPING ═══
+let typingTimeout = null;
+let lastTypingWrite = 0;
+function handleTyping() {
+  const now = Date.now();
+  if (now - lastTypingWrite < 2500) return;
+  lastTypingWrite = now;
+  setDoc(doc(TYPING_REF, state.userId), {
+    userId: state.userId,
+    nickname: state.nickname,
+    updatedAt: serverTimestamp()
+  }, { merge: true }).catch(() => {});
+  
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    deleteDoc(doc(TYPING_REF, state.userId)).catch(() => {});
+  }, 4000);
+}
+
+function listenTyping() {
+  onSnapshot(TYPING_REF, snap => {
+    const now = Date.now();
+    const typing = {};
+    snap.forEach(d => {
+      if (d.id === state.userId) return;
+      const data = d.data();
+      const ts = data.updatedAt?.toDate ? data.updatedAt.toDate().getTime() : 0;
+      if (now - ts < 5000) typing[d.id] = data.nickname;
+    });
+    state.typingUsers = typing;
+    renderTyping();
+  });
+}
+
+function renderTyping() {
+  const names = Object.values(state.typingUsers);
+  const ind = $('#typingIndicator');
+  const text = $('#typingText');
+  if (!names.length) { ind.classList.add('hidden'); return; }
+  ind.classList.remove('hidden');
+  if (names.length === 1) text.textContent = `${names[0]} typing...`;
+  else if (names.length === 2) text.textContent = `${names[0]} and ${names[1]} typing...`;
+  else text.textContent = `${names.length} people are typing...`;
+}
+
+function cleanStaleTyping() {
+  // Called periodically, but the listener already filters by time
+}
+
+// ═══ MESSAGES ═══
+function listenMessages() {
+  const q = query(MESSAGES_REF, orderBy('createdAt', 'asc'), limit(200));
+  onSnapshot(q, snap => {
+    const messages = [];
+    snap.forEach(d => messages.push({ id: d.id, ...d.data() }));
+    
+    // Detect new messages
+    const newOnes = messages.filter(m => !state.seenMessageIds.has(m.id));
+    const otherNew = newOnes.filter(m => m.userId !== state.userId);
+    
+    messages.forEach(m => state.seenMessageIds.add(m.id));
+    state.messages = messages;
+    
+    renderMessages();
+    
+    // Play sound for new messages from others
+    if (otherNew.length > 0 && !document.hidden) {
+      playSound('receive');
+    }
+    
+    // Show browser notification if tab hidden
+    if (otherNew.length > 0 && document.hidden && Notification.permission === 'granted') {
+      const last = otherNew[otherNew.length - 1];
+      new Notification(last.nickname, {
+        body: last.text || '📷 Image',
+        icon: 'logo.png',
+        tag: 'group-chat'
+      });
+    }
+  });
+}
+
+function renderMessages() {
+  const area = $('#messagesArea');
+  const wasAtBottom = isScrolledToBottom();
+  
+  // Group consecutive messages from same user within 5 min
+  let html = '';
+  let lastUserId = null;
+  let lastTime = 0;
+  let lastDateKey = null;
+  
+  // Welcome card
+  if (state.messages.length === 0) {
+    area.innerHTML = `
+      <div id="welcomeCard" class="max-w-md mx-auto my-8 text-center px-4">
+        <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shadow-xl mb-4">
+          <svg class="w-11 h-11 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <h2 class="text-lg font-extrabold">স্বাগতম গ্রুপ চ্যাটে!</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">এখানে সবাই একসাথে কথা বলতে পারে। প্রথম মেসেজটা আপনিই শুরু করুন!</p>
+      </div>`;
+    return;
+  }
+  
+  state.messages.forEach((m, idx) => {
+    const dateKey = getDateKey(m.createdAt);
+    if (dateKey !== lastDateKey) {
+      const d = m.createdAt?.toDate ? m.createdAt.toDate() : new Date();
+      html += `<div class="flex justify-center my-4">
+        <span class="px-3 py-1 text-[11px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full">${fmtDateSeparator(d)}</span>
+      </div>`;
+      lastDateKey = dateKey;
+      lastUserId = null;
+    }
+    
+    const time = m.createdAt?.toDate ? m.createdAt.toDate().getTime() : Date.now();
+    const isConsecutive = m.userId === lastUserId && (time - lastTime) < 5 * 60 * 1000;
+    lastUserId = m.userId;
+    lastTime = time;
+    
+    html += renderMessage(m, isConsecutive);
+  });
+  
+  area.innerHTML = html;
+  attachMessageHandlers();
+  
+  if (wasAtBottom) {
+    scrollToBottom();
+    $('#newMsgIndicator').classList.add('hidden');
+  } else {
+    // Show indicator
+    const newOnes = state.messages.filter(m => m.userId !== state.userId);
+    if (newOnes.length > state.lastMessageCount) {
+      $('#newMsgIndicator').classList.remove('hidden');
+    }
+  }
+  state.lastMessageCount = state.messages.length;
+}
+
+function renderMessage(m, isConsecutive) {
+  const isOwn = m.userId === state.userId;
+  const isAdmin = !!m.isAdmin;
+  const [c1, c2] = avatarColor(m.userId);
+  const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
+  const initials = getInitials(m.nickname);
+  const time = fmtTime(m.createdAt);
+  
+  // Reactions
+  let reactionsHtml = '';
+  if (m.reactions && Object.keys(m.reactions).length > 0) {
+    const reactionList = Object.entries(m.reactions).filter(([_, users]) => users.length > 0);
+    if (reactionList.length > 0) {
+      reactionsHtml = `<div class="flex flex-wrap gap-1 mt-1.5 ${isOwn ? 'justify-end' : ''}">${reactionList.map(([emoji, users]) => {
+        const iReacted = users.includes(state.userId);
+        return `<button type="button" data-react="${emoji}" data-msg="${m.id}" class="reaction-pop inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border transition ${iReacted ? 'bg-brand-100 dark:bg-brand-900/40 border-brand-400 dark:border-brand-600 text-brand-700 dark:text-brand-300' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300'}">
+          <span>${emoji}</span>
+          <span>${users.length}</span>
+        </button>`;
+      }).join('')}</div>`;
+    }
+  }
+  
+  // Image
+  const imageHtml = m.imageUrl ? `<a href="${escapeHtml(m.imageUrl)}" target="_blank" rel="noopener" class="block mt-1.5"><img src="${escapeHtml(m.imageUrl)}" alt="attachment" loading="lazy" class="max-w-full max-h-72 rounded-lg border border-black/10 dark:border-white/10" /></a>` : '';
+  
+  // Reply preview
+  const replyHtml = m.replyTo ? `<div class="mb-1.5 px-2.5 py-1.5 rounded-lg bg-black/10 dark:bg-white/10 border-l-2 ${isOwn ? 'border-white/60' : 'border-brand-500'}">
+    <p class="text-[10px] font-bold ${isOwn ? 'text-white/90' : 'text-brand-600 dark:text-brand-400'}">${escapeHtml(m.replyTo.nickname)}</p>
+    <p class="text-[11px] truncate ${isOwn ? 'text-white/80' : 'text-slate-600 dark:text-slate-400'}">${escapeHtml(m.replyTo.text || '📷 Image')}</p>
+  </div>` : '';
+  
+  // Text
+  const textHtml = m.text ? `<p class="text-sm leading-relaxed break-words whitespace-pre-wrap">${escapeHtml(m.text)}</p>` : '';
+  
+  // Admin badge
+  const adminBadge = isAdmin ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-amber-400 text-amber-950 ml-1">
+    <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+    ADMIN
+  </span>` : '';
+  
+  // Bubble classes
+  let bubbleClass = '';
+  if (isAdmin) {
+    bubbleClass = 'bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/50 dark:to-amber-900/40 border border-amber-300 dark:border-amber-700/60 text-slate-800 dark:text-amber-50 admin-bubble';
+  } else if (isOwn) {
+    bubbleClass = 'bg-gradient-to-br from-brand-600 to-purple-600 text-white shadow-md shadow-brand-500/20';
+  } else {
+    bubbleClass = 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 shadow-sm';
+  }
+  
+  const nameColor = isAdmin ? 'text-amber-700 dark:text-amber-400' : isOwn ? 'text-brand-600 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300';
+  
+  // Quick reactions bar (hover)
+  const quickReactions = ['👍','❤️','😂','😮','😢','🔥'];
+  const reactionBar = `<div class="reaction-bar absolute ${isOwn ? 'right-full mr-2' : 'left-full ml-2'} top-0 flex items-center gap-0.5 bg-white dark:bg-slate-800 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 px-1.5 py-1 z-20">
+    ${quickReactions.map(r => `<button type="button" data-quick-react="${r}" data-msg="${m.id}" class="w-7 h-7 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition text-base emoji-btn">${r}</button>`).join('')}
+  </div>`;
+  
+  // Actions on hover
+  const actionsBtn = `<div class="msg-actions absolute ${isOwn ? 'right-full mr-2' : 'left-full ml-2'} top-0 flex items-center gap-1">
+    <button type="button" data-reply="${m.id}" class="w-7 h-7 rounded-full bg-white dark:bg-slate-800 shadow border border-slate-200 dark:border-slate-700 grid place-items-center hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+      <svg class="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+    </button>
+    ${isOwn ? `<button type="button" data-delete="${m.id}" class="w-7 h-7 rounded-full bg-white dark:bg-slate-800 shadow border border-slate-200 dark:border-slate-700 grid place-items-center hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
+      <svg class="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+    </button>` : ''}
+  </div>`;
+  
+  if (isOwn) {
+    // Own message: right aligned
+    return `
+      <div class="msg-container msg-animate flex items-end justify-end gap-2 ${isConsecutive ? 'mt-0.5' : 'mt-3'}" data-msg-id="${m.id}">
+        <div class="relative max-w-[85%] sm:max-w-[70%]">
+          ${reactionBar}
+          ${actionsBtn}
+          ${!isConsecutive ? `<div class="flex items-center justify-end gap-2 mb-1 mr-1">
+            ${adminBadge}
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${escapeHtml(m.nickname)}</span>
+            <span class="text-[10px] text-slate-400">${time}</span>
+          </div>` : ''}
+          <div class="rounded-2xl rounded-tr-md px-3.5 py-2 ${bubbleClass}">
+            ${replyHtml}
+            ${textHtml}
+            ${imageHtml}
+          </div>
+          ${reactionsHtml}
+        </div>
+      </div>`;
+  }
+  
+  // Other's message: left aligned with avatar
+  return `
+    <div class="msg-container msg-animate flex items-end gap-2 ${isConsecutive ? 'mt-0.5' : 'mt-3'}" data-msg-id="${m.id}">
+      ${!isConsecutive ? `<div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-extrabold shrink-0 shadow-md" style="background: ${grad};">${escapeHtml(initials)}</div>` : `<div class="w-9 shrink-0"></div>`}
+      <div class="relative max-w-[85%] sm:max-w-[70%]">
+        ${reactionBar}
+        ${actionsBtn}
+        ${!isConsecutive ? `<div class="flex items-center gap-2 mb-1 ml-1">
+          <span class="text-[10px] font-bold ${nameColor}">${escapeHtml(m.nickname)}</span>
+          ${adminBadge}
+          <span class="text-[10px] text-slate-400">${time}</span>
+        </div>` : ''}
+        <div class="rounded-2xl rounded-tl-md px-3.5 py-2 ${bubbleClass}">
+          ${replyHtml}
+          ${textHtml}
+          ${imageHtml}
+        </div>
+        ${reactionsHtml}
+      </div>
+    </div>`;
+}
+
+function attachMessageHandlers() {
+  $$('[data-reply]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const msg = state.messages.find(m => m.id === btn.dataset.reply);
+      if (msg) setupReplyTo(msg);
+    });
+  });
+  $$('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('এই মেসেজটি মুছে ফেলবেন?')) return;
+      try {
+        await deleteDoc(doc(MESSAGES_REF, btn.dataset.delete));
+        showToast('মেসেজ মুছে ফেলা হয়েছে', 'success');
+      } catch (e) {
+        showToast('মুছে ফেলা যায়নি (rules চেক করুন)', 'error');
+      }
+    });
+  });
+  $$('[data-quick-react]').forEach(btn => {
+    btn.addEventListener('click', () => toggleReaction(btn.dataset.msg, btn.dataset.quickReact));
+  });
+  $$('[data-react]').forEach(btn => {
+    btn.addEventListener('click', () => toggleReaction(btn.dataset.msg, btn.dataset.react));
+  });
+}
+
+async function toggleReaction(msgId, emoji) {
+  const msg = state.messages.find(m => m.id === msgId);
+  if (!msg) return;
+  try {
+    const { doc: firestoreDoc, updateDoc: firestoreUpdate, arrayUnion, arrayRemove, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js");
+    const msgRef = firestoreDoc(db, 'groupChats', CHAT_ID, 'messages', msgId);
+    const snap = await getDoc(msgRef);
+    if (!snap.exists()) return;
+    const currentReactions = snap.data().reactions || {};
+    const usersForEmoji = currentReactions[emoji] || [];
+    const hasReacted = usersForEmoji.includes(state.userId);
+    
+    const newReactions = { ...currentReactions };
+    if (hasReacted) {
+      newReactions[emoji] = usersForEmoji.filter(u => u !== state.userId);
+      if (newReactions[emoji].length === 0) delete newReactions[emoji];
+    } else {
+      newReactions[emoji] = [...usersForEmoji, state.userId];
+    }
+    
+    await firestoreUpdate(msgRef, { reactions: newReactions });
+  } catch (e) {
+    console.warn(e);
+    showToast('Reaction failed', 'error');
+  }
+}
+
+// ═══ MESSAGE FORM ═══
+function setupMessageForm() {
+  const form = $('#messageForm');
+  const input = $('#messageInput');
+  const sendBtn = $('#sendBtn');
+  
+  input.addEventListener('input', () => {
+    sendBtn.disabled = !input.value.trim() && !state.pendingImage;
+    handleTyping();
+  });
+  
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    await sendMessage();
+  });
+}
+
+async function sendMessage() {
+  const input = $('#messageInput');
+  const text = input.value.trim();
+  if (!text && !state.pendingImage) return;
+  
+  const sendBtn = $('#sendBtn');
+  sendBtn.disabled = true;
+  
+  try {
+    // Upload image if pending
+    let imageUrl = null;
+    if (state.pendingImage) {
+      imageUrl = await uploadToCloudinary(state.pendingImage);
+    }
+    
+    // Build message
+    const payload = {
+      userId: state.userId,
+      nickname: state.nickname,
+      text: text || '',
+      imageUrl: imageUrl || null,
+      replyTo: state.replyTo ? {
+        msgId: state.replyTo.msgId,
+        nickname: state.replyTo.nickname,
+        text: (state.replyTo.text || '').slice(0, 80)
+      } : null,
+      reactions: {},
+      createdAt: serverTimestamp()
+    };
+    if (state.isAdmin) payload.isAdmin = true;
+    
+    await addDoc(MESSAGES_REF, payload);
+    
+    input.value = '';
+    input.style.height = 'auto';
+    state.pendingImage = null;
+    state.replyTo = null;
+    updateReplyPreview();
+    updateImagePreview();
+    playSound('send');
+    
+    // Clear typing
+    try { await deleteDoc(doc(TYPING_REF, state.userId)); } catch {}
+  } catch (e) {
+    console.error(e);
+    showToast('মেসেজ পাঠানো যায়নি', 'error');
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
+function setupAutoResize() {
+  const input = $('#messageInput');
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 128) + 'px';
+  });
+}
+
+// ═══ REPLY ═══
+function setupReply() {
+  $('#cancelReply').addEventListener('click', () => {
+    state.replyTo = null;
+    updateReplyPreview();
+  });
+}
+function setupReplyTo(msg) {
+  state.replyTo = {
+    msgId: msg.id,
+    nickname: msg.nickname,
+    text: msg.text || '📷 Image'
+  };
+  updateReplyPreview();
+  $('#messageInput').focus();
+}
+function updateReplyPreview() {
+  const preview = $('#replyPreview');
+  if (state.replyTo) {
+    $('#replyToName').textContent = state.replyTo.nickname;
+    $('#replyToText').textContent = state.replyTo.text;
+    preview.classList.remove('hidden');
+  } else {
+    preview.classList.add('hidden');
+  }
+}
+
+// ═══ EMOJI PICKER ═══
+const EMOJIS = {
+  smileys: ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😗','😙','😚','😋','😛','😜','😝','🤪','😎','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬','🤯','😳','🥵','🥶','😱','😨','😰','😥','😓','🤗','🤔','🤭','🤫','🤥','😶','😐','😑','😬','🙄'],
+  gestures: ['👍','👎','👌','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','👇','☝️','✋','🤚','🖐️','🖖','👋','🤝','🙏','💪','🦾','🖕','🫶','👏','🙌','👐','🤲','🤜','🤛','✊','👊'],
+  hearts: ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝','💟'],
+  objects: ['🔥','⭐','✨','💫','🎉','🎊','🎈','🎁','🏆','🥇','🥈','🥉','⚡','💥','💯','✅','❌','⚠️','🚀','💡','📌','📎','🎯','🎨','🎵','🎶','☕','🍕','🍔','🍟','🍰','🎂','🌹','🌸','🌺','🌻','🌈','☀️','🌙','⭐']
+};
+
+function setupEmojiPicker() {
+  const btn = $('#emojiBtn');
+  const picker = $('#emojiPicker');
+  const input = $('#messageInput');
+  
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (picker.classList.contains('hidden')) {
+      renderEmojis('smileys');
+      picker.classList.remove('hidden');
+      // Position above input
+      const rect = btn.getBoundingClientRect();
+      picker.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+      picker.style.left = Math.max(8, Math.min(rect.left - 100, window.innerWidth - 350)) + 'px';
+    } else {
+      picker.classList.add('hidden');
+    }
+  });
+  
+  $$('.emoji-cat-btn').forEach(b => {
+    b.addEventListener('click', () => renderEmojis(b.dataset.cat));
+  });
+  
+  document.addEventListener('click', (e) => {
+    if (!picker.contains(e.target) && !btn.contains(e.target)) {
+      picker.classList.add('hidden');
+    }
+  });
+}
+
+function renderEmojis(cat) {
+  const grid = $('#emojiGrid');
+  const list = EMOJIS[cat] || [];
+  grid.innerHTML = list.map(e => `<button type="button" class="emoji-btn p-1.5 text-xl rounded-lg" data-emoji="${e}">${e}</button>`).join('');
+  grid.querySelectorAll('[data-emoji]').forEach(b => {
+    b.addEventListener('click', () => {
+      const input = $('#messageInput');
+      input.value += b.dataset.emoji;
+      input.dispatchEvent(new Event('input'));
+      input.focus();
+    });
+  });
+}
+
+// ═══ IMAGE UPLOAD ═══
+function setupImageUpload() {
+  $('#imageBtn').addEventListener('click', () => $('#imageInput').click());
+  $('#imageInput').addEventListener('change', async e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { showToast('শুধু ছবি', 'error'); e.target.value = ''; return; }
+    if (file.size > 5 * 1024 * 1024) { showToast('সর্বোচ্চ ৫ MB', 'error'); e.target.value = ''; return; }
+    state.pendingImage = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      $('#imagePreviewImg').src = ev.target.result;
+      $('#imagePreview').classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+    $('#sendBtn').disabled = false;
+    e.target.value = '';
+  });
+  $('#cancelImage').addEventListener('click', () => {
+    state.pendingImage = null;
+    updateImagePreview();
+  });
+}
+function updateImagePreview() {
+  if (!state.pendingImage) {
+    $('#imagePreview').classList.add('hidden');
+    $('#sendBtn').disabled = !$('#messageInput').value.trim();
+  }
+}
+
+function uploadToCloudinary(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
+    xhr.upload.onprogress = e => { if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100)); };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try { const data = JSON.parse(xhr.responseText); if (!data.secure_url) return reject(new Error('URL missing')); resolve(data.secure_url); }
+        catch { reject(new Error('Parse failed')); }
+      } else { reject(new Error('Upload failed')); }
+    };
+    xhr.onerror = () => reject(new Error('Network error'));
+    xhr.send(fd);
+  });
+}
+
+// ═══ PROFILE MENU ═══
+function setupProfileMenu() {
+  const btn = $('#profileBtn');
+  const menu = $('#profileMenu');
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    menu.classList.toggle('hidden');
+  });
+  document.addEventListener('click', e => {
+    if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add('hidden');
+  });
+  $('#changeNicknameBtn').addEventListener('click', () => {
+    menu.classList.add('hidden');
+    const newName = prompt('নতুন নাম:', state.nickname);
+    if (newName && newName.trim().length >= 2 && newName.trim().length <= 20) {
+      state.nickname = newName.trim();
+      localStorage.setItem(STORAGE_KEYS.nickname, state.nickname);
+      const [c1, c2] = avatarColor(state.userId);
+      const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
+      const initials = getInitials(state.nickname);
+      ['myAvatar', 'menuAvatar'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.background = grad; el.textContent = initials; }
+      });
+      $('#menuNickname').textContent = state.nickname;
+      updatePresence();
+      showToast('নাম পরিবর্তন হয়েছে', 'success');
+    }
+  });
+  $('#logoutBtn').addEventListener('click', () => {
+    if (!confirm('লগ আউট করবেন? নাম মুছে যাবে।')) return;
+    localStorage.removeItem(STORAGE_KEYS.nickname);
+    deleteDoc(doc(PRESENCE_REF, state.userId)).catch(() => {});
+    deleteDoc(doc(TYPING_REF, state.userId)).catch(() => {});
+    location.reload();
+  });
+}
+
+// ═══ MOBILE DRAWER ═══
+function setupMobileDrawer() {
+  const drawer = $('#mobileDrawer');
+  const aside = drawer.querySelector('aside');
+  const backdrop = $('#drawerBackdrop');
+  $('#mobileMembersBtn').addEventListener('click', () => {
+    drawer.classList.remove('hidden');
+    requestAnimationFrame(() => aside.classList.remove('-translate-x-full'));
+  });
+  function close() {
+    aside.classList.add('-translate-x-full');
+    setTimeout(() => drawer.classList.add('hidden'), 300);
+  }
+  backdrop.addEventListener('click', close);
+  $('#closeDrawerBtn').addEventListener('click', close);
+}
+
+// ═══ SCROLL BEHAVIOR ═══
+function setupScrollBehavior() {
+  const area = $('#messagesArea');
+  area.addEventListener('scroll', () => {
+    state.userScrolledUp = !isScrolledToBottom();
+    if (!state.userScrolledUp) {
+      $('#newMsgIndicator').classList.add('hidden');
+    }
+  });
+  $('#newMsgIndicator').addEventListener('click', () => {
+    scrollToBottom();
+    $('#newMsgIndicator').classList.add('hidden');
+  });
+}
+function isScrolledToBottom() {
+  const area = $('#messagesArea');
+  return area.scrollHeight - area.scrollTop - area.clientHeight < 100;
+}
+function scrollToBottom() {
+  const area = $('#messagesArea');
+  area.scrollTop = area.scrollHeight;
+}
+
+// ═══ ADMIN AUTH ═══
+function setupAdminAuth() {
+  $('#adminBtn').addEventListener('click', () => {
+    if (state.isAdmin) {
+      // Exit admin mode
+      if (confirm('Admin mode থেকে বের হবেন?')) {
+        state.isAdmin = false;
+        $('#adminModeBar').classList.add('hidden');
+        updatePresence();
+        showToast('Admin mode বন্ধ', 'info');
+      }
+    } else {
+      $('#adminModal').classList.remove('hidden');
+      $('#adminModal').classList.add('flex');
+    }
+  });
+  
+  $('#closeAdminModal').addEventListener('click', () => {
+    $('#adminModal').classList.add('hidden');
+    $('#adminModal').classList.remove('flex');
+  });
+  
+  $('#googleAdminLogin').addEventListener('click', async () => {
+    const btn = $('#googleAdminLogin');
+    btn.disabled = true;
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      console.error(e);
+      showToast('লগইন ব্যর্থ', 'error');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+  
+  $('#exitAdminBtn').addEventListener('click', () => {
+    state.isAdmin = false;
+    $('#adminModeBar').classList.add('hidden');
+    updatePresence();
+  });
+  
+  onAuthStateChanged(auth, user => {
+    if (user && user.email?.toLowerCase() === ALLOWED_ADMIN) {
+      state.isAdmin = true;
+      state.adminUser = user;
+      $('#adminModal').classList.add('hidden');
+      $('#adminModal').classList.remove('flex');
+      $('#adminModeBar').classList.remove('hidden');
+      updatePresence();
+      showToast('Admin mode ON', 'success');
+    } else if (user) {
+      showToast('এই email অনুমোদিত নয়', 'error');
+      signOut(auth);
+    }
+  });
+}
+
+// ═══ INIT ALL ═══
+initTheme();
+initSoundToggle();
+initNicknameSetup();
+
+// Request notification permission after entering chat
+setTimeout(() => {
+  if ('Notification' in window && Notification.permission === 'default') {
+    // Only ask if user interacted
+    document.addEventListener('click', function askOnce() {
+      Notification.requestPermission().catch(() => {});
+      document.removeEventListener('click', askOnce);
+    }, { once: true });
+  }
+}, 5000);
+
+</script>
+
+</body>
+</html>
