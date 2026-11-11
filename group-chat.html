@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <title>Group Chat — eMutation Community</title>
 <meta name="description" content="eMutation কমিউনিটির গ্রুপ চ্যাট — সবাই একসাথে আলোচনা করুন।" />
 <meta name="robots" content="index, follow" />
@@ -28,13 +28,78 @@ tailwind.config = {
 </script>
 
 <style>
-  * { -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; overflow: hidden; }
-  body { font-family: 'Noto Sans Bengali', sans-serif; }
+  /* ═══════════════════════════════════════════════════════
+     BASE RESET — iOS Safari MOBILE SAFE
+     ═══════════════════════════════════════════════════════ */
+  * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+
+  html {
+    height: 100%;
+    height: -webkit-fill-available;
+    overflow: hidden;
+    overscroll-behavior: none;
+    width: 100%;
+    max-width: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    position: relative;
+  }
+
+  body {
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans Bengali', sans-serif;
+  }
+
+  /* Main chat container — dynamic viewport height (fixes input behind Safari toolbar) */
+  #chatScreen {
+    height: 100vh;
+    height: -webkit-fill-available;
+    height: 100dvh;
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+  }
+
+  /* Setup screen — constrain to viewport */
+  #setupScreen {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Toast — prevent long text causing horizontal overflow */
+  #toast {
+    max-width: calc(100vw - 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Prevent iOS auto-zoom on input focus — extend to tablet too */
+  @media (max-width: 767px) {
+    input, textarea, select {
+      font-size: 16px !important;
+    }
+  }
+
+  /* ═══ SCROLLBARS ═══ */
   .scroll-slim::-webkit-scrollbar { width: 6px; height: 6px; }
   .scroll-slim::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 99px; }
   .dark .scroll-slim::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.6); }
 
+  /* ═══ SETUP BG ═══ */
   .setup-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative; overflow: hidden; }
   .dark .setup-bg { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); }
   .setup-blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; pointer-events: none; }
@@ -77,7 +142,6 @@ tailwind.config = {
 
   body, body * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease; }
   body.no-transition *, body.no-transition { transition: none !important; }
-  @media (max-width: 640px) { input, textarea { font-size: 16px !important; } }
   .drawer-transition { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -126,12 +190,12 @@ tailwind.config = {
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased">
 
 <!-- ═══ SETUP SCREEN ═══ -->
-<div id="setupScreen" class="setup-bg fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" style="display: none;">
+<div id="setupScreen" class="setup-bg fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
   <div class="setup-blob w-72 h-72 bg-pink-400 -top-20 -left-20 blob-float"></div>
   <div class="setup-blob w-80 h-80 bg-blue-400 -bottom-32 -right-20 blob-float" style="animation-delay: 2s"></div>
   <div class="setup-blob w-64 h-64 bg-purple-400 top-1/3 right-1/4 blob-float" style="animation-delay: 4s"></div>
 
-  <div class="relative w-full max-w-md">
+  <div class="relative w-full max-w-md my-auto">
     <div class="rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl border border-white/40 dark:border-slate-700/60 p-7 sm:p-9">
       <div class="text-center">
         <div class="relative inline-block mb-4">
@@ -171,7 +235,7 @@ tailwind.config = {
 </div>
 
 <!-- ═══ MAIN CHAT ═══ -->
-<div id="chatScreen" class="hidden h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
+<div id="chatScreen" class="hidden flex flex-col bg-slate-50 dark:bg-slate-950">
 
   <!-- HEADER -->
   <header class="shrink-0 flex items-center gap-2 sm:gap-3 px-2 sm:px-5 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-20">
@@ -311,7 +375,7 @@ tailwind.config = {
       </div>
 
       <!-- INPUT -->
-      <div class="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-2 sm:px-5 py-2 sm:py-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] relative">
+      <div class="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-2 sm:px-5 py-2 sm:py-3 relative" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom));">
         <div id="mentionDropdown" class="hidden mention-dropdown absolute bottom-full left-4 mb-2 w-64 max-w-[calc(100%-2rem)] bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-30">
           <div class="px-3 py-2 border-b border-slate-100 dark:border-slate-700"><p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Mention</p></div>
           <div id="mentionList" class="max-h-48 overflow-y-auto scroll-slim py-1"></div>
@@ -342,7 +406,7 @@ tailwind.config = {
           </button>
 
           <div class="flex-1 min-w-0 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-end">
-            <textarea id="messageInput" rows="1" maxlength="1000" placeholder="মেসেজ লিখুন…" class="flex-1 bg-transparent px-3 sm:px-4 py-3 text-sm outline-none resize-none max-h-32 leading-5 disabled:opacity-50" style="min-height: 40px;"></textarea>
+            <textarea id="messageInput" rows="1" maxlength="1000" placeholder="মেসেজ লিখুন…" class="flex-1 bg-transparent px-3 sm:px-4 py-3 text-sm outline-none resize-none max-h-32 leading-5 disabled:opacity-50" style="min-height: 40px; font-size: 16px;"></textarea>
             <button type="button" id="emojiBtn" class="shrink-0 w-10 h-10 grid place-items-center hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Emoji">
               <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </button>
@@ -408,7 +472,7 @@ tailwind.config = {
   <div class="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
     <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-700">
       <svg class="w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input type="text" id="searchInput" placeholder="মেসেজ খুঁজুন…" class="flex-1 bg-transparent outline-none text-sm font-semibold" autocomplete="off" />
+      <input type="text" id="searchInput" placeholder="মেসেজ খুঁজুন…" class="flex-1 bg-transparent outline-none text-sm font-semibold" autocomplete="off" style="font-size: 16px;" />
       <button type="button" id="closeSearchBtn" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
@@ -453,7 +517,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ═══ ACTION MENU (user-only: copy/reply/forward) ═══ -->
+<!-- ═══ ACTION MENU ═══ -->
 <div id="actionMenu" class="hidden fixed z-[60] bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 py-1 min-w-[170px]">
   <button type="button" data-action="copy" class="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition text-left">
     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 012-2h9a2 2 0 012 2v9a2 2 0 01-2 2h-2M5 8h9a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2z"/></svg>Copy text
@@ -467,7 +531,7 @@ tailwind.config = {
 </div>
 
 <!-- ═══ TOAST ═══ -->
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] pointer-events-none transition-opacity duration-300" style="opacity: 0;">
+<div id="toast" class="fixed top-20 z-[100] pointer-events-none transition-opacity duration-300" style="opacity: 0;">
   <div id="toastBox" class="px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow-2xl"></div>
 </div>
 
@@ -507,7 +571,6 @@ const $$ = s => [...document.querySelectorAll(s)];
 
 const KEYS = { nickname: 'em_group_nickname', userId: 'em_group_userid', sound: 'em_group_sound', theme: 'em_group_theme', lastSeenMsg: 'em_group_lastseen' };
 
-// ═══ STATE — NO ADMIN LOGIN, ALWAYS USER ═══
 const state = {
   userId: null, nickname: null,
   messages: [], members: {}, typingUsers: {}, pins: [], banned: {},
@@ -552,7 +615,6 @@ function showToast(msg, type='info') {
   setTimeout(() => { t.style.opacity = '0'; }, 2400);
 }
 
-// MARKDOWN
 function renderMarkdown(text, isOwn = false) {
   if (!text) return '';
   let html = escapeHtml(text);
@@ -583,7 +645,6 @@ function renderMarkdown(text, isOwn = false) {
   return html;
 }
 
-// SOUND
 let audioCtx = null;
 function playSound(type = 'receive') {
   if (!state.soundEnabled) return;
@@ -627,7 +688,6 @@ function initSoundToggle() {
 }
 function updateSoundIcon() { $('#soundOnIcon')?.classList.toggle('hidden', !state.soundEnabled); $('#soundOffIcon')?.classList.toggle('hidden', state.soundEnabled); }
 
-// NICKNAME
 function initNicknameSetup() {
   const savedNick = localStorage.getItem(KEYS.nickname), savedId = localStorage.getItem(KEYS.userId);
   if (savedNick && savedId) { state.nickname = savedNick; state.userId = savedId; enterChat(); return; }
@@ -830,7 +890,7 @@ function renderMessage(m, isConsecutive) {
   const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
   const initials = getInitials(m.nickname);
   const time = fmtTime(m.createdAt);
-  
+
   let reactionsHtml = '';
   if (m.reactions && Object.keys(m.reactions).length > 0) {
     const reactionList = Object.entries(m.reactions).filter(([_, users]) => users.length > 0);
@@ -841,23 +901,23 @@ function renderMessage(m, isConsecutive) {
       }).join('')}</div>`;
     }
   }
-  
+
   const imageHtml = m.imageUrl ? `<div class="mt-1.5"><img src="${escapeHtml(m.imageUrl)}" data-view-image="${escapeHtml(m.imageUrl)}" alt="attachment" loading="lazy" class="max-w-full max-h-72 rounded-lg border border-black/10 dark:border-white/10 cursor-pointer active:opacity-80 transition" /></div>` : '';
-  
+
   const replyHtml = m.replyTo ? `<button type="button" data-jump-to="${m.replyTo.msgId}" class="block w-full text-left mb-1.5 px-2.5 py-1.5 rounded-lg bg-black/10 dark:bg-white/10 border-l-2 ${isOwn ? 'border-white/60' : 'border-brand-500'} hover:bg-black/20 dark:hover:bg-white/20 transition"><p class="text-[10px] font-bold ${isOwn ? 'text-white/90' : 'text-brand-600 dark:text-brand-400'}">${escapeHtml(m.replyTo.nickname)}</p><p class="text-[11px] truncate ${isOwn ? 'text-white/80' : 'text-slate-600 dark:text-slate-400'}">${escapeHtml(m.replyTo.text || '📷')}</p></button>` : '';
-  
+
   const textHtml = m.text ? `<div class="text-sm leading-relaxed break-words whitespace-pre-wrap">${renderMarkdown(m.text, isOwn)}${isEdited ? '<span class="edited-badge opacity-70">(edited)</span>' : ''}</div>` : '';
-  
+
   const adminBadge = isAdminMsg ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-amber-400 text-amber-950 ml-1"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>ADMIN</span>` : '';
   const pinIndicator = isPinned ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 ml-1"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>PINNED</span>` : '';
-  
+
   let bubbleClass = '';
   if (isAdminMsg) bubbleClass = 'bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/50 dark:to-amber-900/40 border border-amber-300 dark:border-amber-700/60 text-slate-800 dark:text-amber-50 admin-bubble';
   else if (isOwn) bubbleClass = 'bg-gradient-to-br from-brand-600 to-purple-600 text-white shadow-md shadow-brand-500/20 own-bubble';
   else bubbleClass = 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 shadow-sm';
-  
+
   const nameColor = isAdminMsg ? 'text-amber-700 dark:text-amber-400' : isOwn ? 'text-brand-600 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300';
-  
+
   const actionsBtn = `<div class="msg-actions absolute ${isOwn ? 'right-full mr-1.5' : 'left-full ml-1.5'} top-1 flex flex-col gap-1 z-20">
     <button type="button" data-show-react="${m.id}" class="w-8 h-8 sm:w-7 sm:h-7 rounded-full bg-white dark:bg-slate-800 shadow border border-slate-200 dark:border-slate-700 grid place-items-center hover:bg-slate-50 dark:hover:bg-slate-700 transition" title="React">
       <svg class="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-600 dark:text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.5-9c.83 0 1.5-.67 1.5-1.5S17.33 8 16.5 8 15 8.67 15 9.5s.67 1.5 1.5 1.5zm-9 0c.83 0 1.5-.67 1.5-1.5S8.33 8 7.5 8 6 8.67 6 9.5 6.67 11 7.5 11zm4.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
@@ -866,7 +926,7 @@ function renderMessage(m, isConsecutive) {
       <svg class="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-600 dark:text-slate-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
     </button>
   </div>`;
-  
+
   if (isOwn) {
     return `<div class="msg-container msg-animate flex items-end justify-end gap-2 ${isConsecutive ? 'mt-0.5' : 'mt-3'}" data-msg-id="${m.id}"><div class="relative max-w-[85%] sm:max-w-[70%]">${actionsBtn}${!isConsecutive ? `<div class="flex items-center justify-end gap-2 mb-1 mr-1">${pinIndicator}${adminBadge}<span class="text-[10px] font-bold text-slate-500 dark:text-slate-400">${escapeHtml(m.nickname)}</span><span class="text-[10px] text-slate-400">${time}</span></div>` : ''}<div class="rounded-2xl rounded-tr-md px-3.5 py-2 ${bubbleClass}">${replyHtml}${textHtml}${imageHtml}</div>${reactionsHtml}</div></div>`;
   }
@@ -927,7 +987,6 @@ function showReactionPicker(msgId, anchor) {
 }
 function hideReactionPicker() { $('#reactionPicker').classList.add('hidden'); state.reactionPickerMsgId = null; }
 
-// IMAGE VIEWER
 function setupImageViewer() {
   $('#viewerClose').addEventListener('click', closeImageViewer);
   $('#imageViewer').addEventListener('click', (e) => { if (e.target.id === 'imageViewer' || e.target.id === 'viewerImageWrap') closeImageViewer(); });
@@ -970,7 +1029,6 @@ function setupImageViewer() {
 function openImageViewer(url) { state.viewerImageUrl = url; $('#viewerImage').src = url; $('#imageViewer').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
 function closeImageViewer() { $('#imageViewer').classList.add('hidden'); $('#viewerImage').src = ''; state.viewerImageUrl = null; document.body.style.overflow = ''; }
 
-// ACTION MENU (user-only)
 function openActionMenu(msgId, anchorBtn) {
   state.activeActionMsgId = msgId;
   const menu = $('#actionMenu');
@@ -1004,7 +1062,6 @@ function setupActionMenu() {
   });
 }
 
-// PINS
 function listenPins() {
   onSnapshot(PINS_REF, snap => {
     const pins = []; snap.forEach(d => pins.push({ msgId: d.id, ...d.data() }));
@@ -1042,7 +1099,6 @@ function jumpToMessage(msgId) {
   setTimeout(() => el.classList.remove('ring-4', 'ring-brand-400', 'rounded-2xl'), 2000);
 }
 
-// MESSAGE FORM
 function setupMessageForm() {
   const form = $('#messageForm'), input = $('#messageInput'), sendBtn = $('#sendBtn');
   input.addEventListener('input', () => { sendBtn.disabled = !input.value.trim() && !state.pendingImage; handleTyping(); updateMentions(); });
@@ -1071,7 +1127,6 @@ async function sendMessage() {
     let imageUrl = null;
     if (state.pendingImage) imageUrl = await uploadToCloudinary(state.pendingImage);
     const payload = { userId: state.userId, nickname: state.nickname, text: text || '', imageUrl: imageUrl || null, replyTo: state.replyTo ? { msgId: state.replyTo.msgId, nickname: state.replyTo.nickname, text: (state.replyTo.text || '').slice(0, 80) } : null, reactions: {}, createdAt: serverTimestamp() };
-    // NOTE: isAdmin is NEVER sent from this page
     await addDoc(MESSAGES_REF, payload);
     input.value = ''; input.style.height = 'auto';
     state.pendingImage = null; state.replyTo = null;
@@ -1084,7 +1139,6 @@ async function sendMessage() {
 }
 function setupAutoResize() { const input = $('#messageInput'); input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 128) + 'px'; }); }
 
-// MENTIONS
 function setupMentions() {}
 function updateMentions() {
   const input = $('#messageInput'), text = input.value, pos = input.selectionStart;
@@ -1115,7 +1169,6 @@ function insertMention(member) {
   $('#mentionDropdown').classList.add('hidden'); state.mentionMatches = [];
 }
 
-// REPLY
 function setupReply() { $('#cancelReply').addEventListener('click', () => { state.replyTo = null; updateReplyPreview(); }); }
 function setupReplyTo(msg) { state.replyTo = { msgId: msg.id, nickname: msg.nickname, text: msg.text || '📷' }; updateReplyPreview(); $('#messageInput').focus(); }
 function updateReplyPreview() {
@@ -1124,7 +1177,6 @@ function updateReplyPreview() {
   else p.classList.add('hidden');
 }
 
-// EMOJI
 const EMOJIS = {
   smileys: ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😗','😙','😚','😋','😛','😜','😝','🤪','😎','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬','🤯','😳','🥵','🥶','😱','😨','😰','😥','😓','🤗','🤔','🤭','🤫','🤥','😶','😐','😑','😬','🙄'],
   gestures: ['👍','👎','👌','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','👇','☝️','✋','🤚','🖐️','🖖','👋','🤝','🙏','💪','🦾','👏','🙌','👐','🤲','🤜','🤛','✊','👊'],
@@ -1152,7 +1204,6 @@ function renderEmojis(cat) {
   grid.querySelectorAll('[data-emoji]').forEach(b => b.addEventListener('click', () => { const input = $('#messageInput'); input.value += b.dataset.emoji; input.dispatchEvent(new Event('input')); input.focus(); }));
 }
 
-// IMAGE
 function setupImageUpload() {
   $('#imageBtn').addEventListener('click', () => $('#imageInput').click());
   $('#imageInput').addEventListener('change', async e => {
@@ -1203,7 +1254,6 @@ function uploadToCloudinary(file, onProgress) {
   });
 }
 
-// SEARCH
 function setupSearch() {
   const overlay = $('#searchOverlay'), input = $('#searchInput');
   $('#searchBtn').addEventListener('click', () => { overlay.classList.remove('hidden'); overlay.classList.add('flex'); input.value = ''; $('#searchResults').innerHTML = ''; setTimeout(() => input.focus(), 50); });
@@ -1228,7 +1278,6 @@ function doSearch(query) {
   results.querySelectorAll('[data-jump-search]').forEach(b => b.addEventListener('click', () => { $('#searchOverlay').classList.add('hidden'); $('#searchOverlay').classList.remove('flex'); jumpToMessage(b.dataset.jumpSearch); }));
 }
 
-// PROFILE MENU
 function setupProfileMenu() {
   const btn = $('#profileBtn'), menu = $('#profileMenu');
   btn.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('hidden'); });
@@ -1254,7 +1303,6 @@ function setupProfileMenu() {
   });
 }
 
-// MOBILE DRAWER
 function setupMobileDrawer() {
   const drawer = $('#mobileDrawer'), aside = drawer.querySelector('aside');
   $('#mobileMembersBtn').addEventListener('click', () => { drawer.classList.remove('hidden'); requestAnimationFrame(() => aside.classList.remove('-translate-x-full')); });
@@ -1263,7 +1311,6 @@ function setupMobileDrawer() {
   $('#closeDrawerBtn').addEventListener('click', close);
 }
 
-// SCROLL
 function setupScrollBehavior() {
   const area = $('#messagesArea');
   area.addEventListener('scroll', () => { state.userScrolledUp = !isScrolledToBottom(); if (!state.userScrolledUp) $('#newMsgIndicator').classList.add('hidden'); });
@@ -1281,7 +1328,6 @@ setTimeout(() => {
     document.addEventListener('click', function once() { Notification.requestPermission().catch(() => {}); document.removeEventListener('click', once); }, { once: true });
   }
 }, 5000);
-
 </script>
 
 <!-- ═══ VISITOR TRACKING ═══ -->
